@@ -1,0 +1,709 @@
+openapi: 3.0.0
+info:
+  title: Paxos Account Members Quote Executions API
+  version: '2.0'
+  description: '<p>Welcome to Paxos APIs. At Paxos, our mission is to enable the movement of any asset, any time, in a trustworthy way. These APIs serve that mission by making it easier than ever for you to directly integrate our product capabilities into your application, leveraging the speed, stability, and security of the Paxos platform.</p> <p>The documentation that follows gives you access to our Crypto Brokerage, Trading, and Exchange products. It includes APIs for market data, orders, and the held rate quote flow.</p> <p>To test in our sandbox environment, <a href="https://account.sandbox.paxos.com" target="_blank">sign up</a> for an account. For more information about Paxos and our APIs, visit <a href="https://www.paxos.com/" target="_blank">Paxos.com</a>.</p>
+
+    '
+  x-logo:
+    url: /docs/paxos.svg
+    backgroundColor: '#FFFFFF'
+    altText: Paxos logo
+servers:
+- url: https://api.paxos.com/v2
+  description: Production
+- url: https://api.sandbox.paxos.com/v2
+  description: Sandbox
+tags:
+- name: Quote Executions
+  description: 'Quote Executions buy or sell assets using a Quote obtained from
+
+    the [Quotes](#tag/Quotes) flow.
+
+    '
+paths:
+  /profiles/{profile_id}/quote-executions:
+    get:
+      summary: List Quote Executions
+      description: List quote executions within a particular profile.
+      operationId: ListQuoteExecutions
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListQuoteExecutionsResponse'
+      parameters:
+      - name: profile_id
+        description: The profile ID associated with the orders.
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: side
+        description: Filter by buy or sell side.
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - BUY
+          - SELL
+      - name: market
+        description: Filter by the trading pair.
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - ETHEUR
+          - ETHSGD
+          - ETHUSD
+          - BTCEUR
+          - BTCSGD
+          - BTCUSD
+          - PAXGUSD
+          - BCHUSD
+          - LTCUSD
+          - USDPUSD
+          - LINKUSD
+          - AAVEUSD
+          - UNIUSD
+          - PEPEUSD
+          - TRUMPUSD
+          - SHIBUSD
+          - ARBUSD
+          - BONKUSD
+          - ENAUSD
+          - MNTUSD
+          - ONDOUSD
+          - PENGUUSD
+          - QNTUSD
+          - RENDERUSD
+          - SKYUSD
+          - WIFUSD
+          - WLDUSD
+          - DOGEUSD
+          - AVAXUSD
+          - SUIUSD
+          - POLUSD
+          - XLMUSD
+          - BNBUSD
+      - name: status
+        description: Filter by the status of the order.
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - CREATED
+          - SETTLED
+      - name: created_at.begin
+        description: Only return records after this timestamp, inclusive. RFC3339 format, like `2006-01-02T15:04:05Z`.
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: created_at.end
+        description: Only return records before this timestamp, inclusive. RFC3339 format, like `2006-01-02T15:04:05Z`.
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: limit
+        description: Number of results to return.
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: order
+        description: 'Return items in ascending (ASC) or descending (DESC) order.
+
+          Default order is descending (DESC).'
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - DESC
+          - ASC
+      - name: order_by
+        description: The specific method by which the returned results will be ordered.
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - CREATED_AT
+      - name: page_cursor
+        description: Cursor token for fetching the next page. If using this then do not use `pagination.limit` and `pagination.offset` fields.
+        in: query
+        required: false
+        schema:
+          type: string
+      tags:
+      - Quote Executions
+      security:
+      - OAuth2:
+        - exchange:read_quote_execution
+    post:
+      summary: Create Quote Execution
+      description: "Execute on a quote for buying or selling an asset.\n\nThe side, market, and guaranteed price of the execution are specified by the quote\nwith ID `quote_id`.\n\nThe amount to buy or sell must be specified in either fiat or crypto by setting\nexactly one of:\n - `base_amount` to specify the amount of crypto to buy or sell.\n - `quote_amount` to specify the amount of fiat to spend or acquire.\n\nAn otherwise-valid request to create a quote execution may fail with the following\ntypes of errors:\n - [Expired](https://developer.paxos.com/docs/v2/problems/expired) if the quote\n   with ID `quote_id` has expired.\n - [Insufficient Funds](https://developer.paxos.com/docs/v2/problems/insufficient-funds)\n   if the profile with ID `profile_id` has insufficient available balance to\n   fund the execution.\n - [Rejected](https://developer.paxos.com/docs/v2/problems/rejected) if extreme\n   market conditions (e.g. a very large price swing) have invalidated the quote.\n - [Already Exists](https://developer.paxos.com/docs/v2/problems/already-exists)\n   if a Quote Execution with the same `ref_id` has already been created."
+      operationId: CreateQuoteExecution
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QuoteExecution'
+              examples:
+                Buy $100 BTC:
+                  value:
+                    id: 43a59965-be3a-45ab-841d-c55386e0ff90
+                    profile_id: b7b77d82-e6a7-4ae9-9904-36231aedf985
+                    quote_id: 366a26d2-3098-4226-a520-4bb43ae4d922
+                    status: CREATED
+                    market: BTCUSD
+                    side: BUY
+                    price: '6001.2'
+                    base_amount: '0.016663334'
+                    base_asset: BTC
+                    quote_amount: '100.00'
+                    quote_asset: USD
+                    created_at: '2020-01-17T18:36:31.345Z'
+                    metadata:
+                      customer_id: 9b8c9cba-801e-4418-adc0-ede709df6339
+                Sell 2 ETH:
+                  value:
+                    id: 43a59965-be3a-45ab-841d-c55386e0ff90
+                    profile_id: b7b77d82-e6a7-4ae9-9904-36231aedf985
+                    quote_id: 5a336768-5bc1-4401-9d95-9cb251ce4b58
+                    status: CREATED
+                    market: ETHUSD
+                    side: SELL
+                    price: '224.11'
+                    base_amount: '2'
+                    base_asset: ETH
+                    quote_amount: '448.22'
+                    quote_asset: USD
+                    created_at: '2020-01-17T18:36:31.345Z'
+                    metadata:
+                      customer_id: 9b8c9cba-801e-4418-adc0-ede709df6339
+        '403':
+          description: Could not create quote execution
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+              examples:
+                Expired:
+                  $ref: '#/components/examples/Problem_expired_quote'
+                Insufficient Funds:
+                  $ref: '#/components/examples/Problem_insufficient_funds'
+                Rejected:
+                  $ref: '#/components/examples/Problem_rejected'
+        '404':
+          description: Could not find quote
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+              examples:
+                Not Found:
+                  $ref: '#/components/examples/Problem_not_found_quote'
+        '409':
+          description: Quote Execution Already Exists
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+              examples:
+                Already Exists:
+                  $ref: '#/components/examples/Problem_already_exists_quote_execution'
+      parameters:
+      - name: profile_id
+        description: The ID of the profile under which to execute this order.
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExchangePublicCreateQuoteExecutionBody'
+            examples:
+              Buy $100 BTC:
+                value:
+                  quote_id: 366a26d2-3098-4226-a520-4bb43ae4d922
+                  quote_amount: '100'
+                  metadata:
+                    customer_id: 9b8c9cba-801e-4418-adc0-ede709df6339
+              Sell 2 ETH:
+                value:
+                  quote_id: 5a336768-5bc1-4401-9d95-9cb251ce4b58
+                  base_amount: '2'
+                  metadata:
+                    customer_id: 9b8c9cba-801e-4418-adc0-ede709df6339
+        required: true
+      tags:
+      - Quote Executions
+      security:
+      - OAuth2:
+        - exchange:write_quote_execution
+  /profiles/{profile_id}/quote-executions/{id}:
+    get:
+      summary: Get Quote Execution
+      description: Get an existing quote execution for buying or selling an asset.
+      operationId: GetQuoteExecution
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QuoteExecution'
+      parameters:
+      - name: profile_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - Quote Executions
+      security:
+      - OAuth2:
+        - exchange:read_quote_execution
+components:
+  schemas:
+    ListQuoteExecutionsResponse:
+      type: object
+      properties:
+        total_count:
+          type: integer
+          format: int32
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/QuoteExecution'
+        next_page_cursor:
+          type: string
+          description: Cursor token required for fetching the next page.
+    ExchangePublicCreateQuoteExecutionBody:
+      type: object
+      example:
+        quote_id: 366a26d2-3098-4226-a520-4bb43ae4d922
+        quote_amount: '14102.82'
+        metadata:
+          customer_id: 9b8c9cba-801e-4418-adc0-ede709df6339
+      properties:
+        quote_id:
+          type: string
+          description: The ID of the held Quote for buying or selling some asset.
+        ref_id:
+          type: string
+          description: A unique identifier for the quote execution (for idempotence).
+        base_amount:
+          type: string
+          description: The amount of the base asset (crypto) to buy or sell using the specified quote. The maximum precision is 8 decimals.
+          pattern: ^[0-9]*\.?[0-9]+$
+        quote_amount:
+          type: string
+          description: The amount of the quote asset (fiat) to spend or acquire using the specified quote. The maximum precision is 2 decimals.
+          pattern: ^[0-9]*\.?[0-9]+$
+        metadata:
+          type: object
+          additionalProperties:
+            type: string
+          description: 'Metadata to store on the quote execution.
+
+            Up to 6 key/value pairs may be stored, with each key and value at most 100 characters.'
+        identity_id:
+          type: string
+          description: The end user that requests the quote execution.
+        account_id:
+          type: string
+          description: The account under which this quote execution is placed. The provided identity must be allowed to trade on behalf of this account.
+        recipient_profile_id:
+          type: string
+          description: The ID of the profile under which to deposit the funds.
+      title: Create Quote Execution Request
+      required:
+      - quote_id
+    Market:
+      type: string
+      enum:
+      - ETHEUR
+      - ETHSGD
+      - ETHUSD
+      - BTCEUR
+      - BTCSGD
+      - BTCUSD
+      - PAXGUSD
+      - BCHUSD
+      - LTCUSD
+      - USDPUSD
+      - LINKUSD
+      - AAVEUSD
+      - UNIUSD
+      - PEPEUSD
+      - TRUMPUSD
+      - SHIBUSD
+      - ARBUSD
+      - BONKUSD
+      - ENAUSD
+      - MNTUSD
+      - ONDOUSD
+      - PENGUUSD
+      - QNTUSD
+      - RENDERUSD
+      - SKYUSD
+      - WIFUSD
+      - WLDUSD
+      - DOGEUSD
+      - AVAXUSD
+      - SUIUSD
+      - POLUSD
+      - XLMUSD
+      - BNBUSD
+      title: ''
+    OrderSide:
+      type: string
+      enum:
+      - BUY
+      - SELL
+      description: Trade side.
+    QuoteExecution:
+      type: object
+      example:
+        id: 43a59965-be3a-45ab-841d-c55386e0ff90
+        profile_id: b7b77d82-e6a7-4ae9-9904-36231aedf985
+        quote_id: 366a26d2-3098-4226-a520-4bb43ae4d922
+        status: SETTLED
+        market: BTCUSD
+        side: BUY
+        price: '6001.2'
+        base_amount: '2.35'
+        base_asset: BTC
+        quote_amount: '14102.82'
+        quote_asset: USD
+        created_at: '2020-01-17T18:36:31.345Z'
+        settled_at: '2020-01-17T18:36:32.123Z'
+        metadata:
+          customer_id: 9b8c9cba-801e-4418-adc0-ede709df6339
+      properties:
+        id:
+          type: string
+          description: The UUID of the quote execution.
+        profile_id:
+          type: string
+          description: The ID of the profile under which this order executed.
+        quote_id:
+          type: string
+          description: The ID of the quote used to create this quote execution.
+        ref_id:
+          type: string
+          description: A unique identifier for the quote execution creation (for idempotence).
+        status:
+          $ref: '#/components/schemas/QuoteExecutionStatus'
+        market:
+          $ref: '#/components/schemas/Market'
+        side:
+          $ref: '#/components/schemas/OrderSide'
+        price:
+          type: string
+          format: decimal
+          description: The guaranteed price of the quote.
+        base_amount:
+          type: string
+          format: decimal
+          description: The amount of assets (crypto) in the transaction.
+        base_asset:
+          type: string
+          description: The "base" side of the trading pair (crypto - like BTC, ETH, PAXG).
+        quote_amount:
+          type: string
+          format: decimal
+          description: The amount of quote currency (cash) in the transaction.
+        quote_asset:
+          type: string
+          description: The "quote" side of the trading pair (fiat - like USD, EUR, SGD).
+        created_at:
+          type: string
+          format: date-time
+          description: The time at which the quote execution was created.
+        settled_at:
+          type: string
+          format: date-time
+          description: The time at which the quote execution was settled, completing its lifecycle.
+        metadata:
+          type: object
+          additionalProperties:
+            type: string
+          description: Client-specified metadata.
+        identity_id:
+          type: string
+          description: The identity under which this quote execution is placed.
+        account_id:
+          type: string
+          description: The account under which this quote execution is placed.
+        recipient_profile_id:
+          type: string
+          description: The ID of the profile under which to deposit the funds.
+      description: A QuoteExecution is an order to buy or sell an asset at a particular held Quote.
+      required:
+      - id
+      - profile_id
+      - quote_id
+      - status
+      - market
+      - side
+      - price
+      - base_amount
+      - base_asset
+      - quote_amount
+      - quote_asset
+      - created_at
+    Problem:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+          description: 'An absolute URI that identifies the problem type.  When dereferenced,
+
+            it SHOULD provide human-readable documentation for the problem type
+
+            (e.g., using HTML).
+
+            '
+          default: about:blank
+          example: https://api.paxos.com/v2/problems/insufficient_funds
+        title:
+          type: string
+          description: 'A short, summary of the problem type. Written in english and readable
+
+            for engineers (usually not suited for non technical stakeholders and
+
+            not localized); example: Service Unavailable
+
+            '
+          example: Insufficient Funds
+        status:
+          type: integer
+          format: int32
+          description: 'The HTTP status code generated by the origin server for this occurrence
+
+            of the problem.
+
+            '
+          minimum: 100
+          maximum: 600
+          exclusiveMaximum: true
+          example: 403
+        detail:
+          type: string
+          description: 'A human readable explanation specific to this occurrence of the
+
+            problem.
+
+            '
+          example: Not enough funds in account.
+        meta:
+          type: object
+          description: 'Additional structured metadata about the error.
+
+            '
+    QuoteExecutionStatus:
+      type: string
+      enum:
+      - CREATED
+      - SETTLED
+      description: 'A QuoteExecution begins in state `CREATED` and transitions to end state `SETTLED`
+
+        when all accounting movements are complete.'
+  examples:
+    Problem_already_exists_quote_execution:
+      value:
+        type: https://developer.paxos.com/docs/v2/problems/already-exists
+        title: Already Exists
+        status: 409
+        detail: quote execution already exists with ref_id 'already_used_ref_id'
+        meta:
+          existing:
+            id: f190b163-208f-4d73-8deb-4fb8b24add00
+            profile_id: b7b77d82-e6a7-4ae9-9904-36231aedf985
+            quote_id: 366a26d2-3098-4226-a520-4bb43ae4d922
+            ref_id: already_used_ref_id
+            status: CREATED
+            market: BTCUSD
+            side: BUY
+            price: '6001.2'
+            base_amount: '0.016663334'
+            base_asset: BTC
+            quote_amount: '100.00'
+            quote_asset: USD
+            created_at: '2020-01-17T18:36:31.345Z'
+            metadata:
+              customer_id: 9b8c9cba-801e-4418-adc0-ede709df6339
+    Problem_not_found_quote:
+      value:
+        type: about:blank
+        title: Not Found
+        status: 404
+        detail: quote not found with id 366a26d2-3098-4226-a520-4bb43ae4d922
+    Problem_expired_quote:
+      value:
+        type: https://developer.paxos.com/docs/v2/problems/expired
+        title: Expired
+        status: 403
+        detail: quote 366a26d2-3098-4226-a520-4bb43ae4d922 expired at 2020-01-17T18:36:38Z
+        meta:
+          expired_at: '2020-01-17T18:36:38Z'
+    Problem_rejected:
+      value:
+        type: https://developer.paxos.com/docs/v2/problems/rejected
+        title: Rejected
+        status: 403
+        detail: extreme market conditions have invalidated this quote execution
+        meta: {}
+    Problem_insufficient_funds:
+      value:
+        type: https://developer.paxos.com/docs/v2/problems/insufficient-funds
+        title: Insufficient Funds
+        status: 403
+        detail: 'insufficient USD funds in profile b7b77d82-e6a7-4ae9-9904-36231aedf985: 100 needed, 50 available'
+        meta:
+          profile_id: b7b77d82-e6a7-4ae9-9904-36231aedf985
+          asset: USD
+          available: '50'
+          needed: '100'
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      description: 'Paxos APIs use [OAuth 2](https://tools.ietf.org/html/rfc6749) with the [client credentials](https://tools.ietf.org/html/rfc6749#section-4.4) grant flow.
+
+
+        **Token URLs:**
+
+        - Production: https://oauth.paxos.com/oauth2/token
+
+        - Sandbox: https://oauth.sandbox.paxos.com/oauth2/token
+
+
+        Learn more in the [API credentials guide →](https://docs.paxos.com/developer/credentials)
+
+        '
+      flows:
+        clientCredentials:
+          tokenUrl: https://oauth.paxos.com/oauth2/token
+          scopes:
+            conversion:read_conversion_stablecoin: Retrieve stablecoin conversion details
+            conversion:write_conversion_stablecoin: Create or cancel a stablecoin conversion
+            exchange:historical_prices: Retrieve marketnaverage prices at a certain time increment
+            exchange:read_order: Retrieve order or order execution details
+            exchange:read_quote: Retrieve quote details for buying or selling an asset
+            exchange:read_quote_execution: Retrieve quote execution details
+            exchange:write_quote_execution: Create a quote execution for buying or selling an asset
+            exchange:write_order: Create or cancel an order for buying or selling an asset
+            fee:write_crypto_withdrawal_fee: Create a guaranteed fee for crypto withdrawal
+            funding:read_bank_balance: Retrieve Paxos dedicated bank account balance
+            funding:read_profile: Retrieve Profile details and deposit funds in Sandbox
+            funding:write_profile: Create a Profile
+            identity:read_account: Retrieve Account details
+            identity:read_identity: Retrieve Identity details or documents
+            identity:write_account: Create or update Account and Account Members
+            identity:write_identity: Create or update Identity details and set Sandbox Identify Status
+            settlement:read_transaction: Retrieve settlement transaction details
+            settlement:write_transaction: Create, affirm or cancel a settlement transaction
+            tax:read_tax_form: Retrieve tax details
+            tax:read_tax_lot: Retrieve tax lot details
+            tax:write_tax_lot: Update the given tax-lot ID
+            transfer:read_deposit_address: Retrieve deposit address details
+            transfer:read_fiat_account: Retrieve Fiat Account details
+            transfer:read_fiat_deposit_instructions: Retrieve fiat deposit instruction details
+            transfer:read_transfer: Retrieve transfer details
+            transfer:read_transfer_limit: Retrieve limits for the given transaction type
+            transfer:reject_crypto_deposit: Reject a crypto deposit (travel rule)
+            transfer:update_crypto_deposit: Provide required travel-rule details
+            transfer:write_crypto_withdrawal: Withdraw asset to a specified destination address
+            transfer:write_deposit_address: Create an deposit address on a blockchain network
+            transfer:write_fiat_account: Create, update or delete a Fiat Account
+            transfer:write_fiat_deposit_instructions: Create, update or delete fiat deposit instructions
+            transfer:write_internal_transfer: Transfer assets between two Profiles
+            transfer:write_sandbox_fiat_deposit: Initiate a test fiat deposit in the Sandbox environment
+            transfer:write_fiat_withdrawal: Withdraw fiat to the given destination
+            events:read_event: Retrieve events
+x-tagGroups:
+- name: Deposits and Withdrawals
+  tags:
+  - Transfers
+  - Fiat Transfers
+  - Deposit Addresses
+  - Crypto Deposits
+  - Crypto Withdrawals
+  - Fees
+  - Internal Transfers
+  - Paxos Transfers
+  - Limits
+- name: Identity
+  tags:
+  - Identity
+  - Institution Members
+  - Accounts
+  - Account Members
+  - Identity Documents
+- name: API Credentials
+  tags:
+  - API Credentials
+- name: Profiles
+  tags:
+  - Profiles
+- name: Sandbox
+  tags:
+  - Sandbox Deposits
+  - Sandbox Identity
+  - Sandbox Fiat Transfers
+- name: Settlements
+  tags:
+  - Settlement
+- name: Stablecoin Conversion
+  tags:
+  - Stablecoin Conversion
+- name: Taxes
+  tags:
+  - Tax Forms
+- name: Trading
+  tags:
+  - Market Data
+  - Orders
+  - Quotes
+  - Quote Executions
+  - Pricing
+  - Issuer Quotes
+- name: Rewards
+  tags:
+  - Monitoring Addresses
+  - Statements
+  - Payments
+- name: Rewards (Alpha)
+  tags:
+  - Reward Addresses
+  - Claims
+  - Payout Groups
+  - Rewards
+- name: Events
+  tags:
+  - Events
+  - Event Types
+  - Event Objects

@@ -1,0 +1,759 @@
+openapi: 3.0.0
+info:
+  title: Paxos Account Members Pricing API
+  version: '2.0'
+  description: '<p>Welcome to Paxos APIs. At Paxos, our mission is to enable the movement of any asset, any time, in a trustworthy way. These APIs serve that mission by making it easier than ever for you to directly integrate our product capabilities into your application, leveraging the speed, stability, and security of the Paxos platform.</p> <p>The documentation that follows gives you access to our Crypto Brokerage, Trading, and Exchange products. It includes APIs for market data, orders, and the held rate quote flow.</p> <p>To test in our sandbox environment, <a href="https://account.sandbox.paxos.com" target="_blank">sign up</a> for an account. For more information about Paxos and our APIs, visit <a href="https://www.paxos.com/" target="_blank">Paxos.com</a>.</p>
+
+    '
+  x-logo:
+    url: /docs/paxos.svg
+    backgroundColor: '#FFFFFF'
+    altText: Paxos logo
+servers:
+- url: https://api.paxos.com/v2
+  description: Production
+- url: https://api.sandbox.paxos.com/v2
+  description: Sandbox
+tags:
+- name: Pricing
+  description: 'Pricing provides historical data related to charting of asset prices.
+
+
+    Note: Some Pricing API markets may be unavailable for trading.
+
+    '
+paths:
+  /all-markets/prices:
+    get:
+      summary: List Prices
+      description: 'Retrieve current prices, as well as 24 hour prior (yesterday) prices, for the specified markets.
+
+        Any single market that failed to be retrieved is excluded from the response.'
+      operationId: ListPrices
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListPricesResponse'
+              examples:
+                response:
+                  value:
+                    prices:
+                    - market: BTCUSD
+                      current_price: '16627.62'
+                      yesterday_price: '16703.29'
+                      snapshot_at: '2023-01-03T18:27:40.294528Z'
+                    - market: ETHUSD
+                      current_price: '1206.93'
+                      yesterday_price: '1216.55'
+                      snapshot_at: '2023-01-03T18:27:40.294528Z'
+      parameters:
+      - name: markets
+        description: ''
+        in: query
+        required: true
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - ETHUSD
+            - BTCUSD
+            - PAXGUSD
+            - BCHUSD
+            - LTCUSD
+            - USDPUSD
+            - LINKUSD
+            - AAVEUSD
+            - UNIUSD
+            - PEPEUSD
+            - TRUMPUSD
+            - SHIBUSD
+            - ARBUSD
+            - BONKUSD
+            - ENAUSD
+            - MNTUSD
+            - ONDOUSD
+            - PENGUUSD
+            - QNTUSD
+            - RENDERUSD
+            - SKYUSD
+            - WIFUSD
+            - WLDUSD
+            - DOGEUSD
+            - AVAXUSD
+            - SUIUSD
+            - POLUSD
+            - XLMUSD
+            - BNBUSD
+      tags:
+      - Pricing
+  /markets/{market}/historical-prices:
+    get:
+      summary: List Historical Prices
+      description: "Retrieves a set of average prices at a certain increment of time for the requested market.\nThis endpoint is suitable for retrieving historical average price trends where price precision, execution, and\nother detailed information is not required.\nTo control the count, use either  `increment` or `max_data_points`.\nList Historical Prices returns an error when an unexpected value is given, or when `increment` and\n `max_data_points` are both given or omitted.\n\nWhen `range.begin` is omitted, the first data point shows the mid price, the average of the order book best bid\n and ask price, or the earliest available date. It is possible to set `range.begin` to a future date without error.\n\nWhen `range.end` is omitted, the last data point will display current mid price (average of order book best bid\n and best ask) at the request timestamp. It is possible to set `range.end` to a future date without error.\n\nWhen `pagination.limit` is omitted, the pagination limit will default to return the first 100 items.\nIf the pagination limit is set, the API will return up to the limit in one response. The pagination limit max is 1,000.\n\nTime-series items are returned in chronological (ascending) order. All timestamps are in UTC."
+      operationId: ListHistoricalPrices
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListHistoricalPricesResponse'
+              examples:
+                response:
+                  value:
+                    market: BTCUSD
+                    prices:
+                    - average_price: '9245.50'
+                      timestamp: '2020-01-17T18:36:00.000Z'
+                    - average_price: '9265.50'
+                      timestamp: '2020-01-17T18:37:00.000Z'
+                    total_count: 50
+      parameters:
+      - name: market
+        description: Market of Order Book.
+        in: path
+        required: true
+        schema:
+          type: string
+          enum:
+          - ETHEUR
+          - ETHUSD
+          - BTCEUR
+          - BTCUSD
+          - PAXGUSD
+          - BCHUSD
+          - LTCUSD
+          - ETHGBP
+          - BTCGBP
+          - LTCGBP
+          - BCHGBP
+          - USDPUSD
+          - ETHBRL
+          - BTCBRL
+          - LTCBRL
+          - BCHBRL
+          - USDPGBP
+          - USDPBRL
+          - LINKUSD
+          - AAVEUSD
+          - UNIUSD
+          - AAVEMXN
+          - BCHMXN
+          - BTCMXN
+          - ETHMXN
+          - LTCMXN
+          - USDPMXN
+          - AAVEEUR
+          - BCHEUR
+          - LTCEUR
+          - LINKEUR
+          - PAXGEUR
+          - SOLEUR
+          - USDPEUR
+          - UNIEUR
+          - PYUSDEUR
+          - PYUSDGBP
+          - PEPEUSD
+          - TRUMPUSD
+          - SHIBUSD
+          - ARBUSD
+          - BONKUSD
+          - ENAUSD
+          - MNTUSD
+          - ONDOUSD
+          - PENGUUSD
+          - QNTUSD
+          - RENDERUSD
+          - SKYUSD
+          - WIFUSD
+          - WLDUSD
+          - DOGEUSD
+          - AVAXUSD
+          - SUIUSD
+          - POLUSD
+          - XLMUSD
+          - BNBUSD
+      - name: max_data_points
+        description: 'Maximum number of data points to return.
+
+
+          The time frame of the increments will be inferred by finding the most granular increment without breaching the `max_data_points` value based on a set of recording data points.'
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int64
+      - name: range.begin
+        description: Only return records after this timestamp, inclusive. RFC3339 format, like `2006-01-02T15:04:05Z`.
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: range.end
+        description: Only return records before this timestamp, inclusive. RFC3339 format, like `2006-01-02T15:04:05Z`.
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: pagination.limit
+        description: Number of results to return
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: pagination.offset
+        description: Number of results to skip
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: increment
+        description: Time increment between prices. Returns data exclusive from `range.begin` and `range.end`. Do not use with `max_data_points`, as this results in an error.
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - ONE_MINUTE
+          - FIVE_MINUTES
+          - FIFTEEN_MINUTES
+          - THIRTY_MINUTES
+          - ONE_HOUR
+          - TWO_HOURS
+          - TWELVE_HOURS
+          - ONE_DAY
+          - ONE_WEEK
+          - TWO_WEEKS
+          - FOUR_WEEKS
+      tags:
+      - Pricing
+      security:
+      - OAuth2:
+        - exchange:historical_prices
+  /markets/{market}/historical-candles:
+    get:
+      summary: List Historical Candles
+      description: "Returns OHLCV Candlesticks data for the given market.\nTo control the count, use either  `increment` or `max_data_points`.\nList Historical Candles returns an error when an unexpected value is given, or when `increment` and\n `max_data_points` are both given or omitted.\n\nWhen `range.end` is omitted, it will default to the current UTC timestamp.\nIt is possible to set `range.end` to a future date without error.\n\nOmitting `range.begin` defaults it to six months before `range.end`.\n\nWhen `limit` is omitted, it will default to return the first 100 items.\nIf `limit` is set, the API will return up to the limit in one response. The maximum limit is 1,000.\n\nTime-series items are in descending order. All timestamps are in UTC.\n\nMarkets that are not yet available will return a 400 error."
+      operationId: ListHistoricalCandles
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/publicListHistoricalCandlesResponse'
+              examples:
+                List Historical Candles:
+                  value:
+                    market: BTCUSD
+                    increment: ONE_MINUTE
+                    items:
+                    - timestamp: '2020-01-17T18:37:00.000Z'
+                      open: '9245.50'
+                      high: '9355.50'
+                      low: '9155.50'
+                      close: '9345.50'
+                      volume: '103200.50'
+                    - timestamp: '2020-01-17T18:36:00.000Z'
+                      open: '9245.50'
+                      high: '9355.50'
+                      low: '9155.50'
+                      close: '9345.50'
+                      volume: '103200.50'
+                    - timestamp: '2020-01-17T18:35:00.000Z'
+                      open: '9245.50'
+                      high: '9355.50'
+                      low: '9155.50'
+                      close: '9345.50'
+                      volume: '103200.50'
+                    next_page_cursor: CgwI-Pr1vgYQyLLpswESJDM2NGU2MTgyLTRhZjctNDg4NC1iY2MxLTM0MThmNTA0MWYzYg
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+              examples:
+                Using max_data_points without setting range param:
+                  value:
+                    type: about:blank
+                    title: Bad Request
+                    status: 400
+                    detail: range.begin and range.end are required if max_data_points is set
+                Setting both increment and max_data_points:
+                  value:
+                    type: about:blank
+                    title: Bad Request
+                    status: 400
+                    detail: only one of increment or max_data_points should be set
+                Setting neither increment nor max_data_points:
+                  value:
+                    type: about:blank
+                    title: Bad Request
+                    status: 400
+                    detail: either increment or max_data_points must be set
+                Using an invalid market value:
+                  value:
+                    type: about:blank
+                    title: Bad Request
+                    status: 400
+                    detail: invalid market USBTC
+                Using an invalid increment value:
+                  value:
+                    type: about:blank
+                    title: Bad Request
+                    status: 400
+                    detail: invalid increment provided 'INVALID' not in [ONE_MINUTE,FIVE_MINUTES,FIFTEEN_MINUTES,THIRTY_MINUTES,ONE_HOUR,TWO_HOURS,TWELVE_HOURS,ONE_DAY,ONE_WEEK,TWO_WEEKS,FOUR_WEEKS]
+      parameters:
+      - name: market
+        description: Market of candle.
+        in: path
+        required: true
+        schema:
+          type: string
+          enum:
+          - ETHEUR
+          - ETHUSD
+          - BTCEUR
+          - BTCUSD
+          - PAXGUSD
+          - BCHUSD
+          - LTCUSD
+          - ETHGBP
+          - BTCGBP
+          - LTCGBP
+          - BCHGBP
+          - USDPUSD
+          - ETHBRL
+          - BTCBRL
+          - LTCBRL
+          - BCHBRL
+          - USDPGBP
+          - USDPBRL
+          - LINKUSD
+          - AAVEUSD
+          - UNIUSD
+          - AAVEMXN
+          - BCHMXN
+          - BTCMXN
+          - ETHMXN
+          - LTCMXN
+          - USDPMXN
+          - AAVEEUR
+          - BCHEUR
+          - LTCEUR
+          - LINKEUR
+          - PAXGEUR
+          - SOLEUR
+          - USDPEUR
+          - UNIEUR
+          - PYUSDEUR
+          - PYUSDGBP
+          - PEPEUSD
+          - TRUMPUSD
+          - SHIBUSD
+          - ARBUSD
+          - BONKUSD
+          - ENAUSD
+          - MNTUSD
+          - ONDOUSD
+          - PENGUUSD
+          - QNTUSD
+          - RENDERUSD
+          - SKYUSD
+          - WIFUSD
+          - WLDUSD
+          - DOGEUSD
+          - AVAXUSD
+          - SUIUSD
+          - POLUSD
+          - XLMUSD
+          - BNBUSD
+      - name: max_data_points
+        description: 'Maximum number of data points to return.
+
+
+          The time frame of the increments will be inferred by finding the most granular increment without breaching the `max_data_points` value based on a set of recorded data points.'
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int64
+      - name: range.begin
+        description: Only return records after this timestamp, inclusive. RFC3339 format, like `2006-01-02T15:04:05Z`.
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: range.end
+        description: Only return records before this timestamp, inclusive. RFC3339 format, like `2006-01-02T15:04:05Z`.
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: limit
+        description: Number of results to return. Defaults to `100` if no limit is provided. Maximum `1000`.
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: order
+        description: Results are ordered by `timestamp`. Specify the ordering of the results. Defaults to `DESC`.
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - DESC
+          - ASC
+      - name: page_cursor
+        description: Cursor for pagination
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: increment
+        description: Time increment between prices. Returns data inclusive from `range.begin` and `range.end`. Do not use with `max_data_points`, as this results in an error.
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - ONE_MINUTE
+          - FIVE_MINUTES
+          - FIFTEEN_MINUTES
+          - THIRTY_MINUTES
+          - ONE_HOUR
+          - TWO_HOURS
+          - TWELVE_HOURS
+          - ONE_DAY
+          - ONE_WEEK
+          - TWO_WEEKS
+          - FOUR_WEEKS
+      tags:
+      - Pricing
+      security:
+      - OAuth2:
+        - exchange:historical_prices
+components:
+  schemas:
+    PricePriceMarket:
+      type: string
+      enum:
+      - ETHUSD
+      - BTCUSD
+      - PAXGUSD
+      - BCHUSD
+      - LTCUSD
+      - USDPUSD
+      - LINKUSD
+      - AAVEUSD
+      - UNIUSD
+      - PEPEUSD
+      - TRUMPUSD
+      - SHIBUSD
+      - ARBUSD
+      - BONKUSD
+      - ENAUSD
+      - MNTUSD
+      - ONDOUSD
+      - PENGUUSD
+      - QNTUSD
+      - RENDERUSD
+      - SKYUSD
+      - WIFUSD
+      - WLDUSD
+      - DOGEUSD
+      - AVAXUSD
+      - SUIUSD
+      - POLUSD
+      - XLMUSD
+      - BNBUSD
+      description: ''
+      title: Market
+    Increment:
+      type: string
+      enum:
+      - ONE_MINUTE
+      - FIVE_MINUTES
+      - FIFTEEN_MINUTES
+      - THIRTY_MINUTES
+      - ONE_HOUR
+      - TWO_HOURS
+      - TWELVE_HOURS
+      - ONE_DAY
+      - ONE_WEEK
+      - TWO_WEEKS
+      - FOUR_WEEKS
+    publicListHistoricalCandlesResponse:
+      type: object
+      properties:
+        market:
+          $ref: '#/components/schemas/PricePriceMarket'
+        increment:
+          $ref: '#/components/schemas/Increment'
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/publicCandlestickPrice'
+          description: List of historical candles.
+        next_page_cursor:
+          type: string
+          description: Cursor token required for fetching the next page.
+    ListPricesResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Pricing'
+    publicCandlestickPrice:
+      type: object
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+          title: Timestamp at the beginning of an increment
+        open:
+          type: string
+          format: decimal
+          title: Opening price of the period
+        high:
+          type: string
+          format: decimal
+          title: Highest price during the period
+        low:
+          type: string
+          format: decimal
+          title: Lowest price during the period
+        close:
+          type: string
+          title: Closing price of the period
+        volume:
+          type: string
+          format: decimal
+          title: Volume traded during the period
+    Pricing:
+      type: object
+      properties:
+        market:
+          $ref: '#/components/schemas/PricePriceMarket'
+        current_price:
+          type: string
+          format: decimal
+          description: The current price for the given market.
+        yesterday_price:
+          type: string
+          format: decimal
+          description: The one-minute average price from 24 hours ago. Updates once per minute.
+        snapshot_at:
+          type: string
+          format: date-time
+          description: The time when the price was generated. RFC3339 format, like `2023-01-03T18:27:40.294528Z`.
+    HistoricalPrice:
+      type: object
+      properties:
+        average_price:
+          type: string
+          format: decimal
+          description: 'Time-weighted average price over the specified time period, beginning at the defined timestamp.
+
+            For example, if `increment` is set to `ONE_HOUR`, then `average_price` is the time-weighted average for an hour.
+
+            The entire time period must be completed to display results.'
+        timestamp:
+          type: string
+          format: date-time
+          description: Timestamp at the beginning of an increment.
+    Problem:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+          description: 'An absolute URI that identifies the problem type.  When dereferenced,
+
+            it SHOULD provide human-readable documentation for the problem type
+
+            (e.g., using HTML).
+
+            '
+          default: about:blank
+          example: https://api.paxos.com/v2/problems/insufficient_funds
+        title:
+          type: string
+          description: 'A short, summary of the problem type. Written in english and readable
+
+            for engineers (usually not suited for non technical stakeholders and
+
+            not localized); example: Service Unavailable
+
+            '
+          example: Insufficient Funds
+        status:
+          type: integer
+          format: int32
+          description: 'The HTTP status code generated by the origin server for this occurrence
+
+            of the problem.
+
+            '
+          minimum: 100
+          maximum: 600
+          exclusiveMaximum: true
+          example: 403
+        detail:
+          type: string
+          description: 'A human readable explanation specific to this occurrence of the
+
+            problem.
+
+            '
+          example: Not enough funds in account.
+        meta:
+          type: object
+          description: 'Additional structured metadata about the error.
+
+            '
+    ListHistoricalPricesResponse:
+      type: object
+      properties:
+        total_count:
+          type: integer
+          format: int32
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/HistoricalPrice'
+          description: List of historical prices.
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      description: 'Paxos APIs use [OAuth 2](https://tools.ietf.org/html/rfc6749) with the [client credentials](https://tools.ietf.org/html/rfc6749#section-4.4) grant flow.
+
+
+        **Token URLs:**
+
+        - Production: https://oauth.paxos.com/oauth2/token
+
+        - Sandbox: https://oauth.sandbox.paxos.com/oauth2/token
+
+
+        Learn more in the [API credentials guide →](https://docs.paxos.com/developer/credentials)
+
+        '
+      flows:
+        clientCredentials:
+          tokenUrl: https://oauth.paxos.com/oauth2/token
+          scopes:
+            conversion:read_conversion_stablecoin: Retrieve stablecoin conversion details
+            conversion:write_conversion_stablecoin: Create or cancel a stablecoin conversion
+            exchange:historical_prices: Retrieve marketnaverage prices at a certain time increment
+            exchange:read_order: Retrieve order or order execution details
+            exchange:read_quote: Retrieve quote details for buying or selling an asset
+            exchange:read_quote_execution: Retrieve quote execution details
+            exchange:write_quote_execution: Create a quote execution for buying or selling an asset
+            exchange:write_order: Create or cancel an order for buying or selling an asset
+            fee:write_crypto_withdrawal_fee: Create a guaranteed fee for crypto withdrawal
+            funding:read_bank_balance: Retrieve Paxos dedicated bank account balance
+            funding:read_profile: Retrieve Profile details and deposit funds in Sandbox
+            funding:write_profile: Create a Profile
+            identity:read_account: Retrieve Account details
+            identity:read_identity: Retrieve Identity details or documents
+            identity:write_account: Create or update Account and Account Members
+            identity:write_identity: Create or update Identity details and set Sandbox Identify Status
+            settlement:read_transaction: Retrieve settlement transaction details
+            settlement:write_transaction: Create, affirm or cancel a settlement transaction
+            tax:read_tax_form: Retrieve tax details
+            tax:read_tax_lot: Retrieve tax lot details
+            tax:write_tax_lot: Update the given tax-lot ID
+            transfer:read_deposit_address: Retrieve deposit address details
+            transfer:read_fiat_account: Retrieve Fiat Account details
+            transfer:read_fiat_deposit_instructions: Retrieve fiat deposit instruction details
+            transfer:read_transfer: Retrieve transfer details
+            transfer:read_transfer_limit: Retrieve limits for the given transaction type
+            transfer:reject_crypto_deposit: Reject a crypto deposit (travel rule)
+            transfer:update_crypto_deposit: Provide required travel-rule details
+            transfer:write_crypto_withdrawal: Withdraw asset to a specified destination address
+            transfer:write_deposit_address: Create an deposit address on a blockchain network
+            transfer:write_fiat_account: Create, update or delete a Fiat Account
+            transfer:write_fiat_deposit_instructions: Create, update or delete fiat deposit instructions
+            transfer:write_internal_transfer: Transfer assets between two Profiles
+            transfer:write_sandbox_fiat_deposit: Initiate a test fiat deposit in the Sandbox environment
+            transfer:write_fiat_withdrawal: Withdraw fiat to the given destination
+            events:read_event: Retrieve events
+x-tagGroups:
+- name: Deposits and Withdrawals
+  tags:
+  - Transfers
+  - Fiat Transfers
+  - Deposit Addresses
+  - Crypto Deposits
+  - Crypto Withdrawals
+  - Fees
+  - Internal Transfers
+  - Paxos Transfers
+  - Limits
+- name: Identity
+  tags:
+  - Identity
+  - Institution Members
+  - Accounts
+  - Account Members
+  - Identity Documents
+- name: API Credentials
+  tags:
+  - API Credentials
+- name: Profiles
+  tags:
+  - Profiles
+- name: Sandbox
+  tags:
+  - Sandbox Deposits
+  - Sandbox Identity
+  - Sandbox Fiat Transfers
+- name: Settlements
+  tags:
+  - Settlement
+- name: Stablecoin Conversion
+  tags:
+  - Stablecoin Conversion
+- name: Taxes
+  tags:
+  - Tax Forms
+- name: Trading
+  tags:
+  - Market Data
+  - Orders
+  - Quotes
+  - Quote Executions
+  - Pricing
+  - Issuer Quotes
+- name: Rewards
+  tags:
+  - Monitoring Addresses
+  - Statements
+  - Payments
+- name: Rewards (Alpha)
+  tags:
+  - Reward Addresses
+  - Claims
+  - Payout Groups
+  - Rewards
+- name: Events
+  tags:
+  - Events
+  - Event Types
+  - Event Objects

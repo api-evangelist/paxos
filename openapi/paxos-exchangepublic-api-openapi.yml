@@ -1,0 +1,594 @@
+openapi: 3.0.0
+info:
+  title: Paxos Account Members ExchangePublic API
+  version: '2.0'
+  description: '<p>Welcome to Paxos APIs. At Paxos, our mission is to enable the movement of any asset, any time, in a trustworthy way. These APIs serve that mission by making it easier than ever for you to directly integrate our product capabilities into your application, leveraging the speed, stability, and security of the Paxos platform.</p> <p>The documentation that follows gives you access to our Crypto Brokerage, Trading, and Exchange products. It includes APIs for market data, orders, and the held rate quote flow.</p> <p>To test in our sandbox environment, <a href="https://account.sandbox.paxos.com" target="_blank">sign up</a> for an account. For more information about Paxos and our APIs, visit <a href="https://www.paxos.com/" target="_blank">Paxos.com</a>.</p>
+
+    '
+  x-logo:
+    url: /docs/paxos.svg
+    backgroundColor: '#FFFFFF'
+    altText: Paxos logo
+servers:
+- url: https://api.paxos.com/v2
+  description: Production
+- url: https://api.sandbox.paxos.com/v2
+  description: Sandbox
+tags:
+- name: ExchangePublic
+paths:
+  /profiles/{profile_id}/executions:
+    get:
+      summary: List Executions
+      description: 'Retrieves full details of underlying executions for a profile id with optional filters.
+
+        If pagination details are not set the response will default to 20 items. Additionally, this endpoint will return a maximum of 500 items per page.'
+      operationId: ListProfileExecutions
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListExecutionsResponse'
+              examples:
+                response:
+                  value:
+                    items:
+                    - execution_id: '1600103'
+                      order_id: 248ffda4-83a0-4033-a5bb-8929d523f59f
+                      executed_at: '2020-01-17T18:36:08.737Z'
+                      market: BTCUSD
+                      side: BUY
+                      amount: '29579.67560314'
+                      price: '9123.50'
+                      commission: '17.747802'
+                      commission_asset: USD
+                      rebate: '0.00'
+                      rebate_asset: USD
+                    - execution_id: '1600104'
+                      order_id: 248ffda4-83a0-4033-a5bb-8929d523f59f
+                      executed_at: '2020-01-17T18:36:08.737Z'
+                      market: BTCUSD
+                      side: SELL
+                      amount: '29579.67560314'
+                      price: '9123.50'
+                      commission: '0'
+                      commission_asset: USD
+                      rebate: '8.873901'
+                      rebate_asset: USD
+                    next_page_cursor: CgsIxom6iQYQwO39XBDbsdVz
+      parameters:
+      - name: profile_id
+        description: The ProfileId associated with the orders.
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: order_id
+        description: Filter executions for a single order id.
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: since_execution_id
+        description: Excludes executions after this id.
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: range.begin
+        description: Only return records after this timestamp, inclusive. RFC3339 format, like `2006-01-02T15:04:05Z`.
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: range.end
+        description: Only return records before this timestamp, inclusive. RFC3339 format, like `2006-01-02T15:04:05Z`.
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: page_cursor
+        description: Cursor token for fetching the next page.
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: limit
+        description: Number of results to return.
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      tags:
+      - ExchangePublic
+      security:
+      - OAuth2:
+        - exchange:read_order
+  /profiles/{profile_id}/orders:
+    get:
+      summary: List Orders
+      description: 'Retrieves full details of orders associated with a profile id with optional filters.
+
+
+        Notes:
+
+        - Pagination Limit has a max of 1000 and Pagination Offset a max of 10000. If a larger Offset is needed, please contact support.'
+      operationId: ListProfileOrders
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListOrdersResponse'
+      parameters:
+      - name: profile_id
+        description: The ProfileId associated with the orders.
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: market
+        description: Filter by the trading pair.
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - ETHEUR
+          - ETHSGD
+          - ETHUSD
+          - BTCEUR
+          - BTCSGD
+          - BTCUSD
+          - PAXGUSD
+          - BCHUSD
+          - LTCUSD
+          - USDPUSD
+          - LINKUSD
+          - AAVEUSD
+          - UNIUSD
+          - PEPEUSD
+          - TRUMPUSD
+          - SHIBUSD
+          - ARBUSD
+          - BONKUSD
+          - ENAUSD
+          - MNTUSD
+          - ONDOUSD
+          - PENGUUSD
+          - QNTUSD
+          - RENDERUSD
+          - SKYUSD
+          - WIFUSD
+          - WLDUSD
+          - DOGEUSD
+          - AVAXUSD
+          - SUIUSD
+          - POLUSD
+          - XLMUSD
+          - BNBUSD
+      - name: status
+        description: Filter by the status of the order.
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - PENDING_SUBMISSION
+          - SUBMITTED
+          - OPEN
+          - FILLED
+          - CANCELLED
+          - REJECTED
+          - EXPIRED
+      - name: order_time.begin
+        description: Only return records after this timestamp, inclusive. RFC3339 format, like `2006-01-02T15:04:05Z`.
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: order_time.end
+        description: Only return records before this timestamp, inclusive. RFC3339 format, like `2006-01-02T15:04:05Z`.
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: ref_ids
+        description: The idempotence ids provided during order creation.
+        in: query
+        required: false
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      - name: page_cursor
+        description: Cursor token for fetching the next page. If using this then do not use paginationLimit and paginationOffset fields.
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: limit
+        description: Number of results to return. If using this then do not use paginationLimit and paginationOffset fields.
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      tags:
+      - ExchangePublic
+      security:
+      - OAuth2:
+        - exchange:read_order
+components:
+  schemas:
+    Order:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The UUID of the order.
+        profile_id:
+          type: string
+          description: The profile ID the order is associated with.
+        ref_id:
+          type: string
+          description: The idempotence ID for order creation. Can be reused if the order has been closed for more than 24 hours.
+        status:
+          $ref: '#/components/schemas/OrderStatus'
+        side:
+          $ref: '#/components/schemas/OrderSide'
+        market:
+          $ref: '#/components/schemas/Market'
+        type:
+          $ref: '#/components/schemas/OrderType'
+        base_amount:
+          type: string
+          format: decimal
+          description: The base amount or purchase amount for a market sell order.
+        price:
+          type: string
+          format: decimal
+          description: The quote price.
+        quote_amount:
+          type: string
+          format: decimal
+          description: The quote amount of purchase for a market buy order.
+        metadata:
+          type: object
+          additionalProperties:
+            type: string
+          description: Client-specified metadata.
+        created_at:
+          type: string
+          format: date-time
+          description: The time at which the order was created.
+        modified_at:
+          type: string
+          format: date-time
+          description: The time at which the order was last modified.
+        amount_filled:
+          type: string
+          format: decimal
+          description: The amount that was filled.
+        volume_weighted_average_price:
+          type: string
+          format: decimal
+          description: The volume-weighted average price.
+        time_in_force:
+          $ref: '#/components/schemas/TimeInForce'
+        expiration_date:
+          type: string
+          format: date-time
+          description: The date the order will expire if not completed when specified time in force is GTT.
+        identity_id:
+          type: string
+          description: The end user that requests the trade. This field must be used in conjunction with `identity_account_id`, otherwise the order is rejected. Depending on your integration type, `identity_id` and `identity_account_id` may be required.
+        identity_account_id:
+          type: string
+          description: The account under which this order is placed. The provided identity must be allowed to trade on behalf of this account. This field must be used in conjunction with `identity_id`, otherwise the order is rejected. Depending on your integration type, `identity_account_id` and `identity_id` may be required.
+        stop_price:
+          type: string
+          format: decimal
+          title: The stop price for a stop order
+        recipient_profile_id:
+          type: string
+          description: The profileId that will receive settled currency (base for buy orders, quote for sell orders).
+        is_triggered:
+          type: boolean
+          description: Returns `true` when a stop order has been triggered.
+    TimeInForce:
+      type: string
+      enum:
+      - GTC
+      - FOK
+      - IOC
+      - GTT
+      description: 'How long an order will remain active before it expires.
+
+        - Immediate-or-Cancel (IOC): Cancel if not executed immediately, partial fills allowed.
+
+        - Good-Til-Canceled (GTC): Order can be canceled at any point until executed.
+
+        - Good-Til-Time (GTT): Expires if not executed by a specified time. GTT must be greater than 10 seconds after the order is placed, otherwise the order will be rejected.
+
+        - Fill-or-Kill (FOK): Fill entire order only or cancel entire order, does not allow for partial filling.
+
+
+        **Time in Force validity for Order Types**
+
+
+        | Order type      | Immediate or Cancel (IOC) | Good Til Canceled (GTC) | Good Til Time (GTT) | Fill or Kill (FOK) |
+
+        | --------------- | ------------------------- | ----------------------- | ------------------- | ------------------ |
+
+        | Market Order    | Default                   |  -                      |  -                  |  -                 |
+
+        | Limit Order     | Valid                     | Default                 | Valid               | Valid              |
+
+        | Post Only Limit | Valid                     | Default                 | Valid               | Valid              |
+
+        | Stop Market     |  -                        | Default                 | Valid               |  -                 |
+
+        | Stop Limit      |  -                        | Default                 | Valid               |  -                 |'
+    ListOrdersResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Order'
+        next_page_cursor:
+          type: string
+          description: Cursor token required for fetching the next page.
+    Execution:
+      type: object
+      properties:
+        execution_id:
+          type: string
+          format: uint64
+          title: Unique Execution id
+        order_id:
+          type: string
+          description: The UUID of the order associated with the execution.
+        executed_at:
+          type: string
+          format: date-time
+          description: Timestamp of the execution.
+        market:
+          $ref: '#/components/schemas/Market'
+        side:
+          $ref: '#/components/schemas/OrderSide'
+        amount:
+          type: string
+          format: decimal
+          description: Execution amount.
+        price:
+          type: string
+          format: decimal
+          description: Execution price.
+        commission:
+          type: string
+          format: decimal
+          description: Amount of commission paid.
+        commission_asset:
+          type: string
+          description: Currency of Commission payment. Fiat Only (USD, EUR, SGD).
+        rebate:
+          type: string
+          format: decimal
+          description: Amount of rebate applied.
+        rebate_asset:
+          type: string
+          description: Currency of the rebate. Fiat Only (USD, EUR, SGD).
+        account_id:
+          type: string
+          description: Account ID associated with the execution.
+        gross_trade_amount:
+          type: string
+          format: decimal
+          description: The total asset traded (asset amount multiplied by price paid).
+    OrderType:
+      type: string
+      enum:
+      - LIMIT
+      - MARKET
+      - POST_ONLY_LIMIT
+      - STOP_MARKET
+      - STOP_LIMIT
+      description: Trade type.
+    OrderStatus:
+      type: string
+      enum:
+      - PENDING_SUBMISSION
+      - SUBMITTED
+      - OPEN
+      - FILLED
+      - CANCELLED
+      - REJECTED
+      - EXPIRED
+      description: 'Status of the order. The `EXPIRED` status is only applicable
+
+        for Smart Order Routing customers.
+
+        '
+    ListExecutionsResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Execution'
+        next_page_cursor:
+          type: string
+          description: Cursor token required for fetching the next page.
+    Market:
+      type: string
+      enum:
+      - ETHEUR
+      - ETHSGD
+      - ETHUSD
+      - BTCEUR
+      - BTCSGD
+      - BTCUSD
+      - PAXGUSD
+      - BCHUSD
+      - LTCUSD
+      - USDPUSD
+      - LINKUSD
+      - AAVEUSD
+      - UNIUSD
+      - PEPEUSD
+      - TRUMPUSD
+      - SHIBUSD
+      - ARBUSD
+      - BONKUSD
+      - ENAUSD
+      - MNTUSD
+      - ONDOUSD
+      - PENGUUSD
+      - QNTUSD
+      - RENDERUSD
+      - SKYUSD
+      - WIFUSD
+      - WLDUSD
+      - DOGEUSD
+      - AVAXUSD
+      - SUIUSD
+      - POLUSD
+      - XLMUSD
+      - BNBUSD
+      title: ''
+    OrderSide:
+      type: string
+      enum:
+      - BUY
+      - SELL
+      description: Trade side.
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      description: 'Paxos APIs use [OAuth 2](https://tools.ietf.org/html/rfc6749) with the [client credentials](https://tools.ietf.org/html/rfc6749#section-4.4) grant flow.
+
+
+        **Token URLs:**
+
+        - Production: https://oauth.paxos.com/oauth2/token
+
+        - Sandbox: https://oauth.sandbox.paxos.com/oauth2/token
+
+
+        Learn more in the [API credentials guide →](https://docs.paxos.com/developer/credentials)
+
+        '
+      flows:
+        clientCredentials:
+          tokenUrl: https://oauth.paxos.com/oauth2/token
+          scopes:
+            conversion:read_conversion_stablecoin: Retrieve stablecoin conversion details
+            conversion:write_conversion_stablecoin: Create or cancel a stablecoin conversion
+            exchange:historical_prices: Retrieve marketnaverage prices at a certain time increment
+            exchange:read_order: Retrieve order or order execution details
+            exchange:read_quote: Retrieve quote details for buying or selling an asset
+            exchange:read_quote_execution: Retrieve quote execution details
+            exchange:write_quote_execution: Create a quote execution for buying or selling an asset
+            exchange:write_order: Create or cancel an order for buying or selling an asset
+            fee:write_crypto_withdrawal_fee: Create a guaranteed fee for crypto withdrawal
+            funding:read_bank_balance: Retrieve Paxos dedicated bank account balance
+            funding:read_profile: Retrieve Profile details and deposit funds in Sandbox
+            funding:write_profile: Create a Profile
+            identity:read_account: Retrieve Account details
+            identity:read_identity: Retrieve Identity details or documents
+            identity:write_account: Create or update Account and Account Members
+            identity:write_identity: Create or update Identity details and set Sandbox Identify Status
+            settlement:read_transaction: Retrieve settlement transaction details
+            settlement:write_transaction: Create, affirm or cancel a settlement transaction
+            tax:read_tax_form: Retrieve tax details
+            tax:read_tax_lot: Retrieve tax lot details
+            tax:write_tax_lot: Update the given tax-lot ID
+            transfer:read_deposit_address: Retrieve deposit address details
+            transfer:read_fiat_account: Retrieve Fiat Account details
+            transfer:read_fiat_deposit_instructions: Retrieve fiat deposit instruction details
+            transfer:read_transfer: Retrieve transfer details
+            transfer:read_transfer_limit: Retrieve limits for the given transaction type
+            transfer:reject_crypto_deposit: Reject a crypto deposit (travel rule)
+            transfer:update_crypto_deposit: Provide required travel-rule details
+            transfer:write_crypto_withdrawal: Withdraw asset to a specified destination address
+            transfer:write_deposit_address: Create an deposit address on a blockchain network
+            transfer:write_fiat_account: Create, update or delete a Fiat Account
+            transfer:write_fiat_deposit_instructions: Create, update or delete fiat deposit instructions
+            transfer:write_internal_transfer: Transfer assets between two Profiles
+            transfer:write_sandbox_fiat_deposit: Initiate a test fiat deposit in the Sandbox environment
+            transfer:write_fiat_withdrawal: Withdraw fiat to the given destination
+            events:read_event: Retrieve events
+x-tagGroups:
+- name: Deposits and Withdrawals
+  tags:
+  - Transfers
+  - Fiat Transfers
+  - Deposit Addresses
+  - Crypto Deposits
+  - Crypto Withdrawals
+  - Fees
+  - Internal Transfers
+  - Paxos Transfers
+  - Limits
+- name: Identity
+  tags:
+  - Identity
+  - Institution Members
+  - Accounts
+  - Account Members
+  - Identity Documents
+- name: API Credentials
+  tags:
+  - API Credentials
+- name: Profiles
+  tags:
+  - Profiles
+- name: Sandbox
+  tags:
+  - Sandbox Deposits
+  - Sandbox Identity
+  - Sandbox Fiat Transfers
+- name: Settlements
+  tags:
+  - Settlement
+- name: Stablecoin Conversion
+  tags:
+  - Stablecoin Conversion
+- name: Taxes
+  tags:
+  - Tax Forms
+- name: Trading
+  tags:
+  - Market Data
+  - Orders
+  - Quotes
+  - Quote Executions
+  - Pricing
+  - Issuer Quotes
+- name: Rewards
+  tags:
+  - Monitoring Addresses
+  - Statements
+  - Payments
+- name: Rewards (Alpha)
+  tags:
+  - Reward Addresses
+  - Claims
+  - Payout Groups
+  - Rewards
+- name: Events
+  tags:
+  - Events
+  - Event Types
+  - Event Objects

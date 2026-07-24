@@ -1,0 +1,311 @@
+openapi: 3.0.0
+info:
+  title: Paxos Account Members Institution Members API
+  version: '2.0'
+  description: '<p>Welcome to Paxos APIs. At Paxos, our mission is to enable the movement of any asset, any time, in a trustworthy way. These APIs serve that mission by making it easier than ever for you to directly integrate our product capabilities into your application, leveraging the speed, stability, and security of the Paxos platform.</p> <p>The documentation that follows gives you access to our Crypto Brokerage, Trading, and Exchange products. It includes APIs for market data, orders, and the held rate quote flow.</p> <p>To test in our sandbox environment, <a href="https://account.sandbox.paxos.com" target="_blank">sign up</a> for an account. For more information about Paxos and our APIs, visit <a href="https://www.paxos.com/" target="_blank">Paxos.com</a>.</p>
+
+    '
+  x-logo:
+    url: /docs/paxos.svg
+    backgroundColor: '#FFFFFF'
+    altText: Paxos logo
+servers:
+- url: https://api.paxos.com/v2
+  description: Production
+- url: https://api.sandbox.paxos.com/v2
+  description: Sandbox
+tags:
+- name: Institution Members
+  description: 'Institution Members allow you to associate persons with an institution on our Platform.
+
+    Each institution can have multiple members, with each member representing the relationship to a person identity.
+
+
+    When creating an institution identity, you must designate at least one institution member.
+
+    This requirement ensures we have complete information about the institution''s ownership structure
+
+    and key personnel, which is necessary to onboard institutions.
+
+    '
+paths:
+  /identity/institution-members:
+    post:
+      summary: Add Institution Members
+      description: 'Add one or more institution members to a given institution.
+
+
+        Adding new members doesn''t affect existing members. For example, if an institution has three
+
+        members, and adds two members using this API, then the institution would end up with five total members.
+
+
+        For details on the properties that can be specified when creating institution members,
+
+        see [Specifying Institution Members and Their Roles](#specifying-institution-members-and-their-roles).'
+      operationId: AddInstitutionMembers
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AddInstitutionMembersResponse'
+              examples:
+                Add Institution Members:
+                  value:
+                    institution_id: 2908fa8b-427a-4089-b2cf-17654c604623
+                    members:
+                    - identity_id: 31abdcbd-2801-4dbc-8986-adec3828391b
+                      roles:
+                      - GRANTOR
+                      id: 23ebbcd3-0fe6-48c8-9a2c-a35572b0e8ba
+                    - identity_id: 58def33e-b68f-47d3-bc2b-62b1f68f21e5
+                      roles:
+                      - TRUSTEE
+                      id: a0a0d270-0dd1-40b7-85ce-de713c47bcec
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddInstitutionMembersRequest'
+            examples:
+              Add Institution Members:
+                value:
+                  institution_id: 2908fa8b-427a-4089-b2cf-17654c604623
+                  members:
+                  - identity_id: 31abdcbd-2801-4dbc-8986-adec3828391b
+                    roles:
+                    - GRANTOR
+                  - identity_id: 58def33e-b68f-47d3-bc2b-62b1f68f21e5
+                    roles:
+                    - TRUSTEE
+        required: true
+      tags:
+      - Institution Members
+      security:
+      - OAuth2:
+        - identity:write_identity
+  /identity/institution-members/{id}:
+    delete:
+      summary: Remove Institution Member
+      description: Removes an institution member from an institution.
+      operationId: DeleteInstitutionMember
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteInstitutionMemberResponse'
+      parameters:
+      - name: id
+        description: The institution member ID that should be removed from the institution.
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - Institution Members
+      security:
+      - OAuth2:
+        - identity:write_identity
+components:
+  schemas:
+    AddInstitutionMembersRequest:
+      type: object
+      properties:
+        institution_id:
+          type: string
+          description: ID of institution identity to which members will be added.
+        members:
+          type: array
+          items:
+            $ref: '#/components/schemas/InstitutionMember'
+          description: A non-empty array of institution members that were added. Should always be present in practice.
+      required:
+      - institution_id
+      - members
+    InstitutionMember:
+      type: object
+      properties:
+        identity_id:
+          type: string
+          title: The ID of the member identity
+        roles:
+          type: array
+          items:
+            $ref: '#/components/schemas/InstitutionRoleType'
+          description: The role(s) the member fulfils for the institution. Should always be present in practice. See the [developer guide](https://docs.paxos.com/guides/identity/institution-types) for required roles per institution type.
+        ownership:
+          type: string
+          format: decimal
+          description: Decimal number representing the percent ownership the identity has in the company--  e.g. 5 represents 5% ownership.
+        position:
+          type: string
+          title: The position the identity holds with the company
+        name:
+          type: string
+          title: Member's full name. Not writable from API
+        summary_status:
+          $ref: '#/components/schemas/IdentityStatus'
+        id:
+          type: string
+          description: 'Institution member ID. Note: This field is auto-generated. Specifying an ID when creating an institution member is a client error.'
+      required:
+      - identity_id
+    DeleteInstitutionMemberResponse:
+      type: object
+    AddInstitutionMembersResponse:
+      type: object
+      properties:
+        institution_id:
+          type: string
+          description: ID of institution identity to which members were added.
+        members:
+          type: array
+          items:
+            $ref: '#/components/schemas/InstitutionMember'
+          description: List of institution members that were added to the institution.
+      required:
+      - institution_id
+    IdentityStatus:
+      type: string
+      enum:
+      - PENDING
+      - ERROR
+      - APPROVED
+      - DENIED
+      - DISABLED
+      title: ''
+    InstitutionRoleType:
+      type: string
+      enum:
+      - BENEFICIAL_OWNER
+      - ACCOUNT_OPENER
+      - TRUSTEE
+      - AUTHORIZED_USER
+      - GRANTOR
+      - MANAGEMENT_CONTROL_PERSON
+      - BENEFICIARY
+      - SOLE_PROPRIETOR
+      title: ''
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      description: 'Paxos APIs use [OAuth 2](https://tools.ietf.org/html/rfc6749) with the [client credentials](https://tools.ietf.org/html/rfc6749#section-4.4) grant flow.
+
+
+        **Token URLs:**
+
+        - Production: https://oauth.paxos.com/oauth2/token
+
+        - Sandbox: https://oauth.sandbox.paxos.com/oauth2/token
+
+
+        Learn more in the [API credentials guide →](https://docs.paxos.com/developer/credentials)
+
+        '
+      flows:
+        clientCredentials:
+          tokenUrl: https://oauth.paxos.com/oauth2/token
+          scopes:
+            conversion:read_conversion_stablecoin: Retrieve stablecoin conversion details
+            conversion:write_conversion_stablecoin: Create or cancel a stablecoin conversion
+            exchange:historical_prices: Retrieve marketnaverage prices at a certain time increment
+            exchange:read_order: Retrieve order or order execution details
+            exchange:read_quote: Retrieve quote details for buying or selling an asset
+            exchange:read_quote_execution: Retrieve quote execution details
+            exchange:write_quote_execution: Create a quote execution for buying or selling an asset
+            exchange:write_order: Create or cancel an order for buying or selling an asset
+            fee:write_crypto_withdrawal_fee: Create a guaranteed fee for crypto withdrawal
+            funding:read_bank_balance: Retrieve Paxos dedicated bank account balance
+            funding:read_profile: Retrieve Profile details and deposit funds in Sandbox
+            funding:write_profile: Create a Profile
+            identity:read_account: Retrieve Account details
+            identity:read_identity: Retrieve Identity details or documents
+            identity:write_account: Create or update Account and Account Members
+            identity:write_identity: Create or update Identity details and set Sandbox Identify Status
+            settlement:read_transaction: Retrieve settlement transaction details
+            settlement:write_transaction: Create, affirm or cancel a settlement transaction
+            tax:read_tax_form: Retrieve tax details
+            tax:read_tax_lot: Retrieve tax lot details
+            tax:write_tax_lot: Update the given tax-lot ID
+            transfer:read_deposit_address: Retrieve deposit address details
+            transfer:read_fiat_account: Retrieve Fiat Account details
+            transfer:read_fiat_deposit_instructions: Retrieve fiat deposit instruction details
+            transfer:read_transfer: Retrieve transfer details
+            transfer:read_transfer_limit: Retrieve limits for the given transaction type
+            transfer:reject_crypto_deposit: Reject a crypto deposit (travel rule)
+            transfer:update_crypto_deposit: Provide required travel-rule details
+            transfer:write_crypto_withdrawal: Withdraw asset to a specified destination address
+            transfer:write_deposit_address: Create an deposit address on a blockchain network
+            transfer:write_fiat_account: Create, update or delete a Fiat Account
+            transfer:write_fiat_deposit_instructions: Create, update or delete fiat deposit instructions
+            transfer:write_internal_transfer: Transfer assets between two Profiles
+            transfer:write_sandbox_fiat_deposit: Initiate a test fiat deposit in the Sandbox environment
+            transfer:write_fiat_withdrawal: Withdraw fiat to the given destination
+            events:read_event: Retrieve events
+x-tagGroups:
+- name: Deposits and Withdrawals
+  tags:
+  - Transfers
+  - Fiat Transfers
+  - Deposit Addresses
+  - Crypto Deposits
+  - Crypto Withdrawals
+  - Fees
+  - Internal Transfers
+  - Paxos Transfers
+  - Limits
+- name: Identity
+  tags:
+  - Identity
+  - Institution Members
+  - Accounts
+  - Account Members
+  - Identity Documents
+- name: API Credentials
+  tags:
+  - API Credentials
+- name: Profiles
+  tags:
+  - Profiles
+- name: Sandbox
+  tags:
+  - Sandbox Deposits
+  - Sandbox Identity
+  - Sandbox Fiat Transfers
+- name: Settlements
+  tags:
+  - Settlement
+- name: Stablecoin Conversion
+  tags:
+  - Stablecoin Conversion
+- name: Taxes
+  tags:
+  - Tax Forms
+- name: Trading
+  tags:
+  - Market Data
+  - Orders
+  - Quotes
+  - Quote Executions
+  - Pricing
+  - Issuer Quotes
+- name: Rewards
+  tags:
+  - Monitoring Addresses
+  - Statements
+  - Payments
+- name: Rewards (Alpha)
+  tags:
+  - Reward Addresses
+  - Claims
+  - Payout Groups
+  - Rewards
+- name: Events
+  tags:
+  - Events
+  - Event Types
+  - Event Objects

@@ -1,0 +1,1949 @@
+openapi: 3.0.0
+info:
+  title: Paxos Account Members Fiat Transfers API
+  version: '2.0'
+  description: '<p>Welcome to Paxos APIs. At Paxos, our mission is to enable the movement of any asset, any time, in a trustworthy way. These APIs serve that mission by making it easier than ever for you to directly integrate our product capabilities into your application, leveraging the speed, stability, and security of the Paxos platform.</p> <p>The documentation that follows gives you access to our Crypto Brokerage, Trading, and Exchange products. It includes APIs for market data, orders, and the held rate quote flow.</p> <p>To test in our sandbox environment, <a href="https://account.sandbox.paxos.com" target="_blank">sign up</a> for an account. For more information about Paxos and our APIs, visit <a href="https://www.paxos.com/" target="_blank">Paxos.com</a>.</p>
+
+    '
+  x-logo:
+    url: /docs/paxos.svg
+    backgroundColor: '#FFFFFF'
+    altText: Paxos logo
+servers:
+- url: https://api.paxos.com/v2
+  description: Production
+- url: https://api.sandbox.paxos.com/v2
+  description: Sandbox
+tags:
+- name: Fiat Transfers
+  description: "The Fiat Transfers API allows clients to deposit and withdraw fiat via the following Fiat Networks: Wire (Fedwire and SWIFT) and CUBIX. The supported asset is USD.\n\nThe full set of Fiat Transfers API endpoints is:\n- For Deposits:\n  - [Create Fiat Deposit Instructions](#operation/CreateFiatDepositInstructions)\n  - [List Fiat Deposit Instructions](#operation/ListFiatDepositInstructions)\n  - [Get Fiat Deposit Instructions](#operation/GetFiatDepositInstructions)\n- For Withdrawals:\n  - [Create Fiat Account](#operation/CreateFiatAccount)\n  - [List Fiat Accounts](#operation/ListFiatAccounts)\n  - [Get Fiat Account](#operation/GetFiatAccount)\n  - [Delete Fiat Account](#operation/DeleteFiatAccount)\n  - [Update Fiat Account](#operation/UpdateFiatAccount)\n  - [Create Fiat Withdrawal](#operation/CreateFiatWithdrawal)\n"
+paths:
+  /transfer/fiat-accounts:
+    get:
+      summary: List Fiat Accounts
+      description: 'List all Fiat Accounts, optionally filtering and paging the results.
+
+        The response includes an abbreviated `FiatAccount` object:
+
+
+        - Beneficiary name and address details are excluded.
+
+        - Only the last four (**4**) digits of the account number are included.
+
+
+        Use [Get Fiat Account](#operation/GetFiatAccount) to retrieve the complete `FiatAccount` object.
+
+
+        The paginated results default to the maximum limit of 1,000 Fiat Accounts, unless otherwise specified with the `limit` parameter.
+
+        Every paginated response contains a `next_page` field until the last page is reached.
+
+        Pass the `next_page` value into the `page_cursor` field of the next request to retrieve the next page of results.'
+      operationId: ListFiatAccounts
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListFiatAccountsResponse'
+              example:
+                items:
+                - id: dde1b3c5-d02a-48f6-8d11-16b4f532ea49
+                  ref_id: test_ref_id_1
+                  identity_id: c6ea91da-8f33-4545-9bdf-3cf29b4041d7
+                  account_id: 91f91384-30d4-46c2-9118-7f3cec676a2c
+                  fiat_account_owner:
+                    person_details: null
+                  fiat_network_instructions:
+                    wire:
+                      account_number: XXXX5678
+                      fiat_account_owner_address: null
+                      routing_details:
+                        routing_number_type: ABA
+                        routing_number: '123456789'
+                        bank_name: Customers Bank
+                        bank_address: null
+                      status: PENDING
+                      metadata:
+                        test_ref_id: 47aa7538-e2d2-47b3-8600-44a7965dd357
+                        transaction_attempt: 1
+                  created_at: '2023-09-24T14:15:22Z'
+                  updated_at: '2023-09-24T14:15:22Z'
+      parameters:
+      - name: ids
+        description: Optionally filter by the UUIDs of the accounts. Limit 100.
+        in: query
+        required: false
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      - name: ref_ids
+        description: Optionally filter by the client-specified IDs provided during account creation. Limit 100.
+        in: query
+        required: false
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      - name: created_at.lt
+        description: Include timestamps strictly less than lt. RFC3339 format, like `2006-01-02T15:04:05Z`.
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: created_at.lte
+        description: Include timestamps less than or equal to lte. RFC3339 format, like `2006-01-02T15:04:05Z`.
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: created_at.eq
+        description: Include timestamps exactly equal to eq. RFC3339 format, like `2006-01-02T15:04:05Z`.
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: created_at.gte
+        description: Include timestamps greater than or equal to gte. RFC3339 format, like `2006-01-02T15:04:05Z`.
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: created_at.gt
+        description: Include timestamps strictly greater than gt. RFC3339 format, like `2006-01-02T15:04:05Z`.
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: limit
+        description: Number of results to return. Defaults to 100 if no limit is provided. Maximum 1000.
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: order
+        description: Return items in ascending (ASC) or descending (DESC) order. Defaults to DESC.
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - DESC
+          - ASC
+      - name: order_by
+        description: The specific method by which the returned results will be ordered. Defaults to CREATED_AT.
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - CREATED_AT
+      - name: page_cursor
+        description: 'Optional: Cursor for getting the next page of results.'
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: include_deleted
+        description: Used to include deleted accounts in the response.
+        in: query
+        required: false
+        schema:
+          type: boolean
+      tags:
+      - Fiat Transfers
+      security:
+      - OAuth2:
+        - transfer:read_fiat_account
+    post:
+      summary: Create Fiat Account
+      description: 'Create an account to initiate a fiat withdrawal.
+
+
+        For U.S. wires, set `fiat_network_instructions` > `wire` > `routing_details` > `routing_number_type` to `ABA`. For international (SWIFT) wires, set `fiat_network_instructions` > `wire` > `routing_details` > `routing_number_type` to `SWIFT`.
+
+        For CUBIX, set `fiat_network_instructions` > `cubix` > `account_id`, and do not specify `routing_number_type`. For CUBIX, the `account_id` is the CUBIX account ID.'
+      operationId: CreateFiatAccount
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FiatAccount'
+              example:
+                id: dde1b3c5-d02a-48f6-8d11-16b4f532ea49
+                ref_id: test_ref_id_1
+                identity_id: c6ea91da-8f33-4545-9bdf-3cf29b4041d7
+                account_id: 91f91384-30d4-46c2-9118-7f3cec676a2c
+                fiat_account_owner:
+                  person_details:
+                    first_name: Jane
+                    last_name: Doe
+                  fiat_network_instructions:
+                    wire:
+                      account_number: '12345678'
+                      fiat_account_owner_address:
+                        country: USA
+                        address1: 456 Main Street, NY
+                        city: New York
+                        province: NY
+                        address2: ''
+                        zip_code: '10101'
+                      routing_details:
+                        routing_number_type: ABA
+                        routing_number: '123456789'
+                        bank_name: Customers Bank
+                        bank_address:
+                          country: USA
+                          address1: 123 Bank Street
+                          city: New York
+                          province: NY
+                          address2: ''
+                          zip_code: '10101'
+                    status: PENDING
+                    metadata:
+                      test_ref_id: 47aa7538-e2d2-47b3-8600-44a7965dd357
+                      transaction_attempt: 1
+                created_at: '2023-09-24T14:15:22Z'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                example:
+                  type: about:blank
+                  title: Bad Request
+                  status: 400
+                  detail: account_number must be set
+                $ref: '#/components/schemas/Problem'
+              example:
+                type: about:blank
+                title: Bad Request
+                status: 400
+                detail: account_number must be set
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                example:
+                  type: about:blank
+                  title: Not Found
+                  status: 403
+                  detail: identity_id forbidden for first-party customers
+                $ref: '#/components/schemas/Problem'
+              example:
+                type: about:blank
+                title: Forbidden
+                status: 403
+                detail: identity_id forbidden for first-party customers
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                example:
+                  type: about:blank
+                  title: Not Found
+                  status: 404
+                  detail: 'no fiat account found for id: 2d929a0d-e1e3-4781-b7f8-7b34e66f7832'
+                $ref: '#/components/schemas/Problem'
+              example:
+                type: about:blank
+                title: Not Found
+                status: 404
+                detail: 'no fiat account found for id: ''2d929a0d-e1e3-4781-b7f8-7b34e66f7832'''
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateFiatAccountRequest'
+        required: true
+      tags:
+      - Fiat Transfers
+      security:
+      - OAuth2:
+        - transfer:write_fiat_account
+  /transfer/fiat-accounts/{id}:
+    get:
+      summary: Get Fiat Account
+      description: 'Get a single Fiat Account by ID.
+
+
+        In the polling workflow, this endpoint can be called to monitor a FiatAccount''s status.
+
+        The Fiat Account response includes the full account number, beneficiary name and address details.'
+      operationId: GetFiatAccount
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FiatAccount'
+      parameters:
+      - name: id
+        description: 'The Paxos fiat account ID (UUID).
+
+          The Fiat Account ID (`id`) is provided in the response of the [Create Fiat Account](#operation/CreateFiatAccount).
+
+          Use this ID to retrieve the instructions using [Get Fiat Account](#operation/GetFiatAccount) & [List Fiat Accounts](#operation/ListFiatAccounts).'
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: include_deleted
+        description: Used to include deleted accounts in the response.
+        in: query
+        required: false
+        schema:
+          type: boolean
+      tags:
+      - Fiat Transfers
+      security:
+      - OAuth2:
+        - transfer:read_fiat_account
+    delete:
+      summary: Delete Fiat Account
+      description: 'Delete a Fiat Account.
+
+        Once a Fiat Account is deleted, transfers cannot be initiated to it.'
+      operationId: DeleteFiatAccount
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                example:
+                  type: application/json
+                  value: '{}'
+              example: {}
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                example:
+                  type: about:blank
+                  title: Bad Request
+                  status: 400
+                  detail: id must be uuid, given 2d929a0d-e1e3-4781-b7f8-7b34e66f
+                $ref: '#/components/schemas/Problem'
+              example:
+                type: about:blank
+                title: Bad Request
+                status: 400
+                detail: id must be uuid, given '123456'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                example:
+                  type: about:blank
+                  title: Not Found
+                  status: 404
+                  detail: 'no fiat account found for id: 2d929a0d-e1e3-4781-b7f8-7b34e66f7832'
+                $ref: '#/components/schemas/Problem'
+              example:
+                type: about:blank
+                title: Not Found
+                status: 404
+                detail: 'no fiat account found for id: ''2d929a0d-e1e3-4781-b7f8-7b34e66f7832'''
+      parameters:
+      - name: id
+        description: The Paxos fiat account ID (UUID).
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - Fiat Transfers
+      security:
+      - OAuth2:
+        - transfer:write_fiat_account
+    put:
+      summary: Update Fiat Account
+      description: 'Change an existing value or add a new value on one or more fields for the given Fiat Account and return the modified Fiat Account in `PENDING` status.
+
+        Update fields in **either** `fiat_account_owner.person_details` or `fiat_account_owner.institution_details`.
+
+        Attempts to convert the `fiat_account_owner` type results in an error.
+
+        Empty strings or null values are ignored.
+
+
+        Upon successful response, Paxos initiates an automated review of the requested changes and then either sets the status to `APPROVED` or `REJECTED`.
+
+        Occasionally, a manual review may be required.
+
+        Use [Get Fiat Account](#operation/GetFiatAccount) to check for status changes.'
+      operationId: UpdateFiatAccount
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FiatAccount'
+              example:
+                id: dde1b3c5-d02a-48f6-8d11-16b4f532ea49
+                ref_id: test_ref_id_1
+                identity_id: c6ea91da-8f33-4545-9bdf-3cf29b4041d7
+                account_id: 91f91384-30d4-46c2-9118-7f3cec676a2c
+                fiat_account_owner:
+                  person_details:
+                    first_name: John
+                    last_name: Smith
+                  fiat_network_instructions:
+                    wire:
+                      account_number: '12345678'
+                      fiat_account_owner_address:
+                        country: USA
+                        address1: 456 Main Street, NY
+                        city: New York
+                        province: NY
+                        address2: ''
+                        zip_code: '10101'
+                      routing_details:
+                        routing_number_type: ABA
+                        routing_number: '123456789'
+                        bank_name: Customers Bank
+                        bank_address:
+                          country: USA
+                          address1: 123 Bank Street
+                          city: New York
+                          province: NY
+                          address2: ''
+                          zip_code: '10101'
+                    status: PENDING
+                    metadata:
+                      test_ref_id: 47aa7538-e2d2-47b3-8600-44a7965dd357
+                      transaction_attempt: 1
+                created_at: '2023-09-24T14:15:22Z'
+                updated_at: '2023-09-24T14:15:22Z'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+              example:
+                type: about:blank
+                title: Bad Request
+                status: 400
+                detail: fiat_account_owner cannot be changed from person to institution
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+              example:
+                type: about:blank
+                title: Forbidden
+                status: 403
+                detail: 'identity_id forbidden for 1st-Party ledgering. See: https://docs.paxos.com/crypto-brokerage/ledger-type'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+              example:
+                type: about:blank
+                title: Not Found
+                status: 404
+                detail: fiat_account with id 2d929a0d-e1e3-4781-b7f8-7b34e66j783 not found
+      parameters:
+      - name: id
+        description: 'The Paxos fiat account ID (UUID).
+
+          The Fiat Account ID (`id`) is provided in the response of the [Create Fiat Account](#operation/CreateFiatAccount).
+
+          Use this ID to retrieve the instructions using [Get Fiat Account](#operation/GetFiatAccount) & [List Fiat Accounts](#operation/ListFiatAccounts).'
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransferPublicUpdateFiatAccountBody'
+            examples:
+              Update fiat account owner person details:
+                value:
+                  fiat_account_owner:
+                    person_details:
+                      first_name: John
+                      last_name: Smith
+              Update fiat account owner institution details:
+                value:
+                  fiat_account_owner:
+                    institution_details:
+                      name: Big Tech Inc
+              Update fiat account owner address:
+                value:
+                  fiat_account_owner:
+                    fiat_network_instructions:
+                      wire:
+                        fiat_account_owner_address:
+                          country: USA
+                          address1: 456 Main Street, NY
+                          city: New York
+                          province: NY
+                          address2: ''
+                          zip_code: '10101'
+              Update routing bank name & address:
+                value:
+                  fiat_account_owner:
+                    fiat_network_instructions:
+                      wire:
+                        routing_details:
+                          bank_name: Customers Bank
+                          bank_address:
+                            country: USA
+                            address1: 123 Bank Street
+                            address2: ''
+                            city: New York
+                            province: NY
+                            zip_code: '10101'
+              Update intermediary bank name & address:
+                value:
+                  fiat_account_owner:
+                    fiat_network_instructions:
+                      wire:
+                        intermediary_bank_name: Intermediary Bank
+                        intermediary_bank_address:
+                          country: USA
+                          address1: 123 Bank Street
+                          city: New York
+                          province: NY
+                          zip_code: '10101'
+              Update fiat account metadata:
+                value:
+                  metadata:
+                    key1: value1
+                    key2: value2
+        required: true
+      tags:
+      - Fiat Transfers
+      security:
+      - OAuth2:
+        - transfer:write_fiat_account
+  /transfer/fiat-deposit-instructions:
+    get:
+      summary: List Fiat Deposit Instructions
+      description: 'Return the associated Fiat Deposit Instructions matching the search criteria for the current Account.
+
+        The paginated results default to the maximum limit of 1,000 Fiat Deposit instructions, unless otherwise specified with the `limit` parameter.
+
+        Every paginated response contains a `next_page` field until the last page is reached.
+
+        Pass the `next_page` value into the `page_cursor` field of the next request to retrieve the next page of results.'
+      operationId: ListFiatDepositInstructions
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListFiatDepositInstructionsResponse'
+              example:
+                items:
+                - id: f190b163-208f-4d73-8deb-4fb8b24add00
+                  profile_id: 5fc6d191-193c-4e28-94fa-656bbdbdfaad
+                  customer_id: 9b8c9cba-801e-4418-adc0-ede709df6339
+                  ref_id: idempotence_id
+                  status: VALID
+                  memo_id: 9CFXQSCMSPLFHXLZ
+                  fiat_network_instructions:
+                    wire:
+                      account_number: '12345678'
+                      fiat_account_owner_address:
+                        country: USA
+                        address1: 456 Main Street, NY
+                        city: New York
+                        province: NY
+                        address2: ''
+                        zip_code: '10101'
+                      routing_details:
+                        routing_number_type: ABA
+                        routing_number: '123456789'
+                        bank_name: Customers Bank
+                        bank_address:
+                          country: USA
+                          address1: 123 Bank Street
+                          city: New York
+                          province: NY
+                          address2: ''
+                          zip_code: '10101'
+                    fiat_account_owner:
+                      person_details:
+                        first_name: Jane
+                        last_name: Doe
+                    metadata:
+                      my_id: 4024ee50-eefb-4f2e-85c7-e7899c0b7da5
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+              example:
+                type: about:blank
+                title: Bad Request
+                status: 400
+                detail: page_cursor token cannot be parsed
+          description: Bad Request
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+              example:
+                type: about:blank
+                title: Not Found
+                status: 404
+                detail: fiat deposit instructions with id f190b163-208f-4d73-8deb-4fb8b24add00 not found
+          description: Could not find Identity
+      parameters:
+      - name: ids
+        description: Optionally filter by the UUIDs of the instructions. Limit 100.
+        in: query
+        required: false
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      - name: ref_ids
+        description: Optionally filter by the client-specified IDs provided during instructions creation. Limit 100.
+        in: query
+        required: false
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      - name: created_at.lt
+        description: Include timestamps strictly less than lt. RFC3339 format, like `2006-01-02T15:04:05Z`.
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: created_at.lte
+        description: Include timestamps less than or equal to lte. RFC3339 format, like `2006-01-02T15:04:05Z`.
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: created_at.eq
+        description: Include timestamps exactly equal to eq. RFC3339 format, like `2006-01-02T15:04:05Z`.
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: created_at.gte
+        description: Include timestamps greater than or equal to gte. RFC3339 format, like `2006-01-02T15:04:05Z`.
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: created_at.gt
+        description: Include timestamps strictly greater than gt. RFC3339 format, like `2006-01-02T15:04:05Z`.
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: limit
+        description: Number of results to return. Defaults to 100 if no limit is provided. Maximum 1000.
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: order
+        description: Return items in ascending (ASC) or descending (DESC) order. Defaults to DESC.
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - DESC
+          - ASC
+      - name: page_cursor
+        description: 'Optional: Cursor for getting the next page of results.'
+        in: query
+        required: false
+        schema:
+          type: string
+      tags:
+      - Fiat Transfers
+      security:
+      - OAuth2:
+        - transfer:read_fiat_deposit_instructions
+    post:
+      summary: Create Fiat Deposit Instructions
+      description: Create instructions for depositing fiat.
+      operationId: CreateFiatDepositInstructions
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FiatDepositInstructions'
+              example:
+                id: f190b163-208f-4d73-8deb-4fb8b24add00
+                profile_id: 5fc6d191-193c-4e28-94fa-656bbdbdfaad
+                customer_id: 9b8c9cba-801e-4418-adc0-ede709df6339
+                ref_id: idempotence_id
+                status: VALID
+                memo_id: 9CFXQSCMSPLFHXLZ
+                fiat_network_instructions:
+                  wire:
+                    account_number: '12345678'
+                    fiat_account_owner_address:
+                      country: USA
+                      address1: 456 Main Street, NY
+                      city: New York
+                      province: NY
+                      address2: ''
+                      zip_code: '10101'
+                    routing_details:
+                      routing_number_type: ABA
+                      routing_number: '123456789'
+                      bank_name: Customers Bank
+                      bank_address:
+                        country: USA
+                        address1: 123 Bank Street
+                        city: New York
+                        province: NY
+                        address2: ''
+                        zip_code: '10101'
+                  fiat_account_owner:
+                    person_details:
+                      first_name: Jane
+                      last_name: Doe
+                  metadata:
+                    my_id: 4024ee50-eefb-4f2e-85c7-e7899c0b7da5
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+              example:
+                type: about:blank
+                title: Bad Request
+                status: 400
+                detail: 'identity not enabled for customer 8a398cb6-4e3b-4868-9cea-a1c567856e68 '
+          description: Bad Request
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+              example:
+                type: about:blank
+                title: Not Found
+                status: 404
+                detail: identity not found for customer 8a398cb6-4e3b-4868-9cea-a1c567856e68
+          description: Could not find Identity
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateFiatDepositInstructionsRequest'
+            examples:
+              Create fiat deposit instructions:
+                value:
+                  profile_id: 5fc6d191-193c-4e28-94fa-656bbdbdfaad
+                  fiat_network: WIRE
+                  identity_id: 8a398cb6-4e3b-4868-9cea-a1c567856e68
+                  account_ id: 91f91384-30d4-46c2-9118-7f3cec676a2c
+                  ref_id: idempotence_id
+                  routing_number_type: SWIFT
+                  metadata:
+                    my_id: 4024ee50-eefb-4f2e-85c7-e7899c0b7da5
+        required: true
+      tags:
+      - Fiat Transfers
+      security:
+      - OAuth2:
+        - transfer:write_fiat_deposit_instructions
+  /transfer/fiat-deposit-instructions/{id}:
+    get:
+      summary: Get Fiat Deposit Instructions
+      description: 'Get instructions for depositing fiat using a Paxos Fiat Deposit Instructions ID.
+
+        The Fiat Deposit Instructions ID (`id`) is provided in the response of the [Create Fiat Deposit Instructions](#operation/CreateFiatDepositInstructions).'
+      operationId: GetFiatDepositInstructions
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FiatDepositInstructions'
+              example:
+                id: f190b163-208f-4d73-8deb-4fb8b24add00
+                profile_id: 5fc6d191-193c-4e28-94fa-656bbdbdfaad
+                customer_id: 9b8c9cba-801e-4418-adc0-ede709df6339
+                ref_id: idempotence_id
+                status: VALID
+                memo_id: 9CFXQSCMSPLFHXLZ
+                fiat_network_instructions:
+                  wire:
+                    account_number: '12345678'
+                    fiat_account_owner_address:
+                      country: USA
+                      address1: 456 Main Street, NY
+                      city: New York
+                      province: NY
+                      address2: ''
+                      zip_code: '10101'
+                    routing_details:
+                      routing_number_type: ABA
+                      routing_number: '123456789'
+                      bank_name: Customers Bank
+                      bank_address:
+                        country: USA
+                        address1: 123 Bank Street
+                        city: New York
+                        province: NY
+                        address2: ''
+                        zip_code: '10101'
+                  fiat_account_owner:
+                    person_details:
+                      first_name: Jane
+                      last_name: Doe
+                  metadata:
+                    my_id: 4024ee50-eefb-4f2e-85c7-e7899c0b7da5
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+              example:
+                type: about:blank
+                title: Bad Request
+                status: 400
+                detail: expected uuid, got invalid-uuid
+          description: Bad Request
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+              example:
+                type: about:blank
+                title: Not Found
+                status: 404
+                detail: fiat deposit instructions with id f190b163-208f-4d73-8deb-4fb8b24add00 not found
+          description: Could not find Identity
+      parameters:
+      - name: id
+        description: Retrieve the Paxos Fiat Deposit Instructions for the given `id`.
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - Fiat Transfers
+      security:
+      - OAuth2:
+        - transfer:read_fiat_deposit_instructions
+  /transfer/fiat-withdrawals:
+    post:
+      summary: Create Fiat Withdrawal
+      description: Withdraw fiat to the given destination.
+      operationId: CreateFiatWithdrawal
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Transfer'
+              example:
+                id: f190b163-208f-4d73-8deb-4fb8b24add00
+                customer_id: 9b8c9cba-801e-4418-adc0-ede709df6339
+                profile_id: 5fc6d191-193c-4e28-94fa-656bbdbdfaad
+                identity_id: 54385e67-d7ef-40d1-b488-ceda6dd9b264
+                amount: '10.00'
+                total: '10.00'
+                fee: '0.0000000'
+                asset: USD
+                balance_asset: USD
+                direction: DEBIT
+                type: CUBIX_WITHDRAWAL
+                status: PENDING
+                created_at: '2023-07-13T18:36:08.737Z'
+                updated_at: '2023-07-13T18:36:08.737Z'
+                fiat_account_id: caa82b32-8abd-4899-afdc-f9d4bf9b4e98
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                example:
+                  type: about:blank
+                  title: Bad Request
+                  status: 400
+                  detail: fiat account has invalid status REJECTED, must be approved
+                $ref: '#/components/schemas/Problem'
+              example:
+                type: about:blank
+                title: Bad Request
+                status: 400
+                detail: fiat account has invalid status REJECTED, must be approved
+        '404':
+          description: Could not find Profile
+          content:
+            application/json:
+              schema:
+                example:
+                  type: about:blank
+                  title: Not Found
+                  status: 404
+                  detail: fiat account not found with requested ID
+                $ref: '#/components/schemas/Problem'
+              example:
+                type: about:blank
+                title: Not Found
+                status: 404
+                detail: fiat account not found with requested ID
+        '403':
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+              examples:
+                Insufficient Funds:
+                  summary: Example of insufficient funds
+                  description: The needed funds include wire withdrawal fees. Please check developer documentation for fee details.
+                  value:
+                    type: https://developer.paxos.com/docs/v2/problems/insufficient-funds
+                    title: Insufficient Funds
+                    status: 403
+                    detail: 'insufficient USD funds in profile 5fc6d191-193c-4e28-94fa-656bbdbdfaad: 100 needed, 50 available'
+                    meta:
+                      profile_id: 5fc6d191-193c-4e28-94fa-656bbdbdfaad
+                      asset: USD
+                      available: '50'
+                      needed: '100'
+          description: Insufficient funds
+        '409':
+          description: Transfer already exists
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+              examples:
+                Already Exists:
+                  $ref: '#/components/examples/Problem_already_exists_fiat_withdrawal'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateFiatWithdrawalRequest'
+        required: true
+      tags:
+      - Fiat Transfers
+      security:
+      - OAuth2:
+        - transfer:write_fiat_withdrawal
+components:
+  schemas:
+    CreateFiatAccountRequest:
+      type: object
+      example:
+        identity_id: 54385e67-d7ef-40d1-b488-ceda6dd9b264
+        fiat_network_instructions:
+          wire:
+            account_number: '12345678'
+            routing_details:
+              routing_number: 031302971
+              bank_name: Customers Bank
+              bank_address:
+                country: USA
+            fiat_account_owner_address:
+              address1: 456 Main Street
+              city: NY
+              country: USA
+        fiat_account_owner:
+          person_details:
+            first_name: Jane
+            last_name: Doe
+      properties:
+        ref_id:
+          type: string
+          description: The optional client-specified ID (for idempotence).
+        identity_id:
+          type: string
+          description: 'The Paxos Identity (`identity_id`) of the user''s FiatAccount.
+
+            Required only for customers with [3rd-Party integrations](https://docs.paxos.com/crypto-brokerage/ledger-type#fiat-and-crypto-subledger) initiating transfers on behalf of their end users.'
+        account_id:
+          type: string
+          description: 'The Paxos Account (`account_id`) of the user''s FiatAccount.
+
+            Required only for customers with [3rd-Party integrations](https://docs.paxos.com/crypto-brokerage/ledger-type#fiat-and-crypto-subledger) initiating transfers on behalf of their end users.'
+        fiat_account_owner:
+          $ref: '#/components/schemas/FiatAccountOwner'
+        fiat_network_instructions:
+          $ref: '#/components/schemas/FiatNetworkInstructions'
+        metadata:
+          type: object
+          additionalProperties:
+            type: string
+          description: 'Optional client-specified metadata.
+
+            Up to 6 key/value pairs may be provided.
+
+            Each key and value must be less than or equal to 100 characters.'
+      required:
+      - fiat_network_instructions
+      - fiat_account_owner
+    FiatNetworkInstructionsCubix:
+      type: object
+      properties:
+        account_id:
+          type: string
+          description: The uuid account id of the CUBIX account.
+      required:
+      - account_id
+    FiatNetworkInstructionsWireRoutingDetails:
+      type: object
+      properties:
+        routing_number_type:
+          $ref: '#/components/schemas/FiatWireAccountType'
+        routing_number:
+          type: string
+          description: The routing number.
+        bank_name:
+          type: string
+          description: The name of the bank.
+        bank_address:
+          $ref: '#/components/schemas/MailingAddress'
+      required:
+      - routing_number_type
+      - routing_number
+      - bank_name
+      - bank_address
+    ListFiatDepositInstructionsResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/FiatDepositInstructions'
+        next_page_cursor:
+          type: string
+    FiatNetworkInstructionsWire:
+      type: object
+      properties:
+        account_number:
+          type: string
+          description: The FiatAccount owner's bank account number.
+        fiat_account_owner_address:
+          $ref: '#/components/schemas/MailingAddress'
+        routing_details:
+          $ref: '#/components/schemas/FiatNetworkInstructionsWireRoutingDetails'
+        intermediary_routing_details:
+          $ref: '#/components/schemas/FiatNetworkInstructionsWireRoutingDetails'
+      required:
+      - account_number
+      - fiat_account_owner_address
+      - routing_details
+    FiatNetworkInstructions:
+      type: object
+      properties:
+        wire:
+          $ref: '#/components/schemas/FiatNetworkInstructionsWire'
+        cbit:
+          $ref: '#/components/schemas/FiatNetworkInstructionsCbit'
+        dbs_act:
+          $ref: '#/components/schemas/FiatNetworkInstructionsDbsAct'
+        cubix:
+          $ref: '#/components/schemas/FiatNetworkInstructionsCubix'
+        scb:
+          $ref: '#/components/schemas/FiatNetworkInstructionsScb'
+        rtp:
+          $ref: '#/components/schemas/FiatNetworkInstructionsRtp'
+    FiatAccountOwner:
+      type: object
+      properties:
+        person_details:
+          $ref: '#/components/schemas/FiatAccountOwnerPersonDetails'
+        institution_details:
+          $ref: '#/components/schemas/FiatAccountOwnerInstitutionDetails'
+    CryptoNetwork:
+      type: string
+      enum:
+      - BITCOIN
+      - ETHEREUM
+      - BITCOIN_CASH
+      - LITECOIN
+      - SOLANA
+      - POLYGON_POS
+      - BASE
+      - ARBITRUM_ONE
+      - STELLAR
+      - INK
+      - XLAYER
+      - AVALANCHE
+      - DOGECOIN
+      - SUI
+      - ROBINHOOD
+      - BNB
+      description: A CryptoNetwork is a blockchain transmitting cryptocurrencies.
+    FiatWireAccountType:
+      type: string
+      enum:
+      - ABA
+      - SWIFT
+    FiatNetworkInstructionsCbit:
+      type: object
+      properties:
+        wallet_address:
+          type: string
+          description: The wallet address of the CBIT account.
+      required:
+      - wallet_address
+    FiatAccountOwnerPersonDetails:
+      type: object
+      properties:
+        first_name:
+          type: string
+        last_name:
+          type: string
+      required:
+      - first_name
+      - last_name
+    UpdateFiatNetworkInstructionsUpdateWire:
+      type: object
+      properties:
+        fiat_account_owner_address:
+          $ref: '#/components/schemas/MailingAddress'
+        routing_details:
+          $ref: '#/components/schemas/UpdateWireUpdateRoutingDetails'
+        intermediary_routing_details:
+          $ref: '#/components/schemas/UpdateWireUpdateRoutingDetails'
+      title: Wire
+    AutoConversion:
+      type: object
+      properties:
+        from_transfer_id:
+          type: string
+          title: Transfer Id of the deposit triggering this transfer (only on withdrawal transfers)
+        to_transfer_id:
+          type: string
+          title: Transfer Id of the withdrawal triggered by this deposit(only on deposit transfers)
+    TransferDirection:
+      type: string
+      enum:
+      - CREDIT
+      - DEBIT
+      description: Direction of the transfer.
+    FiatAccountOwnerInstitutionDetails:
+      type: object
+      properties:
+        name:
+          type: string
+      required:
+      - name
+    CreateFiatDepositInstructionsRequest:
+      type: object
+      properties:
+        ref_id:
+          type: string
+          description: The optional client-specified ID (for idempotence).
+        profile_id:
+          type: string
+          description: The Profile (`profile_id`) to deposit to.
+        identity_id:
+          type: string
+          description: 'The Identity (`identity_id`) of the user making the deposit.
+
+            Required only for customers with [3rd-Party integrations](https://docs.paxos.com/crypto-brokerage/ledger-type#fiat-and-crypto-subledger) making deposits on behalf of their end users.'
+        account_id:
+          type: string
+          description: 'The Account (`account_id`) associated with the Identity of the user making the deposit.
+
+            Required only for customers with [3rd-Party integrations](https://docs.paxos.com/crypto-brokerage/ledger-type#fiat-and-crypto-subledger) making deposits on behalf of their end users.'
+        fiat_network:
+          $ref: '#/components/schemas/FiatNetwork'
+        routing_number_type:
+          $ref: '#/components/schemas/FiatWireAccountType'
+        metadata:
+          type: object
+          additionalProperties:
+            type: string
+          description: 'Optional client-specified metadata.
+
+            Up to 6 key/value pairs may be provided.
+
+            Each key and value must be less than or equal to 100 characters.'
+      required:
+      - profile_id
+      - fiat_network
+    InvalidDestinationAddress:
+      type: object
+      properties:
+        message:
+          type: string
+          title: Human-readable explanation of the error
+        destination_address:
+          type: string
+          title: The destination address that caused the cancellation
+      description: 'InvalidDestinationAddress represents a transfer cancelled because the destination address
+
+        cannot receive the requested asset (e.g. it is a token account for a different mint).'
+    FiatNetworkInstructionsRtpRoutingDetails:
+      type: object
+      properties:
+        routing_number:
+          type: string
+          description: The routing number.
+        bank_name:
+          type: string
+          description: The name of the bank.
+        bank_address:
+          $ref: '#/components/schemas/MailingAddress'
+      required:
+      - routing_number
+    FiatAccount:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The Paxos FiatAccount ID (UUID).
+        ref_id:
+          type: string
+          description: The optional client-specified ID (for idempotence).
+        identity_id:
+          type: string
+          description: The Paxos Identity (`identity_id`) of the user's FiatAccount.
+        account_id:
+          type: string
+          description: 'The Paxos Account (`account_id`) of the user''s FiatAccount.
+
+            Required only for customers with [3rd-Party integrations](https://docs.paxos.com/crypto-brokerage/ledger-type#fiat-and-crypto-subledger) initiating transfers on behalf of their end users.'
+        fiat_account_owner:
+          $ref: '#/components/schemas/FiatAccountOwner'
+        fiat_network_instructions:
+          $ref: '#/components/schemas/FiatNetworkInstructions'
+        status:
+          $ref: '#/components/schemas/FiatAccountStatus'
+        metadata:
+          type: object
+          additionalProperties:
+            type: string
+          description: 'Optional client-specified metadata.
+
+            Up to 6 key/value pairs may be returned.
+
+            Each key and value must be less than or equal to 100 characters.'
+        created_at:
+          type: string
+          format: date-time
+          description: The time at which this FiatAccount was created.
+        updated_at:
+          type: string
+          format: date-time
+          description: The time at which this FiatAccount record was most recently updated.
+      required:
+      - id
+      - status
+      - fiat_network_instructions
+      - created_at
+    MaxRentExceeded:
+      type: object
+      properties:
+        message:
+          type: string
+          title: Human-readable explanation of the error
+        destination_address:
+          type: string
+          title: The destination account address that triggered the check
+      description: 'MaxRentExceeded represents a failed transfer that was flagged for system abuse.
+
+        When a withdrawal''s rent calculation for the destination account exceeds the
+
+        maximum allowed rent threshold, it may indicate malicious behavior. This status
+
+        detail is set when such transfers are automatically cancelled.'
+    Transfer:
+      type: object
+      example:
+        id: f190b163-208f-4d73-8deb-4fb8b24add00
+        ref_id: idempotence_id
+        customer_id: 9b8c9cba-801e-4418-adc0-ede709df6339
+        profile_id: b7b77d82-e6a7-4ae9-9904-36231aedf985
+        amount: '0.10000000'
+        total: '0.10000023'
+        fee: '0.00000023'
+        asset: BTC
+        balance_asset: BTC
+        direction: WITHDRAWAL
+        type: CRYPTO_WITHDRAWAL
+        status: COMPLETED
+        created_at: '2020-01-17T18:36:08.737Z'
+        updated_at: '2020-01-17T18:37:08.737Z'
+        crypto_network: BITCOIN
+        crypto_tx_hash: f4184fc596403b9d638783cf57adfe4c75c605f6356fbc91338530e9831e9e16
+        crypto_tx_index: '0'
+        destination_address: 1BvBMSEYstWetqTFn5Au4m4GFg7xJaNVN2
+        notional_value: '1.02'
+        metadata:
+          my_id: 4024ee50-eefb-4f2e-85c7-e7899c0b7da5
+      properties:
+        id:
+          type: string
+          description: The Paxos transfer ID.
+        customer_id:
+          type: string
+          description: The Paxos customer ID.
+        profile_id:
+          type: string
+          description: The target Profile of the transfer. The profile asset balance is debited or credited by the transfer.
+        identity_id:
+          type: string
+          description: The Paxos ID of the Identity associated with the transfer.
+        ref_id:
+          type: string
+          description: The optional client-specified ID for replay protection and lookup.
+        amount:
+          type: string
+          description: The amount sent in the transfer.
+          pattern: ^[0-9]*\.?[0-9]+$
+        total:
+          type: string
+          description: 'The balance change from this transfer: amount - fee for deposits, and amount + fee for withdrawals. Unsigned.'
+          pattern: ^[0-9]*\.?[0-9]+$
+        fee:
+          type: string
+          description: The fee paid for the transfer.
+          pattern: ^[0-9]*\.?[0-9]+$
+        asset:
+          type: string
+          description: The asset for this transfer. This profile's balance of this asset will be debited or credited.
+        balance_asset:
+          type: string
+          description: The balance_asset represents what asset's balance was affected at Paxos with this transfer. It only differs from Asset when the transfer includes conversion.
+        direction:
+          $ref: '#/components/schemas/TransferDirection'
+        type:
+          $ref: '#/components/schemas/TransferType'
+        status:
+          $ref: '#/components/schemas/TransferStatus'
+        secondary_status:
+          $ref: '#/components/schemas/SecondaryStatus'
+        status_details:
+          $ref: '#/components/schemas/TransferStatusDetails'
+        created_at:
+          type: string
+          format: date-time
+          description: The time at which this transfer record was created.
+        updated_at:
+          type: string
+          format: date-time
+          description: The time at which this transfer record was most recently updated.
+        metadata:
+          type: object
+          additionalProperties:
+            type: string
+          description: 'Optional client-specified stored metadata. For deposit event transfers
+
+            this metadata is copied from the crypto deposit address or fiat deposit
+
+            memo used for attribution.
+
+            Up to 6 key/value pairs may be returned.
+
+            Each key and value must be less than or equal to 100 characters.'
+        destination_address:
+          type: string
+          description: The destination crypto address.
+        crypto_network:
+          $ref: '#/components/schemas/CryptoNetwork'
+        crypto_tx_hash:
+          type: string
+          description: For crypto transactions, the on-chain transaction hash.
+        crypto_tx_index:
+          type: string
+          description: For crypto transactions, the output index or output address.
+        account_id:
+          type: string
+          description: The Paxos ID of the Account associated with the transfer.
+        auto_conversion:
+          $ref: '#/components/schemas/AutoConversion'
+        group_id:
+          type: string
+          description: Unique identifier linking the debit and credit sides of an internal or Paxos transfer.
+        fiat_account_id:
+          type: string
+          description: For fiat withdrawals, the Paxos ID of the owner's fiat account (UUID).
+        notional_value:
+          type: string
+          format: decimal
+          description: For crypto withdrawals and deposits, the USD value of the combined amount and fee at the time of the transfer.
+        memo:
+          type: string
+          description: An optional memo to be included with the transfer as an identifier.
+      required:
+      - id
+      - customer_id
+      - profile_id
+      - amount
+      - total
+      - fee
+      - created_at
+      - updated_at
+      - asset
+      - status
+      - direction
+      - type
+    UpdateFiatAccountRequestUpdateFiatNetworkInstructions:
+      type: object
+      properties:
+        wire:
+          $ref: '#/components/schemas/UpdateFiatNetworkInstructionsUpdateWire'
+      title: FiatNetworkInstructions
+    TransferStatusDetails:
+      type: object
+      properties:
+        missing_trustline:
+          $ref: '#/components/schemas/MissingTrustline'
+        max_rent_exceeded:
+          $ref: '#/components/schemas/MaxRentExceeded'
+        pending_customer_approval:
+          $ref: '#/components/schemas/PendingCustomerApproval'
+        stale_fee_quote:
+          $ref: '#/components/schemas/StaleFeeQuote'
+        invalid_destination_address:
+          $ref: '#/components/schemas/InvalidDestinationAddress'
+      description: 'TransferStatusDetails provides additional information about why a transfer
+
+        is in its current state. This field is only populated when a transfer
+
+        encounters specific error conditions or requires additional context.'
+    FiatNetworkInstructionsRtp:
+      type: object
+      properties:
+        account_number:
+          type: string
+          description: The FiatAccount owner's bank account number.
+        fiat_account_owner_address:
+          $ref: '#/components/schemas/MailingAddress'
+        routing_details:
+          $ref: '#/components/schemas/FiatNetworkInstructionsRtpRoutingDetails'
+      required:
+      - account_number
+      - routing_details
+    FiatNetworkInstructionsScb:
+      type: object
+      properties:
+        account_number:
+          type: string
+          description: The account number of the StandChart account.
+      required:
+      - account_number
+    SecondaryStatusName:
+      type: string
+      enum:
+      - TRAVEL_RULE_INFO_REQUESTED
+      - TRAVEL_RULE_REJECTED
+      - CUSTOMER_REJECTED
+      - PENDING_CUSTOMER_APPROVAL
+      description: "Identifier for secondary status.\n\n - TRAVEL_RULE_INFO_REQUESTED: Travel rule information is required to continue processing the transfer.\n - TRAVEL_RULE_REJECTED: Transfer has been terminally rejected due to failing travel rule checks.\n - CUSTOMER_REJECTED: Transfer was rejected by a customer.\n - PENDING_CUSTOMER_APPROVAL: Transfer is pending customer approval."
+    FiatDepositInstructions:
+      type: object
+      properties:
+        id:
+          type: string
+          description: 'The Fiat Deposit Instructions ID (`id`) is provided in the response of the [Create Fiat Deposit Instructions](#operation/CreateFiatDepositInstructions).
+
+            Use this ID to retrieve the instructions using [Get Fiat Deposit Instructions](#operation/GetFiatDepositInstructions) & [List Fiat Deposit Instructions](#operation/ListFiatDepositInstructions).'
+        profile_id:
+          type: string
+          description: The Profile (`profile_id`) to deposit to.
+        identity_id:
+          type: string
+          description: The Identity (`identity_id`) of the user making the deposit.
+        account_id:
+          type: string
+          description: 'The Account (`account_id`) associated with the Identity of the user making the deposit.
+
+            Required only for customers with [3rd-Party integrations](https://docs.paxos.com/crypto-brokerage/ledger-type#fiat-and-crypto-subledger) making deposits on behalf of their end users.'
+        ref_id:
+          type: string
+          description: The optional client-specified ID (for idempotence).
+        status:
+          $ref: '#/components/schemas/FiatDepositInstructionsStatus'
+        memo_id:
+          type: string
+          description: 'The string, unique to the request.
+
+            To deposit funds into an account, the memo ID must be provided when initiating a `WIRE` transfer to Paxos.
+
+            This is provided after creating [Fiat Deposit Instructions](#/operation/CreateFiatDepositInstructions)
+
+            The `memo_id` can also be found from either [Get Fiat Deposit Instructions](#operation/GetFiatDepositInstructions) or [List Fiat Deposit Instructions](#operation/ListFiatDepositInstructions) for the corresponding ID (Fiat Deposit Instructions ID).'
+        fiat_network_instructions:
+          $ref: '#/components/schemas/FiatNetworkInstructions'
+        fiat_account_owner:
+          $ref: '#/components/schemas/FiatAccountOwner'
+        metadata:
+          type: object
+          additionalProperties:
+            type: string
+          description: Optional client-specified metadata.
+        created_at:
+          type: string
+          format: date-time
+          description: The time at which these instructions were created.
+      required:
+      - id
+      - profile_id
+      - identity_id
+      - status
+      - memo_id
+      - fiat_network_instructions
+      - created_at
+    FiatNetworkInstructionsDbsAct:
+      type: object
+      properties:
+        account_number:
+          type: string
+          description: The account number of the DBS account.
+      required:
+      - account_number
+    MissingTrustline:
+      type: object
+      properties:
+        message:
+          type: string
+          title: Human-readable explanation of the error
+        destination_address:
+          type: string
+          title: The destination account address that is missing the trustline
+        asset:
+          type: string
+          title: The asset that requires a trustline
+      description: 'MissingTrustline represents a failed transfer where the destination account
+
+        lacks the required asset trustline.'
+    FiatAccountStatus:
+      type: string
+      enum:
+      - PENDING
+      - APPROVED
+      - REJECTED
+    ListFiatAccountsResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/FiatAccount'
+        next_page_cursor:
+          type: string
+    Problem:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+          description: 'An absolute URI that identifies the problem type.  When dereferenced,
+
+            it SHOULD provide human-readable documentation for the problem type
+
+            (e.g., using HTML).
+
+            '
+          default: about:blank
+          example: https://api.paxos.com/v2/problems/insufficient_funds
+        title:
+          type: string
+          description: 'A short, summary of the problem type. Written in english and readable
+
+            for engineers (usually not suited for non technical stakeholders and
+
+            not localized); example: Service Unavailable
+
+            '
+          example: Insufficient Funds
+        status:
+          type: integer
+          format: int32
+          description: 'The HTTP status code generated by the origin server for this occurrence
+
+            of the problem.
+
+            '
+          minimum: 100
+          maximum: 600
+          exclusiveMaximum: true
+          example: 403
+        detail:
+          type: string
+          description: 'A human readable explanation specific to this occurrence of the
+
+            problem.
+
+            '
+          example: Not enough funds in account.
+        meta:
+          type: object
+          description: 'Additional structured metadata about the error.
+
+            '
+    UpdateWireUpdateRoutingDetails:
+      type: object
+      properties:
+        bank_name:
+          type: string
+          description: The name of the bank.
+        bank_address:
+          $ref: '#/components/schemas/MailingAddress'
+      title: RoutingDetails
+    FiatDepositInstructionsStatus:
+      type: string
+      enum:
+      - VALID
+      - DEPRECATED
+    StaleFeeQuote:
+      type: object
+      properties:
+        message:
+          type: string
+          title: Human-readable explanation
+      description: StaleFeeQuote represents a transfer cancelled because on-chain state changed after the fee was quoted.
+    TransferType:
+      type: string
+      enum:
+      - INTERNAL_TRANSFER_DEBIT
+      - INTERNAL_TRANSFER_CREDIT
+      - CRYPTO_DEPOSIT
+      - CRYPTO_WITHDRAWAL
+      - WIRE_DEPOSIT
+      - WIRE_WITHDRAWAL
+      - SEN_DEPOSIT
+      - SEN_WITHDRAWAL
+      - BANK_DEPOSIT
+      - BANK_WITHDRAWAL
+      - PAXOS_TRANSFER_DEBIT
+      - PAXOS_TRANSFER_CREDIT
+      - SIGNET_DEPOSIT
+      - SIGNET_WITHDRAWAL
+      - CBIT_WITHDRAWAL
+      - CBIT_DEPOSIT
+      - CUBIX_DEPOSIT
+      - CUBIX_WITHDRAWAL
+      - RTP_DEPOSIT
+      description: Type of transfer.
+    MailingAddress:
+      type: object
+      properties:
+        country:
+          type: string
+          maxLength: 35
+          pattern: ^[0-9A-Za-z /?:().,&'+-]+$
+        address1:
+          type: string
+          maxLength: 35
+          pattern: ^[0-9A-Za-z /?:().,&'+-]+$
+        address2:
+          type: string
+          maxLength: 35
+          pattern: ^[0-9A-Za-z /?:().,&'+-]+$
+        city:
+          type: string
+          maxLength: 35
+          pattern: ^[0-9A-Za-z /?:().,&'+-]+$
+        province:
+          type: string
+          maxLength: 35
+          pattern: ^[0-9A-Za-z /?:().,&'+-]+$
+        zip_code:
+          type: string
+          maxLength: 35
+          pattern: ^[0-9A-Za-z /?:().,&'+-]+$
+      description: A mailing address.
+      required:
+      - country
+    FiatNetwork:
+      type: string
+      enum:
+      - WIRE
+      - DBS_ACT
+      - CUBIX
+      - SCB
+      - RTP
+    CreateFiatWithdrawalRequest:
+      type: object
+      example:
+        amount: '12.34'
+        asset: USD
+        fiat_account_id: caa82b32-8abd-4899-afdc-f9d4bf9b4e98
+        profile_id: 5fc6d191-193c-4e28-94fa-656bbdbdfaad
+        identity_id: 54385e67-d7ef-40d1-b488-ceda6dd9b264
+      properties:
+        ref_id:
+          type: string
+          description: The optional client-specified ID (for idempotence).
+        amount:
+          type: string
+          description: Amount to withdraw, excluding fees. Specify exactly one of `amount` or `total`. When `amount` is specified, Paxos initiates the withdrawal for `amount` and then charges fees.
+          pattern: ^[0-9]*\.?[0-9]{1,2}$
+        asset:
+          type: string
+          description: 'The asset to withdraw. Current supported asset: "USD".'
+        fiat_account_id:
+          type: string
+          description: The fiat account (`fiat_account_id`) destination.
+        profile_id:
+          type: string
+          description: The Profile (`profile_id`) to withdraw from.
+        identity_id:
+          type: string
+          description: 'The Identity (`identity_id`) of the user making the withdrawal.
+
+            Required only for customers with [3rd-Party integrations](https://docs.paxos.com/crypto-brokerage/ledger-type#fiat-and-crypto-subledger) initiating transfers on behalf of their end users.'
+        account_id:
+          type: string
+          description: 'The Account (`account_id`) associated with the Identity of the user making the withdrawal.
+
+            Required only for customers with [3rd-Party integrations](https://docs.paxos.com/crypto-brokerage/ledger-type#fiat-and-crypto-subledger) initiating transfers on behalf of their end users.'
+        metadata:
+          type: object
+          additionalProperties:
+            type: string
+          description: 'Optional client-specified metadata.
+
+            Up to 6 key/value pairs may be provided.
+
+            Each key and value must be less than or equal to 100 characters.'
+        memo:
+          type: string
+          description: 'Optional additional memo to be set on the outgoing withdrawal.
+
+            For wire withdrawals the character limit is 100.
+
+            For CUBIX intrabank withdrawals, the character limit is 40.
+
+            For DBS intrabank withdrawals, the character limit is 100.
+
+            For SCB intrabank withdrawals, the character limit is 140.'
+          maxLength: 500
+          pattern: ^[0-9A-Za-z /?:().,&'+-]*$
+        total:
+          type: string
+          format: decimal
+          description: Total to withdraw, including fees. Specify exactly one of `amount` or `total`. When `total` is specified, Paxos initiates the withdrawal for `total` minus the fee.
+      required:
+      - asset
+      - fiat_account_id
+      - profile_id
+    PendingCustomerApproval:
+      type: object
+      properties:
+        message:
+          type: string
+          title: Human-readable explanation
+      description: PendingCustomerApproval represents that this resource is awaiting customer approval.
+    TransferStatus:
+      type: string
+      enum:
+      - PENDING
+      - COMPLETED
+      - FAILED
+    TransferPublicUpdateFiatAccountBody:
+      type: object
+      properties:
+        fiat_account_owner:
+          $ref: '#/components/schemas/FiatAccountOwner'
+        fiat_network_instructions:
+          $ref: '#/components/schemas/UpdateFiatAccountRequestUpdateFiatNetworkInstructions'
+        metadata:
+          type: object
+          additionalProperties:
+            type: string
+          description: 'Optional client-specified metadata.
+
+            Up to 6 key/value pairs may be provided.
+
+            Each key and value must be less than or equal to 100 characters.'
+      title: UpdateFiatAccountRequest
+    SecondaryStatus:
+      type: object
+      properties:
+        name:
+          $ref: '#/components/schemas/SecondaryStatusName'
+        detail:
+          type: string
+          description: Additional information about the current status of the transfer (e.g. if information is missing).
+      description: Secondary status for the transfer, used for more granular explanation of the transfer status.
+  examples:
+    Problem_already_exists_fiat_withdrawal:
+      value:
+        type: https://developer.paxos.com/docs/v2/problems/already-exists
+        title: Already Exists
+        status: 409
+        detail: activity with external id already_used_ref_id already exists
+        meta:
+          existing:
+            id: f190b163-208f-4d73-8deb-4fb8b24add00
+            customer_id: 9b8c9cba-801e-4418-adc0-ede709df6339
+            profile_id: 5fc6d191-193c-4e28-94fa-656bbdbdfaad
+            identity_id: 54385e67-d7ef-40d1-b488-ceda6dd9b264
+            amount: '10.00'
+            total: '10.00'
+            fee: '0.0000000'
+            asset: USD
+            balance_asset: USD
+            direction: DEBIT
+            type: CUBIX_WITHDRAWAL
+            status: PENDING
+            created_at: '2023-07-13T18:36:08.737Z'
+            updated_at: '2023-07-13T18:36:08.737Z'
+            fiat_account_id: caa82b32-8abd-4899-afdc-f9d4bf9b4e98
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      description: 'Paxos APIs use [OAuth 2](https://tools.ietf.org/html/rfc6749) with the [client credentials](https://tools.ietf.org/html/rfc6749#section-4.4) grant flow.
+
+
+        **Token URLs:**
+
+        - Production: https://oauth.paxos.com/oauth2/token
+
+        - Sandbox: https://oauth.sandbox.paxos.com/oauth2/token
+
+
+        Learn more in the [API credentials guide →](https://docs.paxos.com/developer/credentials)
+
+        '
+      flows:
+        clientCredentials:
+          tokenUrl: https://oauth.paxos.com/oauth2/token
+          scopes:
+            conversion:read_conversion_stablecoin: Retrieve stablecoin conversion details
+            conversion:write_conversion_stablecoin: Create or cancel a stablecoin conversion
+            exchange:historical_prices: Retrieve marketnaverage prices at a certain time increment
+            exchange:read_order: Retrieve order or order execution details
+            exchange:read_quote: Retrieve quote details for buying or selling an asset
+            exchange:read_quote_execution: Retrieve quote execution details
+            exchange:write_quote_execution: Create a quote execution for buying or selling an asset
+            exchange:write_order: Create or cancel an order for buying or selling an asset
+            fee:write_crypto_withdrawal_fee: Create a guaranteed fee for crypto withdrawal
+            funding:read_bank_balance: Retrieve Paxos dedicated bank account balance
+            funding:read_profile: Retrieve Profile details and deposit funds in Sandbox
+            funding:write_profile: Create a Profile
+            identity:read_account: Retrieve Account details
+            identity:read_identity: Retrieve Identity details or documents
+            identity:write_account: Create or update Account and Account Members
+            identity:write_identity: Create or update Identity details and set Sandbox Identify Status
+            settlement:read_transaction: Retrieve settlement transaction details
+            settlement:write_transaction: Create, affirm or cancel a settlement transaction
+            tax:read_tax_form: Retrieve tax details
+            tax:read_tax_lot: Retrieve tax lot details
+            tax:write_tax_lot: Update the given tax-lot ID
+            transfer:read_deposit_address: Retrieve deposit address details
+            transfer:read_fiat_account: Retrieve Fiat Account details
+            transfer:read_fiat_deposit_instructions: Retrieve fiat deposit instruction details
+            transfer:read_transfer: Retrieve transfer details
+            transfer:read_transfer_limit: Retrieve limits for the given transaction type
+            transfer:reject_crypto_deposit: Reject a crypto deposit (travel rule)
+            transfer:update_crypto_deposit: Provide required travel-rule details
+            transfer:write_crypto_withdrawal: Withdraw asset to a specified destination address
+            transfer:write_deposit_address: Create an deposit address on a blockchain network
+            transfer:write_fiat_account: Create, update or delete a Fiat Account
+            transfer:write_fiat_deposit_instructions: Create, update or delete fiat deposit instructions
+            transfer:write_internal_transfer: Transfer assets between two Profiles
+            transfer:write_sandbox_fiat_deposit: Initiate a test fiat deposit in the Sandbox environment
+            transfer:write_fiat_withdrawal: Withdraw fiat to the given destination
+            events:read_event: Retrieve events
+x-tagGroups:
+- name: Deposits and Withdrawals
+  tags:
+  - Transfers
+  - Fiat Transfers
+  - Deposit Addresses
+  - Crypto Deposits
+  - Crypto Withdrawals
+  - Fees
+  - Internal Transfers
+  - Paxos Transfers
+  - Limits
+- name: Identity
+  tags:
+  - Identity
+  - Institution Members
+  - Accounts
+  - Account Members
+  - Identity Documents
+- name: API Credentials
+  tags:
+  - API Credentials
+- name: Profiles
+  tags:
+  - Profiles
+- name: Sandbox
+  tags:
+  - Sandbox Deposits
+  - Sandbox Identity
+  - Sandbox Fiat Transfers
+- name: Settlements
+  tags:
+  - Settlement
+- name: Stablecoin Conversion
+  tags:
+  - Stablecoin Conversion
+- name: Taxes
+  tags:
+  - Tax Forms
+- name: Trading
+  tags:
+  - Market Data
+  - Orders
+  - Quotes
+  - Quote Executions
+  - Pricing
+  - Issuer Quotes
+- name: Rewards
+  tags:
+  - Monitoring Addresses
+  - Statements
+  - Payments
+- name: Rewards (Alpha)
+  tags:
+  - Reward Addresses
+  - Claims
+  - Payout Groups
+  - Rewards
+- name: Events
+  tags:
+  - Events
+  - Event Types
+  - Event Objects

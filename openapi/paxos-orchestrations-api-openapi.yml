@@ -1,0 +1,644 @@
+openapi: 3.0.0
+info:
+  title: Paxos Account Members Orchestrations API
+  version: '2.0'
+  description: '<p>Welcome to Paxos APIs. At Paxos, our mission is to enable the movement of any asset, any time, in a trustworthy way. These APIs serve that mission by making it easier than ever for you to directly integrate our product capabilities into your application, leveraging the speed, stability, and security of the Paxos platform.</p> <p>The documentation that follows gives you access to our Crypto Brokerage, Trading, and Exchange products. It includes APIs for market data, orders, and the held rate quote flow.</p> <p>To test in our sandbox environment, <a href="https://account.sandbox.paxos.com" target="_blank">sign up</a> for an account. For more information about Paxos and our APIs, visit <a href="https://www.paxos.com/" target="_blank">Paxos.com</a>.</p>
+
+    '
+  x-logo:
+    url: /docs/paxos.svg
+    backgroundColor: '#FFFFFF'
+    altText: Paxos logo
+servers:
+- url: https://api.paxos.com/v2
+  description: Production
+- url: https://api.sandbox.paxos.com/v2
+  description: Sandbox
+tags:
+- name: Orchestrations
+paths:
+  /orchestration/orchestrations:
+    get:
+      summary: List Orchestrations
+      description: 'List all orchestrations, optionally filtering and paging the results.
+
+
+        By default, orchestrations are returned in reverse chronological (descending)
+
+        order by creation time. If no query parameters are supplied,
+
+        the response will include up to the last 100 orchestrations which
+
+        were created.
+
+
+        The paginated results default to display up to 100 orchestrations, unless
+
+        otherwise specified with the `limit` parameter. The maximum `limit` value is 1000.
+
+        Every paginated response contains a `next_page_cursor` field until the last page is reached.
+
+
+        Pass the `next_page_cursor` value into the `page_cursor` field of a new
+
+        request to retrieve the next page of results.
+
+
+        When filtering by profile IDs using the `profile_ids` parameter, there is a limit of 100 profiles
+
+        that can be specified in a single request.
+
+
+        Orchestrations are provided for various operations including:
+
+        - Deposits to a paxos-platform crypto address or bank account
+
+        - Withdrawals to a customer-owned crypto address or bank account
+
+        - Conversions from one asset to another
+
+        - Orchestrated workflows involving some or all of the above
+
+        - Invocation of an Orchestration Rule'
+      operationId: ListOrchestrations
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListOrchestrationsResponse'
+      parameters:
+      - name: orchestration_rule_id
+        description: Optionally filter by the initiating orchestration rule ids. There is a limit of 100 orchestration rule ids that can be specified in a single request.
+        in: query
+        required: false
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      - name: source_asset
+        description: Optionally filter by source assets. There is a limit of 100 source assets that can be specified in a single request.
+        in: query
+        required: false
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      - name: destination_asset
+        description: Optionally filter by destination assets. There is a limit of 100 destination assets ids that can be specified in a single request.
+        in: query
+        required: false
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      - name: status
+        description: Optionally filter by statuses. There is a limit of 100 statuses that can be specified in a single request.
+        in: query
+        required: false
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      - name: created_at.lt
+        description: Include timestamps strictly less than lt. RFC3339 format, like `2006-01-02T15:04:05Z`.
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: created_at.lte
+        description: Include timestamps less than or equal to lte. RFC3339 format, like `2006-01-02T15:04:05Z`.
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: created_at.eq
+        description: Include timestamps exactly equal to eq. RFC3339 format, like `2006-01-02T15:04:05Z`.
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: created_at.gte
+        description: Include timestamps greater than or equal to gte. RFC3339 format, like `2006-01-02T15:04:05Z`.
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: created_at.gt
+        description: Include timestamps strictly greater than gt. RFC3339 format, like `2006-01-02T15:04:05Z`.
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: limit
+        description: Number of results to return. Defaults to 100 if no limit is provided. Maximum 1000.
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: order
+        description: Sort order for the results. Defaults to DESC by created_at time.
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - DESC
+          - ASC
+      - name: page_cursor
+        description: Optional Cursor for getting the next page of results.
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: orchestration_id
+        description: Optionally filter by a list of orchestration IDs. There is a limit of 100 orchestration ids that can be specified in a single request.
+        in: query
+        required: false
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      - name: profile_id
+        description: Optionally filter by the target profiles. There is a limit of 100 profiles that can be specified in a single request.
+        in: query
+        required: false
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      - name: ref_id
+        description: Optionally filter by client-provided reference IDs. There is a limit of 100 ref_ids that can be specified in a single request.
+        in: query
+        required: false
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      tags:
+      - Orchestrations
+      security:
+      - OAuth2:
+        - orchestration:read_orchestration
+    post:
+      summary: Create Orchestration
+      description: "Creates a one-time orchestration that moves assets from a source profile to a destination.\nUse this endpoint when funds already reside on the Paxos platform and need to be transferred or converted as part of a single workflow.\n\nA request to create an orchestration can fail with one of the following\ntypes of errors:\n - [Insufficient Funds](https://developer.paxos.com/docs/v2/problems/insufficient-funds)\n   if the Profile (`profile_id`) has insufficient available balance to\n   fund the execution.\n - [Already Exists](https://developer.paxos.com/docs/v2/problems/already-exists)\n   if an orchestration with the same external ID (`ref_id`) has already been created."
+      operationId: CreateOrchestration
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Orchestration'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateOrchestrationRequest'
+        required: true
+      tags:
+      - Orchestrations
+      security:
+      - OAuth2:
+        - orchestration:write_orchestration
+  /orchestration/orchestrations/{id}:
+    get:
+      summary: Get Orchestration
+      description: Retreives a specific orchestration using its orchestration ID.
+      operationId: GetOrchestration
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Orchestration'
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - Orchestrations
+      security:
+      - OAuth2:
+        - orchestration:read_orchestration
+components:
+  schemas:
+    OrchestrationDestination:
+      type: object
+      properties:
+        crypto:
+          $ref: '#/components/schemas/OrchestrationCryptoDestination'
+        fiat:
+          $ref: '#/components/schemas/OrchestrationFiatDestination'
+        profile:
+          $ref: '#/components/schemas/OrchestrationProfileDestination'
+    OrchestrationStatus:
+      type: string
+      enum:
+      - PROCESSING
+      - COMPLETED
+      - FAILED
+      - PENDING
+      - REJECTED
+      description: "Status represents the current state of an orchestration.\n\n - PROCESSING: The orchestration is actively being processed.\n - COMPLETED: The orchestration completed successfully.\n - FAILED: The orchestration failed during processing.\n - PENDING: The orchestration is awaiting approval before processing begins.\nOnce approved, it transitions to PROCESSING. If rejected, it transitions to REJECTED.\n - REJECTED: The orchestration was rejected during approval."
+    CreateOrchestrationRequestDestination:
+      type: object
+      properties:
+        crypto:
+          $ref: '#/components/schemas/CreateOrchestrationRequestCryptoDestination'
+        fiat:
+          $ref: '#/components/schemas/CreateOrchestrationRequestFiatDestination'
+        profile:
+          $ref: '#/components/schemas/CreateOrchestrationRequestProfileDestination'
+    ListOrchestrationsResponse:
+      type: object
+      properties:
+        orchestrations:
+          type: array
+          items:
+            $ref: '#/components/schemas/Orchestration'
+          description: 'Deprecated: Use items instead. This field will be removed in a future version.'
+        next_page_cursor:
+          type: string
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Orchestration'
+    FailReason:
+      type: object
+      properties:
+        detail:
+          type: string
+    OrchestrationCryptoSource:
+      type: object
+      properties:
+        address_id:
+          type: string
+        address:
+          type: string
+        network:
+          type: string
+    CreateOrchestrationRequestFiatDestination:
+      type: object
+      properties:
+        bank_account_id:
+          type: string
+        memo:
+          type: string
+    Orchestration:
+      type: object
+      example:
+        id: e5f6a7b8-9c0d-1e2f-3a4b-c5d6e7f8a9b0
+        profile_id: 7c4e8f2a-1d3b-4a5e-9f6c-8b2d7e0a4f1c
+        customer_id: a1b2c3d4-5e6f-7a8b-9c0d-e1f2a3b4c5d6
+        ref_id: orch-usdc-usdg-a3b1c2d4
+        source_asset: USDC
+        destination_asset: USDG
+        source_amount: '100'
+        status: PROCESSING
+        source:
+          profile:
+            profile_id: 7c4e8f2a-1d3b-4a5e-9f6c-8b2d7e0a4f1c
+        destination:
+          crypto:
+            address_id: d4e5f6a7-8b9c-0d1e-2f3a-b4c5d6e7f8a9
+        created_at: '2026-04-20T12:30:01.397730Z'
+        updated_at: '2026-04-20T12:30:01.397730Z'
+        metadata:
+          my_id: 4f8a2b6c-9d1e-4c3a-b5f7-0e2d8a7c1b9f
+      properties:
+        id:
+          type: string
+        profile_id:
+          type: string
+        identity_id:
+          type: string
+        account_id:
+          type: string
+        customer_id:
+          type: string
+        ref_id:
+          type: string
+          description: 'A client or system-specified unique identifier for the orchestration - used for idempotency
+
+            protection. Retries of a request should use the same ref_id to avoid duplicate transactions.
+
+            For system-initiated orchestrations generated by invocation of an orchestration rule, the
+
+            ref_id is generated the system.'
+        source_asset:
+          type: string
+        destination_asset:
+          type: string
+        source_amount:
+          type: string
+          format: decimal
+          title: Amount in source asset
+        source_transfer:
+          $ref: '#/components/schemas/TransferDetails'
+        destination_transfer:
+          $ref: '#/components/schemas/TransferDetails'
+        status:
+          $ref: '#/components/schemas/OrchestrationStatus'
+        fail_reason:
+          $ref: '#/components/schemas/FailReason'
+        source:
+          $ref: '#/components/schemas/OrchestrationSource'
+        destination:
+          $ref: '#/components/schemas/OrchestrationDestination'
+        orchestration_rule_id:
+          type: string
+          description: 'The ID of the orchestration rule which triggered this orchestration. Can be empty for
+
+            ad-hoc orchestrations.'
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        metadata:
+          type: object
+          additionalProperties:
+            type: string
+          title: Metadata associated with the orchestration
+      description: 'Orchestrations can be created directly via the CreateOrchestration endpoint, or indirectly
+
+        by an incoming deposit which matches an OrchestrationRule previously defined with the
+
+        CreateOrchestrationRule endpoint.'
+    OrchestrationFiatDestination:
+      type: object
+      properties:
+        bank_account_id:
+          type: string
+        memo:
+          type: string
+    CreateOrchestrationRequestProfileSource:
+      type: object
+      properties:
+        profile_id:
+          type: string
+    CreateOrchestrationRequestCryptoDestination:
+      type: object
+      properties:
+        address:
+          type: string
+          description: 'The blockchain destination address. Specify together with `network`
+
+            (and `identity_id` on the parent request for 3P integrations).
+
+            These together identify a CryptoDestinationAddress whose travel rule metadata will be used.'
+        network:
+          type: string
+          description: The blockchain network of the destination address.
+        address_id:
+          type: string
+          description: Deprecated. Specify `address` and `network` instead.
+    TransferDetailsTransferStatus:
+      type: string
+      enum:
+      - PENDING
+      - PROCESSING
+      - COMPLETED
+      - FAILED
+      description: " - PENDING: PENDING: a transfer is planned, but its resource_id is not yet known.\n - PROCESSING: PROCESSING: a transfer with `resource_id` is being processed. resource_id is\nguaranteed to be set if the status is PROCESSING.\n - COMPLETED: COMPLETED: a transfer with `resource_id` has successfully completed.\n - FAILED: FAILED: a transfer with `resource_id` has failed."
+    OrchestrationProfileSource:
+      type: object
+      properties:
+        profile_id:
+          type: string
+    OrchestrationFiatSource:
+      type: object
+      properties:
+        deposit_instructions_id:
+          type: string
+        memo:
+          type: string
+    CreateOrchestrationRequestProfileDestination:
+      type: object
+      properties:
+        profile_id:
+          type: string
+    OrchestrationSource:
+      type: object
+      properties:
+        crypto:
+          $ref: '#/components/schemas/OrchestrationCryptoSource'
+        fiat:
+          $ref: '#/components/schemas/OrchestrationFiatSource'
+        profile:
+          $ref: '#/components/schemas/OrchestrationProfileSource'
+    CreateOrchestrationRequestSource:
+      type: object
+      properties:
+        profile:
+          $ref: '#/components/schemas/CreateOrchestrationRequestProfileSource'
+    OrchestrationProfileDestination:
+      type: object
+      properties:
+        profile_id:
+          type: string
+    CreateOrchestrationRequest:
+      type: object
+      example:
+        ref_id: orch-usdc-usdg-a3b1c2d4
+        identity_id: b2c3d4e5-6f7a-8b9c-0d1e-f2a3b4c5d6e7
+        account_id: c3d4e5f6-7a8b-9c0d-1e2f-a3b4c5d6e7f8
+        source_asset: USDC
+        source_amount: '100'
+        destination_asset: USDG
+        source:
+          profile:
+            profile_id: 7c4e8f2a-1d3b-4a5e-9f6c-8b2d7e0a4f1c
+        destination:
+          crypto:
+            address_id: d4e5f6a7-8b9c-0d1e-2f3a-b4c5d6e7f8a9
+        metadata:
+          my_id: 4f8a2b6c-9d1e-4c3a-b5f7-0e2d8a7c1b9f
+      properties:
+        identity_id:
+          type: string
+        account_id:
+          type: string
+        ref_id:
+          type: string
+          description: 'A client or system-specified unique identifier for the orchestration - used for idempotency
+
+            protection. Retries of a request should use the same ref_id to avoid duplicate transactions.'
+        source_asset:
+          type: string
+        destination_asset:
+          type: string
+        source_amount:
+          type: string
+          format: decimal
+          title: The available amount in the source profile
+        source:
+          $ref: '#/components/schemas/CreateOrchestrationRequestSource'
+        destination:
+          $ref: '#/components/schemas/CreateOrchestrationRequestDestination'
+        metadata:
+          type: object
+          additionalProperties:
+            type: string
+          title: Metadata associated with the orchestration
+      required:
+      - ref_id
+      - source_asset
+      - destination_asset
+      - source_amount
+    TransferDetails:
+      type: object
+      properties:
+        transfer_id:
+          type: string
+        status:
+          $ref: '#/components/schemas/TransferDetailsTransferStatus'
+      description: TransferDetails refers to a specific Transfer and encodes its current status.
+    OrchestrationCryptoDestination:
+      type: object
+      properties:
+        address:
+          type: string
+        network:
+          type: string
+        address_id:
+          type: string
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      description: 'Paxos APIs use [OAuth 2](https://tools.ietf.org/html/rfc6749) with the [client credentials](https://tools.ietf.org/html/rfc6749#section-4.4) grant flow.
+
+
+        **Token URLs:**
+
+        - Production: https://oauth.paxos.com/oauth2/token
+
+        - Sandbox: https://oauth.sandbox.paxos.com/oauth2/token
+
+
+        Learn more in the [API credentials guide →](https://docs.paxos.com/developer/credentials)
+
+        '
+      flows:
+        clientCredentials:
+          tokenUrl: https://oauth.paxos.com/oauth2/token
+          scopes:
+            conversion:read_conversion_stablecoin: Retrieve stablecoin conversion details
+            conversion:write_conversion_stablecoin: Create or cancel a stablecoin conversion
+            exchange:historical_prices: Retrieve marketnaverage prices at a certain time increment
+            exchange:read_order: Retrieve order or order execution details
+            exchange:read_quote: Retrieve quote details for buying or selling an asset
+            exchange:read_quote_execution: Retrieve quote execution details
+            exchange:write_quote_execution: Create a quote execution for buying or selling an asset
+            exchange:write_order: Create or cancel an order for buying or selling an asset
+            fee:write_crypto_withdrawal_fee: Create a guaranteed fee for crypto withdrawal
+            funding:read_bank_balance: Retrieve Paxos dedicated bank account balance
+            funding:read_profile: Retrieve Profile details and deposit funds in Sandbox
+            funding:write_profile: Create a Profile
+            identity:read_account: Retrieve Account details
+            identity:read_identity: Retrieve Identity details or documents
+            identity:write_account: Create or update Account and Account Members
+            identity:write_identity: Create or update Identity details and set Sandbox Identify Status
+            settlement:read_transaction: Retrieve settlement transaction details
+            settlement:write_transaction: Create, affirm or cancel a settlement transaction
+            tax:read_tax_form: Retrieve tax details
+            tax:read_tax_lot: Retrieve tax lot details
+            tax:write_tax_lot: Update the given tax-lot ID
+            transfer:read_deposit_address: Retrieve deposit address details
+            transfer:read_fiat_account: Retrieve Fiat Account details
+            transfer:read_fiat_deposit_instructions: Retrieve fiat deposit instruction details
+            transfer:read_transfer: Retrieve transfer details
+            transfer:read_transfer_limit: Retrieve limits for the given transaction type
+            transfer:reject_crypto_deposit: Reject a crypto deposit (travel rule)
+            transfer:update_crypto_deposit: Provide required travel-rule details
+            transfer:write_crypto_withdrawal: Withdraw asset to a specified destination address
+            transfer:write_deposit_address: Create an deposit address on a blockchain network
+            transfer:write_fiat_account: Create, update or delete a Fiat Account
+            transfer:write_fiat_deposit_instructions: Create, update or delete fiat deposit instructions
+            transfer:write_internal_transfer: Transfer assets between two Profiles
+            transfer:write_sandbox_fiat_deposit: Initiate a test fiat deposit in the Sandbox environment
+            transfer:write_fiat_withdrawal: Withdraw fiat to the given destination
+            events:read_event: Retrieve events
+x-tagGroups:
+- name: Deposits and Withdrawals
+  tags:
+  - Transfers
+  - Fiat Transfers
+  - Deposit Addresses
+  - Crypto Deposits
+  - Crypto Withdrawals
+  - Fees
+  - Internal Transfers
+  - Paxos Transfers
+  - Limits
+- name: Identity
+  tags:
+  - Identity
+  - Institution Members
+  - Accounts
+  - Account Members
+  - Identity Documents
+- name: API Credentials
+  tags:
+  - API Credentials
+- name: Profiles
+  tags:
+  - Profiles
+- name: Sandbox
+  tags:
+  - Sandbox Deposits
+  - Sandbox Identity
+  - Sandbox Fiat Transfers
+- name: Settlements
+  tags:
+  - Settlement
+- name: Stablecoin Conversion
+  tags:
+  - Stablecoin Conversion
+- name: Taxes
+  tags:
+  - Tax Forms
+- name: Trading
+  tags:
+  - Market Data
+  - Orders
+  - Quotes
+  - Quote Executions
+  - Pricing
+  - Issuer Quotes
+- name: Rewards
+  tags:
+  - Monitoring Addresses
+  - Statements
+  - Payments
+- name: Rewards (Alpha)
+  tags:
+  - Reward Addresses
+  - Claims
+  - Payout Groups
+  - Rewards
+- name: Events
+  tags:
+  - Events
+  - Event Types
+  - Event Objects

@@ -1,0 +1,495 @@
+openapi: 3.0.0
+info:
+  title: Paxos Account Members Payout Groups API
+  version: '2.0'
+  description: '<p>Welcome to Paxos APIs. At Paxos, our mission is to enable the movement of any asset, any time, in a trustworthy way. These APIs serve that mission by making it easier than ever for you to directly integrate our product capabilities into your application, leveraging the speed, stability, and security of the Paxos platform.</p> <p>The documentation that follows gives you access to our Crypto Brokerage, Trading, and Exchange products. It includes APIs for market data, orders, and the held rate quote flow.</p> <p>To test in our sandbox environment, <a href="https://account.sandbox.paxos.com" target="_blank">sign up</a> for an account. For more information about Paxos and our APIs, visit <a href="https://www.paxos.com/" target="_blank">Paxos.com</a>.</p>
+
+    '
+  x-logo:
+    url: /docs/paxos.svg
+    backgroundColor: '#FFFFFF'
+    altText: Paxos logo
+servers:
+- url: https://api.paxos.com/v2
+  description: Production
+- url: https://api.sandbox.paxos.com/v2
+  description: Sandbox
+tags:
+- name: Payout Groups
+  description: 'Payout groups encapsulate common rewards characteristics. All monitored addresses that reference a payout group accumulate rewards at the same rate and claim to the payout destination specified for that group.
+
+
+    *These endpoints are only relevant for whitelisted Rewards partners.*
+
+    '
+paths:
+  /rewards/payout-groups:
+    get:
+      summary: List Payout Groups
+      description: Retrieves a list of payout groups.
+      operationId: ListPayoutGroups
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListPayoutGroupsResponse'
+      parameters:
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: page_cursor
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: asset_type
+        description: When set, only payout groups for this asset type (e.g. "USDG", "PYUSD") are returned.
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: name_prefix
+        description: When set, only payout groups whose name starts with this prefix are returned (case-insensitive).
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: claimer_address
+        description: When set, only payout groups with this claimer address are returned.
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: ledger
+        description: When set, only payout groups for this ledger (network) are returned.
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: jurisdiction
+        description: When set, only payout groups for this jurisdiction are returned.
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: onchain_statuses
+        description: When set, only payout groups with one of these onchain statuses are returned.
+        in: query
+        required: false
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - UNREGISTERED
+            - PENDING_REGISTRATION
+            - NEEDS_REREGISTRATION
+            - ACTIVE
+            - FAILED_REGISTRATION
+            - PENDING_DELETION
+            - FAILED_DELETION
+            - PENDING_MULTIPLIER_UPDATE
+            - MULTIPLIER_UPDATE_FAILED
+            - UNREGISTERED_INSUFFICIENT_BALANCE
+      - name: min_balance
+        description: When set, only payout groups with a balance >= this value are returned (in business units, e.g. "1000.50").
+        in: query
+        required: false
+        schema:
+          type: string
+      tags:
+      - Payout Groups
+      security:
+      - OAuth2:
+        - rewards:read_payout_groups
+    post:
+      summary: Create Payout Group
+      description: 'Adds a payout group. A payout group encapsulates common rewards characteristics.
+
+        All monitored addresses which reference this payout group will accumulate rewards
+
+        at the same rate and claim their rewards to the payout destination specified for this group.'
+      operationId: CreatePayoutGroup
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreatePayoutGroupResponse'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePayoutGroupRequest'
+        required: true
+      tags:
+      - Payout Groups
+      security:
+      - OAuth2:
+        - rewards:create_payout_groups
+      - OAuth2:
+        - rewards:write_payout_groups
+  /rewards/payout-groups/{id}:
+    delete:
+      summary: Delete Payout Group
+      description: 'Deletes a payout group. A 200 response indicates the request was accepted; however,
+
+        if the payout group is registered on a blockchain, it may continue to appear for up
+
+        to a few minutes while the on-chain removal is confirmed. Once confirmed, the payout
+
+        group will no longer appear.
+
+
+        Deleting a payout group which has an on-chain component will cause the unclaimed
+
+        rewards for that group to be implicitly claimed. No details of the implicit claiming
+
+        are returned in this API response.'
+      operationId: DeletePayoutGroup
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeletePayoutGroupResponse'
+      parameters:
+      - name: id
+        description: UUID direct reference to the payout group to delete
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - Payout Groups
+      security:
+      - OAuth2:
+        - rewards:delete_payout_groups
+      - OAuth2:
+        - rewards:write_payout_groups
+    put:
+      summary: Update Payout Group
+      description: 'Updates a payout group. Any changes to a payout group which has an on-chain component
+
+        will cause the unclaimed rewards for that group to be implicitly claimed. No details of
+
+        the implicit claiming are returned in this API response.'
+      operationId: UpdatePayoutGroup
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdatePayoutGroupResponse'
+      parameters:
+      - name: id
+        description: UUID direct reference to the existing payout group
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RewardsPayoutGroupServiceUpdatePayoutGroupBody'
+        required: true
+      tags:
+      - Payout Groups
+      security:
+      - OAuth2:
+        - rewards:update_payout_groups
+      - OAuth2:
+        - rewards:write_payout_groups
+components:
+  schemas:
+    CreatePayoutGroupResponse:
+      type: object
+      properties:
+        group:
+          $ref: '#/components/schemas/PayoutGroup'
+    CreatePayoutGroupRequest:
+      type: object
+      properties:
+        ledger:
+          type: string
+          title: Ledger identifier
+        asset_type:
+          type: string
+          title: Asset type for this payout group
+        jurisdiction:
+          type: string
+          title: Jurisdiction for this payout group
+        name:
+          type: string
+          title: User-readable name for this group
+        claimer_address:
+          type: string
+          description: Address with signing authority to claim rewards for this group.
+        schedule:
+          $ref: '#/components/schemas/ClaimScheduleConfig'
+    RewardsPayoutGroupServiceUpdatePayoutGroupBody:
+      type: object
+      properties:
+        name:
+          type: string
+          title: User-readable name for this group (optional)
+        jurisdiction:
+          type: string
+          title: Jurisdiction for this payout group (optional, e.g. "US", "EU")
+    ListPayoutGroupsResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/PayoutGroup'
+          description: Payout groups in this page of results.
+        next_page_cursor:
+          type: string
+        count:
+          type: integer
+          format: int32
+          description: Total number of payout groups matching the current filters (without pagination).
+    PayoutGroup:
+      type: object
+      properties:
+        id:
+          type: string
+          title: UUID direct reference to the created payout group (to be used for updates)
+        ledger:
+          type: string
+          title: Ledger identifier
+        asset_type:
+          type: string
+          title: Asset type for this payout group
+        rate_id:
+          type: string
+          title: Rate ID associated with this payout group
+        jurisdiction:
+          type: string
+          title: Jurisdiction for this payout group
+        name:
+          type: string
+          title: User-readable name for this group
+        claimer_address:
+          type: string
+          description: Address with signing authority to claim rewards for this group.
+        manager_address:
+          type: string
+          description: Address that manages this payout group. Defaults to claimer_address if not explicitly set.
+        destination_address:
+          type: string
+          description: Address that receives reward payouts for this group. Defaults to claimer_address if not explicitly set.
+        onchain_group_id:
+          type: string
+          format: int64
+          title: On-chain group ID (optional)
+        onchain_status:
+          $ref: '#/components/schemas/PayoutGroupOnchainStatus'
+        balance:
+          type: string
+          description: Current balance of addresses in this payout group. Does not include any pending/unclaimed rewards.
+        balance_at:
+          type: string
+          format: date-time
+          title: Balance timestamp (optional)
+        last_claim_all_at:
+          type: string
+          format: date-time
+          title: Last claim all timestamp (optional)
+        created_at:
+          type: string
+          format: date-time
+          title: When the payout group was created
+        updated_at:
+          type: string
+          format: date-time
+          title: When the payout group was last updated
+      required:
+      - id
+      - ledger
+      - asset_type
+      - rate_id
+      - jurisdiction
+      - claimer_address
+      - onchain_status
+      - balance
+      - created_at
+      - updated_at
+    ClaimScheduleConfig:
+      type: object
+      properties:
+        schedule_type:
+          $ref: '#/components/schemas/ScheduleType'
+        days_of_week:
+          type: array
+          items:
+            type: integer
+            format: int32
+        days_of_month:
+          type: array
+          items:
+            type: integer
+            format: int32
+        hour:
+          type: integer
+          format: int32
+        minute:
+          type: integer
+          format: int32
+    DeletePayoutGroupResponse:
+      type: object
+    PayoutGroupOnchainStatus:
+      type: string
+      enum:
+      - UNREGISTERED
+      - PENDING_REGISTRATION
+      - NEEDS_REREGISTRATION
+      - ACTIVE
+      - FAILED_REGISTRATION
+      - PENDING_DELETION
+      - FAILED_DELETION
+      - PENDING_MULTIPLIER_UPDATE
+      - MULTIPLIER_UPDATE_FAILED
+      - UNREGISTERED_INSUFFICIENT_BALANCE
+      description: PayoutGroupOnchainStatus represents the on-chain registration status of a payout group.
+    ScheduleType:
+      type: string
+      enum:
+      - DAILY
+      - MONTHLY
+      - WEEKLY
+    UpdatePayoutGroupResponse:
+      type: object
+      properties:
+        group:
+          $ref: '#/components/schemas/PayoutGroup'
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      description: 'Paxos APIs use [OAuth 2](https://tools.ietf.org/html/rfc6749) with the [client credentials](https://tools.ietf.org/html/rfc6749#section-4.4) grant flow.
+
+
+        **Token URLs:**
+
+        - Production: https://oauth.paxos.com/oauth2/token
+
+        - Sandbox: https://oauth.sandbox.paxos.com/oauth2/token
+
+
+        Learn more in the [API credentials guide →](https://docs.paxos.com/developer/credentials)
+
+        '
+      flows:
+        clientCredentials:
+          tokenUrl: https://oauth.paxos.com/oauth2/token
+          scopes:
+            conversion:read_conversion_stablecoin: Retrieve stablecoin conversion details
+            conversion:write_conversion_stablecoin: Create or cancel a stablecoin conversion
+            exchange:historical_prices: Retrieve marketnaverage prices at a certain time increment
+            exchange:read_order: Retrieve order or order execution details
+            exchange:read_quote: Retrieve quote details for buying or selling an asset
+            exchange:read_quote_execution: Retrieve quote execution details
+            exchange:write_quote_execution: Create a quote execution for buying or selling an asset
+            exchange:write_order: Create or cancel an order for buying or selling an asset
+            fee:write_crypto_withdrawal_fee: Create a guaranteed fee for crypto withdrawal
+            funding:read_bank_balance: Retrieve Paxos dedicated bank account balance
+            funding:read_profile: Retrieve Profile details and deposit funds in Sandbox
+            funding:write_profile: Create a Profile
+            identity:read_account: Retrieve Account details
+            identity:read_identity: Retrieve Identity details or documents
+            identity:write_account: Create or update Account and Account Members
+            identity:write_identity: Create or update Identity details and set Sandbox Identify Status
+            settlement:read_transaction: Retrieve settlement transaction details
+            settlement:write_transaction: Create, affirm or cancel a settlement transaction
+            tax:read_tax_form: Retrieve tax details
+            tax:read_tax_lot: Retrieve tax lot details
+            tax:write_tax_lot: Update the given tax-lot ID
+            transfer:read_deposit_address: Retrieve deposit address details
+            transfer:read_fiat_account: Retrieve Fiat Account details
+            transfer:read_fiat_deposit_instructions: Retrieve fiat deposit instruction details
+            transfer:read_transfer: Retrieve transfer details
+            transfer:read_transfer_limit: Retrieve limits for the given transaction type
+            transfer:reject_crypto_deposit: Reject a crypto deposit (travel rule)
+            transfer:update_crypto_deposit: Provide required travel-rule details
+            transfer:write_crypto_withdrawal: Withdraw asset to a specified destination address
+            transfer:write_deposit_address: Create an deposit address on a blockchain network
+            transfer:write_fiat_account: Create, update or delete a Fiat Account
+            transfer:write_fiat_deposit_instructions: Create, update or delete fiat deposit instructions
+            transfer:write_internal_transfer: Transfer assets between two Profiles
+            transfer:write_sandbox_fiat_deposit: Initiate a test fiat deposit in the Sandbox environment
+            transfer:write_fiat_withdrawal: Withdraw fiat to the given destination
+            events:read_event: Retrieve events
+x-tagGroups:
+- name: Deposits and Withdrawals
+  tags:
+  - Transfers
+  - Fiat Transfers
+  - Deposit Addresses
+  - Crypto Deposits
+  - Crypto Withdrawals
+  - Fees
+  - Internal Transfers
+  - Paxos Transfers
+  - Limits
+- name: Identity
+  tags:
+  - Identity
+  - Institution Members
+  - Accounts
+  - Account Members
+  - Identity Documents
+- name: API Credentials
+  tags:
+  - API Credentials
+- name: Profiles
+  tags:
+  - Profiles
+- name: Sandbox
+  tags:
+  - Sandbox Deposits
+  - Sandbox Identity
+  - Sandbox Fiat Transfers
+- name: Settlements
+  tags:
+  - Settlement
+- name: Stablecoin Conversion
+  tags:
+  - Stablecoin Conversion
+- name: Taxes
+  tags:
+  - Tax Forms
+- name: Trading
+  tags:
+  - Market Data
+  - Orders
+  - Quotes
+  - Quote Executions
+  - Pricing
+  - Issuer Quotes
+- name: Rewards
+  tags:
+  - Monitoring Addresses
+  - Statements
+  - Payments
+- name: Rewards (Alpha)
+  tags:
+  - Reward Addresses
+  - Claims
+  - Payout Groups
+  - Rewards
+- name: Events
+  tags:
+  - Events
+  - Event Types
+  - Event Objects

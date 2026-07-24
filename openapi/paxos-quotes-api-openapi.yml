@@ -1,0 +1,351 @@
+openapi: 3.0.0
+info:
+  title: Paxos Account Members Quotes API
+  version: '2.0'
+  description: '<p>Welcome to Paxos APIs. At Paxos, our mission is to enable the movement of any asset, any time, in a trustworthy way. These APIs serve that mission by making it easier than ever for you to directly integrate our product capabilities into your application, leveraging the speed, stability, and security of the Paxos platform.</p> <p>The documentation that follows gives you access to our Crypto Brokerage, Trading, and Exchange products. It includes APIs for market data, orders, and the held rate quote flow.</p> <p>To test in our sandbox environment, <a href="https://account.sandbox.paxos.com" target="_blank">sign up</a> for an account. For more information about Paxos and our APIs, visit <a href="https://www.paxos.com/" target="_blank">Paxos.com</a>.</p>
+
+    '
+  x-logo:
+    url: /docs/paxos.svg
+    backgroundColor: '#FFFFFF'
+    altText: Paxos logo
+servers:
+- url: https://api.paxos.com/v2
+  description: Production
+- url: https://api.sandbox.paxos.com/v2
+  description: Sandbox
+tags:
+- name: Quotes
+  description: "Quotes are \"held rates\" offered by Paxos to buy or sell assets at a specific\nprice within a period of time - for example, the option to buy BTC within\nthe next 30 seconds for $8,000.\n\nThe typical Quotes workflow is as follows:\n\n1. Call [List Quotes](#operation/ListQuotes) to get the latest available\n   quoted prices for the assets you want to buy or sell.\n1. Present the offered price to one or more end-users, with a timer\n   indicating the time to expiration.\n1. If a user accepts the price, call [Create Quote Execution](#operation/CreateQuoteExecution) with the amount to buy or sell.\n1. Call [Get Quote Execution](#operation/GetQuoteExecution) to monitor\n   for completion and know when the funds from the execution are available.\n\nIt's important to show end-users the latest available price. If you cache\nprices to show them to multiple users, you should refresh the cache once\nper second.\n\nYou can call [List Quote Executions](#operation/ListQuoteExecutions) to\nreview or construct reports on quote execution activity.\n"
+paths:
+  /quotes:
+    get:
+      summary: List Quotes
+      description: 'List quotes for buying or selling assets. By default, the list will
+
+        include the latest available quotes for both buying and selling all supported
+
+        assets.
+
+
+        Each quote is valid until `expires_at`, and can be executed on by
+
+        calling [Create Quote Execution](#operation/CreateQuoteExecution).
+
+
+        Multiple calls to list quotes in quick succession may return the same quote
+
+        values. Paxos currently issues new quotes at most once per second.'
+      operationId: ListQuotes
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListQuotesResponse'
+              examples:
+                Get Latest USD Quotes:
+                  value:
+                    items:
+                    - id: 366a26d2-3098-4226-a520-4bb43ae4d922
+                      market: BTCUSD
+                      side: BUY
+                      price: '6001.2'
+                      base_asset: BTC
+                      quote_asset: USD
+                      created_at: '2020-01-17T18:36:08Z'
+                      expires_at: '2020-01-17T18:36:38Z'
+                    - id: 71e2a297-f2d7-423c-8e4f-486aac70fa9f
+                      market: BTCUSD
+                      side: SELL
+                      price: '5999.8'
+                      base_asset: BTC
+                      quote_asset: USD
+                      created_at: '2020-01-17T18:36:08Z'
+                      expires_at: '2020-01-17T18:36:38Z'
+                    - id: ee018e41-0379-41c6-a099-1ea81204b192
+                      market: ETHUSD
+                      side: BUY
+                      price: '225.88'
+                      base_asset: ETH
+                      quote_asset: USD
+                      created_at: '2020-01-17T18:36:08Z'
+                      expires_at: '2020-01-17T18:36:38Z'
+                    - id: 5a336768-5bc1-4401-9d95-9cb251ce4b58
+                      market: ETHUSD
+                      side: SELL
+                      price: '224.11'
+                      base_asset: ETH
+                      quote_asset: USD
+                      created_at: '2020-01-17T18:36:08Z'
+                      expires_at: '2020-01-17T18:36:38Z'
+      parameters:
+      - name: markets
+        description: ''
+        in: query
+        required: true
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - ETHEUR
+            - ETHSGD
+            - ETHUSD
+            - BTCEUR
+            - BTCSGD
+            - BTCUSD
+            - PAXGUSD
+            - BCHUSD
+            - LTCUSD
+            - USDPUSD
+            - LINKUSD
+            - AAVEUSD
+            - UNIUSD
+            - PEPEUSD
+            - TRUMPUSD
+            - SHIBUSD
+            - ARBUSD
+            - BONKUSD
+            - ENAUSD
+            - MNTUSD
+            - ONDOUSD
+            - PENGUUSD
+            - QNTUSD
+            - RENDERUSD
+            - SKYUSD
+            - WIFUSD
+            - WLDUSD
+            - DOGEUSD
+            - AVAXUSD
+            - SUIUSD
+            - POLUSD
+            - XLMUSD
+            - BNBUSD
+      tags:
+      - Quotes
+      security:
+      - OAuth2:
+        - exchange:read_quote
+components:
+  schemas:
+    Quote:
+      type: object
+      example:
+        id: 366a26d2-3098-4226-a520-4bb43ae4d922
+        market: BTCUSD
+        side: BUY
+        price: '6001.2'
+        base_asset: BTC
+        quote_asset: USD
+        created_at: '2020-01-17T18:36:08Z'
+        expires_at: '2020-01-17T18:36:38Z'
+      properties:
+        id:
+          type: string
+          description: The UUID of the quote.
+        market:
+          $ref: '#/components/schemas/Market'
+        side:
+          $ref: '#/components/schemas/OrderSide'
+        price:
+          type: string
+          format: decimal
+          description: The guaranteed price, held until expires_at.
+        base_asset:
+          type: string
+          description: The "base" side of the trading pair (crypto - like BTC, ETH, PAXG).
+        quote_asset:
+          type: string
+          description: The "quote" side of the trading pair (fiat - like USD, EUR, SGD).
+        created_at:
+          type: string
+          format: date-time
+          description: The time at which the quote was first offered.
+        expires_at:
+          type: string
+          format: date-time
+          description: The time at which the quote expires.
+      description: 'A Quote is a guaranteed price to buy or sell on a particular market for a
+
+        limited period of time (a "held rate").'
+      required:
+      - id
+      - market
+      - side
+      - price
+      - base_asset
+      - quote_asset
+      - created_at
+      - expires_at
+    ListQuotesResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Quote'
+    Market:
+      type: string
+      enum:
+      - ETHEUR
+      - ETHSGD
+      - ETHUSD
+      - BTCEUR
+      - BTCSGD
+      - BTCUSD
+      - PAXGUSD
+      - BCHUSD
+      - LTCUSD
+      - USDPUSD
+      - LINKUSD
+      - AAVEUSD
+      - UNIUSD
+      - PEPEUSD
+      - TRUMPUSD
+      - SHIBUSD
+      - ARBUSD
+      - BONKUSD
+      - ENAUSD
+      - MNTUSD
+      - ONDOUSD
+      - PENGUUSD
+      - QNTUSD
+      - RENDERUSD
+      - SKYUSD
+      - WIFUSD
+      - WLDUSD
+      - DOGEUSD
+      - AVAXUSD
+      - SUIUSD
+      - POLUSD
+      - XLMUSD
+      - BNBUSD
+      title: ''
+    OrderSide:
+      type: string
+      enum:
+      - BUY
+      - SELL
+      description: Trade side.
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      description: 'Paxos APIs use [OAuth 2](https://tools.ietf.org/html/rfc6749) with the [client credentials](https://tools.ietf.org/html/rfc6749#section-4.4) grant flow.
+
+
+        **Token URLs:**
+
+        - Production: https://oauth.paxos.com/oauth2/token
+
+        - Sandbox: https://oauth.sandbox.paxos.com/oauth2/token
+
+
+        Learn more in the [API credentials guide →](https://docs.paxos.com/developer/credentials)
+
+        '
+      flows:
+        clientCredentials:
+          tokenUrl: https://oauth.paxos.com/oauth2/token
+          scopes:
+            conversion:read_conversion_stablecoin: Retrieve stablecoin conversion details
+            conversion:write_conversion_stablecoin: Create or cancel a stablecoin conversion
+            exchange:historical_prices: Retrieve marketnaverage prices at a certain time increment
+            exchange:read_order: Retrieve order or order execution details
+            exchange:read_quote: Retrieve quote details for buying or selling an asset
+            exchange:read_quote_execution: Retrieve quote execution details
+            exchange:write_quote_execution: Create a quote execution for buying or selling an asset
+            exchange:write_order: Create or cancel an order for buying or selling an asset
+            fee:write_crypto_withdrawal_fee: Create a guaranteed fee for crypto withdrawal
+            funding:read_bank_balance: Retrieve Paxos dedicated bank account balance
+            funding:read_profile: Retrieve Profile details and deposit funds in Sandbox
+            funding:write_profile: Create a Profile
+            identity:read_account: Retrieve Account details
+            identity:read_identity: Retrieve Identity details or documents
+            identity:write_account: Create or update Account and Account Members
+            identity:write_identity: Create or update Identity details and set Sandbox Identify Status
+            settlement:read_transaction: Retrieve settlement transaction details
+            settlement:write_transaction: Create, affirm or cancel a settlement transaction
+            tax:read_tax_form: Retrieve tax details
+            tax:read_tax_lot: Retrieve tax lot details
+            tax:write_tax_lot: Update the given tax-lot ID
+            transfer:read_deposit_address: Retrieve deposit address details
+            transfer:read_fiat_account: Retrieve Fiat Account details
+            transfer:read_fiat_deposit_instructions: Retrieve fiat deposit instruction details
+            transfer:read_transfer: Retrieve transfer details
+            transfer:read_transfer_limit: Retrieve limits for the given transaction type
+            transfer:reject_crypto_deposit: Reject a crypto deposit (travel rule)
+            transfer:update_crypto_deposit: Provide required travel-rule details
+            transfer:write_crypto_withdrawal: Withdraw asset to a specified destination address
+            transfer:write_deposit_address: Create an deposit address on a blockchain network
+            transfer:write_fiat_account: Create, update or delete a Fiat Account
+            transfer:write_fiat_deposit_instructions: Create, update or delete fiat deposit instructions
+            transfer:write_internal_transfer: Transfer assets between two Profiles
+            transfer:write_sandbox_fiat_deposit: Initiate a test fiat deposit in the Sandbox environment
+            transfer:write_fiat_withdrawal: Withdraw fiat to the given destination
+            events:read_event: Retrieve events
+x-tagGroups:
+- name: Deposits and Withdrawals
+  tags:
+  - Transfers
+  - Fiat Transfers
+  - Deposit Addresses
+  - Crypto Deposits
+  - Crypto Withdrawals
+  - Fees
+  - Internal Transfers
+  - Paxos Transfers
+  - Limits
+- name: Identity
+  tags:
+  - Identity
+  - Institution Members
+  - Accounts
+  - Account Members
+  - Identity Documents
+- name: API Credentials
+  tags:
+  - API Credentials
+- name: Profiles
+  tags:
+  - Profiles
+- name: Sandbox
+  tags:
+  - Sandbox Deposits
+  - Sandbox Identity
+  - Sandbox Fiat Transfers
+- name: Settlements
+  tags:
+  - Settlement
+- name: Stablecoin Conversion
+  tags:
+  - Stablecoin Conversion
+- name: Taxes
+  tags:
+  - Tax Forms
+- name: Trading
+  tags:
+  - Market Data
+  - Orders
+  - Quotes
+  - Quote Executions
+  - Pricing
+  - Issuer Quotes
+- name: Rewards
+  tags:
+  - Monitoring Addresses
+  - Statements
+  - Payments
+- name: Rewards (Alpha)
+  tags:
+  - Reward Addresses
+  - Claims
+  - Payout Groups
+  - Rewards
+- name: Events
+  tags:
+  - Events
+  - Event Types
+  - Event Objects

@@ -1,0 +1,454 @@
+openapi: 3.0.0
+info:
+  title: Paxos Account Members Address Verification API
+  version: '2.0'
+  description: '<p>Welcome to Paxos APIs. At Paxos, our mission is to enable the movement of any asset, any time, in a trustworthy way. These APIs serve that mission by making it easier than ever for you to directly integrate our product capabilities into your application, leveraging the speed, stability, and security of the Paxos platform.</p> <p>The documentation that follows gives you access to our Crypto Brokerage, Trading, and Exchange products. It includes APIs for market data, orders, and the held rate quote flow.</p> <p>To test in our sandbox environment, <a href="https://account.sandbox.paxos.com" target="_blank">sign up</a> for an account. For more information about Paxos and our APIs, visit <a href="https://www.paxos.com/" target="_blank">Paxos.com</a>.</p>
+
+    '
+  x-logo:
+    url: /docs/paxos.svg
+    backgroundColor: '#FFFFFF'
+    altText: Paxos logo
+servers:
+- url: https://api.paxos.com/v2
+  description: Production
+- url: https://api.sandbox.paxos.com/v2
+  description: Sandbox
+tags:
+- name: Address Verification
+paths:
+  /addresses/verifications:
+    get:
+      summary: List address verifications
+      operationId: ListVerifications
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/publicListVerificationsResponse'
+      parameters:
+      - name: verification_method
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - SIGNATURE
+          - SMALL_DEPOSIT
+          - MANUAL
+      - name: status
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - PENDING
+          - APPROVED
+          - EXPIRED
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: order
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - DESC
+          - ASC
+      - name: order_by
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - CREATED_AT
+      - name: page_cursor
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: created_at.lt
+        description: Include timestamps strictly less than lt. RFC3339 format, like `2006-01-02T15:04:05Z`.
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: created_at.lte
+        description: Include timestamps less than or equal to lte. RFC3339 format, like `2006-01-02T15:04:05Z`.
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: created_at.eq
+        description: Include timestamps exactly equal to eq. RFC3339 format, like `2006-01-02T15:04:05Z`.
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: created_at.gte
+        description: Include timestamps greater than or equal to gte. RFC3339 format, like `2006-01-02T15:04:05Z`.
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: created_at.gt
+        description: Include timestamps strictly greater than gt. RFC3339 format, like `2006-01-02T15:04:05Z`.
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: deposit_address
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: network
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: address
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: updated_at.lt
+        description: Include timestamps strictly less than lt. RFC3339 format, like `2006-01-02T15:04:05Z`.
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: updated_at.lte
+        description: Include timestamps less than or equal to lte. RFC3339 format, like `2006-01-02T15:04:05Z`.
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: updated_at.eq
+        description: Include timestamps exactly equal to eq. RFC3339 format, like `2006-01-02T15:04:05Z`.
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: updated_at.gte
+        description: Include timestamps greater than or equal to gte. RFC3339 format, like `2006-01-02T15:04:05Z`.
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: updated_at.gt
+        description: Include timestamps strictly greater than gt. RFC3339 format, like `2006-01-02T15:04:05Z`.
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      tags:
+      - Address Verification
+      security:
+      - OAuth2:
+        - address_ownership:read_verification
+    post:
+      summary: Create address verification
+      description: 'For SIGNATURE method: EVM messages follow EIP-191; Solana messages are JSON payloads signed with ed25519.'
+      operationId: CreateVerification
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/publicVerification'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/publicCreateVerificationRequest'
+        required: true
+      tags:
+      - Address Verification
+      security:
+      - OAuth2:
+        - address_ownership:write_verification
+  /addresses/verifications/signature:
+    post:
+      summary: Submit address verification signature
+      operationId: SubmitSignature
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/publicVerification'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/publicSubmitSignatureRequest'
+        required: true
+      tags:
+      - Address Verification
+      security:
+      - OAuth2:
+        - address_ownership:write_verification
+  /addresses/verifications/{id}:
+    get:
+      summary: Get address verification
+      operationId: GetVerification
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/publicVerification'
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - Address Verification
+      security:
+      - OAuth2:
+        - address_ownership:read_verification
+components:
+  schemas:
+    publicVerificationStatus:
+      type: string
+      enum:
+      - PENDING
+      - APPROVED
+      - EXPIRED
+    publicVerificationMethod:
+      type: string
+      enum:
+      - SIGNATURE
+      - SMALL_DEPOSIT
+      - MANUAL
+    publicManualVerification:
+      type: object
+      properties:
+        verified_by:
+          type: string
+          description: verified_by is the email of the admin who submitted the proof.
+        reason:
+          type: string
+      description: 'ManualVerification is populated on admin endpoints only when
+
+        verification_method is MANUAL. Not returned on public endpoints.'
+    publicSmallDepositVerification:
+      type: object
+      properties:
+        amount:
+          type: string
+          format: decimal
+        deposit_address:
+          type: string
+        transaction_hash:
+          type: string
+        asset:
+          type: string
+    publicListVerificationsResponse:
+      type: object
+      properties:
+        next_page_cursor:
+          type: string
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/publicVerification'
+    publicSubmitSignatureRequest:
+      type: object
+      properties:
+        id:
+          type: string
+        signature:
+          type: string
+    publicCreateVerificationRequest:
+      type: object
+      properties:
+        network:
+          type: string
+        address:
+          type: string
+        verification_method:
+          $ref: '#/components/schemas/publicVerificationMethod'
+        ref_id:
+          type: string
+    publicSignatureVerification:
+      type: object
+      properties:
+        message:
+          type: string
+        nonce:
+          type: string
+        signature:
+          type: string
+    publicVerification:
+      type: object
+      properties:
+        id:
+          type: string
+        network:
+          type: string
+        address:
+          type: string
+        verification_method:
+          $ref: '#/components/schemas/publicVerificationMethod'
+        status:
+          $ref: '#/components/schemas/publicVerificationStatus'
+        signature_verification:
+          $ref: '#/components/schemas/publicSignatureVerification'
+        small_deposit_verification:
+          $ref: '#/components/schemas/publicSmallDepositVerification'
+        manual_verification:
+          $ref: '#/components/schemas/publicManualVerification'
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        expires_at:
+          type: string
+          format: date-time
+          description: expires_at is computed server-side at creation time and is always populated.
+        ref_id:
+          type: string
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      description: 'Paxos APIs use [OAuth 2](https://tools.ietf.org/html/rfc6749) with the [client credentials](https://tools.ietf.org/html/rfc6749#section-4.4) grant flow.
+
+
+        **Token URLs:**
+
+        - Production: https://oauth.paxos.com/oauth2/token
+
+        - Sandbox: https://oauth.sandbox.paxos.com/oauth2/token
+
+
+        Learn more in the [API credentials guide →](https://docs.paxos.com/developer/credentials)
+
+        '
+      flows:
+        clientCredentials:
+          tokenUrl: https://oauth.paxos.com/oauth2/token
+          scopes:
+            conversion:read_conversion_stablecoin: Retrieve stablecoin conversion details
+            conversion:write_conversion_stablecoin: Create or cancel a stablecoin conversion
+            exchange:historical_prices: Retrieve marketnaverage prices at a certain time increment
+            exchange:read_order: Retrieve order or order execution details
+            exchange:read_quote: Retrieve quote details for buying or selling an asset
+            exchange:read_quote_execution: Retrieve quote execution details
+            exchange:write_quote_execution: Create a quote execution for buying or selling an asset
+            exchange:write_order: Create or cancel an order for buying or selling an asset
+            fee:write_crypto_withdrawal_fee: Create a guaranteed fee for crypto withdrawal
+            funding:read_bank_balance: Retrieve Paxos dedicated bank account balance
+            funding:read_profile: Retrieve Profile details and deposit funds in Sandbox
+            funding:write_profile: Create a Profile
+            identity:read_account: Retrieve Account details
+            identity:read_identity: Retrieve Identity details or documents
+            identity:write_account: Create or update Account and Account Members
+            identity:write_identity: Create or update Identity details and set Sandbox Identify Status
+            settlement:read_transaction: Retrieve settlement transaction details
+            settlement:write_transaction: Create, affirm or cancel a settlement transaction
+            tax:read_tax_form: Retrieve tax details
+            tax:read_tax_lot: Retrieve tax lot details
+            tax:write_tax_lot: Update the given tax-lot ID
+            transfer:read_deposit_address: Retrieve deposit address details
+            transfer:read_fiat_account: Retrieve Fiat Account details
+            transfer:read_fiat_deposit_instructions: Retrieve fiat deposit instruction details
+            transfer:read_transfer: Retrieve transfer details
+            transfer:read_transfer_limit: Retrieve limits for the given transaction type
+            transfer:reject_crypto_deposit: Reject a crypto deposit (travel rule)
+            transfer:update_crypto_deposit: Provide required travel-rule details
+            transfer:write_crypto_withdrawal: Withdraw asset to a specified destination address
+            transfer:write_deposit_address: Create an deposit address on a blockchain network
+            transfer:write_fiat_account: Create, update or delete a Fiat Account
+            transfer:write_fiat_deposit_instructions: Create, update or delete fiat deposit instructions
+            transfer:write_internal_transfer: Transfer assets between two Profiles
+            transfer:write_sandbox_fiat_deposit: Initiate a test fiat deposit in the Sandbox environment
+            transfer:write_fiat_withdrawal: Withdraw fiat to the given destination
+            events:read_event: Retrieve events
+x-tagGroups:
+- name: Deposits and Withdrawals
+  tags:
+  - Transfers
+  - Fiat Transfers
+  - Deposit Addresses
+  - Crypto Deposits
+  - Crypto Withdrawals
+  - Fees
+  - Internal Transfers
+  - Paxos Transfers
+  - Limits
+- name: Identity
+  tags:
+  - Identity
+  - Institution Members
+  - Accounts
+  - Account Members
+  - Identity Documents
+- name: API Credentials
+  tags:
+  - API Credentials
+- name: Profiles
+  tags:
+  - Profiles
+- name: Sandbox
+  tags:
+  - Sandbox Deposits
+  - Sandbox Identity
+  - Sandbox Fiat Transfers
+- name: Settlements
+  tags:
+  - Settlement
+- name: Stablecoin Conversion
+  tags:
+  - Stablecoin Conversion
+- name: Taxes
+  tags:
+  - Tax Forms
+- name: Trading
+  tags:
+  - Market Data
+  - Orders
+  - Quotes
+  - Quote Executions
+  - Pricing
+  - Issuer Quotes
+- name: Rewards
+  tags:
+  - Monitoring Addresses
+  - Statements
+  - Payments
+- name: Rewards (Alpha)
+  tags:
+  - Reward Addresses
+  - Claims
+  - Payout Groups
+  - Rewards
+- name: Events
+  tags:
+  - Events
+  - Event Types
+  - Event Objects

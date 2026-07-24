@@ -1,0 +1,785 @@
+openapi: 3.0.0
+info:
+  title: Paxos Account Members Settlement API
+  version: '2.0'
+  description: '<p>Welcome to Paxos APIs. At Paxos, our mission is to enable the movement of any asset, any time, in a trustworthy way. These APIs serve that mission by making it easier than ever for you to directly integrate our product capabilities into your application, leveraging the speed, stability, and security of the Paxos platform.</p> <p>The documentation that follows gives you access to our Crypto Brokerage, Trading, and Exchange products. It includes APIs for market data, orders, and the held rate quote flow.</p> <p>To test in our sandbox environment, <a href="https://account.sandbox.paxos.com" target="_blank">sign up</a> for an account. For more information about Paxos and our APIs, visit <a href="https://www.paxos.com/" target="_blank">Paxos.com</a>.</p>
+
+    '
+  x-logo:
+    url: /docs/paxos.svg
+    backgroundColor: '#FFFFFF'
+    altText: Paxos logo
+servers:
+- url: https://api.paxos.com/v2
+  description: Production
+- url: https://api.sandbox.paxos.com/v2
+  description: Sandbox
+tags:
+- name: Settlement
+  description: 'Use the Settlements API to facilitate simultaneous exchange of pre-funded assets. Automate a variety of use cases that require two-party approval, including net settlement of over-the-counter trades, withdrawal requests for tri-party collateral, payment requests, and bilateral settlement for marketplace end users.
+
+
+    The simple request-and-approval workflow supports both one-directional and bidirectional transactions to allow a user to receive an asset (for example, send USDP) or simultaneously send and receive assets (for example, send USD and receive BTC and ETH). Only when all parties are in agreement and assets are fully funded does the Settlements API allow for change of custody. Upon completion, all settled assets are immediately available for trading, transferring, withdrawal or other supported activities.
+
+
+    The Source Profile initiates the transaction for the Target Profile to approve. The `DIRECTION` of each asset is always relative to the Source Profile and only the owner of the Source Profile can cancel a transaction if it hasn''t been approved by the Target Profile.
+
+    '
+  externalDocs:
+    description: Learn more about the Settlement APIs →
+    url: https://docs.paxos.com/settlements
+paths:
+  /settlement/transactions:
+    get:
+      summary: List Transactions
+      description: 'This endpoint enables you to fetch a list of Settlement Transactions that you have created (own the `source_profile_id`) or have been alleged against you (own the `target_profile_id`).
+
+        You can use query parameters to filter the results returned by `statuses`, `source_profile_id` and `target_profile_id`.
+
+
+        Note that this endpoint supports pagination and returns a cursor token for fetching next pages.'
+      operationId: ListTransactions
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListTransactionsResponse'
+              example:
+              - id: d99a03ee-6b88-4362-89da-087c2c8cd4a7
+                ref_id: d840cf31-352f-4190-a476-7522bf3eafda
+                settlement_window_start: '2023-08-25T14:25:41.648486573Z'
+                settlement_window_end: '2023-08-25T14:25:41.648486953Z'
+                source_profile_id: 4fd025ab-f29f-47e6-a02e-df90a61c7ec9
+                target_profile_id: 47db6271-50d6-4934-8c81-c42d87bfb390
+                legs:
+                - id: ace21517-447e-4764-8733-765cb12a7fab
+                  direction: DELIVER
+                  asset: BTC
+                  amount: '100'
+                status: PENDING
+                created_at: '2023-08-25T14:25:41.648489333Z'
+                updated_at: '2023-08-25T14:25:41.648489493Z'
+              - id: 738b465a-7bea-42cf-be8d-63572f5745e7
+                ref_id: 8f1dcf84-56e7-4e84-80aa-f01ef2eb1ab0
+                settlement_window_start: '2023-08-26T00:25:41.648486573Z'
+                settlement_window_end: '2023-08-29T19:25:41.648486953Z'
+                source_profile_id: 4fd025ab-f29f-47e6-a02e-df90a61c7ec9
+                target_profile_id: 47db6271-50d6-4934-8c81-c42d87bfb390
+                legs:
+                - id: ace21517-447e-4764-8733-765cb12a7fab
+                  direction: RECEIVE
+                  asset: ETH
+                  amount: '39.231'
+                status: PENDING
+                created_at: '2023-08-24T18:29:41.648489333Z'
+                updated_at: '2023-08-24T18:29:41.648489493Z'
+        '403':
+          description: Insufficient scopes
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+              examples:
+                Insufficient scopes:
+                  value:
+                    type: about:blank
+                    title: Forbidden
+                    status: 403
+                    detail: 'insufficient scopes: found ''settlement:write_transaction'', required one of ''[settlement:read_transaction]'''
+      parameters:
+      - name: statuses
+        description: "Transaction statuses to filter on\n\n - PENDING: Initial state of a settlement transaction upon creation.\n - SETTLED: Indicates all obligations belong to the settlement transaction have been enacted.\n - EXPIRED: Indicates the settlement transaction is no longer eligible for settlement.\n - CANCELLED: Indicates the settlement transaction was cancelled by the source profile.\n - AFFIRMED: Indicates the settlement transaction will be eligible for settlement once within the window."
+        in: query
+        required: false
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - PENDING
+            - SETTLED
+            - EXPIRED
+            - CANCELLED
+            - AFFIRMED
+      - name: source_profile_id
+        description: The `profile_id` of the entity on the submitting side of the transaction.
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: target_profile_id
+        description: The `profile_id` of the entity on the receiving side of the transaction.
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: limit
+        description: Number of results to return. Defaults to 100 if no limit is provided.
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int64
+      - name: page_cursor
+        description: Cursor for getting the next page of results.
+        in: query
+        required: false
+        schema:
+          type: string
+      tags:
+      - Settlement
+      security:
+      - OAuth2:
+        - settlement:read_transaction
+    post:
+      summary: Create Transaction
+      description: 'Creates a new bilateral Settlement Transaction with one or more legs. The customer must own the
+
+        `source_profile_id` specified in the transaction.
+
+
+        A successful response indicates the transaction has been accepted and will be in an initial `status` of `"PENDING"`
+
+        for settlement, the transaction is only eligible for settlement once the `status` is `"AFFIRMED"` by the
+
+        `target_profile_id` and the current time is between the provided `settlement_window_start` and `settlement_window_end`.
+
+
+        Settlement will only be enacted once both `source_profile_id` and `target_profile_id` have sufficient balances to
+
+        fulfill all legs specified as settlement is **atomic**.'
+      operationId: CreateTransaction
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Transaction'
+              example:
+                id: d99a03ee-6b88-4362-89da-087c2c8cd4a7
+                ref_id: d840cf31-352f-4190-a476-7522bf3eafda
+                settlement_window_start: '2023-08-25T14:25:41.648486573Z'
+                settlement_window_end: '2023-08-25T14:25:41.648486953Z'
+                source_profile_id: 4fd025ab-f29f-47e6-a02e-df90a61c7ec9
+                target_profile_id: 47db6271-50d6-4934-8c81-c42d87bfb390
+                legs:
+                - id: ace21517-447e-4764-8733-765cb12a7fab
+                  direction: DELIVER
+                  asset: BTC
+                  amount: '100'
+                status: PENDING
+                created_at: '2023-08-25T14:25:41.648489333Z'
+                updated_at: '2023-08-25T14:25:41.648489493Z'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+              examples:
+                Insufficient scopes:
+                  value:
+                    type: about:blank
+                    title: Bad Request
+                    status: 400
+        '403':
+          description: Insufficient scopes
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+              examples:
+                Insufficient scopes:
+                  value:
+                    type: about:blank
+                    title: Forbidden
+                    status: 403
+                    detail: 'insufficient scopes: found ''settlement:read_transaction'', required one of ''[settlement:write_transaction]'''
+        '409':
+          description: Already Exists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+              examples:
+                Already Exists:
+                  value:
+                    status: 409
+                    title: Conflict
+                    type: about:blank
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTransactionRequest'
+            examples:
+              Create Transaction:
+                value:
+                  ref_id: d840cf31-352f-4190-a476-7522bf3eafda
+                  settlement_window_start: '2023-08-25T14:25:41Z'
+                  settlement_window_end: '2023-08-25T16:25:41Z'
+                  source_profile_id: 4fd025ab-f29f-47e6-a02e-df90a61c7ec9
+                  target_profile_id: 47db6271-50d6-4934-8c81-c42d87bfb390
+                  legs:
+                  - direction: DELIVER
+                    asset: BTC
+                    amount: '100'
+        description: Request to create a bilateral settlement transaction with one or more legs.
+        required: true
+      tags:
+      - Settlement
+      security:
+      - OAuth2:
+        - settlement:write_transaction
+  /settlement/transactions/{transaction_id}:
+    get:
+      summary: Get Transaction
+      description: 'Get a Settlement Transaction by its (transaction) id, you must have created the transaction (own the `source_profile_id`) or
+
+        have had the transaction alleged against you (own the `target_profile_id`).'
+      operationId: GetTransaction
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Transaction'
+              example:
+              - id: d99a03ee-6b88-4362-89da-087c2c8cd4a7
+                ref_id: d840cf31-352f-4190-a476-7522bf3eafda
+                settlement_window_start: '2023-08-25T14:25:41.648486573Z'
+                settlement_window_end: '2023-08-25T14:25:41.648486953Z'
+                source_profile_id: 4fd025ab-f29f-47e6-a02e-df90a61c7ec9
+                target_profile_id: 47db6271-50d6-4934-8c81-c42d87bfb390
+                legs:
+                - id: ace21517-447e-4764-8733-765cb12a7fab
+                  direction: DELIVER
+                  asset: BTC
+                  amount: '100'
+                status: PENDING
+                created_at: '2023-08-25T14:25:41.648489333Z'
+                updated_at: '2023-08-25T17:53:23.648489493Z'
+        '403':
+          description: Insufficient scopes
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+              examples:
+                Insufficient scopes:
+                  value:
+                    type: about:blank
+                    title: Forbidden
+                    status: 403
+                    detail: 'insufficient scopes: found ''settlement:write_transaction'', required one of ''[settlement:read_transaction]'''
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+              examples:
+                Not Found:
+                  value:
+                    status: 404
+                    title: Not Found
+                    type: about:blank
+      parameters:
+      - name: transaction_id
+        description: The unique `id` in the `Transaction` object.
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - Settlement
+      security:
+      - OAuth2:
+        - settlement:read_transaction
+    delete:
+      summary: Cancel Transaction
+      description: 'Cancels the Settlement Transaction, this action can only be done by the customer owning the source profile (`source_profile_id`).
+
+        The transaction must be in a `"PENDING"` status for this to take effect, you cannot cancel a transaction which
+
+        is `"AFFIRMED"`.'
+      operationId: CancelTransaction
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Transaction'
+              example:
+                id: d99a03ee-6b88-4362-89da-087c2c8cd4a7
+                ref_id: d840cf31-352f-4190-a476-7522bf3eafda
+                settlement_window_start: '2023-08-25T14:25:41.648486573Z'
+                settlement_window_end: '2023-08-25T14:25:41.648486953Z'
+                source_profile_id: 4fd025ab-f29f-47e6-a02e-df90a61c7ec9
+                target_profile_id: 47db6271-50d6-4934-8c81-c42d87bfb390
+                legs:
+                - id: ace21517-447e-4764-8733-765cb12a7fab
+                  direction: DELIVER
+                  asset: BTC
+                  amount: '100'
+                status: CANCELLED
+                created_at: '2023-08-25T14:25:41.648489333Z'
+                updated_at: '2023-08-25T17:53:23.648489493Z'
+        '403':
+          description: Insufficient scopes
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+              examples:
+                Insufficient scopes:
+                  value:
+                    type: about:blank
+                    title: Forbidden
+                    status: 403
+                    detail: 'insufficient scopes: found ''settlement:read_transaction'', required one of ''[settlement:write_transaction]'''
+                Forbidden:
+                  value:
+                    type: about:blank
+                    title: Forbidden
+                    status: 403
+        '409':
+          description: Already Exists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+              examples:
+                Not Found:
+                  value:
+                    status: 409
+                    title: Conflict
+                    type: about:blank
+      parameters:
+      - name: transaction_id
+        description: The unique `id` in the `Transaction` object.
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - Settlement
+      security:
+      - OAuth2:
+        - settlement:write_transaction
+  /settlement/transactions/{transaction_id}/affirm:
+    put:
+      summary: Affirm Transaction
+      description: 'Affirms the Settlement Transaction for settlement, the transaction is now eligible for settlement once the current time is
+
+        between the provided `settlement_window_start` and `settlement_window_end`. This action can only be done by the
+
+        customer owning the target profile (`target_profile_id`).
+
+        The transaction must be in a `"PENDING"` status for this to take effect.'
+      operationId: AffirmTransaction
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Transaction'
+              example:
+                id: d99a03ee-6b88-4362-89da-087c2c8cd4a7
+                ref_id: d840cf31-352f-4190-a476-7522bf3eafda
+                settlement_window_start: '2023-08-25T14:25:41.648486573Z'
+                settlement_window_end: '2023-08-25T14:25:41.648486953Z'
+                source_profile_id: 4fd025ab-f29f-47e6-a02e-df90a61c7ec9
+                target_profile_id: 47db6271-50d6-4934-8c81-c42d87bfb390
+                legs:
+                - id: ace21517-447e-4764-8733-765cb12a7fab
+                  direction: DELIVER
+                  asset: BTC
+                  amount: '100'
+                status: AFFIRMED
+                created_at: '2023-08-25T14:25:41.648489333Z'
+                updated_at: '2023-08-25T17:53:23.648489493Z'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+              examples:
+                Insufficient scopes:
+                  value:
+                    type: about:blank
+                    title: Bad Request
+                    status: 400
+        '403':
+          description: Insufficient scopes
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+              examples:
+                Insufficient scopes:
+                  value:
+                    type: about:blank
+                    title: Forbidden
+                    status: 403
+                    detail: 'insufficient scopes: found ''settlement:write_transaction'', required one of ''[settlement:read_transaction]'''
+      parameters:
+      - name: transaction_id
+        description: The unique `id` in the `Transaction` object.
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - Settlement
+      security:
+      - OAuth2:
+        - settlement:write_transaction
+components:
+  schemas:
+    Transaction:
+      type: object
+      example:
+        id: d99a03ee-6b88-4362-89da-087c2c8cd4a7
+        ref_id: d840cf31-352f-4190-a476-7522bf3eafda
+        settlement_window_start: '2023-08-25T14:25:41.648486573Z'
+        settlement_window_end: '2023-08-25T14:25:41.648486953Z'
+        source_profile_id: 4fd025ab-f29f-47e6-a02e-df90a61c7ec9
+        target_profile_id: 47db6271-50d6-4934-8c81-c42d87bfb390
+        legs:
+        - id: ace21517-447e-4764-8733-765cb12a7fab
+          direction: DELIVER
+          asset: BTC
+          amount: '100'
+        status: PENDING
+        created_at: '2023-08-25T14:25:41.648489333Z'
+        updated_at: '2023-08-25T14:25:41.648489493Z'
+      properties:
+        id:
+          type: string
+          description: The transaction identifier used to query or refer to a specific transaction.
+        ref_id:
+          type: string
+          description: Idempotency key.
+        settlement_window_start:
+          type: string
+          format: date-time
+          description: 'The start of the window which the transaction is eligible for settlement.
+
+            If omitted, transactions are immediately eligible for settlement upon success.
+
+            RFC3339 format, like `YYYY-MM-DDTHH:MM:SS.sssZ`. ex: `2006-01-02T15:04:05Z`.'
+        settlement_window_end:
+          type: string
+          format: date-time
+          description: 'The end of the window which the transaction is eligible for settlement.
+
+            Transactions which are not cancelled or settled by this time will expire.
+
+            RFC3339 format, like `YYYY-MM-DDTHH:MM:SS.sssZ`. ex: `2006-01-02T15:04:05Z`.'
+        source_profile_id:
+          type: string
+          description: The Profile ID (profile_id) of the entity submitting the transaction.
+        target_profile_id:
+          type: string
+          description: The Profile ID (profile_id) of the entity receiving the transaction.
+        legs:
+          type: array
+          items:
+            $ref: '#/components/schemas/Obligation'
+          description: The obligations (representing one-way asset movements) to be settled atomically.
+        status:
+          $ref: '#/components/schemas/TransactionStatus'
+        created_at:
+          type: string
+          format: date-time
+          description: The timestamp when the transaction was first created, RFC3339 format, like `YYYY-MM-DDTHH:MM:SS.sssZ`.
+        updated_at:
+          type: string
+          format: date-time
+          description: The timestamp when the transaction was last updated, RFC3339 format, like `YYYY-MM-DDTHH:MM:SS.sssZ`.
+      description: Transaction returned on create (Create Transaction), list (List Transactions) and get (Get Transaction) requests.
+      required:
+      - id
+      - ref_id
+      - settlement_window_start
+      - settlement_window_end
+      - source_profile_id
+      - target_profile_id
+      - legs
+      - status
+      - created_at
+      - updated_at
+    TransactionStatus:
+      type: string
+      enum:
+      - PENDING
+      - SETTLED
+      - EXPIRED
+      - CANCELLED
+      - AFFIRMED
+      description: "- PENDING: Initial state of a settlement transaction upon creation.\n - SETTLED: Indicates all obligations belong to the settlement transaction have been enacted.\n - EXPIRED: Indicates the settlement transaction is no longer eligible for settlement.\n - CANCELLED: Indicates the settlement transaction was cancelled by the source profile.\n - AFFIRMED: Indicates the settlement transaction will be eligible for settlement once within the window."
+      title: Status of the transaction
+    CreateObligationRequest:
+      type: object
+      properties:
+        direction:
+          $ref: '#/components/schemas/ObligationDirection'
+        asset:
+          type: string
+          description: Asset which is obliged.
+        amount:
+          type: string
+          format: decimal
+          description: Amount of the asset which is obliged.
+      description: Request to create a obligation.
+    CreateTransactionRequest:
+      type: object
+      properties:
+        ref_id:
+          type: string
+          description: Idempotency key.
+        settlement_window_start:
+          type: string
+          format: date-time
+          description: 'The start of the window which the transaction is eligible for settlement.
+
+            If omitted, transactions are immediately eligible for settlement upon success.
+
+            RFC3339 format, like `2006-01-02T15:04:05Z`.'
+        settlement_window_end:
+          type: string
+          format: date-time
+          description: 'The end of the window which the transaction is eligible for settlement.
+
+            Transactions which are not cancelled or settled by this time will expire.
+
+            RFC3339 format, like `2006-01-02T15:04:05Z`.'
+        source_profile_id:
+          type: string
+          description: The `profile_id` of the entity submitting the transaction.
+        target_profile_id:
+          type: string
+          description: The `profile_id` of the entity receiving the transaction.
+        legs:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreateObligationRequest'
+          description: The obligations (representing one-way asset movements) to be settled atomically.
+      description: Request to create a bilateral settlement transaction with one or more legs.
+    ObligationDirection:
+      type: string
+      enum:
+      - DELIVER
+      - RECEIVE
+      description: "Direction of asset delivery for an obligation.\n\n - DELIVER: Assets are delivered from the source profile to the target profile.\n - RECEIVE: Assets are delivered from the target profile to the source profile."
+    ListTransactionsResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Transaction'
+        next_page_cursor:
+          type: string
+    Obligation:
+      type: object
+      example:
+        id: e7b6892a-00f7-40fb-8871-bdd1eefb6192
+        direction: DELIVER
+        asset: BTC
+        amount: '0.10000000'
+      properties:
+        id:
+          type: string
+        direction:
+          $ref: '#/components/schemas/ObligationDirection'
+        asset:
+          type: string
+          description: Asset which is obliged.
+        amount:
+          type: string
+          description: Amount of the asset which is obliged.
+          pattern: ^[0-9]*\.?[0-9]+$
+      required:
+      - id
+      - direction
+      - asset
+      - amount
+    Problem:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+          description: 'An absolute URI that identifies the problem type.  When dereferenced,
+
+            it SHOULD provide human-readable documentation for the problem type
+
+            (e.g., using HTML).
+
+            '
+          default: about:blank
+          example: https://api.paxos.com/v2/problems/insufficient_funds
+        title:
+          type: string
+          description: 'A short, summary of the problem type. Written in english and readable
+
+            for engineers (usually not suited for non technical stakeholders and
+
+            not localized); example: Service Unavailable
+
+            '
+          example: Insufficient Funds
+        status:
+          type: integer
+          format: int32
+          description: 'The HTTP status code generated by the origin server for this occurrence
+
+            of the problem.
+
+            '
+          minimum: 100
+          maximum: 600
+          exclusiveMaximum: true
+          example: 403
+        detail:
+          type: string
+          description: 'A human readable explanation specific to this occurrence of the
+
+            problem.
+
+            '
+          example: Not enough funds in account.
+        meta:
+          type: object
+          description: 'Additional structured metadata about the error.
+
+            '
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      description: 'Paxos APIs use [OAuth 2](https://tools.ietf.org/html/rfc6749) with the [client credentials](https://tools.ietf.org/html/rfc6749#section-4.4) grant flow.
+
+
+        **Token URLs:**
+
+        - Production: https://oauth.paxos.com/oauth2/token
+
+        - Sandbox: https://oauth.sandbox.paxos.com/oauth2/token
+
+
+        Learn more in the [API credentials guide →](https://docs.paxos.com/developer/credentials)
+
+        '
+      flows:
+        clientCredentials:
+          tokenUrl: https://oauth.paxos.com/oauth2/token
+          scopes:
+            conversion:read_conversion_stablecoin: Retrieve stablecoin conversion details
+            conversion:write_conversion_stablecoin: Create or cancel a stablecoin conversion
+            exchange:historical_prices: Retrieve marketnaverage prices at a certain time increment
+            exchange:read_order: Retrieve order or order execution details
+            exchange:read_quote: Retrieve quote details for buying or selling an asset
+            exchange:read_quote_execution: Retrieve quote execution details
+            exchange:write_quote_execution: Create a quote execution for buying or selling an asset
+            exchange:write_order: Create or cancel an order for buying or selling an asset
+            fee:write_crypto_withdrawal_fee: Create a guaranteed fee for crypto withdrawal
+            funding:read_bank_balance: Retrieve Paxos dedicated bank account balance
+            funding:read_profile: Retrieve Profile details and deposit funds in Sandbox
+            funding:write_profile: Create a Profile
+            identity:read_account: Retrieve Account details
+            identity:read_identity: Retrieve Identity details or documents
+            identity:write_account: Create or update Account and Account Members
+            identity:write_identity: Create or update Identity details and set Sandbox Identify Status
+            settlement:read_transaction: Retrieve settlement transaction details
+            settlement:write_transaction: Create, affirm or cancel a settlement transaction
+            tax:read_tax_form: Retrieve tax details
+            tax:read_tax_lot: Retrieve tax lot details
+            tax:write_tax_lot: Update the given tax-lot ID
+            transfer:read_deposit_address: Retrieve deposit address details
+            transfer:read_fiat_account: Retrieve Fiat Account details
+            transfer:read_fiat_deposit_instructions: Retrieve fiat deposit instruction details
+            transfer:read_transfer: Retrieve transfer details
+            transfer:read_transfer_limit: Retrieve limits for the given transaction type
+            transfer:reject_crypto_deposit: Reject a crypto deposit (travel rule)
+            transfer:update_crypto_deposit: Provide required travel-rule details
+            transfer:write_crypto_withdrawal: Withdraw asset to a specified destination address
+            transfer:write_deposit_address: Create an deposit address on a blockchain network
+            transfer:write_fiat_account: Create, update or delete a Fiat Account
+            transfer:write_fiat_deposit_instructions: Create, update or delete fiat deposit instructions
+            transfer:write_internal_transfer: Transfer assets between two Profiles
+            transfer:write_sandbox_fiat_deposit: Initiate a test fiat deposit in the Sandbox environment
+            transfer:write_fiat_withdrawal: Withdraw fiat to the given destination
+            events:read_event: Retrieve events
+x-tagGroups:
+- name: Deposits and Withdrawals
+  tags:
+  - Transfers
+  - Fiat Transfers
+  - Deposit Addresses
+  - Crypto Deposits
+  - Crypto Withdrawals
+  - Fees
+  - Internal Transfers
+  - Paxos Transfers
+  - Limits
+- name: Identity
+  tags:
+  - Identity
+  - Institution Members
+  - Accounts
+  - Account Members
+  - Identity Documents
+- name: API Credentials
+  tags:
+  - API Credentials
+- name: Profiles
+  tags:
+  - Profiles
+- name: Sandbox
+  tags:
+  - Sandbox Deposits
+  - Sandbox Identity
+  - Sandbox Fiat Transfers
+- name: Settlements
+  tags:
+  - Settlement
+- name: Stablecoin Conversion
+  tags:
+  - Stablecoin Conversion
+- name: Taxes
+  tags:
+  - Tax Forms
+- name: Trading
+  tags:
+  - Market Data
+  - Orders
+  - Quotes
+  - Quote Executions
+  - Pricing
+  - Issuer Quotes
+- name: Rewards
+  tags:
+  - Monitoring Addresses
+  - Statements
+  - Payments
+- name: Rewards (Alpha)
+  tags:
+  - Reward Addresses
+  - Claims
+  - Payout Groups
+  - Rewards
+- name: Events
+  tags:
+  - Events
+  - Event Types
+  - Event Objects

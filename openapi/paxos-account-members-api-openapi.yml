@@ -1,0 +1,273 @@
+openapi: 3.0.0
+info:
+  title: Paxos Account Members API
+  version: '2.0'
+  description: '<p>Welcome to Paxos APIs. At Paxos, our mission is to enable the movement of any asset, any time, in a trustworthy way. These APIs serve that mission by making it easier than ever for you to directly integrate our product capabilities into your application, leveraging the speed, stability, and security of the Paxos platform.</p> <p>The documentation that follows gives you access to our Crypto Brokerage, Trading, and Exchange products. It includes APIs for market data, orders, and the held rate quote flow.</p> <p>To test in our sandbox environment, <a href="https://account.sandbox.paxos.com" target="_blank">sign up</a> for an account. For more information about Paxos and our APIs, visit <a href="https://www.paxos.com/" target="_blank">Paxos.com</a>.</p>
+
+    '
+  x-logo:
+    url: /docs/paxos.svg
+    backgroundColor: '#FFFFFF'
+    altText: Paxos logo
+servers:
+- url: https://api.paxos.com/v2
+  description: Production
+- url: https://api.sandbox.paxos.com/v2
+  description: Sandbox
+tags:
+- name: Account Members
+  description: "Account Members allow you to associate an Identity with an Account on our Platform.\nEach Account can be linked to multiple Identities, which supports Joint Accounts (where two Identities have the ability\nto transact against a single Profile)  \n\nAccount members are effectively immutable. In order to update an account member,\nclients should remove then re-add the account member with the desired state.\n\nThe API requires clients to have write access on the account and all identities\nassociated with the account.\n"
+paths:
+  /identity/account-members:
+    post:
+      summary: Add Account Members
+      description: 'Add one or more account members to a given account.
+
+
+        The account members added by this API do not affect existing account members. For example,
+
+        if an account has two members, and one member is added using this API, then the account will
+
+        end up with three members.
+
+
+        For more information on properties of account members, see [Account Members](#account-members).'
+      operationId: AddAccountMembers
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AddAccountMembersResponse'
+              examples:
+                Add Institution Members:
+                  value:
+                    account_id: 79c27a0e-46a2-4276-9769-e1ebc055fa72
+                    members:
+                    - identity_id: 11a3122a-0c50-4950-9934-2ad48a782b78
+                      roles:
+                      - FINANCIAL_ADVISOR
+                      id: 01516495-031a-4c6c-b277-5734ea9cb99c
+                    - identity_id: 08ba6b70-bcc0-4e4a-a67f-1d28842dedfc
+                      roles:
+                      - AUTHORIZED_USER
+                      id: 1039d953-808f-495f-902d-c15480942885
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddAccountMembersRequest'
+            examples:
+              Add Account Members:
+                value:
+                  account_id: 79c27a0e-46a2-4276-9769-e1ebc055fa72
+                  members:
+                  - identity_id: 11a3122a-0c50-4950-9934-2ad48a782b78
+                    roles:
+                    - FINANCIAL_ADVISOR
+                  - identity_id: 08ba6b70-bcc0-4e4a-a67f-1d28842dedfc
+                    roles:
+                    - AUTHORIZED_USER
+        required: true
+      tags:
+      - Account Members
+      security:
+      - OAuth2:
+        - identity:write_account
+  /identity/account-members/{id}:
+    delete:
+      summary: Remove Account Member
+      description: Removes an account member from an account.
+      operationId: DeleteAccountMember
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteAccountMemberResponse'
+      parameters:
+      - name: id
+        description: The account member ID that should be removed from the account.
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - Account Members
+      security:
+      - OAuth2:
+        - identity:write_account
+components:
+  schemas:
+    AccountMember:
+      type: object
+      properties:
+        identity_id:
+          type: string
+        type:
+          $ref: '#/components/schemas/AccountMemberAccountRoleType'
+        roles:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccountMemberAccountRoleType'
+        id:
+          type: string
+          description: 'Account member ID. Note: This field is auto-generated. Specifying an ID when creating an account member is a client error.'
+      required:
+      - identity_id
+    AddAccountMembersRequest:
+      type: object
+      properties:
+        account_id:
+          type: string
+          description: ID of account to which members will be added.
+        members:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccountMember'
+          description: A non-empty array of account members to be added. Account members allow additional identities to act on this account (e.g. joint accounts).
+      required:
+      - account_id
+      - members
+    AccountMemberAccountRoleType:
+      type: string
+      enum:
+      - BENEFICIAL_OWNER
+      - AUTHORIZED_USER
+      - FINANCIAL_ADVISOR
+    DeleteAccountMemberResponse:
+      type: object
+    AddAccountMembersResponse:
+      type: object
+      properties:
+        account_id:
+          type: string
+          description: ID of account to which members were added.
+        members:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccountMember'
+          description: List of account members that were added to the account.
+      required:
+      - account_id
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      description: 'Paxos APIs use [OAuth 2](https://tools.ietf.org/html/rfc6749) with the [client credentials](https://tools.ietf.org/html/rfc6749#section-4.4) grant flow.
+
+
+        **Token URLs:**
+
+        - Production: https://oauth.paxos.com/oauth2/token
+
+        - Sandbox: https://oauth.sandbox.paxos.com/oauth2/token
+
+
+        Learn more in the [API credentials guide →](https://docs.paxos.com/developer/credentials)
+
+        '
+      flows:
+        clientCredentials:
+          tokenUrl: https://oauth.paxos.com/oauth2/token
+          scopes:
+            conversion:read_conversion_stablecoin: Retrieve stablecoin conversion details
+            conversion:write_conversion_stablecoin: Create or cancel a stablecoin conversion
+            exchange:historical_prices: Retrieve marketnaverage prices at a certain time increment
+            exchange:read_order: Retrieve order or order execution details
+            exchange:read_quote: Retrieve quote details for buying or selling an asset
+            exchange:read_quote_execution: Retrieve quote execution details
+            exchange:write_quote_execution: Create a quote execution for buying or selling an asset
+            exchange:write_order: Create or cancel an order for buying or selling an asset
+            fee:write_crypto_withdrawal_fee: Create a guaranteed fee for crypto withdrawal
+            funding:read_bank_balance: Retrieve Paxos dedicated bank account balance
+            funding:read_profile: Retrieve Profile details and deposit funds in Sandbox
+            funding:write_profile: Create a Profile
+            identity:read_account: Retrieve Account details
+            identity:read_identity: Retrieve Identity details or documents
+            identity:write_account: Create or update Account and Account Members
+            identity:write_identity: Create or update Identity details and set Sandbox Identify Status
+            settlement:read_transaction: Retrieve settlement transaction details
+            settlement:write_transaction: Create, affirm or cancel a settlement transaction
+            tax:read_tax_form: Retrieve tax details
+            tax:read_tax_lot: Retrieve tax lot details
+            tax:write_tax_lot: Update the given tax-lot ID
+            transfer:read_deposit_address: Retrieve deposit address details
+            transfer:read_fiat_account: Retrieve Fiat Account details
+            transfer:read_fiat_deposit_instructions: Retrieve fiat deposit instruction details
+            transfer:read_transfer: Retrieve transfer details
+            transfer:read_transfer_limit: Retrieve limits for the given transaction type
+            transfer:reject_crypto_deposit: Reject a crypto deposit (travel rule)
+            transfer:update_crypto_deposit: Provide required travel-rule details
+            transfer:write_crypto_withdrawal: Withdraw asset to a specified destination address
+            transfer:write_deposit_address: Create an deposit address on a blockchain network
+            transfer:write_fiat_account: Create, update or delete a Fiat Account
+            transfer:write_fiat_deposit_instructions: Create, update or delete fiat deposit instructions
+            transfer:write_internal_transfer: Transfer assets between two Profiles
+            transfer:write_sandbox_fiat_deposit: Initiate a test fiat deposit in the Sandbox environment
+            transfer:write_fiat_withdrawal: Withdraw fiat to the given destination
+            events:read_event: Retrieve events
+x-tagGroups:
+- name: Deposits and Withdrawals
+  tags:
+  - Transfers
+  - Fiat Transfers
+  - Deposit Addresses
+  - Crypto Deposits
+  - Crypto Withdrawals
+  - Fees
+  - Internal Transfers
+  - Paxos Transfers
+  - Limits
+- name: Identity
+  tags:
+  - Identity
+  - Institution Members
+  - Accounts
+  - Account Members
+  - Identity Documents
+- name: API Credentials
+  tags:
+  - API Credentials
+- name: Profiles
+  tags:
+  - Profiles
+- name: Sandbox
+  tags:
+  - Sandbox Deposits
+  - Sandbox Identity
+  - Sandbox Fiat Transfers
+- name: Settlements
+  tags:
+  - Settlement
+- name: Stablecoin Conversion
+  tags:
+  - Stablecoin Conversion
+- name: Taxes
+  tags:
+  - Tax Forms
+- name: Trading
+  tags:
+  - Market Data
+  - Orders
+  - Quotes
+  - Quote Executions
+  - Pricing
+  - Issuer Quotes
+- name: Rewards
+  tags:
+  - Monitoring Addresses
+  - Statements
+  - Payments
+- name: Rewards (Alpha)
+  tags:
+  - Reward Addresses
+  - Claims
+  - Payout Groups
+  - Rewards
+- name: Events
+  tags:
+  - Events
+  - Event Types
+  - Event Objects

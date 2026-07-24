@@ -1,0 +1,455 @@
+openapi: 3.0.0
+info:
+  title: Paxos Account Members Identity Documents API
+  version: '2.0'
+  description: '<p>Welcome to Paxos APIs. At Paxos, our mission is to enable the movement of any asset, any time, in a trustworthy way. These APIs serve that mission by making it easier than ever for you to directly integrate our product capabilities into your application, leveraging the speed, stability, and security of the Paxos platform.</p> <p>The documentation that follows gives you access to our Crypto Brokerage, Trading, and Exchange products. It includes APIs for market data, orders, and the held rate quote flow.</p> <p>To test in our sandbox environment, <a href="https://account.sandbox.paxos.com" target="_blank">sign up</a> for an account. For more information about Paxos and our APIs, visit <a href="https://www.paxos.com/" target="_blank">Paxos.com</a>.</p>
+
+    '
+  x-logo:
+    url: /docs/paxos.svg
+    backgroundColor: '#FFFFFF'
+    altText: Paxos logo
+servers:
+- url: https://api.paxos.com/v2
+  description: Production
+- url: https://api.sandbox.paxos.com/v2
+  description: Sandbox
+tags:
+- name: Identity Documents
+  description: "The Identity Documents API allows clients to send documents to Paxos to validate identities\nduring the KYC process. Files can be updated multiple times by re-sending the document type\nfor processing.\n\nWe currently accept the following file formats:\n- <code>pdf</code>\n- <code>jpg</code>\n- <code>png</code>\n\nSteps to upload a document are as follows:\n1. Send a <code>PUT</code> request to <code>/identity/identities/{id}/documents</code> to get\n  the upload URL.\n1. Send your document to the provided URL via a PUT request. Take the following example using curl:\n  <code>$ curl --upload-file Proof_of_residence.jpg $URI </code>\n\nUploaded document metadata will be available via <code>GET</code> request to <code>/identity/identities/{id}/documents</code>\n"
+paths:
+  /identity/identities/{identity_id}/documents:
+    get:
+      summary: List Identity Documents
+      description: This endpoint enables you to get a list of all documents associated with an identity.
+      operationId: ListIdentityDocuments
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListIdentityDocumentsResponse'
+              examples:
+                List Identity Documents:
+                  value:
+                    documents:
+                    - file_id: e1959b03-8c3d-4bdd-9437-403ccf8772f5
+                      name: test_file.png
+                      document_types:
+                      - OTHER_DOCUMENTS
+                      - APPLICATION
+                      created_at: '2023-07-07T23:03:19.170481Z'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+              examples:
+                Not Found:
+                  value:
+                    detail: Identity with id f6b1365a-dc8e-4526-aa3f-e688826c36be doesn't exist
+                    status: 404
+                    title: Not Found
+                    type: about:blank
+        '403':
+          description: Permissions Denied
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+              examples:
+                Forbidden:
+                  value:
+                    detail: Forbidden
+                    status: 403
+                    title: Forbidden
+                    type: about:blank
+      parameters:
+      - name: identity_id
+        description: id associated with the identity
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: include_pending_docs
+        description: Add a list of pending document types for the identity
+        in: query
+        required: false
+        schema:
+          type: boolean
+      tags:
+      - Identity Documents
+      security:
+      - OAuth2:
+        - identity:read_identity
+    put:
+      summary: Document Upload
+      description: 'This endpoint enables you to receive a URL to upload a document to Paxos for identity verification or enhanced due diligence purposes.
+
+        When uploading a document you must specify the document type. You will receive a
+
+        URL where you can upload the document using a POST request.
+
+
+        Requirements:
+
+        - Uploaded documents must be less than 100 MB in size
+
+        - Supported formats include PDF, JPG, and PNG
+
+
+        For more information on document requirements for enhanced due diligence, see [here](https://docs.paxos.com/identity/edd).'
+      operationId: DocumentUpload
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocumentUploadResponse'
+              examples:
+                Create Document Upload:
+                  value:
+                    file_id: f190b163-208f-4d73-8deb-4fb8b24add00
+                    name: Proof_of_residence.jpg
+                    upload_url: https://s3.amasonaws.com/pax...cec3f64fe20348685a
+        '403':
+          description: Permissions Denied
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+              examples:
+                Forbidden:
+                  value:
+                    detail: document storage not enabled
+                    status: 403
+                    title: Forbidden
+                    type: about:blank
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+              examples:
+                Not Found:
+                  value:
+                    detail: identity does not exist
+                    status: 404
+                    title: Not Found
+                    type: about:blank
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+              examples:
+                Invalid Request:
+                  value:
+                    detail: must provide a file name, up to 260 characters
+                    status: 400
+                    title: Bad Request
+                    type: about:blank
+        '409':
+          description: Already Exists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+              examples:
+                Duplicate File Name:
+                  value:
+                    detail: file named "Proof_of_residence.jpg" already exists
+                    meta:
+                      existing:
+                        name: Proof_of_residence.jpg
+                    status: 409
+                    title: Already Exists
+                    type: https://developer.paxos.com/docs/v2/problems/already-exists
+      parameters:
+      - name: identity_id
+        description: The id of the identity the document is associated with.
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IdentityPublicDocumentUploadBody'
+            examples:
+              Create Document Upload:
+                value:
+                  name: Proof_of_residence.jpg
+                  document_types:
+                  - PROOF_OF_RESIDENCY
+        required: true
+      tags:
+      - Identity Documents
+      security:
+      - OAuth2:
+        - identity:write_identity
+components:
+  schemas:
+    IdentityPublicDocumentUploadBody:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The file name.
+        document_types:
+          type: array
+          items:
+            $ref: '#/components/schemas/DocumentType'
+          description: A list of document types contained within the uploaded file.
+      title: DocumentUploadRequest
+      required:
+      - name
+    DocumentUploadResponse:
+      type: object
+      properties:
+        file_id:
+          type: string
+          description: The id assigned to the file.
+        name:
+          type: string
+          description: The file name.
+        upload_url:
+          type: string
+          description: The URI where we expect the file to be uploaded into.
+    ListIdentityDocumentsResponse:
+      type: object
+      properties:
+        documents:
+          type: array
+          items:
+            $ref: '#/components/schemas/DocumentDescription'
+          title: A list of documents
+        pending_documents:
+          type: array
+          items:
+            $ref: '#/components/schemas/DocumentType'
+          title: The document types that are mandatory for the identity but are missing
+    DocumentType:
+      type: string
+      enum:
+      - OTHER_DOCUMENTS
+      - APPLICATION
+      - ORGANIZATIONAL_DOCUMENTS
+      - CERTIFICATE_OF_GOOD_STANDING
+      - TAX_IDENTIFICATION
+      - IDENTITY_VERIFICATION
+      - PROOF_OF_RESIDENCY
+      - PROOF_OF_FUNDS
+      - SAMPLE_INVOICE
+      - OPERATING_AGREEMENT
+      - TRUST_DOCUMENTS
+      - MONEY_SERVICE_DOCUMENTS
+      - INVESTMENT_DOCUMENTS
+      - CURP
+      - AML_DOCUMENTS
+      - FUND_STRUCTURE_CHART
+      - FUND_MANAGER_REGISTRATION
+      - MEMORANDUM_OF_ASSOCIATION
+      - ORGANIZATIONAL_CHART
+      - FOUNDATION_BY_LAWS
+      - APPOINTMENT_OF_GUARDIAN_EVIDENCE
+      - LEGAL_DOMICILE_OF_BENEFICIAL_OWNERS
+      - GOVERNING_BODY_MEMBER_NAMES
+      - INDEPENDENT_AUDIT
+    DocumentDescription:
+      type: object
+      properties:
+        file_id:
+          type: string
+          title: The document id
+        name:
+          type: string
+          title: The file name
+        document_types:
+          type: array
+          items:
+            $ref: '#/components/schemas/DocumentType'
+          title: The document types contained within the document
+        created_at:
+          type: string
+          format: date-time
+          title: When the document was created
+        archived_at:
+          type: string
+          format: date-time
+          title: When the document was archived
+    Problem:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+          description: 'An absolute URI that identifies the problem type.  When dereferenced,
+
+            it SHOULD provide human-readable documentation for the problem type
+
+            (e.g., using HTML).
+
+            '
+          default: about:blank
+          example: https://api.paxos.com/v2/problems/insufficient_funds
+        title:
+          type: string
+          description: 'A short, summary of the problem type. Written in english and readable
+
+            for engineers (usually not suited for non technical stakeholders and
+
+            not localized); example: Service Unavailable
+
+            '
+          example: Insufficient Funds
+        status:
+          type: integer
+          format: int32
+          description: 'The HTTP status code generated by the origin server for this occurrence
+
+            of the problem.
+
+            '
+          minimum: 100
+          maximum: 600
+          exclusiveMaximum: true
+          example: 403
+        detail:
+          type: string
+          description: 'A human readable explanation specific to this occurrence of the
+
+            problem.
+
+            '
+          example: Not enough funds in account.
+        meta:
+          type: object
+          description: 'Additional structured metadata about the error.
+
+            '
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      description: 'Paxos APIs use [OAuth 2](https://tools.ietf.org/html/rfc6749) with the [client credentials](https://tools.ietf.org/html/rfc6749#section-4.4) grant flow.
+
+
+        **Token URLs:**
+
+        - Production: https://oauth.paxos.com/oauth2/token
+
+        - Sandbox: https://oauth.sandbox.paxos.com/oauth2/token
+
+
+        Learn more in the [API credentials guide →](https://docs.paxos.com/developer/credentials)
+
+        '
+      flows:
+        clientCredentials:
+          tokenUrl: https://oauth.paxos.com/oauth2/token
+          scopes:
+            conversion:read_conversion_stablecoin: Retrieve stablecoin conversion details
+            conversion:write_conversion_stablecoin: Create or cancel a stablecoin conversion
+            exchange:historical_prices: Retrieve marketnaverage prices at a certain time increment
+            exchange:read_order: Retrieve order or order execution details
+            exchange:read_quote: Retrieve quote details for buying or selling an asset
+            exchange:read_quote_execution: Retrieve quote execution details
+            exchange:write_quote_execution: Create a quote execution for buying or selling an asset
+            exchange:write_order: Create or cancel an order for buying or selling an asset
+            fee:write_crypto_withdrawal_fee: Create a guaranteed fee for crypto withdrawal
+            funding:read_bank_balance: Retrieve Paxos dedicated bank account balance
+            funding:read_profile: Retrieve Profile details and deposit funds in Sandbox
+            funding:write_profile: Create a Profile
+            identity:read_account: Retrieve Account details
+            identity:read_identity: Retrieve Identity details or documents
+            identity:write_account: Create or update Account and Account Members
+            identity:write_identity: Create or update Identity details and set Sandbox Identify Status
+            settlement:read_transaction: Retrieve settlement transaction details
+            settlement:write_transaction: Create, affirm or cancel a settlement transaction
+            tax:read_tax_form: Retrieve tax details
+            tax:read_tax_lot: Retrieve tax lot details
+            tax:write_tax_lot: Update the given tax-lot ID
+            transfer:read_deposit_address: Retrieve deposit address details
+            transfer:read_fiat_account: Retrieve Fiat Account details
+            transfer:read_fiat_deposit_instructions: Retrieve fiat deposit instruction details
+            transfer:read_transfer: Retrieve transfer details
+            transfer:read_transfer_limit: Retrieve limits for the given transaction type
+            transfer:reject_crypto_deposit: Reject a crypto deposit (travel rule)
+            transfer:update_crypto_deposit: Provide required travel-rule details
+            transfer:write_crypto_withdrawal: Withdraw asset to a specified destination address
+            transfer:write_deposit_address: Create an deposit address on a blockchain network
+            transfer:write_fiat_account: Create, update or delete a Fiat Account
+            transfer:write_fiat_deposit_instructions: Create, update or delete fiat deposit instructions
+            transfer:write_internal_transfer: Transfer assets between two Profiles
+            transfer:write_sandbox_fiat_deposit: Initiate a test fiat deposit in the Sandbox environment
+            transfer:write_fiat_withdrawal: Withdraw fiat to the given destination
+            events:read_event: Retrieve events
+x-tagGroups:
+- name: Deposits and Withdrawals
+  tags:
+  - Transfers
+  - Fiat Transfers
+  - Deposit Addresses
+  - Crypto Deposits
+  - Crypto Withdrawals
+  - Fees
+  - Internal Transfers
+  - Paxos Transfers
+  - Limits
+- name: Identity
+  tags:
+  - Identity
+  - Institution Members
+  - Accounts
+  - Account Members
+  - Identity Documents
+- name: API Credentials
+  tags:
+  - API Credentials
+- name: Profiles
+  tags:
+  - Profiles
+- name: Sandbox
+  tags:
+  - Sandbox Deposits
+  - Sandbox Identity
+  - Sandbox Fiat Transfers
+- name: Settlements
+  tags:
+  - Settlement
+- name: Stablecoin Conversion
+  tags:
+  - Stablecoin Conversion
+- name: Taxes
+  tags:
+  - Tax Forms
+- name: Trading
+  tags:
+  - Market Data
+  - Orders
+  - Quotes
+  - Quote Executions
+  - Pricing
+  - Issuer Quotes
+- name: Rewards
+  tags:
+  - Monitoring Addresses
+  - Statements
+  - Payments
+- name: Rewards (Alpha)
+  tags:
+  - Reward Addresses
+  - Claims
+  - Payout Groups
+  - Rewards
+- name: Events
+  tags:
+  - Events
+  - Event Types
+  - Event Objects

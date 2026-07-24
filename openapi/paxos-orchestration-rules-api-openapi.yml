@@ -1,0 +1,601 @@
+openapi: 3.0.0
+info:
+  title: Paxos Account Members Orchestration Rules API
+  version: '2.0'
+  description: '<p>Welcome to Paxos APIs. At Paxos, our mission is to enable the movement of any asset, any time, in a trustworthy way. These APIs serve that mission by making it easier than ever for you to directly integrate our product capabilities into your application, leveraging the speed, stability, and security of the Paxos platform.</p> <p>The documentation that follows gives you access to our Crypto Brokerage, Trading, and Exchange products. It includes APIs for market data, orders, and the held rate quote flow.</p> <p>To test in our sandbox environment, <a href="https://account.sandbox.paxos.com" target="_blank">sign up</a> for an account. For more information about Paxos and our APIs, visit <a href="https://www.paxos.com/" target="_blank">Paxos.com</a>.</p>
+
+    '
+  x-logo:
+    url: /docs/paxos.svg
+    backgroundColor: '#FFFFFF'
+    altText: Paxos logo
+servers:
+- url: https://api.paxos.com/v2
+  description: Production
+- url: https://api.sandbox.paxos.com/v2
+  description: Sandbox
+tags:
+- name: Orchestration Rules
+paths:
+  /orchestration/rules:
+    get:
+      summary: List Orchestration Rules
+      description: 'List all orchestration rules, optionally filtering and paging the results.
+
+
+        By default, orchestration rules are returned in reverse chronological (descending)
+
+        order by creation time. If no query parameters are supplied,
+
+        the response will include up to the last 100 rules which were created.
+
+
+        The paginated results default to display up to 100 rules, unless
+
+        otherwise specified with the `limit` parameter. The maximum `limit` value is 1000.
+
+        Every paginated response contains a `next_page_cursor` field until the last page is reached.
+
+
+        Pass the `next_page_cursor` value into the `page_cursor` field of a new
+
+        request to retrieve the next page of results.
+
+
+        Rules can be filtered by:
+
+        - Profile ID (`profile_id`)
+
+        - Status (`status`)
+
+        - Source asset (`source_asset`)
+
+        - Destination asset (`destination_asset`)'
+      operationId: ListOrchestrationRules
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListOrchestrationRulesResponse'
+      parameters:
+      - name: profile_id
+        description: Optional filter by profile ID
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: status
+        description: "Optional filter by statuses\n\n - ACTIVE: The rule is active, deposits matching the `source_asset` and `source` of this rule start a conversion and\nsubsequent delivery of the `destination_asset` to the specified `destination`.\n - DELETED: The rule has been deleted, newly deposited `source_assets` to the `source` of this rule will not be converted.\nThe deposited `source_asset` is still going to be credited to the Profile specified by `profile_id`.\n - PENDING: The rule creation is pending approval(s) before the rule becomes ACTIVE.\n - REJECTED: The rule creation has been rejected during the approval process."
+        in: query
+        required: false
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - ACTIVE
+            - DELETED
+            - PENDING
+            - REJECTED
+      - name: source_asset
+        description: Optional filter by source asset
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: destination_asset
+        description: Optional filter by destination asset
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: ids
+        description: Optionally filter by the UUIDs of the orchestration rules. Limit 100.
+        in: query
+        required: false
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      - name: limit
+        description: Number of results to return. Defaults to 100 if no limit is provided. Maximum 1000.
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: order
+        description: Sort order for the results. Defaults to DESC by created_at time.
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - DESC
+          - ASC
+      - name: page_cursor
+        description: Optional Cursor for getting the next page of results.
+        in: query
+        required: false
+        schema:
+          type: string
+      tags:
+      - Orchestration Rules
+      security:
+      - OAuth2:
+        - orchestration:read_orchestration_rule
+    post:
+      summary: Create Orchestration Rule
+      description: 'Creates a persistent orchestration rule that automatically triggers orchestrations
+
+        when matching deposits are received.
+
+
+        The rule will:
+
+        1. Generate deposit instructions associated with the rule.
+
+        2. Continuously monitor incoming deposits to those instructions.
+
+        3. Automatically execute orchestrations to the specified destination.
+
+
+        Supported Sources:
+
+
+        - Crypto deposit
+
+        - Fiat deposit
+
+
+        Supported Destinations:
+
+
+        - Crypto address on a supported network
+
+        - Bank account
+
+        - Profile ID
+
+
+        Error conditions:
+
+        - [Already Exists](https://developer.paxos.com/docs/v2/problems/already-exists): Returned if a rule with the same ref_id already exists.'
+      operationId: CreateOrchestrationRule
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateOrchestrationRuleResponse'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateOrchestrationRuleRequest'
+        required: true
+      tags:
+      - Orchestration Rules
+      security:
+      - OAuth2:
+        - orchestration:write_orchestration_rule
+  /orchestration/rules/{id}:
+    delete:
+      summary: Delete Orchestration Rule
+      description: 'Deactivates an orchestration rule by updating its status to DELETED.
+
+        Once deleted, the rule will no longer trigger new orchestrations.
+
+        Any orchestrations previously created by the rule will continue to be processed.
+
+
+        The request accepts a single rule ID and returns the updated rule resource
+
+        with its status set to DELETED upon success.'
+      operationId: DeleteOrchestrationRule
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteOrchestrationRuleResponse'
+      parameters:
+      - name: id
+        description: The ID of the orchestration rule to delete
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - Orchestration Rules
+      security:
+      - OAuth2:
+        - orchestration:write_orchestration_rule
+components:
+  schemas:
+    OrchestrationRuleProfileSource:
+      type: object
+      properties:
+        profile_id:
+          type: string
+    CreateOrchestrationRuleRequestDestination:
+      type: object
+      properties:
+        crypto:
+          $ref: '#/components/schemas/CreateOrchestrationRuleRequestCryptoDestination'
+        fiat:
+          $ref: '#/components/schemas/CreateOrchestrationRuleRequestFiatDestination'
+        profile:
+          $ref: '#/components/schemas/CreateOrchestrationRuleRequestProfileDestination'
+    OrchestrationRuleCryptoDestination:
+      type: object
+      properties:
+        address:
+          type: string
+        network:
+          type: string
+    CreateOrchestrationRuleRequestCryptoSource:
+      type: object
+      properties:
+        network:
+          type: string
+          description: 'The blockchain network for the crypto source.
+
+
+            Valid values: ETHEREUM, SOLANA, STELLAR, BASE, POLYGON'
+    OrchestrationRuleSource:
+      type: object
+      properties:
+        crypto:
+          $ref: '#/components/schemas/OrchestrationRuleCryptoSource'
+        fiat:
+          $ref: '#/components/schemas/OrchestrationRuleFiatSource'
+        profile:
+          $ref: '#/components/schemas/OrchestrationRuleProfileSource'
+    CreateOrchestrationRuleRequest:
+      type: object
+      example:
+        ref_id: my-rule-001
+        nickname: USDC to USDG conversion
+        profile_id: e8ea8b1c-4e8d-4c59-9e7a-c985194ba2e8
+        source_asset: USDC
+        destination_asset: USDG
+        source:
+          crypto:
+            network: ETHEREUM
+        destination:
+          profile:
+            profile_id: e8ea8b1c-4e8d-4c59-9e7a-c985194ba2e8
+      properties:
+        ref_id:
+          type: string
+          description: Client-provided unique reference ID for the rule.
+        nickname:
+          type: string
+          description: Optional human-readable nickname for the rule.
+        profile_id:
+          type: string
+          description: Profile ID of the account owner.
+        identity_id:
+          type: string
+          description: Identity ID of the account owner.
+        account_id:
+          type: string
+          description: Account ID where the rule applies.
+        source_asset:
+          type: string
+          description: 'Asset being converted from.
+
+
+            Valid values: USDG, PYUSD, USDP, USDC, USD'
+        destination_asset:
+          type: string
+          description: 'Asset being converted to.
+
+
+            Valid values: USDG, PYUSD, USDP, USDC, USD'
+        source:
+          $ref: '#/components/schemas/CreateOrchestrationRuleRequestSource'
+        destination:
+          $ref: '#/components/schemas/CreateOrchestrationRuleRequestDestination'
+      required:
+      - ref_id
+      - profile_id
+      - source_asset
+      - destination_asset
+      - source
+    OrchestrationRuleDestination:
+      type: object
+      properties:
+        crypto:
+          $ref: '#/components/schemas/OrchestrationRuleCryptoDestination'
+        fiat:
+          $ref: '#/components/schemas/OrchestrationRuleFiatDestination'
+        profile:
+          $ref: '#/components/schemas/OrchestrationRuleProfileDestination'
+    CreateOrchestrationRuleRequestProfileDestination:
+      type: object
+      properties:
+        profile_id:
+          type: string
+    CreateOrchestrationRuleRequestCryptoDestination:
+      type: object
+      properties:
+        address:
+          type: string
+          description: 'The blockchain destination address. Specify together with `network`
+
+            (and `identity_id` on the parent request for 3P integrations).
+
+            These together identify a CryptoDestinationAddress whose travel rule metadata will be used.'
+        network:
+          type: string
+          description: The blockchain network of the destination address.
+        crypto_address_id:
+          type: string
+          description: Deprecated. Specify `address` and `network` instead.
+    CreateOrchestrationRuleResponse:
+      type: object
+      properties:
+        rule:
+          $ref: '#/components/schemas/OrchestrationRule'
+    OrchestrationRuleFiatSource:
+      type: object
+      properties:
+        deposit_instructions_id:
+          type: string
+        network:
+          type: string
+        account_type:
+          type: string
+        memo_id:
+          type: string
+    OrchestrationRuleProfileDestination:
+      type: object
+      properties:
+        profile_id:
+          type: string
+    OrchestrationRuleStatus:
+      type: string
+      enum:
+      - ACTIVE
+      - DELETED
+      - PENDING
+      - REJECTED
+      description: " - ACTIVE: The rule is active, deposits matching the `source_asset` and `source` of this rule start a conversion and\nsubsequent delivery of the `destination_asset` to the specified `destination`.\n - DELETED: The rule has been deleted, newly deposited `source_assets` to the `source` of this rule will not be converted.\nThe deposited `source_asset` is still going to be credited to the Profile specified by `profile_id`.\n - PENDING: The rule creation is pending approval(s) before the rule becomes ACTIVE.\n - REJECTED: The rule creation has been rejected during the approval process."
+    OrchestrationRuleCryptoSource:
+      type: object
+      properties:
+        address_id:
+          type: string
+        address:
+          type: string
+        network:
+          type: string
+    CreateOrchestrationRuleRequestFiatDestination:
+      type: object
+      properties:
+        fiat_account_id:
+          type: string
+          description: 'The ID of a pre-approved fiat account.
+
+
+            Valid fiat account IDs can be retrieved using:
+
+            - CreateFiatAccount endpoint (/transfer/fiat-accounts)
+
+            - GetFiatAccount endpoint (/transfer/fiat-accounts/{id})
+
+            - ListFiatAccounts endpoint (/transfer/fiat-accounts)'
+        memo:
+          type: string
+    DeleteOrchestrationRuleResponse:
+      type: object
+      properties:
+        rule:
+          $ref: '#/components/schemas/OrchestrationRule'
+    OrchestrationRule:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the orchestration rule.
+        ref_id:
+          type: string
+          description: Unique reference ID for the rule.
+        nickname:
+          type: string
+          description: Optional human-readable nickname for the rule.
+        profile_id:
+          type: string
+          description: Profile ID of the account owner.
+        identity_id:
+          type: string
+          description: Identity ID of the account owner.
+        account_id:
+          type: string
+          description: Account ID where the rule applies.
+        status:
+          $ref: '#/components/schemas/OrchestrationRuleStatus'
+        source_asset:
+          type: string
+          description: Asset being converted from.
+        destination_asset:
+          type: string
+          description: Asset being converted to.
+        source:
+          $ref: '#/components/schemas/OrchestrationRuleSource'
+        destination:
+          $ref: '#/components/schemas/OrchestrationRuleDestination'
+        created_at:
+          type: string
+          format: date-time
+          description: Timestamp when the rule was created.
+    CreateOrchestrationRuleRequestFiatSource:
+      type: object
+      properties:
+        network:
+          type: string
+          description: 'The fiat network for the source.
+
+
+            Valid values: WIRE, CUBIX'
+        account_type:
+          type: string
+          description: 'The account type for the fiat source.
+
+
+            Valid values: SWIFT, ABA'
+    ListOrchestrationRulesResponse:
+      type: object
+      properties:
+        rules:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrchestrationRule'
+          description: 'Deprecated: Use items instead. This field will be removed in a future version.'
+        next_page_cursor:
+          type: string
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrchestrationRule'
+    OrchestrationRuleFiatDestination:
+      type: object
+      properties:
+        fiat_account_id:
+          type: string
+        memo:
+          type: string
+    CreateOrchestrationRuleRequestSource:
+      type: object
+      properties:
+        crypto:
+          $ref: '#/components/schemas/CreateOrchestrationRuleRequestCryptoSource'
+        fiat:
+          $ref: '#/components/schemas/CreateOrchestrationRuleRequestFiatSource'
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      description: 'Paxos APIs use [OAuth 2](https://tools.ietf.org/html/rfc6749) with the [client credentials](https://tools.ietf.org/html/rfc6749#section-4.4) grant flow.
+
+
+        **Token URLs:**
+
+        - Production: https://oauth.paxos.com/oauth2/token
+
+        - Sandbox: https://oauth.sandbox.paxos.com/oauth2/token
+
+
+        Learn more in the [API credentials guide →](https://docs.paxos.com/developer/credentials)
+
+        '
+      flows:
+        clientCredentials:
+          tokenUrl: https://oauth.paxos.com/oauth2/token
+          scopes:
+            conversion:read_conversion_stablecoin: Retrieve stablecoin conversion details
+            conversion:write_conversion_stablecoin: Create or cancel a stablecoin conversion
+            exchange:historical_prices: Retrieve marketnaverage prices at a certain time increment
+            exchange:read_order: Retrieve order or order execution details
+            exchange:read_quote: Retrieve quote details for buying or selling an asset
+            exchange:read_quote_execution: Retrieve quote execution details
+            exchange:write_quote_execution: Create a quote execution for buying or selling an asset
+            exchange:write_order: Create or cancel an order for buying or selling an asset
+            fee:write_crypto_withdrawal_fee: Create a guaranteed fee for crypto withdrawal
+            funding:read_bank_balance: Retrieve Paxos dedicated bank account balance
+            funding:read_profile: Retrieve Profile details and deposit funds in Sandbox
+            funding:write_profile: Create a Profile
+            identity:read_account: Retrieve Account details
+            identity:read_identity: Retrieve Identity details or documents
+            identity:write_account: Create or update Account and Account Members
+            identity:write_identity: Create or update Identity details and set Sandbox Identify Status
+            settlement:read_transaction: Retrieve settlement transaction details
+            settlement:write_transaction: Create, affirm or cancel a settlement transaction
+            tax:read_tax_form: Retrieve tax details
+            tax:read_tax_lot: Retrieve tax lot details
+            tax:write_tax_lot: Update the given tax-lot ID
+            transfer:read_deposit_address: Retrieve deposit address details
+            transfer:read_fiat_account: Retrieve Fiat Account details
+            transfer:read_fiat_deposit_instructions: Retrieve fiat deposit instruction details
+            transfer:read_transfer: Retrieve transfer details
+            transfer:read_transfer_limit: Retrieve limits for the given transaction type
+            transfer:reject_crypto_deposit: Reject a crypto deposit (travel rule)
+            transfer:update_crypto_deposit: Provide required travel-rule details
+            transfer:write_crypto_withdrawal: Withdraw asset to a specified destination address
+            transfer:write_deposit_address: Create an deposit address on a blockchain network
+            transfer:write_fiat_account: Create, update or delete a Fiat Account
+            transfer:write_fiat_deposit_instructions: Create, update or delete fiat deposit instructions
+            transfer:write_internal_transfer: Transfer assets between two Profiles
+            transfer:write_sandbox_fiat_deposit: Initiate a test fiat deposit in the Sandbox environment
+            transfer:write_fiat_withdrawal: Withdraw fiat to the given destination
+            events:read_event: Retrieve events
+x-tagGroups:
+- name: Deposits and Withdrawals
+  tags:
+  - Transfers
+  - Fiat Transfers
+  - Deposit Addresses
+  - Crypto Deposits
+  - Crypto Withdrawals
+  - Fees
+  - Internal Transfers
+  - Paxos Transfers
+  - Limits
+- name: Identity
+  tags:
+  - Identity
+  - Institution Members
+  - Accounts
+  - Account Members
+  - Identity Documents
+- name: API Credentials
+  tags:
+  - API Credentials
+- name: Profiles
+  tags:
+  - Profiles
+- name: Sandbox
+  tags:
+  - Sandbox Deposits
+  - Sandbox Identity
+  - Sandbox Fiat Transfers
+- name: Settlements
+  tags:
+  - Settlement
+- name: Stablecoin Conversion
+  tags:
+  - Stablecoin Conversion
+- name: Taxes
+  tags:
+  - Tax Forms
+- name: Trading
+  tags:
+  - Market Data
+  - Orders
+  - Quotes
+  - Quote Executions
+  - Pricing
+  - Issuer Quotes
+- name: Rewards
+  tags:
+  - Monitoring Addresses
+  - Statements
+  - Payments
+- name: Rewards (Alpha)
+  tags:
+  - Reward Addresses
+  - Claims
+  - Payout Groups
+  - Rewards
+- name: Events
+  tags:
+  - Events
+  - Event Types
+  - Event Objects

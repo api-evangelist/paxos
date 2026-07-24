@@ -1,0 +1,292 @@
+openapi: 3.0.0
+info:
+  title: Paxos Account Members Rewards API
+  version: '2.0'
+  description: '<p>Welcome to Paxos APIs. At Paxos, our mission is to enable the movement of any asset, any time, in a trustworthy way. These APIs serve that mission by making it easier than ever for you to directly integrate our product capabilities into your application, leveraging the speed, stability, and security of the Paxos platform.</p> <p>The documentation that follows gives you access to our Crypto Brokerage, Trading, and Exchange products. It includes APIs for market data, orders, and the held rate quote flow.</p> <p>To test in our sandbox environment, <a href="https://account.sandbox.paxos.com" target="_blank">sign up</a> for an account. For more information about Paxos and our APIs, visit <a href="https://www.paxos.com/" target="_blank">Paxos.com</a>.</p>
+
+    '
+  x-logo:
+    url: /docs/paxos.svg
+    backgroundColor: '#FFFFFF'
+    altText: Paxos logo
+servers:
+- url: https://api.paxos.com/v2
+  description: Production
+- url: https://api.sandbox.paxos.com/v2
+  description: Sandbox
+tags:
+- name: Rewards
+  description: 'Rewards details including current reward rates, next accrual time, lifetime earned amounts, and estimated next accrual.
+
+
+    *These endpoints are only relevant for whitelisted Rewards partners.*
+
+    '
+paths:
+  /rewards/details:
+    get:
+      summary: Get reward details
+      description: Returns current reward rates, next accrual time, lifetime earned, and total available rewards
+      operationId: GetRewardDetails
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetRewardDetailsResponse'
+      parameters:
+      - name: asset_type
+        description: When set, only data for this asset type (e.g. "USDG", "PYUSD") is returned.
+        in: query
+        required: false
+        schema:
+          type: string
+      tags:
+      - Rewards
+      security:
+      - OAuth2:
+        - rewards:read_rewards_details
+  /rewards/rates:
+    get:
+      summary: Get reward rates
+      description: Returns the reward rates for the given asset type
+      operationId: GetRewardsRates
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetRewardsRatesResponse'
+      parameters:
+      - name: asset_type
+        description: 'The asset type to fetch rates for (e.g. "USDG", "PYUSD").
+
+          When not set, an empty rates array is returned.'
+        in: query
+        required: false
+        schema:
+          type: string
+      tags:
+      - Rewards
+      security:
+      - OAuth2:
+        - rewards:read_rewards_details
+components:
+  schemas:
+    RewardRate:
+      type: object
+      properties:
+        id:
+          type: string
+          title: The rate ID
+        multiplier_id:
+          type: string
+          title: Maps to on-chain multiplier ID
+        rate:
+          type: string
+          title: The annualized yield rate as a decimal string (e.g., "0.0376" for 3.76%)
+        networks:
+          type: array
+          items:
+            type: string
+          title: The networks this rate applies to (e.g., ["ethereum", "polygon"])
+        jurisdiction:
+          $ref: '#/components/schemas/Jurisdiction'
+        tier:
+          $ref: '#/components/schemas/Tier'
+        effective_at:
+          type: string
+          format: date-time
+          title: When this rate becomes effective
+        created_at:
+          type: string
+          format: date-time
+          title: When this rate was created
+      title: RewardRate represents a reward rate configuration
+    GetRewardsRatesResponse:
+      type: object
+      properties:
+        rates:
+          type: array
+          items:
+            $ref: '#/components/schemas/RewardRate'
+          description: Reward rates for the requested asset type.
+    GetRewardDetailsResponse:
+      type: object
+      properties:
+        rates:
+          type: array
+          items:
+            $ref: '#/components/schemas/RewardRate'
+          title: Current reward rates
+        next_accrual:
+          type: string
+          format: date-time
+          title: The next time rewards will accrue
+        lifetime_earned:
+          type: string
+          title: Total rewards earned over the lifetime of the account
+        total_available_rewards:
+          type: string
+          title: Total rewards currently available to claim in business units
+        est_next_accrual_amount:
+          type: string
+          title: Estimated amount of the next accrual based on current balances, pending rewards, and multiplier rates
+        asset_details:
+          type: array
+          items:
+            $ref: '#/components/schemas/AssetRewardDetails'
+          description: Per-asset reward details breakdown. Supports partners with multiple asset types.
+    Jurisdiction:
+      type: string
+      enum:
+      - JURISDICTION_UNSPECIFIED
+      - EU
+      - US
+    AssetRewardDetails:
+      type: object
+      properties:
+        asset_type:
+          type: string
+          title: The asset symbol (e.g., "USDG", "PYUSD")
+        total_available_rewards:
+          type: string
+          title: Total rewards currently available to claim, in business units
+        lifetime_earned:
+          type: string
+          title: Total rewards earned over the lifetime of the account for this asset, in business units
+        est_next_accrual_amount:
+          type: string
+          title: Estimated amount of the next accrual for this asset, in business units
+      description: AssetRewardDetails contains reward summary information for a single asset type.
+    Tier:
+      type: string
+      enum:
+      - TIER_UNSPECIFIED
+      - FOUNDER
+      - PARTNER_CUSTODY_REMOVAL_PROGRAM
+      - PARTNER_STANDARD_CUSTODY_TIER_1
+      - PARTNER_STANDARD_CUSTODY_TIER_2
+      - PARTNER_STANDARD_CUSTODY_TIER_3
+      - FOUNDER_TIER_2
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      description: 'Paxos APIs use [OAuth 2](https://tools.ietf.org/html/rfc6749) with the [client credentials](https://tools.ietf.org/html/rfc6749#section-4.4) grant flow.
+
+
+        **Token URLs:**
+
+        - Production: https://oauth.paxos.com/oauth2/token
+
+        - Sandbox: https://oauth.sandbox.paxos.com/oauth2/token
+
+
+        Learn more in the [API credentials guide →](https://docs.paxos.com/developer/credentials)
+
+        '
+      flows:
+        clientCredentials:
+          tokenUrl: https://oauth.paxos.com/oauth2/token
+          scopes:
+            conversion:read_conversion_stablecoin: Retrieve stablecoin conversion details
+            conversion:write_conversion_stablecoin: Create or cancel a stablecoin conversion
+            exchange:historical_prices: Retrieve marketnaverage prices at a certain time increment
+            exchange:read_order: Retrieve order or order execution details
+            exchange:read_quote: Retrieve quote details for buying or selling an asset
+            exchange:read_quote_execution: Retrieve quote execution details
+            exchange:write_quote_execution: Create a quote execution for buying or selling an asset
+            exchange:write_order: Create or cancel an order for buying or selling an asset
+            fee:write_crypto_withdrawal_fee: Create a guaranteed fee for crypto withdrawal
+            funding:read_bank_balance: Retrieve Paxos dedicated bank account balance
+            funding:read_profile: Retrieve Profile details and deposit funds in Sandbox
+            funding:write_profile: Create a Profile
+            identity:read_account: Retrieve Account details
+            identity:read_identity: Retrieve Identity details or documents
+            identity:write_account: Create or update Account and Account Members
+            identity:write_identity: Create or update Identity details and set Sandbox Identify Status
+            settlement:read_transaction: Retrieve settlement transaction details
+            settlement:write_transaction: Create, affirm or cancel a settlement transaction
+            tax:read_tax_form: Retrieve tax details
+            tax:read_tax_lot: Retrieve tax lot details
+            tax:write_tax_lot: Update the given tax-lot ID
+            transfer:read_deposit_address: Retrieve deposit address details
+            transfer:read_fiat_account: Retrieve Fiat Account details
+            transfer:read_fiat_deposit_instructions: Retrieve fiat deposit instruction details
+            transfer:read_transfer: Retrieve transfer details
+            transfer:read_transfer_limit: Retrieve limits for the given transaction type
+            transfer:reject_crypto_deposit: Reject a crypto deposit (travel rule)
+            transfer:update_crypto_deposit: Provide required travel-rule details
+            transfer:write_crypto_withdrawal: Withdraw asset to a specified destination address
+            transfer:write_deposit_address: Create an deposit address on a blockchain network
+            transfer:write_fiat_account: Create, update or delete a Fiat Account
+            transfer:write_fiat_deposit_instructions: Create, update or delete fiat deposit instructions
+            transfer:write_internal_transfer: Transfer assets between two Profiles
+            transfer:write_sandbox_fiat_deposit: Initiate a test fiat deposit in the Sandbox environment
+            transfer:write_fiat_withdrawal: Withdraw fiat to the given destination
+            events:read_event: Retrieve events
+x-tagGroups:
+- name: Deposits and Withdrawals
+  tags:
+  - Transfers
+  - Fiat Transfers
+  - Deposit Addresses
+  - Crypto Deposits
+  - Crypto Withdrawals
+  - Fees
+  - Internal Transfers
+  - Paxos Transfers
+  - Limits
+- name: Identity
+  tags:
+  - Identity
+  - Institution Members
+  - Accounts
+  - Account Members
+  - Identity Documents
+- name: API Credentials
+  tags:
+  - API Credentials
+- name: Profiles
+  tags:
+  - Profiles
+- name: Sandbox
+  tags:
+  - Sandbox Deposits
+  - Sandbox Identity
+  - Sandbox Fiat Transfers
+- name: Settlements
+  tags:
+  - Settlement
+- name: Stablecoin Conversion
+  tags:
+  - Stablecoin Conversion
+- name: Taxes
+  tags:
+  - Tax Forms
+- name: Trading
+  tags:
+  - Market Data
+  - Orders
+  - Quotes
+  - Quote Executions
+  - Pricing
+  - Issuer Quotes
+- name: Rewards
+  tags:
+  - Monitoring Addresses
+  - Statements
+  - Payments
+- name: Rewards (Alpha)
+  tags:
+  - Reward Addresses
+  - Claims
+  - Payout Groups
+  - Rewards
+- name: Events
+  tags:
+  - Events
+  - Event Types
+  - Event Objects

@@ -1,0 +1,486 @@
+openapi: 3.0.0
+info:
+  title: Paxos Account Members Rewards Statements API
+  version: '2.0'
+  description: '<p>Welcome to Paxos APIs. At Paxos, our mission is to enable the movement of any asset, any time, in a trustworthy way. These APIs serve that mission by making it easier than ever for you to directly integrate our product capabilities into your application, leveraging the speed, stability, and security of the Paxos platform.</p> <p>The documentation that follows gives you access to our Crypto Brokerage, Trading, and Exchange products. It includes APIs for market data, orders, and the held rate quote flow.</p> <p>To test in our sandbox environment, <a href="https://account.sandbox.paxos.com" target="_blank">sign up</a> for an account. For more information about Paxos and our APIs, visit <a href="https://www.paxos.com/" target="_blank">Paxos.com</a>.</p>
+
+    '
+  x-logo:
+    url: /docs/paxos.svg
+    backgroundColor: '#FFFFFF'
+    altText: Paxos logo
+servers:
+- url: https://api.paxos.com/v2
+  description: Production
+- url: https://api.sandbox.paxos.com/v2
+  description: Sandbox
+tags:
+- name: Rewards Statements
+paths:
+  /rewards/statements:
+    get:
+      summary: List Rewards Statements
+      description: 'Returns monthly rewards statements for the authenticated partner, ordered by
+
+        period newest first. Summary fields (total_accrued, avg_daily_balance) are
+
+        included in list responses. Presigned download URLs are populated on files
+
+        for completed statements only.'
+      operationId: ListRewardsStatements
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListRewardsStatementsResponse'
+              examples:
+                List all rewards statements:
+                  value:
+                    items:
+                    - id: a1b2c3d4-e5f6-7890-abcd-ef1234567890
+                      asset_type: USDG
+                      period_start: '2025-03-01T00:00:00Z'
+                      period_end: '2025-03-31T23:59:59Z'
+                      status: STATEMENT_STATUS_COMPLETED
+                      type: STATEMENT_TYPE_MONTHLY_REWARDS
+                      total_accrued: '1523.841209'
+                      avg_daily_balance: '600000.000000'
+                      files:
+                      - format: STATEMENT_FORMAT_PDF
+                        download_url: https://s3.amazonaws.com/rewards-statements/partners/11111111/2025-03/summary.pdf?X-Amz-Signature=abc123
+                        generated_at: '2025-04-02T01:00:00Z'
+                      - format: STATEMENT_FORMAT_CSV
+                        download_url: https://s3.amazonaws.com/rewards-statements/partners/11111111/2025-03/balances.csv?X-Amz-Signature=def456
+                        generated_at: '2025-04-02T01:00:00Z'
+                      created_at: '2025-04-02T01:00:00Z'
+                    - id: b2c3d4e5-f6a7-8901-bcde-f12345678901
+                      asset_type: USDG
+                      period_start: '2025-02-01T00:00:00Z'
+                      period_end: '2025-02-28T23:59:59Z'
+                      status: STATEMENT_STATUS_COMPLETED
+                      type: STATEMENT_TYPE_MONTHLY_REWARDS
+                      total_accrued: '1387.502341'
+                      avg_daily_balance: '545000.000000'
+                      files:
+                      - format: STATEMENT_FORMAT_PDF
+                        download_url: https://s3.amazonaws.com/rewards-statements/partners/11111111/2025-02/summary.pdf?X-Amz-Signature=ghi789
+                        generated_at: '2025-03-02T01:00:00Z'
+                      - format: STATEMENT_FORMAT_CSV
+                        download_url: https://s3.amazonaws.com/rewards-statements/partners/11111111/2025-02/balances.csv?X-Amz-Signature=jkl012
+                        generated_at: '2025-03-02T01:00:00Z'
+                      created_at: '2025-03-02T01:00:00Z'
+                    next_page_cursor: ''
+                List statements filtered by asset type:
+                  value:
+                    items:
+                    - id: c3d4e5f6-a7b8-9012-cdef-123456789012
+                      asset_type: PYUSD
+                      period_start: '2025-03-01T00:00:00Z'
+                      period_end: '2025-03-31T23:59:59Z'
+                      status: STATEMENT_STATUS_COMPLETED
+                      type: STATEMENT_TYPE_MONTHLY_REWARDS
+                      total_accrued: '412.109876'
+                      avg_daily_balance: '200000.000000'
+                      files:
+                      - format: STATEMENT_FORMAT_PDF
+                        download_url: https://s3.amazonaws.com/rewards-statements/partners/11111111/2025-03/pyusd-summary.pdf?X-Amz-Signature=mno345
+                        generated_at: '2025-04-02T01:00:00Z'
+                      created_at: '2025-04-02T01:00:00Z'
+                    next_page_cursor: ''
+                Paginated list with a next page cursor:
+                  value:
+                    items:
+                    - id: d4e5f6a7-b8c9-0123-defa-234567890123
+                      asset_type: USDG
+                      period_start: '2025-03-01T00:00:00Z'
+                      period_end: '2025-03-31T23:59:59Z'
+                      status: STATEMENT_STATUS_GENERATING
+                      type: STATEMENT_TYPE_MONTHLY_REWARDS
+                      total_accrued: '0'
+                      avg_daily_balance: '0'
+                      files: []
+                      created_at: '2025-04-02T00:05:00Z'
+                    next_page_cursor: CgwI-Pr1vgYQyLLpswESJDM2NGU2MTgyLTRhZjctNDg4NC1iY2MxLTM0MThmNTA0MWYzYg
+      parameters:
+      - name: limit
+        description: Maximum number of statements to return. Defaults to 12 if not set.
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: page_cursor
+        description: Opaque pagination cursor from a previous response.
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: asset_type
+        description: When set, only statements for this asset type are returned.
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: type
+        description: "When set, only statements of this content type are returned.\n\n - STATEMENT_TYPE_MONTHLY_REWARDS: Monthly statement: PDF rewards summary with daily balance totals, rates, and\nper-payout-group breakdown, plus a CSV per-wallet daily balance export."
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - STATEMENT_TYPE_MONTHLY_REWARDS
+      tags:
+      - Rewards Statements
+      security:
+      - OAuth2:
+        - rewards:read_statements
+  /rewards/statements/{id}:
+    get:
+      summary: Get Rewards Statement
+      description: 'Returns a single rewards statement with presigned download URLs for each
+
+        generated file (PDF, CSV).'
+      operationId: GetRewardsStatement
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetRewardsStatementResponse'
+              examples:
+                Get a completed rewards statement:
+                  value:
+                    statement:
+                      id: a1b2c3d4-e5f6-7890-abcd-ef1234567890
+                      asset_type: USDG
+                      period_start: '2025-03-01T00:00:00Z'
+                      period_end: '2025-03-31T23:59:59Z'
+                      status: STATEMENT_STATUS_COMPLETED
+                      type: STATEMENT_TYPE_MONTHLY_REWARDS
+                      total_accrued: '1523.841209'
+                      avg_daily_balance: '600000.000000'
+                      files:
+                      - format: STATEMENT_FORMAT_PDF
+                        download_url: https://s3.amazonaws.com/rewards-statements/partners/11111111/2025-03/summary.pdf?X-Amz-Signature=abc123
+                        generated_at: '2025-04-02T01:00:00Z'
+                      - format: STATEMENT_FORMAT_CSV
+                        download_url: https://s3.amazonaws.com/rewards-statements/partners/11111111/2025-03/balances.csv?X-Amz-Signature=def456
+                        generated_at: '2025-04-02T01:00:00Z'
+                      created_at: '2025-04-02T01:00:00Z'
+                Get a statement that is still generating:
+                  value:
+                    statement:
+                      id: d4e5f6a7-b8c9-0123-defa-234567890123
+                      asset_type: USDG
+                      period_start: '2025-04-01T00:00:00Z'
+                      period_end: '2025-04-30T23:59:59Z'
+                      status: STATEMENT_STATUS_GENERATING
+                      type: STATEMENT_TYPE_MONTHLY_REWARDS
+                      total_accrued: '0'
+                      avg_daily_balance: '0'
+                      files: []
+                      created_at: '2025-05-02T00:05:00Z'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+              examples:
+                Statement not found:
+                  value:
+                    type: about:blank
+                    title: Not Found
+                    status: 404
+                    detail: statement not found
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+              examples:
+                Invalid statement ID:
+                  value:
+                    type: about:blank
+                    title: Bad Request
+                    status: 400
+                    detail: invalid statement id
+      parameters:
+      - name: id
+        description: UUID of the statement to retrieve.
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - Rewards Statements
+      security:
+      - OAuth2:
+        - rewards:read_statements
+components:
+  schemas:
+    RewardsStatementFile:
+      type: object
+      properties:
+        format:
+          $ref: '#/components/schemas/RewardsStatementFormat'
+        download_url:
+          type: string
+          description: Presigned S3 download URL. Populated for completed statements in both list and get responses.
+        generated_at:
+          type: string
+          format: date-time
+          description: When the file was written to S3.
+      description: RewardsStatementFile describes one generated file attached to a reward statement.
+    RewardsStatement:
+      type: object
+      properties:
+        id:
+          type: string
+          description: UUID of this statement record.
+        asset_type:
+          type: string
+          description: Asset type (e.g. "USDG", "PYUSD").
+        period_start:
+          type: string
+          format: date-time
+          description: Start of the statement period (inclusive, beginning of month, UTC).
+        period_end:
+          type: string
+          format: date-time
+          description: End of the statement period (inclusive, end of month, UTC).
+        status:
+          $ref: '#/components/schemas/RewardsStatementStatus'
+        type:
+          $ref: '#/components/schemas/RewardsStatementType'
+        total_accrued:
+          type: string
+          description: Total rewards accrued over the period across all payout groups.
+        avg_daily_balance:
+          type: string
+          description: Average end-of-day balance across all payout groups and all days in the period.
+        files:
+          type: array
+          items:
+            $ref: '#/components/schemas/RewardsStatementFile'
+          description: Generated files (PDF, CSV). download_url is populated for completed statements in both list and get responses.
+        created_at:
+          type: string
+          format: date-time
+          description: When this statement record was created.
+      description: 'RewardsStatement is the period-level entity for a partner''s monthly rewards.
+
+        One record exists per (partner, asset, period, type). Each statement produces
+
+        one or more files (tracked in files), whose presigned download URLs are
+
+        populated for completed statements in both list and get responses.'
+    GetRewardsStatementResponse:
+      type: object
+      properties:
+        statement:
+          $ref: '#/components/schemas/RewardsStatement'
+    ListRewardsStatementsResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/RewardsStatement'
+          description: Statements for this page, ordered by period_start descending (newest first).
+        next_page_cursor:
+          type: string
+          description: Cursor for the next page; empty string if this is the last page.
+    RewardsStatementType:
+      type: string
+      enum:
+      - STATEMENT_TYPE_MONTHLY_REWARDS
+      description: "RewardsStatementType identifies the content and purpose of a reward statement.\n\n - STATEMENT_TYPE_MONTHLY_REWARDS: Monthly statement: PDF rewards summary with daily balance totals, rates, and\nper-payout-group breakdown, plus a CSV per-wallet daily balance export."
+      x-enum-varnames:
+      - MonthlyRewards
+    RewardsStatementFormat:
+      type: string
+      enum:
+      - STATEMENT_FORMAT_PDF
+      - STATEMENT_FORMAT_CSV
+      description: "RewardsStatementFormat identifies the file encoding of a generated statement file.\n\n - STATEMENT_FORMAT_PDF: PDF report suitable for printing or archival.\n - STATEMENT_FORMAT_CSV: CSV with per-wallet daily balance rows."
+    RewardsStatementStatus:
+      type: string
+      enum:
+      - STATEMENT_STATUS_GENERATING
+      - STATEMENT_STATUS_COMPLETED
+      - STATEMENT_STATUS_FAILED
+      description: "RewardsStatementStatus reflects the overall generation lifecycle of a reward statement.\n\n - STATEMENT_STATUS_GENERATING: Files are currently being generated.\n - STATEMENT_STATUS_COMPLETED: All files were successfully generated and are available for download.\n - STATEMENT_STATUS_FAILED: Generation failed; files may be incomplete or unavailable."
+    Problem:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+          description: 'An absolute URI that identifies the problem type.  When dereferenced,
+
+            it SHOULD provide human-readable documentation for the problem type
+
+            (e.g., using HTML).
+
+            '
+          default: about:blank
+          example: https://api.paxos.com/v2/problems/insufficient_funds
+        title:
+          type: string
+          description: 'A short, summary of the problem type. Written in english and readable
+
+            for engineers (usually not suited for non technical stakeholders and
+
+            not localized); example: Service Unavailable
+
+            '
+          example: Insufficient Funds
+        status:
+          type: integer
+          format: int32
+          description: 'The HTTP status code generated by the origin server for this occurrence
+
+            of the problem.
+
+            '
+          minimum: 100
+          maximum: 600
+          exclusiveMaximum: true
+          example: 403
+        detail:
+          type: string
+          description: 'A human readable explanation specific to this occurrence of the
+
+            problem.
+
+            '
+          example: Not enough funds in account.
+        meta:
+          type: object
+          description: 'Additional structured metadata about the error.
+
+            '
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      description: 'Paxos APIs use [OAuth 2](https://tools.ietf.org/html/rfc6749) with the [client credentials](https://tools.ietf.org/html/rfc6749#section-4.4) grant flow.
+
+
+        **Token URLs:**
+
+        - Production: https://oauth.paxos.com/oauth2/token
+
+        - Sandbox: https://oauth.sandbox.paxos.com/oauth2/token
+
+
+        Learn more in the [API credentials guide →](https://docs.paxos.com/developer/credentials)
+
+        '
+      flows:
+        clientCredentials:
+          tokenUrl: https://oauth.paxos.com/oauth2/token
+          scopes:
+            conversion:read_conversion_stablecoin: Retrieve stablecoin conversion details
+            conversion:write_conversion_stablecoin: Create or cancel a stablecoin conversion
+            exchange:historical_prices: Retrieve marketnaverage prices at a certain time increment
+            exchange:read_order: Retrieve order or order execution details
+            exchange:read_quote: Retrieve quote details for buying or selling an asset
+            exchange:read_quote_execution: Retrieve quote execution details
+            exchange:write_quote_execution: Create a quote execution for buying or selling an asset
+            exchange:write_order: Create or cancel an order for buying or selling an asset
+            fee:write_crypto_withdrawal_fee: Create a guaranteed fee for crypto withdrawal
+            funding:read_bank_balance: Retrieve Paxos dedicated bank account balance
+            funding:read_profile: Retrieve Profile details and deposit funds in Sandbox
+            funding:write_profile: Create a Profile
+            identity:read_account: Retrieve Account details
+            identity:read_identity: Retrieve Identity details or documents
+            identity:write_account: Create or update Account and Account Members
+            identity:write_identity: Create or update Identity details and set Sandbox Identify Status
+            settlement:read_transaction: Retrieve settlement transaction details
+            settlement:write_transaction: Create, affirm or cancel a settlement transaction
+            tax:read_tax_form: Retrieve tax details
+            tax:read_tax_lot: Retrieve tax lot details
+            tax:write_tax_lot: Update the given tax-lot ID
+            transfer:read_deposit_address: Retrieve deposit address details
+            transfer:read_fiat_account: Retrieve Fiat Account details
+            transfer:read_fiat_deposit_instructions: Retrieve fiat deposit instruction details
+            transfer:read_transfer: Retrieve transfer details
+            transfer:read_transfer_limit: Retrieve limits for the given transaction type
+            transfer:reject_crypto_deposit: Reject a crypto deposit (travel rule)
+            transfer:update_crypto_deposit: Provide required travel-rule details
+            transfer:write_crypto_withdrawal: Withdraw asset to a specified destination address
+            transfer:write_deposit_address: Create an deposit address on a blockchain network
+            transfer:write_fiat_account: Create, update or delete a Fiat Account
+            transfer:write_fiat_deposit_instructions: Create, update or delete fiat deposit instructions
+            transfer:write_internal_transfer: Transfer assets between two Profiles
+            transfer:write_sandbox_fiat_deposit: Initiate a test fiat deposit in the Sandbox environment
+            transfer:write_fiat_withdrawal: Withdraw fiat to the given destination
+            events:read_event: Retrieve events
+x-tagGroups:
+- name: Deposits and Withdrawals
+  tags:
+  - Transfers
+  - Fiat Transfers
+  - Deposit Addresses
+  - Crypto Deposits
+  - Crypto Withdrawals
+  - Fees
+  - Internal Transfers
+  - Paxos Transfers
+  - Limits
+- name: Identity
+  tags:
+  - Identity
+  - Institution Members
+  - Accounts
+  - Account Members
+  - Identity Documents
+- name: API Credentials
+  tags:
+  - API Credentials
+- name: Profiles
+  tags:
+  - Profiles
+- name: Sandbox
+  tags:
+  - Sandbox Deposits
+  - Sandbox Identity
+  - Sandbox Fiat Transfers
+- name: Settlements
+  tags:
+  - Settlement
+- name: Stablecoin Conversion
+  tags:
+  - Stablecoin Conversion
+- name: Taxes
+  tags:
+  - Tax Forms
+- name: Trading
+  tags:
+  - Market Data
+  - Orders
+  - Quotes
+  - Quote Executions
+  - Pricing
+  - Issuer Quotes
+- name: Rewards
+  tags:
+  - Monitoring Addresses
+  - Statements
+  - Payments
+- name: Rewards (Alpha)
+  tags:
+  - Reward Addresses
+  - Claims
+  - Payout Groups
+  - Rewards
+- name: Events
+  tags:
+  - Events
+  - Event Types
+  - Event Objects

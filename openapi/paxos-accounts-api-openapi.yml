@@ -1,0 +1,595 @@
+openapi: 3.0.0
+info:
+  title: Paxos Account Members Accounts API
+  version: '2.0'
+  description: '<p>Welcome to Paxos APIs. At Paxos, our mission is to enable the movement of any asset, any time, in a trustworthy way. These APIs serve that mission by making it easier than ever for you to directly integrate our product capabilities into your application, leveraging the speed, stability, and security of the Paxos platform.</p> <p>The documentation that follows gives you access to our Crypto Brokerage, Trading, and Exchange products. It includes APIs for market data, orders, and the held rate quote flow.</p> <p>To test in our sandbox environment, <a href="https://account.sandbox.paxos.com" target="_blank">sign up</a> for an account. For more information about Paxos and our APIs, visit <a href="https://www.paxos.com/" target="_blank">Paxos.com</a>.</p>
+
+    '
+  x-logo:
+    url: /docs/paxos.svg
+    backgroundColor: '#FFFFFF'
+    altText: Paxos logo
+servers:
+- url: https://api.paxos.com/v2
+  description: Production
+- url: https://api.sandbox.paxos.com/v2
+  description: Sandbox
+tags:
+- name: Accounts
+  description: 'Accounts connect Identities (persons or institutions) to Profiles (asset balances).
+
+    Key features include:
+
+
+    - **Balance Management**: Track and manage profile balances via [Subledgering](https://docs.paxos.com/crypto-brokerage/ledger-type#fiat-and-crypto-subledger)
+
+    - **Joint Account Support**: Link multiple Identities to a single Account for shared on platform balance
+
+
+    Accounts are required for all Identity API integrations.
+
+    '
+paths:
+  /identity/accounts:
+    get:
+      summary: List Accounts
+      description: 'List accounts with pagination. Every response will contain a `next_page` field,
+
+        as long as the end of the list has not been reached. Pass this value into the `page_cursor` field of the next request
+
+        to retrieve the next page of results.'
+      operationId: ListAccounts
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListAccountsResponse'
+      parameters:
+      - name: page_cursor
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: order
+        description: Return items in ascending (ASC) or descending (DESC) order. Defaults to DESC.
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - DESC
+          - ASC
+      - name: order_by
+        description: The specific method by which the returned results will be ordered.
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - CREATED_AT
+      - name: limit
+        description: Number of results to return.
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: created_at.lt
+        description: Include timestamps strictly less than lt. RFC3339 format, like `2006-01-02T15:04:05Z`.
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: created_at.lte
+        description: Include timestamps less than or equal to lte. RFC3339 format, like `2006-01-02T15:04:05Z`.
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: created_at.eq
+        description: Include timestamps exactly equal to eq. RFC3339 format, like `2006-01-02T15:04:05Z`.
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: created_at.gte
+        description: Include timestamps greater than or equal to gte. RFC3339 format, like `2006-01-02T15:04:05Z`.
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: created_at.gt
+        description: Include timestamps strictly greater than gt. RFC3339 format, like `2006-01-02T15:04:05Z`.
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: identity_id
+        description: Optionally filter by primary identity identity.
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: updated_at.lt
+        description: Include timestamps strictly less than lt. RFC3339 format, like `2006-01-02T15:04:05Z`.
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: updated_at.lte
+        description: Include timestamps less than or equal to lte. RFC3339 format, like `2006-01-02T15:04:05Z`.
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: updated_at.eq
+        description: Include timestamps exactly equal to eq. RFC3339 format, like `2006-01-02T15:04:05Z`.
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: updated_at.gte
+        description: Include timestamps greater than or equal to gte. RFC3339 format, like `2006-01-02T15:04:05Z`.
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: updated_at.gt
+        description: Include timestamps strictly greater than gt. RFC3339 format, like `2006-01-02T15:04:05Z`.
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      tags:
+      - Accounts
+      security:
+      - OAuth2:
+        - identity:read_account
+    post:
+      summary: Create Account
+      description: 'Create an account for a given identity, via the `identity_id` field.
+
+        This identity is the primary owner of the account for all tax-related purposes.
+
+
+        To track user balances using Paxos [Profiles](#tag/Profiles), use `create_profile=true` when creating the account.
+
+        Once an account has been created, it is not possible to associate it with a [Profile](#tag/Profiles).
+
+
+        ### Account Members
+
+
+        In addition to the primary owner, other identities may be associated with the account, by using `members`.
+
+        The identity on the account is treated as a BENEFICIAL_OWNER.
+
+
+        To add a financial advisor to an account, add a member with the FINANCIAL_ADVISOR role.
+
+
+        #### Example
+
+        This example request creates a joint account for John and Jane Doe. John has identity_id=82c338f4-3cb7-4d9b-be2a-4b077c82ee3a,
+
+        and Jane has identity_id=0f5d8475-33f3-4ebd-88a0-66dedc2581c1. John is the primary owner of the account for tax-purposes, but Jane
+
+        is a full beneficial owner.
+
+
+        Additionally, this account has an associated financial advisor with identity_id=0d26f878-298e-4d47-81be-cdf4e982a3d3.
+
+
+        ```json
+
+        {
+
+        "account": {
+
+        "identity_id": "82c338f4-3cb7-4d9b-be2a-4b077c82ee3a",
+
+        "members": [{
+
+        "identity_id": "0f5d8475-33f3-4ebd-88a0-66dedc2581c1",
+
+        "roles": ["BENEFICIAL_OWNER"]
+
+        }, {
+
+        "identity_id": "0d26f878-298e-4d47-81be-cdf4e982a3d3",
+
+        "roles": ["FINANCIAL_ADVISOR"]
+
+        }]
+
+        }
+
+        }
+
+        ```
+
+
+        ### Fields
+
+
+        Any fields not listed are forbidden in this request.
+
+
+        Field | Notes
+
+        ---|---
+
+        identity_id | Required
+
+        description | Optional
+
+        metadata | Optional
+
+        ref_id | Optional
+
+        members | Optional'
+      operationId: CreateAccount
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Account'
+              example:
+                id: e69e4e31-6dca-4a46-bb85-af40b5fe2d59
+                identity_id: 82c338f4-3cb7-4d9b-be2a-4b077c82ee3a
+                ref_id: fec36070-4c23-48ac-9ee1-df338b8233fc
+                description: Individual account for John Doe
+                metadata:
+                  custom_field: custom_value
+                admin_disabled: false
+                user_disabled: false
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateAccountRequest'
+        required: true
+      tags:
+      - Accounts
+      security:
+      - OAuth2:
+        - identity:write_account
+    put:
+      summary: Update Account
+      description: "This enables you to update an existing account with new information. Please refer to the following\ntable for fields that can be updated via this endpoint.\n\nField | Notes\n---|---\naccount.id | Required\naccount.description | Optional\naccount.ref_id | Optional\naccount.metadata | Optional. This will overwrite any existing metadata added to the account.\naccount.members | Optional. The only roles that can be added/removed are `FINANCIAL_ADVISOR` or `AUTHORIZED_USER.` You must always specify the full members object as we do not currently support differential member updates.\nset_user_disabled | Optional. Setting this to `true` will disable the account, limiting its ability to be used within the Paxos platform.\n\n#### Example Requests\n#### Disabling an account\n\n```json\n{\n\"set_user_disabled\": true,\n\"account\": {\n\"id\": \"82c338f4-3cb7-4d9b-be2a-4b077c82ee3a\",\n\"description\": \"Account Description\",\n\"ref_id\": \"82c338f4-3cb7\"\n}\n}\n```\n\n### Adding an account member\nTo retain the existing account members and add a new account member, the `members` field must contain the existing \naccount members and the new member. The below example adds an `AUTHORIZED_USER` to the account.\n\nIn order to add account members while leaving existing account members unaffected, clients \nshould use the [Add Account Members](#operation/AddAccountMembers) API.\n\n```json\n{\n\"account\": {\n\"id\": \"82c338f4-3cb7-4d9b-be2a-4b077c82ee3a\",\n\"members\": [{\n\"identity_id\": \"0f5d8475-33f3-4ebd-88a0-66dedc2581c1\",\n\"roles\": [\"BENEFICIAL_OWNER\"]\n}, {\n\"identity_id\": \"0d26f878-298e-4d47-81be-cdf4e982a3d3\",\n\"roles\": [\"FINANCIAL_ADVISOR\"]\n}, {\n\"identity_id\": \"012k23eb-298e-4d47-81be-cdf4e982a3d3\",\n\"roles\": [\"AUTHORIZED_USER\"]\n}]\n}\n}\n```\n\n### Removing an account member\nTo remove an existing account member and retain other needed members, the `members` field must contain \nthe existing account members without the account member you'd like to remove. The below example removes an `AUTHORIZED_USER` from the account.\n\nNote, this API requires the `members` array to have at least one element. In order to delete all members \nfrom an account, clients should use the [Delete Account Member](#operation/DeleteAccountMember) API.\n\n```json\n{\n\"account\": {\n\"id\": \"82c338f4-3cb7-4d9b-be2a-4b077c82ee3a\",\n\"members\": [{\n\"identity_id\": \"0f5d8475-33f3-4ebd-88a0-66dedc2581c1\",\n\"roles\": [\"BENEFICIAL_OWNER\"]\n}]\n}\n}\n```\n\n### Updating an account members' roles\nTo update an account members' roles, the `members` field must contain all the existing members with their roles along \nwith the additional role that you'd like to add or remove. The below example adds the `FINANCIAL_ADVISOR` role to an member that is already a `BENEFICIAL_OWNER`.\n\n```json\n{\n\"account\": {\n\"id\": \"82c338f4-3cb7-4d9b-be2a-4b077c82ee3a\",\n\"members\": [{\n\"identity_id\": \"0f5d8475-33f3-4ebd-88a0-66dedc2581c1\",\n\"roles\": [\"BENEFICIAL_OWNER\", \"FINANCIAL_ADVISOR\"]\n}]\n}\n}\n```"
+      operationId: UpdateAccount
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Account'
+              example:
+                created_at: '2014-02-20T04:22:22.222221Z'
+                id: 79c27a0e-46a2-4276-9769-e1ebc055fa72
+                identity_id: 0acd56b7-140b-4b29-83e4-7e717f03afd9
+                members:
+                - identity_id: 11a3122a-0c50-4950-9934-2ad48a782b78
+                  roles:
+                  - FINANCIAL_ADVISOR
+                - identity_id: 08ba6b70-bcc0-4e4a-a67f-1d28842dedfc
+                  roles:
+                  - AUTHORIZED_USER
+                - identity_id: 2dedfc70-a67f-4e4a-bcc0-1d288408ba6b
+                  roles:
+                  - BENEFICIAL_OWNER
+                summary_status: PENDING
+                updated_at: '2022-02-24T04:20:22.222222Z'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateAccountRequest'
+            example:
+              account:
+                id: 79c27a0e-46a2-4276-9769-e1ebc055fa72
+                members:
+                - identity_id: 11a3122a-0c50-4950-9934-2ad48a782b78
+                  roles:
+                  - FINANCIAL_ADVISOR
+                - identity_id: 08ba6b70-bcc0-4e4a-a67f-1d28842dedfc
+                  roles:
+                  - AUTHORIZED_USER
+                - identity_id: 2dedfc70-a67f-4e4a-bcc0-1d288408ba6b
+                  roles:
+                  - BENEFICIAL_OWNER
+        required: true
+      tags:
+      - Accounts
+      security:
+      - OAuth2:
+        - identity:write_account
+  /identity/accounts/{id}:
+    get:
+      operationId: GetAccount
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Account'
+      parameters:
+      - name: id
+        description: uuid id of account
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - Accounts
+      security:
+      - OAuth2:
+        - identity:read_account
+components:
+  schemas:
+    AccountAccountType:
+      type: string
+      enum:
+      - BROKERAGE
+      - TRADITIONAL_IRA
+      - ROTH_IRA
+      - SEP_IRA
+      - FINANCIAL_ADVISOR
+    AccountMember:
+      type: object
+      properties:
+        identity_id:
+          type: string
+        type:
+          $ref: '#/components/schemas/AccountMemberAccountRoleType'
+        roles:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccountMemberAccountRoleType'
+        id:
+          type: string
+          description: 'Account member ID. Note: This field is auto-generated. Specifying an ID when creating an account member is a client error.'
+      required:
+      - identity_id
+    ListAccountsResponse:
+      type: object
+      properties:
+        next_page_cursor:
+          type: string
+          description: Cursor token required for fetching the next page.
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Account'
+          description: The result list of accounts.
+    CreateAccountRequest:
+      type: object
+      properties:
+        account:
+          $ref: '#/components/schemas/Account'
+        create_profile:
+          type: boolean
+          description: 'Create a new profile for this account.
+
+            Set to `true` to track user balances at the Profile level for this account.
+
+            See also [Profiles](#tag/Profiles).'
+      required:
+      - account
+      example:
+        account:
+          identity_id: 82c338f4-3cb7-4d9b-be2a-4b077c82ee3a
+          ref_id: fec36070-4c23-48ac-9ee1-df338b8233fc
+          description: Individual account for John Doe
+          metadata:
+            custom_field: custom_value
+    AccountMemberAccountRoleType:
+      type: string
+      enum:
+      - BENEFICIAL_OWNER
+      - AUTHORIZED_USER
+      - FINANCIAL_ADVISOR
+    IdentityStatus:
+      type: string
+      enum:
+      - PENDING
+      - ERROR
+      - APPROVED
+      - DENIED
+      - DISABLED
+      title: ''
+    Account:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The id used for all other interactions with this account. Required on update. Auto-generated on create; do not set.
+        identity_id:
+          type: string
+          description: The primary identity associated with the account. Required on create. Not writable on update.
+        description:
+          type: string
+          description: A free-text description of the account.
+        admin_disabled:
+          type: boolean
+          description: true if the account has been disabled by a Paxos admin.
+        user_disabled:
+          type: boolean
+          description: true if the account has been disabled by the API user.
+        metadata:
+          type: object
+          additionalProperties:
+            type: string
+          description: API User-facing metadata.
+        ref_id:
+          type: string
+          description: A user-facing ID to prevent duplicate account creation. Unique for all accounts created by the same API user.
+        members:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccountMember'
+          description: Additional Identities with varying types of access to this account.
+        created_at:
+          type: string
+          format: date-time
+          description: The time this account was created.
+        summary_status:
+          $ref: '#/components/schemas/IdentityStatus'
+        updated_at:
+          type: string
+          format: date-time
+          description: The time this account was updated.
+        profile_id:
+          type: string
+          description: 'The ID of the profile created for the account when `create_profile=true`.
+
+            The [Profile](#tag/Profiles) type is `NORMAL`.
+
+            The field is omitted when the account has no associated [Profile](#tag/Profiles).'
+        type:
+          $ref: '#/components/schemas/AccountAccountType'
+    UpdateAccountRequest:
+      type: object
+      properties:
+        account:
+          $ref: '#/components/schemas/Account'
+        set_user_disabled:
+          type: boolean
+          description: true if the account is required to be disabled by the API user.
+      required:
+      - account
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      description: 'Paxos APIs use [OAuth 2](https://tools.ietf.org/html/rfc6749) with the [client credentials](https://tools.ietf.org/html/rfc6749#section-4.4) grant flow.
+
+
+        **Token URLs:**
+
+        - Production: https://oauth.paxos.com/oauth2/token
+
+        - Sandbox: https://oauth.sandbox.paxos.com/oauth2/token
+
+
+        Learn more in the [API credentials guide →](https://docs.paxos.com/developer/credentials)
+
+        '
+      flows:
+        clientCredentials:
+          tokenUrl: https://oauth.paxos.com/oauth2/token
+          scopes:
+            conversion:read_conversion_stablecoin: Retrieve stablecoin conversion details
+            conversion:write_conversion_stablecoin: Create or cancel a stablecoin conversion
+            exchange:historical_prices: Retrieve marketnaverage prices at a certain time increment
+            exchange:read_order: Retrieve order or order execution details
+            exchange:read_quote: Retrieve quote details for buying or selling an asset
+            exchange:read_quote_execution: Retrieve quote execution details
+            exchange:write_quote_execution: Create a quote execution for buying or selling an asset
+            exchange:write_order: Create or cancel an order for buying or selling an asset
+            fee:write_crypto_withdrawal_fee: Create a guaranteed fee for crypto withdrawal
+            funding:read_bank_balance: Retrieve Paxos dedicated bank account balance
+            funding:read_profile: Retrieve Profile details and deposit funds in Sandbox
+            funding:write_profile: Create a Profile
+            identity:read_account: Retrieve Account details
+            identity:read_identity: Retrieve Identity details or documents
+            identity:write_account: Create or update Account and Account Members
+            identity:write_identity: Create or update Identity details and set Sandbox Identify Status
+            settlement:read_transaction: Retrieve settlement transaction details
+            settlement:write_transaction: Create, affirm or cancel a settlement transaction
+            tax:read_tax_form: Retrieve tax details
+            tax:read_tax_lot: Retrieve tax lot details
+            tax:write_tax_lot: Update the given tax-lot ID
+            transfer:read_deposit_address: Retrieve deposit address details
+            transfer:read_fiat_account: Retrieve Fiat Account details
+            transfer:read_fiat_deposit_instructions: Retrieve fiat deposit instruction details
+            transfer:read_transfer: Retrieve transfer details
+            transfer:read_transfer_limit: Retrieve limits for the given transaction type
+            transfer:reject_crypto_deposit: Reject a crypto deposit (travel rule)
+            transfer:update_crypto_deposit: Provide required travel-rule details
+            transfer:write_crypto_withdrawal: Withdraw asset to a specified destination address
+            transfer:write_deposit_address: Create an deposit address on a blockchain network
+            transfer:write_fiat_account: Create, update or delete a Fiat Account
+            transfer:write_fiat_deposit_instructions: Create, update or delete fiat deposit instructions
+            transfer:write_internal_transfer: Transfer assets between two Profiles
+            transfer:write_sandbox_fiat_deposit: Initiate a test fiat deposit in the Sandbox environment
+            transfer:write_fiat_withdrawal: Withdraw fiat to the given destination
+            events:read_event: Retrieve events
+x-tagGroups:
+- name: Deposits and Withdrawals
+  tags:
+  - Transfers
+  - Fiat Transfers
+  - Deposit Addresses
+  - Crypto Deposits
+  - Crypto Withdrawals
+  - Fees
+  - Internal Transfers
+  - Paxos Transfers
+  - Limits
+- name: Identity
+  tags:
+  - Identity
+  - Institution Members
+  - Accounts
+  - Account Members
+  - Identity Documents
+- name: API Credentials
+  tags:
+  - API Credentials
+- name: Profiles
+  tags:
+  - Profiles
+- name: Sandbox
+  tags:
+  - Sandbox Deposits
+  - Sandbox Identity
+  - Sandbox Fiat Transfers
+- name: Settlements
+  tags:
+  - Settlement
+- name: Stablecoin Conversion
+  tags:
+  - Stablecoin Conversion
+- name: Taxes
+  tags:
+  - Tax Forms
+- name: Trading
+  tags:
+  - Market Data
+  - Orders
+  - Quotes
+  - Quote Executions
+  - Pricing
+  - Issuer Quotes
+- name: Rewards
+  tags:
+  - Monitoring Addresses
+  - Statements
+  - Payments
+- name: Rewards (Alpha)
+  tags:
+  - Reward Addresses
+  - Claims
+  - Payout Groups
+  - Rewards
+- name: Events
+  tags:
+  - Events
+  - Event Types
+  - Event Objects

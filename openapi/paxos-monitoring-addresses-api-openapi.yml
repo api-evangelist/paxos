@@ -1,0 +1,568 @@
+openapi: 3.0.0
+info:
+  title: Paxos Account Members Monitoring Addresses API
+  version: '2.0'
+  description: '<p>Welcome to Paxos APIs. At Paxos, our mission is to enable the movement of any asset, any time, in a trustworthy way. These APIs serve that mission by making it easier than ever for you to directly integrate our product capabilities into your application, leveraging the speed, stability, and security of the Paxos platform.</p> <p>The documentation that follows gives you access to our Crypto Brokerage, Trading, and Exchange products. It includes APIs for market data, orders, and the held rate quote flow.</p> <p>To test in our sandbox environment, <a href="https://account.sandbox.paxos.com" target="_blank">sign up</a> for an account. For more information about Paxos and our APIs, visit <a href="https://www.paxos.com/" target="_blank">Paxos.com</a>.</p>
+
+    '
+  x-logo:
+    url: /docs/paxos.svg
+    backgroundColor: '#FFFFFF'
+    altText: Paxos logo
+servers:
+- url: https://api.paxos.com/v2
+  description: Production
+- url: https://api.sandbox.paxos.com/v2
+  description: Sandbox
+tags:
+- name: Monitoring Addresses
+  description: "A Monitoring Address is a blockchain address that Paxos monitors daily for eligible stablecoin activity and determines the amount of rewards your organization will earn. We recommend adding any addresses you expect to hold, receive, or mint Paxos stablecoins as a monitoring address in order to receive rewards for all of your qualifying on-chain activity. \n\n> Monitoring addresses must be added by month end (`23:59 UTC+0`) in order to earn rewards for that month. Addresses added after month end will start earning rewards for the following month.\n\n*These endpoints are only relevant for Global Dollar Network (GDN) partners.*\n"
+paths:
+  /rewards/monitor/address:
+    get:
+      summary: List Monitoring Address
+      description: 'Retrieve a list of monitoring address
+
+
+        Filter by network to retrieve a list of addresses on that network, or filter by network & address to retrieve a single record.'
+      operationId: ListMonitoringAddress
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListMonitoringAddressResponse'
+              examples:
+                List monitoring addresses:
+                  value:
+                    addresses:
+                    - address: '0xD6E012522DB5075694ac9907BABBDB4825A1c822'
+                      id: 6477f17d-7c17-43a5-84cc-a6a104a89d81
+                      crypto_network: ETHEREUM
+                      name: Address 1
+                      created_at: '2025-03-21T14:45:22.682768Z'
+                    - address: '0xD6E012522DB5075694ac9907BABBDB4825A1c822'
+                      id: 6477f17d-7c17-43a5-84cc-a6a104a89d81
+                      crypto_network: ETHEREUM
+                      created_at: '2025-02-20T14:45:22.682768Z'
+                    - address: 14grJpemFaf88c8tiVb77W7TYg2W3ir6pfkKz3YjhhZ6
+                      id: 6477f17d-7c17-43a5-84cc-a6a104a89d81
+                      crypto_network: SOLANA
+                      created_at: '2025-01-10T14:45:22.682768Z'
+                    next_page_cursor: CgwI-Pr1vgYQyLLpswESJDM2NGU2MTgyLTRhZjctNDg4NC1iY2MxLTM0MThmNTA0MWYzYg
+      parameters:
+      - name: address
+        description: 'On-chain address Paxos is monitoring for eligible reward activity. Must be valid for the specified network.
+
+          For `SOLANA` specify the wallet account (ie: not a derived/token account like an ATA).'
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: crypto_network
+        description: 'Network the address belongs to. Supported: `ETHEREUM`, `SOLANA`, `INK`, `XLAYER`.'
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - BITCOIN
+          - ETHEREUM
+          - BITCOIN_CASH
+          - LITECOIN
+          - SOLANA
+          - POLYGON_POS
+          - BASE
+          - ARBITRUM_ONE
+          - STELLAR
+          - INK
+          - XLAYER
+          - AVALANCHE
+          - DOGECOIN
+          - SUI
+          - ROBINHOOD
+          - BNB
+      - name: limit
+        description: Number of results to return. Defaults to `100` if no limit is provided. Maximum `1000`.
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: order
+        description: Results are ordered by `created_at`. Specify the ordering of the results. Defaults to `DESC`.
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - DESC
+          - ASC
+      - name: page_cursor
+        description: Cursor for pagination
+        in: query
+        required: false
+        schema:
+          type: string
+      tags:
+      - Monitoring Addresses
+      deprecated: true
+      security:
+      - OAuth2:
+        - rewards:read_monitoring_address
+    post:
+      summary: Create Monitoring Address
+      description: 'Adds an address to be monitored for rewards tracking.
+
+
+        Currently only `ETHEREUM`, `SOLANA`, `INK` & `XLAYER` addresses are supported.'
+      operationId: CreateMonitoringAddress
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateMonitoringAddressResponse'
+              examples:
+                Setting up a new address to monitor:
+                  value:
+                    address:
+                      address: '0x2D2849217C027494ae0D7Af2fC7f9b798Ddd5aB9'
+                      crypto_network: ETHEREUM
+                      name: New Address
+                      created_at: '2025-03-21T15:22:05.474383Z'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+              examples:
+                Trying to set up an invalid address:
+                  value:
+                    type: about:blank
+                    title: Bad Request
+                    status: 400
+                    detail: invalid address
+                Not setting the address:
+                  value:
+                    type: about:blank
+                    title: Bad Request
+                    status: 400
+                    detail: address must be set
+                Not setting the network:
+                  value:
+                    type: about:blank
+                    title: Bad Request
+                    status: 400
+                    detail: network must be set
+                Using an unsupported network:
+                  value:
+                    type: about:blank
+                    title: Bad Request
+                    status: 400
+                    detail: invalid crypto_network
+                Registering an address already claimed by another customer:
+                  value:
+                    type: about:blank
+                    title: Bad Request
+                    status: 400
+                    detail: address cannot be claimed
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateMonitoringAddressRequest'
+            examples:
+              Add a new monitoring address with a name:
+                value:
+                  crypto_network: ETHEREUM
+                  address: '0x2D2849217C027494ae0D7Af2fC7f9b798Ddd5aB9'
+                  name: New Address
+              Add a new monitoring address with no name:
+                value:
+                  id: 6477f17d-7c17-43a5-84cc-a6a104a89d81
+                  crypto_network: ETHEREUM
+                  address: '0x2D2849217C027494ae0D7Af2fC7f9b798Ddd5aB9'
+        required: true
+      tags:
+      - Monitoring Addresses
+      deprecated: true
+      security:
+      - OAuth2:
+        - rewards:write_monitoring_address
+  /rewards/monitor/address/{id}:
+    get:
+      summary: Get Monitoring Address
+      description: Retrieves a monitoring address by ID
+      operationId: GetMonitoringAddress
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetMonitoringAddressResponse'
+              examples:
+                List monitoring addresses:
+                  value:
+                    address: '0xD6E012522DB5075694ac9907BABBDB4825A1c822'
+                    id: 6477f17d-7c17-43a5-84cc-a6a104a89d81
+                    crypto_network: ETHEREUM
+                    name: Address 1
+                    created_at: '2025-03-21T14:45:22.682768Z'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+              examples:
+                Using an unsupported network:
+                  value:
+                    type: about:blank
+                    title: Not Found
+                    status: 404
+                    detail: address not found
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+              examples:
+                Using an unsupported network:
+                  value:
+                    type: about:blank
+                    title: Bad Request
+                    status: 400
+                    detail: invalid address id
+      parameters:
+      - name: id
+        description: UUID direct reference to a particular monitored address.
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - Monitoring Addresses
+      deprecated: true
+      security:
+      - OAuth2:
+        - rewards:read_monitoring_address
+    put:
+      summary: Update Monitoring Address
+      description: Updates a monitored address name
+      operationId: UpdateMonitoringAddress
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateMonitoringAddressResponse'
+              examples:
+                Update address name:
+                  value:
+                    address:
+                      id: 6477f17d-7c17-43a5-84cc-a6a104a89d81
+                      address: '0x2D2849217C027494ae0D7Af2fC7f9b798Ddd5aB9'
+                      crypto_network: ETHEREUM
+                      name: Address name
+                      created_at: '2025-03-21T15:22:05.474383Z'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+              examples:
+                Using an unsupported network:
+                  value:
+                    type: about:blank
+                    title: Bad Request
+                    status: 400
+                    detail: name must be set
+      parameters:
+      - name: id
+        description: UUID direct reference to a particular monitored address.
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AutoRewardsPublicUpdateMonitoringAddressBody'
+            examples:
+              Update address name:
+                value:
+                  name: Address name
+        required: true
+      tags:
+      - Monitoring Addresses
+      deprecated: true
+      security:
+      - OAuth2:
+        - rewards:write_monitoring_address
+components:
+  schemas:
+    MonitoringAddress:
+      type: object
+      properties:
+        address:
+          type: string
+          description: On-chain address Paxos will monitor for eligible reward activity.
+        crypto_network:
+          $ref: '#/components/schemas/CryptoNetwork'
+        name:
+          type: string
+          description: Optional display name. Useful for grouping or reporting.
+        created_at:
+          type: string
+          format: date-time
+          description: When the address was registered.
+        id:
+          type: string
+          description: UUID direct reference to the created address (to be used for updates).
+      required:
+      - id
+      - address
+      - crypto_network
+      - created_at
+    AutoRewardsPublicUpdateMonitoringAddressBody:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Optional display name. Useful for grouping or reporting.
+    CreateMonitoringAddressResponse:
+      type: object
+      properties:
+        address:
+          $ref: '#/components/schemas/MonitoringAddress'
+    ListMonitoringAddressResponse:
+      type: object
+      properties:
+        addresses:
+          type: array
+          items:
+            $ref: '#/components/schemas/MonitoringAddress'
+        next_page_cursor:
+          type: string
+          title: Value to use as `page_cursor` in subsequent request
+    UpdateMonitoringAddressResponse:
+      type: object
+      properties:
+        address:
+          $ref: '#/components/schemas/MonitoringAddress'
+    CreateMonitoringAddressRequest:
+      type: object
+      properties:
+        crypto_network:
+          $ref: '#/components/schemas/CryptoNetwork'
+        address:
+          type: string
+          description: 'On-chain address Paxos will monitor for eligible reward activity. Must be valid for the specified network and not be registered to another customer.
+
+            For `SOLANA` specify the wallet account (ie: not a derived/token account like an ATA).'
+        name:
+          type: string
+          description: Optional display name. Useful for grouping or reporting.
+    CryptoNetwork:
+      type: string
+      enum:
+      - BITCOIN
+      - ETHEREUM
+      - BITCOIN_CASH
+      - LITECOIN
+      - SOLANA
+      - POLYGON_POS
+      - BASE
+      - ARBITRUM_ONE
+      - STELLAR
+      - INK
+      - XLAYER
+      - AVALANCHE
+      - DOGECOIN
+      - SUI
+      - ROBINHOOD
+      - BNB
+      description: A CryptoNetwork is a blockchain transmitting cryptocurrencies.
+    GetMonitoringAddressResponse:
+      type: object
+      properties:
+        address:
+          $ref: '#/components/schemas/MonitoringAddress'
+    Problem:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+          description: 'An absolute URI that identifies the problem type.  When dereferenced,
+
+            it SHOULD provide human-readable documentation for the problem type
+
+            (e.g., using HTML).
+
+            '
+          default: about:blank
+          example: https://api.paxos.com/v2/problems/insufficient_funds
+        title:
+          type: string
+          description: 'A short, summary of the problem type. Written in english and readable
+
+            for engineers (usually not suited for non technical stakeholders and
+
+            not localized); example: Service Unavailable
+
+            '
+          example: Insufficient Funds
+        status:
+          type: integer
+          format: int32
+          description: 'The HTTP status code generated by the origin server for this occurrence
+
+            of the problem.
+
+            '
+          minimum: 100
+          maximum: 600
+          exclusiveMaximum: true
+          example: 403
+        detail:
+          type: string
+          description: 'A human readable explanation specific to this occurrence of the
+
+            problem.
+
+            '
+          example: Not enough funds in account.
+        meta:
+          type: object
+          description: 'Additional structured metadata about the error.
+
+            '
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      description: 'Paxos APIs use [OAuth 2](https://tools.ietf.org/html/rfc6749) with the [client credentials](https://tools.ietf.org/html/rfc6749#section-4.4) grant flow.
+
+
+        **Token URLs:**
+
+        - Production: https://oauth.paxos.com/oauth2/token
+
+        - Sandbox: https://oauth.sandbox.paxos.com/oauth2/token
+
+
+        Learn more in the [API credentials guide →](https://docs.paxos.com/developer/credentials)
+
+        '
+      flows:
+        clientCredentials:
+          tokenUrl: https://oauth.paxos.com/oauth2/token
+          scopes:
+            conversion:read_conversion_stablecoin: Retrieve stablecoin conversion details
+            conversion:write_conversion_stablecoin: Create or cancel a stablecoin conversion
+            exchange:historical_prices: Retrieve marketnaverage prices at a certain time increment
+            exchange:read_order: Retrieve order or order execution details
+            exchange:read_quote: Retrieve quote details for buying or selling an asset
+            exchange:read_quote_execution: Retrieve quote execution details
+            exchange:write_quote_execution: Create a quote execution for buying or selling an asset
+            exchange:write_order: Create or cancel an order for buying or selling an asset
+            fee:write_crypto_withdrawal_fee: Create a guaranteed fee for crypto withdrawal
+            funding:read_bank_balance: Retrieve Paxos dedicated bank account balance
+            funding:read_profile: Retrieve Profile details and deposit funds in Sandbox
+            funding:write_profile: Create a Profile
+            identity:read_account: Retrieve Account details
+            identity:read_identity: Retrieve Identity details or documents
+            identity:write_account: Create or update Account and Account Members
+            identity:write_identity: Create or update Identity details and set Sandbox Identify Status
+            settlement:read_transaction: Retrieve settlement transaction details
+            settlement:write_transaction: Create, affirm or cancel a settlement transaction
+            tax:read_tax_form: Retrieve tax details
+            tax:read_tax_lot: Retrieve tax lot details
+            tax:write_tax_lot: Update the given tax-lot ID
+            transfer:read_deposit_address: Retrieve deposit address details
+            transfer:read_fiat_account: Retrieve Fiat Account details
+            transfer:read_fiat_deposit_instructions: Retrieve fiat deposit instruction details
+            transfer:read_transfer: Retrieve transfer details
+            transfer:read_transfer_limit: Retrieve limits for the given transaction type
+            transfer:reject_crypto_deposit: Reject a crypto deposit (travel rule)
+            transfer:update_crypto_deposit: Provide required travel-rule details
+            transfer:write_crypto_withdrawal: Withdraw asset to a specified destination address
+            transfer:write_deposit_address: Create an deposit address on a blockchain network
+            transfer:write_fiat_account: Create, update or delete a Fiat Account
+            transfer:write_fiat_deposit_instructions: Create, update or delete fiat deposit instructions
+            transfer:write_internal_transfer: Transfer assets between two Profiles
+            transfer:write_sandbox_fiat_deposit: Initiate a test fiat deposit in the Sandbox environment
+            transfer:write_fiat_withdrawal: Withdraw fiat to the given destination
+            events:read_event: Retrieve events
+x-tagGroups:
+- name: Deposits and Withdrawals
+  tags:
+  - Transfers
+  - Fiat Transfers
+  - Deposit Addresses
+  - Crypto Deposits
+  - Crypto Withdrawals
+  - Fees
+  - Internal Transfers
+  - Paxos Transfers
+  - Limits
+- name: Identity
+  tags:
+  - Identity
+  - Institution Members
+  - Accounts
+  - Account Members
+  - Identity Documents
+- name: API Credentials
+  tags:
+  - API Credentials
+- name: Profiles
+  tags:
+  - Profiles
+- name: Sandbox
+  tags:
+  - Sandbox Deposits
+  - Sandbox Identity
+  - Sandbox Fiat Transfers
+- name: Settlements
+  tags:
+  - Settlement
+- name: Stablecoin Conversion
+  tags:
+  - Stablecoin Conversion
+- name: Taxes
+  tags:
+  - Tax Forms
+- name: Trading
+  tags:
+  - Market Data
+  - Orders
+  - Quotes
+  - Quote Executions
+  - Pricing
+  - Issuer Quotes
+- name: Rewards
+  tags:
+  - Monitoring Addresses
+  - Statements
+  - Payments
+- name: Rewards (Alpha)
+  tags:
+  - Reward Addresses
+  - Claims
+  - Payout Groups
+  - Rewards
+- name: Events
+  tags:
+  - Events
+  - Event Types
+  - Event Objects

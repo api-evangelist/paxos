@@ -1,0 +1,742 @@
+openapi: 3.0.0
+info:
+  title: Paxos Account Members Stablecoin Conversion API
+  version: '2.0'
+  description: '<p>Welcome to Paxos APIs. At Paxos, our mission is to enable the movement of any asset, any time, in a trustworthy way. These APIs serve that mission by making it easier than ever for you to directly integrate our product capabilities into your application, leveraging the speed, stability, and security of the Paxos platform.</p> <p>The documentation that follows gives you access to our Crypto Brokerage, Trading, and Exchange products. It includes APIs for market data, orders, and the held rate quote flow.</p> <p>To test in our sandbox environment, <a href="https://account.sandbox.paxos.com" target="_blank">sign up</a> for an account. For more information about Paxos and our APIs, visit <a href="https://www.paxos.com/" target="_blank">Paxos.com</a>.</p>
+
+    '
+  x-logo:
+    url: /docs/paxos.svg
+    backgroundColor: '#FFFFFF'
+    altText: Paxos logo
+servers:
+- url: https://api.paxos.com/v2
+  description: Production
+- url: https://api.sandbox.paxos.com/v2
+  description: Sandbox
+tags:
+- name: Stablecoin Conversion
+  description: '<p>Convert between fiat and stablecoin using <a href="#operation/CreateStablecoinConversion">Create Stablecoin Conversion</a> and check the status of a <a href="#operation/GetStablecoinConversion">single conversion</a> or retrieve a <a href="#operation/ListStablecoinConversions">list of conversions</a>.</p>
+
+    '
+  externalDocs:
+    description: Learn more about stablecoin conversions →
+    url: https://docs.paxos.com/developer/convert
+paths:
+  /conversion/stablecoins:
+    get:
+      summary: List Stablecoin Conversions
+      description: 'List all conversions, optionally filtering and paging the results.
+
+
+        By default, conversions are returned in reverse chronological (descending)
+
+        order by creation time. If no query parameters are supplied,
+
+        the response will include up to the last 100 conversions which
+
+        were created.
+
+
+        The paginated results default to display up to 100 conversions, unless
+
+        otherwise specified with the `limit` parameter. The maximum `limit` value is 1000.
+
+        Every paginated response contains a `next_page_cursor` field until the last page is reached.
+
+
+        Pass the `next_page_cursor` value into the `page_cursor` field of a new
+
+        request to retrieve the next page of results.'
+      operationId: ListStablecoinConversions
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListStablecoinConversionsResponse'
+              examples:
+                List Stablecoin Conversions:
+                  value:
+                    items:
+                    - account_id: 00000000-0000-0000-0000-000000000000
+                      amount: '100.01'
+                      created_at: '2023-09-16T02:01:15.941902Z'
+                      id: 38a2c6b4-167c-4c98-a190-406efc4121aa
+                      identity_id: 00000000-0000-0000-0000-000000000000
+                      metadata:
+                        skey: svalue
+                      profile_id: b821ff88-fdb4-49ba-b30f-99c40f01fcfc
+                      ref_id: 497266c5214043a29f9854096e9a9103
+                      settled_at: '2023-09-16T02:01:16.613995Z'
+                      source_asset: USD
+                      status: SETTLED
+                      target_asset: USDP
+                      updated_at: '2023-09-16T02:01:16.018493Z'
+                    - account_id: 00000000-0000-0000-0000-000000000000
+                      amount: '100.01'
+                      created_at: '2023-09-16T03:34:50.555200Z'
+                      id: a490536f-3842-4823-8c84-056728243064
+                      identity_id: 00000000-0000-0000-0000-000000000000
+                      metadata:
+                        skey: svalue
+                      profile_id: b821ff88-fdb4-49ba-b30f-99c40f01fcfc
+                      ref_id: 4fecc881b73744e4a4e858017689da7d
+                      settled_at: '2023-09-16T03:34:51.060002Z'
+                      source_asset: USD
+                      status: SETTLED
+                      target_asset: USDP
+                      updated_at: '2023-09-16T03:34:50.610541Z'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+              examples:
+                Insufficient scopes:
+                  value:
+                    detail: 'insufficient scopes: found "conversion:write_conversion_stablecoin" required one of "[conversion:read_conversion_stablecoin]"'
+                    status: 403
+                    title: Forbidden
+                    type: about:blank
+      parameters:
+      - name: profile_id
+        description: 'The [Profile](#tag/Profiles) associated with a conversion. Required in the
+
+          [Create Stablecoin Conversion](#operation/CreateStablecoinConversion) request.'
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: ref_id
+        description: 'Client provided, unique Reference ID included the
+
+          [Create Stablecoin Conversion](#operation/CreateStablecoinConversion) request.'
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: created_at.begin
+        description: Only return records after this timestamp, inclusive. RFC3339 format, like `2006-01-02T15:04:05Z`.
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: created_at.end
+        description: Only return records before this timestamp, inclusive. RFC3339 format, like `2006-01-02T15:04:05Z`.
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: updated_at.begin
+        description: Only return records after this timestamp, inclusive. RFC3339 format, like `2006-01-02T15:04:05Z`.
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: updated_at.end
+        description: Only return records before this timestamp, inclusive. RFC3339 format, like `2006-01-02T15:04:05Z`.
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: order
+        description: 'Return items in ascending (ASC) or descending (DESC) order by `created_at` timestamp.
+
+
+          Default order is descending (DESC).'
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - DESC
+          - ASC
+      - name: page_cursor
+        description: Cursor token for fetching the next page.
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: limit
+        description: 'Number of results to return.
+
+
+          Default is 100 items. Maximum is 1000 items.'
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      tags:
+      - Stablecoin Conversion
+      deprecated: true
+      security:
+      - OAuth2:
+        - conversion:read_conversion_stablecoin
+    post:
+      summary: Create Stablecoin Conversion
+      description: "Create a Conversion request to exchange assets 1:1.\n\nA request to create a conversion can fail with one of the following\ntypes of errors:\n - [Insufficient Funds](https://developer.paxos.com/docs/v2/problems/insufficient-funds)\n   if the Profile (`profile_id`) has insufficient available balance to\n   fund the execution.\n - [Already Exists](https://developer.paxos.com/docs/v2/problems/already-exists)\n   if a conversion with the same external ID (`ref_id`) has already been created."
+      operationId: CreateStablecoinConversion
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StablecoinConversion'
+              examples:
+                Create Stablecoin Conversion:
+                  value:
+                    account_id': 00000000-0000-0000-0000-000000000000
+                    amount': '3'
+                    created_at: '2023-10-19T15:37:18.929305155Z'
+                    id: 8dbce0e0-510f-4edc-9249-15f8c6214569
+                    identity_id: 00000000-0000-0000-0000-000000000000
+                    metadata:
+                      skey: svalue
+                      custom_key: custom_value
+                    profile_id: b821ff88-fdb4-49ba-b30f-99c40f01fcfc
+                    ref_id: refid-24d25de7f5bd47ab978cbbd428b74199
+                    source_asset: USD
+                    status: CREATED
+                    target_asset: USDP
+                    updated_at: '2023-10-19T15:37:18.990343Z'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+              examples:
+                Conversion limit exceeded:
+                  value:
+                    type: about:blank
+                    title: Bad Request
+                    status: 400
+                    detail: 11000 amount is above the maximum 10000 USD
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+              examples:
+                insufficient scopes:
+                  value:
+                    type: about:blank
+                    title: Forbidden
+                    status: 403
+                    detail: 'insufficient scopes: found ''conversion:read_conversion_stablecoin'', required one of ''[conversion:write_conversion_stablecoin]'''
+                insufficient funds:
+                  value:
+                    detail: 'insufficient USD funds in profile b821ff88-fdb4-49ba-b30f-99c40f01fcfc: 999 needed, 358.24 available'
+                    meta:
+                      asset: USD
+                      available': '358.24'
+                      needed: '999'
+                      profile_id: b821ff88-fdb4-49ba-b30f-99c40f01fcfc
+                    status: 403
+                    title: Insufficient Funds
+                    type: https://developer.paxos.com/docs/v2/problems/insufficient-funds
+        '409':
+          description: Already Exists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+              examples:
+                Already Exists:
+                  value:
+                    detail: conversion already exists with ref_id 'refid-1'
+                    meta:
+                      existing:
+                        account_id: 00000000-0000-0000-0000-000000000000
+                        amount: '3'
+                        created_at: '2023-10-19T19:53:21.297848Z'
+                        id: 9e7a1f81-2cfa-4499-97dc-150d2a98bbd8
+                        identity_id: 00000000-0000-0000-0000-000000000000
+                        metadata:
+                          skey: svalue
+                        profile_id: b821ff88-fdb4-49ba-b30f-99c40f01fcfc
+                        ref_id: refid-1
+                        settled_at: '2023-10-19T19:53:21.987849Z'
+                        source_asset: USD
+                        status: SETTLED
+                        target_asset: USDP
+                        updated_at: '2023-10-19T19:53:21.334615Z'
+                    status: 409
+                    title: Already Exists
+                    type: https://developer.paxos.com/docs/v2/problems/already-exists
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateStablecoinConversionRequest'
+            examples:
+              Create Stablecoin Conversion:
+                value:
+                  amount': '3'
+                  metadata:
+                    skey: svalue
+                    custom_key: custom_value
+                  profile_id: b821ff88-fdb4-49ba-b30f-99c40f01fcfc
+                  ref_id: refid-24d25de7f5bd47ab978cbbd428b74199
+                  source_asset: USD
+                  target_asset: USDP
+        required: true
+      tags:
+      - Stablecoin Conversion
+      deprecated: true
+      security:
+      - OAuth2:
+        - conversion:write_conversion_stablecoin
+  /conversion/stablecoins/{id}:
+    get:
+      summary: Get Stablecoin Conversion
+      description: Retrieve a single conversion using the transaction `id` from the [Create Stablecoin Conversion](#operation/CreateStablecoinConversion) response.
+      operationId: GetStablecoinConversion
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StablecoinConversion'
+              examples:
+                Get Stablecoin Conversion:
+                  value:
+                    account_id: 00000000-0000-0000-0000-000000000000
+                    amount: '3'
+                    created_at': '2023-10-19T15:37:18.929305Z'
+                    id: 8dbce0e0-510f-4edc-9249-15f8c6214569
+                    identity_id: 00000000-0000-0000-0000-000000000000
+                    metadata:
+                      skey: svalue
+                      custom_key: custom_value
+                    profile_id: b821ff88-fdb4-49ba-b30f-99c40f01fcfc
+                    ref_id: refid-24d25de7f5bd47ab978cbbd428b74199
+                    source_asset: USD
+                    status: CREATED
+                    target_asset: USDP
+                    updated_at: '2023-10-19T15:37:18.990343Z'
+        '403':
+          description: Insufficient scopes
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+              examples:
+                Insufficient scopes:
+                  value:
+                    type: about:blank
+                    title: Forbidden
+                    status: 403
+                    detail: 'insufficient scopes: found ''conversion:write_conversion_stablecoin'', required one of ''[conversion:read_conversion_stablecoin]'''
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+              examples:
+                Not Found:
+                  value:
+                    detail: conversion with id 0def57e8-c6bb-40dc-b2b8-69bb80440cc1 not found for customer with id 4eaffe58-df0e-4559-8dec-fdae231684e1
+                    status: 404
+                    title: Not Found
+                    type: about:blank
+      parameters:
+      - name: id
+        description: 'System provided UUID for the conversion is
+
+          provided in the [Create Stablecoin Conversion](#operation/CreateStablecoinConversion) response.'
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - Stablecoin Conversion
+      deprecated: true
+      security:
+      - OAuth2:
+        - conversion:read_conversion_stablecoin
+    delete:
+      summary: Cancel Stablecoin Conversion
+      description: 'Cancel a single conversion using the `id` from the
+
+        [Create Stablecoin Conversion](#operation/CreateStablecoinConversion) response.'
+      operationId: CancelStablecoinConversion
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StablecoinConversion'
+              examples:
+                Cancel Stablecoin Conversion:
+                  value:
+                    id: e5ca4d90-dff1-488a-ac04-04540f776ae1
+                    profile_id: c3680989-c04e-4000-9d96-8aca09eedee1
+                    amount: '11.1'
+                    source_asset: USD
+                    target_asset: USDP
+                    status: CANCELLED
+                    identity_id: d6aee44c-c169-405d-b14e-d78818577531
+                    account_id: 47bb49d7-4e6c-43bf-9fd6-6ccd7d7f15d1
+                    created_at: '2023-10-19T21:21:46.497863Z'
+                    updated_at: '2023-10-19T21:21:53.297594Z'
+                    cancelled_at: '2023-10-19T21:21:53.297594Z'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+              examples:
+                Insufficient scopes:
+                  value:
+                    detail: 'insufficient scopes: found "conversion:read_conversion_stablecoin" required one of "[conversion:write_conversion_stablecoin]"'
+                    status: 403
+                    title: Forbidden
+                    type: about:blank
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+              examples:
+                Not Found:
+                  value:
+                    detail: conversion with id 0def57e8-c6bb-40dc-b2b8-69bb80440cc1 not found for customer with id 4eaffe58-df0e-4559-8dec-fdae231684e1
+                    status: 404
+                    title: Not Found
+                    type: about:blank
+      parameters:
+      - name: id
+        description: 'System provided UUID for the conversion is
+
+          provided in the [Create Stablecoin Conversion](#operation/CreateStablecoinConversion) response.'
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - Stablecoin Conversion
+      deprecated: true
+      security:
+      - OAuth2:
+        - conversion:write_conversion_stablecoin
+components:
+  schemas:
+    StablecoinConversion:
+      type: object
+      properties:
+        id:
+          type: string
+          description: 'System provided UUID for the conversion is
+
+            provided in the [Create Stablecoin Conversion](#operation/CreateStablecoinConversion) response.
+
+
+            Required parameter for the
+
+            [Get Stablecoin Conversion](#operation/GetStablecoinConversion) request.'
+        profile_id:
+          type: string
+          description: 'The Profile associated with a conversion. Required in the
+
+            [Create Stablecoin Conversion](#operation/CreateStablecoinConversion) request.'
+        amount:
+          type: string
+          format: decimal
+          description: Asset amount to convert. [Details](https://docs.paxos.com/developer/convert#assets).
+        source_asset:
+          type: string
+          description: The asset to convert from. [Details](https://docs.paxos.com/developer/convert#assets).
+        target_asset:
+          type: string
+          description: The asset to convert to. [Details](https://docs.paxos.com/developer/convert#assets).
+        status:
+          type: string
+          description: The current status of the conversion. [Details](https://docs.paxos.com/developer/convert#stablecoin-conversion-statuses).
+        ref_id:
+          type: string
+          description: 'Client provided, unique Reference ID included the
+
+            [Create Stablecoin Conversion](#operation/CreateStablecoinConversion) request.'
+        identity_id:
+          type: string
+          description: 'The Identity ID associated with the user requesting the conversion.
+
+            Required only for customers with [3rd-Party integrations](/crypto-brokerage/ledger-type#fiat-and-crypto-subledger).'
+        account_id:
+          type: string
+          description: 'The Account ID associated with the user requesting the conversion.
+
+            Required only for customers with [3rd-Party integrations](/crypto-brokerage/ledger-type#fiat-and-crypto-subledger).'
+        created_at:
+          type: string
+          format: date-time
+          description: 'The time at which the conversion was requested.
+
+            See RFC3339 format, like `2006-01-02T15:04:05Z`.'
+        updated_at:
+          type: string
+          format: date-time
+          description: 'The time at which the conversion was last updated.
+
+            RFC3339 format, like `2006-01-02T15:04:05Z`.'
+        settled_at:
+          type: string
+          format: date-time
+          description: 'The time at which the conversion was settled.
+
+            [Details](https://docs.paxos.com/developer/convert#stablecoin-conversion-statuses).
+
+            RFC3339 format, like `2006-01-02T15:04:05Z`.'
+        cancelled_at:
+          type: string
+          format: date-time
+          description: 'The time at which the conversion has been cancelled.
+
+            [Details](https://docs.paxos.com/developer/convert#stablecoin-conversion-statuses).
+
+            RFC3339 format, like `2006-01-02T15:04:05Z`.'
+        metadata:
+          type: object
+          additionalProperties:
+            type: string
+          description: Optional client-specified stored metadata.
+        recipient_profile_id:
+          type: string
+          description: For directed settlement, the receiving side `profile_id`.
+    CreateStablecoinConversionRequest:
+      type: object
+      properties:
+        profile_id:
+          type: string
+          description: The Profile associated with a conversion.
+        amount:
+          type: string
+          description: Asset amount to convert. [Details](https://docs.paxos.com/developer/convert#assets).
+          pattern: ^[0-9]*\.?[0-9]+$
+        source_asset:
+          type: string
+          description: The asset to convert from. [Details](https://docs.paxos.com/developer/convert#assets).
+        target_asset:
+          type: string
+          description: The asset to convert to. [Details](https://docs.paxos.com/developer/convert#assets).
+        ref_id:
+          type: string
+          description: Client provided, unique Reference ID for lookup and replay protection.
+        identity_id:
+          type: string
+          description: 'The Identity ID associated with the user requesting the conversion.
+
+            Required only for customers with [3rd-Party integrations](/crypto-brokerage/ledger-type#fiat-and-crypto-subledger).'
+        account_id:
+          type: string
+          description: 'The Account ID associated with the user requesting the conversion.
+
+            Required only for customers with [3rd-Party integrations](/crypto-brokerage/ledger-type#fiat-and-crypto-subledger).'
+        metadata:
+          type: object
+          additionalProperties:
+            type: string
+          description: Optional client-specified stored metadata.
+        recipient_profile_id:
+          type: string
+          description: For directed settlement, the receiving side `profile_id`.
+      required:
+      - profile_id
+      - amount
+      - source_asset
+      - target_asset
+    Problem:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+          description: 'An absolute URI that identifies the problem type.  When dereferenced,
+
+            it SHOULD provide human-readable documentation for the problem type
+
+            (e.g., using HTML).
+
+            '
+          default: about:blank
+          example: https://api.paxos.com/v2/problems/insufficient_funds
+        title:
+          type: string
+          description: 'A short, summary of the problem type. Written in english and readable
+
+            for engineers (usually not suited for non technical stakeholders and
+
+            not localized); example: Service Unavailable
+
+            '
+          example: Insufficient Funds
+        status:
+          type: integer
+          format: int32
+          description: 'The HTTP status code generated by the origin server for this occurrence
+
+            of the problem.
+
+            '
+          minimum: 100
+          maximum: 600
+          exclusiveMaximum: true
+          example: 403
+        detail:
+          type: string
+          description: 'A human readable explanation specific to this occurrence of the
+
+            problem.
+
+            '
+          example: Not enough funds in account.
+        meta:
+          type: object
+          description: 'Additional structured metadata about the error.
+
+            '
+    ListStablecoinConversionsResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/StablecoinConversion'
+        next_page_cursor:
+          type: string
+          description: Cursor token required for fetching the next page.
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      description: 'Paxos APIs use [OAuth 2](https://tools.ietf.org/html/rfc6749) with the [client credentials](https://tools.ietf.org/html/rfc6749#section-4.4) grant flow.
+
+
+        **Token URLs:**
+
+        - Production: https://oauth.paxos.com/oauth2/token
+
+        - Sandbox: https://oauth.sandbox.paxos.com/oauth2/token
+
+
+        Learn more in the [API credentials guide →](https://docs.paxos.com/developer/credentials)
+
+        '
+      flows:
+        clientCredentials:
+          tokenUrl: https://oauth.paxos.com/oauth2/token
+          scopes:
+            conversion:read_conversion_stablecoin: Retrieve stablecoin conversion details
+            conversion:write_conversion_stablecoin: Create or cancel a stablecoin conversion
+            exchange:historical_prices: Retrieve marketnaverage prices at a certain time increment
+            exchange:read_order: Retrieve order or order execution details
+            exchange:read_quote: Retrieve quote details for buying or selling an asset
+            exchange:read_quote_execution: Retrieve quote execution details
+            exchange:write_quote_execution: Create a quote execution for buying or selling an asset
+            exchange:write_order: Create or cancel an order for buying or selling an asset
+            fee:write_crypto_withdrawal_fee: Create a guaranteed fee for crypto withdrawal
+            funding:read_bank_balance: Retrieve Paxos dedicated bank account balance
+            funding:read_profile: Retrieve Profile details and deposit funds in Sandbox
+            funding:write_profile: Create a Profile
+            identity:read_account: Retrieve Account details
+            identity:read_identity: Retrieve Identity details or documents
+            identity:write_account: Create or update Account and Account Members
+            identity:write_identity: Create or update Identity details and set Sandbox Identify Status
+            settlement:read_transaction: Retrieve settlement transaction details
+            settlement:write_transaction: Create, affirm or cancel a settlement transaction
+            tax:read_tax_form: Retrieve tax details
+            tax:read_tax_lot: Retrieve tax lot details
+            tax:write_tax_lot: Update the given tax-lot ID
+            transfer:read_deposit_address: Retrieve deposit address details
+            transfer:read_fiat_account: Retrieve Fiat Account details
+            transfer:read_fiat_deposit_instructions: Retrieve fiat deposit instruction details
+            transfer:read_transfer: Retrieve transfer details
+            transfer:read_transfer_limit: Retrieve limits for the given transaction type
+            transfer:reject_crypto_deposit: Reject a crypto deposit (travel rule)
+            transfer:update_crypto_deposit: Provide required travel-rule details
+            transfer:write_crypto_withdrawal: Withdraw asset to a specified destination address
+            transfer:write_deposit_address: Create an deposit address on a blockchain network
+            transfer:write_fiat_account: Create, update or delete a Fiat Account
+            transfer:write_fiat_deposit_instructions: Create, update or delete fiat deposit instructions
+            transfer:write_internal_transfer: Transfer assets between two Profiles
+            transfer:write_sandbox_fiat_deposit: Initiate a test fiat deposit in the Sandbox environment
+            transfer:write_fiat_withdrawal: Withdraw fiat to the given destination
+            events:read_event: Retrieve events
+x-tagGroups:
+- name: Deposits and Withdrawals
+  tags:
+  - Transfers
+  - Fiat Transfers
+  - Deposit Addresses
+  - Crypto Deposits
+  - Crypto Withdrawals
+  - Fees
+  - Internal Transfers
+  - Paxos Transfers
+  - Limits
+- name: Identity
+  tags:
+  - Identity
+  - Institution Members
+  - Accounts
+  - Account Members
+  - Identity Documents
+- name: API Credentials
+  tags:
+  - API Credentials
+- name: Profiles
+  tags:
+  - Profiles
+- name: Sandbox
+  tags:
+  - Sandbox Deposits
+  - Sandbox Identity
+  - Sandbox Fiat Transfers
+- name: Settlements
+  tags:
+  - Settlement
+- name: Stablecoin Conversion
+  tags:
+  - Stablecoin Conversion
+- name: Taxes
+  tags:
+  - Tax Forms
+- name: Trading
+  tags:
+  - Market Data
+  - Orders
+  - Quotes
+  - Quote Executions
+  - Pricing
+  - Issuer Quotes
+- name: Rewards
+  tags:
+  - Monitoring Addresses
+  - Statements
+  - Payments
+- name: Rewards (Alpha)
+  tags:
+  - Reward Addresses
+  - Claims
+  - Payout Groups
+  - Rewards
+- name: Events
+  tags:
+  - Events
+  - Event Types
+  - Event Objects

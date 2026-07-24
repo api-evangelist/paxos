@@ -1,0 +1,578 @@
+openapi: 3.0.0
+info:
+  title: Paxos Account Members Profiles API
+  version: '2.0'
+  description: '<p>Welcome to Paxos APIs. At Paxos, our mission is to enable the movement of any asset, any time, in a trustworthy way. These APIs serve that mission by making it easier than ever for you to directly integrate our product capabilities into your application, leveraging the speed, stability, and security of the Paxos platform.</p> <p>The documentation that follows gives you access to our Crypto Brokerage, Trading, and Exchange products. It includes APIs for market data, orders, and the held rate quote flow.</p> <p>To test in our sandbox environment, <a href="https://account.sandbox.paxos.com" target="_blank">sign up</a> for an account. For more information about Paxos and our APIs, visit <a href="https://www.paxos.com/" target="_blank">Paxos.com</a>.</p>
+
+    '
+  x-logo:
+    url: /docs/paxos.svg
+    backgroundColor: '#FFFFFF'
+    altText: Paxos logo
+servers:
+- url: https://api.paxos.com/v2
+  description: Production
+- url: https://api.sandbox.paxos.com/v2
+  description: Sandbox
+tags:
+- name: Profiles
+  description: 'Profiles hold asset balances, and every Paxos transaction is on a particular profile.
+
+    Depending on your integration type, Profiles may be used to reflect both corporate balances or individual user balances.
+
+    There are two types of Profiles:
+
+    - `DEFAULT` Profiles are system-generated.
+
+    - `NORMAL` Profiles are created using the [Create Profile](#operation/CreateProfile) endpoint and are the only type of Profile you can create.
+
+    '
+paths:
+  /profiles:
+    get:
+      summary: List Profiles
+      description: 'Return the associated Profiles for the current Account.
+
+        The paginated results default to the maximum limit of 1,000 Profiles, unless otherwise specified with the `limit` parameter.
+
+        Every paginated response contains a `next_page` field until the last page is reached.
+
+        Pass the `next_page` value into the `page_cursor` field of the next request to retrieve the next page of results.'
+      operationId: ListProfiles
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListProfilesResponse'
+              examples:
+                response:
+                  value:
+                    items:
+                    - id: 1a763ac5-13d9-4568-bb8b-747c416b105c
+                      nickname: default
+                      type: DEFAULT
+                    - id: b7b77d82-e6a7-4ae9-9904-36231aedf985
+                      nickname: MyProfileName
+                      type: NORMAL
+      parameters:
+      - name: created_at.lt
+        description: Include timestamps strictly less than lt. RFC3339 format, like `2006-01-02T15:04:05Z`.
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: created_at.lte
+        description: Include timestamps less than or equal to lte. RFC3339 format, like `2006-01-02T15:04:05Z`.
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: created_at.eq
+        description: Include timestamps exactly equal to eq. RFC3339 format, like `2006-01-02T15:04:05Z`.
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: created_at.gte
+        description: Include timestamps greater than or equal to gte. RFC3339 format, like `2006-01-02T15:04:05Z`.
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: created_at.gt
+        description: Include timestamps strictly greater than gt. RFC3339 format, like `2006-01-02T15:04:05Z`.
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: limit
+        description: Number of results to return.
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: order
+        description: Return items in ascending (ASC) or descending (DESC) order. Defaults to ASC.
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - DESC
+          - ASC
+      - name: order_by
+        description: The specific method by which the returned results will be ordered.
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - CREATED_AT
+      - name: page_cursor
+        description: Cursor token for fetching the next page.
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: nickname
+        description: Optionally filter by Profile display name. Retrieves nickname(s) based on the beginning characters of the given display name (prefix matching). Case insensitive. WIldcards and regular expressions not supported.
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: ids
+        description: Optionally filter by the UUIDs of the profiles. Limit 100.
+        in: query
+        required: false
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      tags:
+      - Profiles
+      security:
+      - OAuth2:
+        - funding:read_profile
+    post:
+      summary: Create Profile
+      description: Create a new profile for this account. Profiles created using this endpoint always have a type of `NORMAL`.
+      operationId: CreateProfile
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Profile'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateProfileRequest'
+        required: true
+      tags:
+      - Profiles
+      security:
+      - OAuth2:
+        - funding:write_profile
+  /profiles/{profile_id}:
+    get:
+      summary: Get Profile
+      description: Read a single profile by its UUID, or read the default profile using the alias "default".
+      operationId: GetProfile
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Profile'
+              examples:
+                profile_id=b7b77d82-e6a7-4ae9-9904-36231aedf985:
+                  value:
+                    id: b7b77d82-e6a7-4ae9-9904-36231aedf985
+                    nickname: MyProfileName
+                    type: NORMAL
+      parameters:
+      - name: profile_id
+        description: The UUID of the profile, or "default" for the default profile.
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: include_deactivated
+        description: Used to include deactivated profiles in the response.
+        in: query
+        required: false
+        schema:
+          type: boolean
+      tags:
+      - Profiles
+      security:
+      - OAuth2:
+        - funding:read_profile
+    put:
+      summary: Update Profile
+      description: Change the `nickname` label for the given `profile_id` (Profile).
+      operationId: UpdateProfile
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Profile'
+      parameters:
+      - name: profile_id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProfilePublicUpdateProfileBody'
+        required: true
+      tags:
+      - Profiles
+      security:
+      - OAuth2:
+        - funding:write_profile
+  /profiles/{profile_id}/balances:
+    get:
+      summary: List Profile Balances
+      description: 'Retrieve the Profile’s available and trading balances.
+
+        Use query parameters to retrieve a defined set of assets.
+
+        Omit query parameters to retrieve all asset balances.'
+      operationId: ListProfileBalances
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListProfileBalancesResponse'
+              examples:
+                assets=BTC,USD:
+                  value:
+                    items:
+                    - asset: BTC
+                      available: '1.23103715'
+                      trading: '.25'
+                    - asset: USD
+                      available: '1510.23'
+                      trading: '100.00'
+                All Assets:
+                  value:
+                    items:
+                    - asset: USD
+                      available: '1510.23'
+                      trading: '100.00'
+                    - asset: EUR
+                      available: '0'
+                      trading: '0'
+                    - asset: SGD
+                      available: '0'
+                      trading: '0'
+                    - asset: BTC
+                      available: '1.23103715'
+                      trading: '.25'
+                    - asset: ETH
+                      available: '0'
+                      trading: '0'
+                    - asset: PAXG
+                      available: '0'
+                      trading: '0'
+                    - asset: BCH
+                      available: '0'
+                      trading: '0'
+                    - asset: SOL
+                      available: '0'
+                      trading: '0'
+      parameters:
+      - name: profile_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: assets
+        in: query
+        required: false
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      tags:
+      - Profiles
+      security:
+      - OAuth2:
+        - funding:read_profile
+  /profiles/{profile_id}/balances/{asset}:
+    get:
+      summary: Get Profile Balance
+      description: Get the balance of `asset` in a profile.
+      operationId: GetProfileBalance
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProfileBalance'
+      parameters:
+      - name: profile_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: asset
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - Profiles
+      security:
+      - OAuth2:
+        - funding:read_profile
+  /profiles/{profile_id}/deactivate:
+    put:
+      summary: Deactivate Profile
+      description: 'Deactivate the given `profile_id`. The default profile cannot be deactivated.
+
+        Deactivated profiles won''t be visible for deposits.
+
+        Profiles with more than zero balances cannot be deactivated.
+
+        If a deactivated profile has a non-zero balance it will be reactivated.'
+      operationId: DeactivateProfile
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeactivateProfileResponse'
+      parameters:
+      - name: profile_id
+        description: 'The UUID of the profile.
+
+          The default profile cannot be deactivated.
+
+          The profile must have a zero balance to be deactivated.'
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - Profiles
+      security:
+      - OAuth2:
+        - funding:write_profile
+components:
+  schemas:
+    ProfileType:
+      type: string
+      enum:
+      - NORMAL
+      - DEFAULT
+      description: "The profile type.\n\n - NORMAL: A client-created profile. All Profiles created using the `CreateProfile` endpoint are of this type.\n - DEFAULT: A system-generated profile."
+    CreateProfileRequest:
+      type: object
+      properties:
+        nickname:
+          type: string
+          description: The display name of the profile. Must be unique.
+        description:
+          type: string
+          description: The description of the created profile.
+      required:
+      - nickname
+    DeactivateProfileResponse:
+      type: object
+    ProfileBalance:
+      type: object
+      example:
+        asset: BTC
+        available: '1.23103715'
+        trading: '.25'
+      properties:
+        asset:
+          type: string
+          description: The asset held by the profile.
+        available:
+          type: string
+          format: decimal
+          description: The available asset balance for new debit requests.
+        trading:
+          type: string
+          format: decimal
+          description: The asset amount committed to pending orders.
+      description: A ProfileBalance represents the holdings of a particular asset within a profile.
+      required:
+      - asset
+      - available
+      - trading
+    ListProfilesResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Profile'
+        next_page_cursor:
+          type: string
+          description: Cursor token required for fetching the next page.
+    ListProfileBalancesResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProfileBalance'
+      required:
+      - items
+    ProfilePublicUpdateProfileBody:
+      type: object
+      example:
+        profile_id: b7b77d82-e6a7-4ae9-9904-36231aedf985
+        nickname: MyProfileName
+      properties:
+        nickname:
+          type: string
+      required:
+      - nickname
+    Profile:
+      type: object
+      example:
+        id: b7b77d82-e6a7-4ae9-9904-36231aedf985
+        nickname: MyProfileName
+        type: NORMAL
+      properties:
+        id:
+          type: string
+        nickname:
+          type: string
+        type:
+          $ref: '#/components/schemas/ProfileType'
+        description:
+          type: string
+        account_id:
+          type: string
+          title: '@hidden'
+      required:
+      - id
+      - nickname
+      - type
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      description: 'Paxos APIs use [OAuth 2](https://tools.ietf.org/html/rfc6749) with the [client credentials](https://tools.ietf.org/html/rfc6749#section-4.4) grant flow.
+
+
+        **Token URLs:**
+
+        - Production: https://oauth.paxos.com/oauth2/token
+
+        - Sandbox: https://oauth.sandbox.paxos.com/oauth2/token
+
+
+        Learn more in the [API credentials guide →](https://docs.paxos.com/developer/credentials)
+
+        '
+      flows:
+        clientCredentials:
+          tokenUrl: https://oauth.paxos.com/oauth2/token
+          scopes:
+            conversion:read_conversion_stablecoin: Retrieve stablecoin conversion details
+            conversion:write_conversion_stablecoin: Create or cancel a stablecoin conversion
+            exchange:historical_prices: Retrieve marketnaverage prices at a certain time increment
+            exchange:read_order: Retrieve order or order execution details
+            exchange:read_quote: Retrieve quote details for buying or selling an asset
+            exchange:read_quote_execution: Retrieve quote execution details
+            exchange:write_quote_execution: Create a quote execution for buying or selling an asset
+            exchange:write_order: Create or cancel an order for buying or selling an asset
+            fee:write_crypto_withdrawal_fee: Create a guaranteed fee for crypto withdrawal
+            funding:read_bank_balance: Retrieve Paxos dedicated bank account balance
+            funding:read_profile: Retrieve Profile details and deposit funds in Sandbox
+            funding:write_profile: Create a Profile
+            identity:read_account: Retrieve Account details
+            identity:read_identity: Retrieve Identity details or documents
+            identity:write_account: Create or update Account and Account Members
+            identity:write_identity: Create or update Identity details and set Sandbox Identify Status
+            settlement:read_transaction: Retrieve settlement transaction details
+            settlement:write_transaction: Create, affirm or cancel a settlement transaction
+            tax:read_tax_form: Retrieve tax details
+            tax:read_tax_lot: Retrieve tax lot details
+            tax:write_tax_lot: Update the given tax-lot ID
+            transfer:read_deposit_address: Retrieve deposit address details
+            transfer:read_fiat_account: Retrieve Fiat Account details
+            transfer:read_fiat_deposit_instructions: Retrieve fiat deposit instruction details
+            transfer:read_transfer: Retrieve transfer details
+            transfer:read_transfer_limit: Retrieve limits for the given transaction type
+            transfer:reject_crypto_deposit: Reject a crypto deposit (travel rule)
+            transfer:update_crypto_deposit: Provide required travel-rule details
+            transfer:write_crypto_withdrawal: Withdraw asset to a specified destination address
+            transfer:write_deposit_address: Create an deposit address on a blockchain network
+            transfer:write_fiat_account: Create, update or delete a Fiat Account
+            transfer:write_fiat_deposit_instructions: Create, update or delete fiat deposit instructions
+            transfer:write_internal_transfer: Transfer assets between two Profiles
+            transfer:write_sandbox_fiat_deposit: Initiate a test fiat deposit in the Sandbox environment
+            transfer:write_fiat_withdrawal: Withdraw fiat to the given destination
+            events:read_event: Retrieve events
+x-tagGroups:
+- name: Deposits and Withdrawals
+  tags:
+  - Transfers
+  - Fiat Transfers
+  - Deposit Addresses
+  - Crypto Deposits
+  - Crypto Withdrawals
+  - Fees
+  - Internal Transfers
+  - Paxos Transfers
+  - Limits
+- name: Identity
+  tags:
+  - Identity
+  - Institution Members
+  - Accounts
+  - Account Members
+  - Identity Documents
+- name: API Credentials
+  tags:
+  - API Credentials
+- name: Profiles
+  tags:
+  - Profiles
+- name: Sandbox
+  tags:
+  - Sandbox Deposits
+  - Sandbox Identity
+  - Sandbox Fiat Transfers
+- name: Settlements
+  tags:
+  - Settlement
+- name: Stablecoin Conversion
+  tags:
+  - Stablecoin Conversion
+- name: Taxes
+  tags:
+  - Tax Forms
+- name: Trading
+  tags:
+  - Market Data
+  - Orders
+  - Quotes
+  - Quote Executions
+  - Pricing
+  - Issuer Quotes
+- name: Rewards
+  tags:
+  - Monitoring Addresses
+  - Statements
+  - Payments
+- name: Rewards (Alpha)
+  tags:
+  - Reward Addresses
+  - Claims
+  - Payout Groups
+  - Rewards
+- name: Events
+  tags:
+  - Events
+  - Event Types
+  - Event Objects

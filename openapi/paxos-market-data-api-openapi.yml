@@ -1,0 +1,729 @@
+openapi: 3.0.0
+info:
+  title: Paxos Account Members Market Data API
+  version: '2.0'
+  description: '<p>Welcome to Paxos APIs. At Paxos, our mission is to enable the movement of any asset, any time, in a trustworthy way. These APIs serve that mission by making it easier than ever for you to directly integrate our product capabilities into your application, leveraging the speed, stability, and security of the Paxos platform.</p> <p>The documentation that follows gives you access to our Crypto Brokerage, Trading, and Exchange products. It includes APIs for market data, orders, and the held rate quote flow.</p> <p>To test in our sandbox environment, <a href="https://account.sandbox.paxos.com" target="_blank">sign up</a> for an account. For more information about Paxos and our APIs, visit <a href="https://www.paxos.com/" target="_blank">Paxos.com</a>.</p>
+
+    '
+  x-logo:
+    url: /docs/paxos.svg
+    backgroundColor: '#FFFFFF'
+    altText: Paxos logo
+servers:
+- url: https://api.paxos.com/v2
+  description: Production
+- url: https://api.sandbox.paxos.com/v2
+  description: Sandbox
+tags:
+- name: Market Data
+  description: 'Market data provides various parameters of the order book and historical order data.
+
+    '
+paths:
+  /markets:
+    get:
+      summary: List Markets
+      description: Retrieves the set of current available markets for trading with details.
+      operationId: ListMarkets
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListMarketsResponse'
+              examples:
+                response:
+                  value:
+                    markets:
+                    - market: BTCUSD
+                      base_asset: BTC
+                      quote_asset: USD
+                      tick_rate: '0.25'
+                      market_status:
+                        buy_status: AVAILABLE
+                        sell_status: AVAILABLE
+                        updated_at: '2026-04-20T18:36:00Z'
+                        scheduled_maintenance:
+                        - starts_at: '2026-04-21T02:00:00Z'
+                          ends_at: '2026-04-21T03:00:00Z'
+                          recurrence: NONE
+      tags:
+      - Market Data
+  /markets/{market}/order-book:
+    get:
+      summary: Get Order Book
+      description: Retrieves the full list of bids and asks of the order book at individual price levels with resting quantities per level.
+      operationId: GetOrderBook
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetOrderBookResponse'
+              examples:
+                response:
+                  value:
+                    market: BTCUSD
+                    asks:
+                    - price: '9240.25'
+                      amount: '1.2341300'
+                    - price: '9260.75'
+                      amount: '0.8134231'
+                    bids:
+                    - price: '9220.50'
+                      amount: '3.7441300'
+                    - price: '9123.00'
+                      amount: '0.2334231'
+      parameters:
+      - name: market
+        description: Market of Order Book.
+        in: path
+        required: true
+        schema:
+          type: string
+          enum:
+          - ETHEUR
+          - ETHSGD
+          - ETHUSD
+          - BTCEUR
+          - BTCSGD
+          - BTCUSD
+          - PAXGUSD
+          - BCHUSD
+          - LTCUSD
+          - USDPUSD
+          - ETHBRL
+          - BTCBRL
+          - LTCBRL
+          - BCHBRL
+          - USDPGBP
+          - USDPBRL
+          - LINKUSD
+          - AAVEUSD
+          - UNIUSD
+          - AAVEMXN
+          - BCHMXN
+          - BTCMXN
+          - ETHMXN
+          - LTCMXN
+          - USDPMXN
+          - AAVEEUR
+          - BCHEUR
+          - LTCEUR
+          - LINKEUR
+          - PAXGEUR
+          - SOLEUR
+          - USDPEUR
+          - UNIEUR
+          - PYUSDEUR
+          - PEPEUSD
+          - TRUMPUSD
+          - SHIBUSD
+          - ARBUSD
+          - BONKUSD
+          - ENAUSD
+          - MNTUSD
+          - ONDOUSD
+          - PENGUUSD
+          - QNTUSD
+          - RENDERUSD
+          - SKYUSD
+          - WIFUSD
+          - WLDUSD
+          - DOGEUSD
+          - AVAXUSD
+          - SUIUSD
+          - POLUSD
+          - XLMUSD
+          - BNBUSD
+      tags:
+      - Market Data
+      deprecated: true
+  /markets/{market}/recent-executions:
+    get:
+      summary: List Recent Executions
+      description: Retrieves the list of 2000 most recent executions by all users to occur in the order book.
+      operationId: ListRecentExecutions
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListRecentExecutionsResponse'
+              examples:
+                response:
+                  value:
+                    items:
+                    - match_number: 5K8U4TTBKS1E
+                      price: '9245.50'
+                      amount: '0.23421231'
+                      executed_at: '2020-01-17T18:36:38.737Z'
+                    - match_number: 5K8U4TTBKRIO
+                      price: '9237.50'
+                      amount: '1.68421231'
+                      executed_at: '2020-01-17T18:36:52.737Z'
+      parameters:
+      - name: market
+        description: Market of the executions.
+        in: path
+        required: true
+        schema:
+          type: string
+          enum:
+          - ETHEUR
+          - ETHSGD
+          - ETHUSD
+          - BTCEUR
+          - BTCSGD
+          - BTCUSD
+          - PAXGUSD
+          - BCHUSD
+          - LTCUSD
+          - USDPUSD
+          - ETHBRL
+          - BTCBRL
+          - LTCBRL
+          - BCHBRL
+          - USDPGBP
+          - USDPBRL
+          - LINKUSD
+          - AAVEUSD
+          - UNIUSD
+          - AAVEMXN
+          - BCHMXN
+          - BTCMXN
+          - ETHMXN
+          - LTCMXN
+          - USDPMXN
+          - AAVEEUR
+          - BCHEUR
+          - LTCEUR
+          - LINKEUR
+          - PAXGEUR
+          - SOLEUR
+          - USDPEUR
+          - UNIEUR
+          - PYUSDEUR
+          - PEPEUSD
+          - TRUMPUSD
+          - SHIBUSD
+          - ARBUSD
+          - BONKUSD
+          - ENAUSD
+          - MNTUSD
+          - ONDOUSD
+          - PENGUUSD
+          - QNTUSD
+          - RENDERUSD
+          - SKYUSD
+          - WIFUSD
+          - WLDUSD
+          - DOGEUSD
+          - AVAXUSD
+          - SUIUSD
+          - POLUSD
+          - XLMUSD
+          - BNBUSD
+      tags:
+      - Market Data
+      deprecated: true
+  /markets/{market}/ticker:
+    get:
+      summary: Get Ticker
+      description: Retrieves order book statistics of the exchange over the last 24 hours and from midnight UTC until current time.
+      operationId: GetTicker
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TickerRecord'
+              examples:
+                response:
+                  value:
+                    market: BTCUSD
+                    best_bid:
+                      price: '9245.25'
+                      amount: '0.23124212'
+                    best_ask:
+                      price: '9274.00'
+                      amount: '1.82341000'
+                    last_execution:
+                      price: '9273.75'
+                      amount: '0.00002341'
+                    last_day:
+                      high: '10425.25'
+                      low: '8923.50'
+                      open: '9324.50'
+                      volume: '1423.12314232'
+                      start_time: '2020-01-17T18:36:08.737Z'
+                      end_time: '2020-01-18T18:36:08.737Z'
+                    today:
+                      high: '10125.25'
+                      low: '9100.25'
+                      open: '9502.50'
+                      volume: '872.12314232'
+                      start_time: '2020-01-18T00:00:00.000Z'
+                      end_time: '2020-01-18T18:36:08.737Z'
+                    snapshot_at: '2020-01-17T18:36:08.737Z'
+      parameters:
+      - name: market
+        description: Market of the Ticker.
+        in: path
+        required: true
+        schema:
+          type: string
+          enum:
+          - ETHEUR
+          - ETHSGD
+          - ETHUSD
+          - BTCEUR
+          - BTCSGD
+          - BTCUSD
+          - PAXGUSD
+          - BCHUSD
+          - LTCUSD
+          - USDPUSD
+          - ETHBRL
+          - BTCBRL
+          - LTCBRL
+          - BCHBRL
+          - USDPGBP
+          - USDPBRL
+          - LINKUSD
+          - AAVEUSD
+          - UNIUSD
+          - AAVEMXN
+          - BCHMXN
+          - BTCMXN
+          - ETHMXN
+          - LTCMXN
+          - USDPMXN
+          - AAVEEUR
+          - BCHEUR
+          - LTCEUR
+          - LINKEUR
+          - PAXGEUR
+          - SOLEUR
+          - USDPEUR
+          - UNIEUR
+          - PYUSDEUR
+          - PEPEUSD
+          - TRUMPUSD
+          - SHIBUSD
+          - ARBUSD
+          - BONKUSD
+          - ENAUSD
+          - MNTUSD
+          - ONDOUSD
+          - PENGUUSD
+          - QNTUSD
+          - RENDERUSD
+          - SKYUSD
+          - WIFUSD
+          - WLDUSD
+          - DOGEUSD
+          - AVAXUSD
+          - SUIUSD
+          - POLUSD
+          - XLMUSD
+          - BNBUSD
+      tags:
+      - Market Data
+      deprecated: true
+components:
+  schemas:
+    MarketDetails:
+      type: object
+      properties:
+        market:
+          $ref: '#/components/schemas/Market'
+        base_asset:
+          type: string
+          title: Base asset. Crypto Only (BTC, ETH, PAXG)
+        quote_asset:
+          type: string
+          description: Quote asset. Fiat Only (USD, EUR, SGD).
+        tick_rate:
+          type: string
+          format: decimal
+          title: Tick rate for market
+        market_status:
+          $ref: '#/components/schemas/MarketStatus'
+        min_base_amount:
+          type: string
+          description: Minimum base amount allowed for this market.
+        min_quote_amount:
+          type: string
+          description: Minimum quote amount allowed for this market.
+        max_base_amount:
+          type: string
+          description: Maximum base amount allowed for this market.
+        max_quote_amount:
+          type: string
+          description: Maximum quote amount allowed for this market.
+    GetOrderBookResponse:
+      properties:
+        asks:
+          description: All Asks.
+          items:
+            $ref: '#/components/schemas/BookLevel'
+          type: array
+        bids:
+          description: All Bids.
+          items:
+            $ref: '#/components/schemas/BookLevel'
+          type: array
+        market:
+          $ref: '#/components/schemas/Market'
+      type: object
+    RecentExecution:
+      type: object
+      properties:
+        match_number:
+          type: string
+          description: Unique execution match number.
+        price:
+          type: string
+          format: decimal
+          description: Price of the execution.
+        amount:
+          type: string
+          format: decimal
+          description: Amount of the execution.
+        executed_at:
+          type: string
+          description: Execution timestamp.
+    ScheduledMaintenance:
+      type: object
+      properties:
+        starts_at:
+          type: string
+          format: date-time
+          description: Start of the maintenance window.
+        ends_at:
+          type: string
+          format: date-time
+          description: Expected end of the maintenance window.
+        recurrence:
+          $ref: '#/components/schemas/MaintenanceRecurrence'
+      description: A scheduled maintenance window during which a market may become unavailable.
+    PricePriceMarket:
+      type: string
+      enum:
+      - ETHUSD
+      - BTCUSD
+      - PAXGUSD
+      - BCHUSD
+      - LTCUSD
+      - USDPUSD
+      - LINKUSD
+      - AAVEUSD
+      - UNIUSD
+      - PEPEUSD
+      - TRUMPUSD
+      - SHIBUSD
+      - ARBUSD
+      - BONKUSD
+      - ENAUSD
+      - MNTUSD
+      - ONDOUSD
+      - PENGUUSD
+      - QNTUSD
+      - RENDERUSD
+      - SKYUSD
+      - WIFUSD
+      - WLDUSD
+      - DOGEUSD
+      - AVAXUSD
+      - SUIUSD
+      - POLUSD
+      - XLMUSD
+      - BNBUSD
+      description: ''
+      title: Market
+    ListRecentExecutionsResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/RecentExecution'
+          description: Recent Executions.
+    MarketStatusReason:
+      type: string
+      enum:
+      - MARKET_STATUS_REASON_UNSPECIFIED
+      - SCHEDULED_MAINTENANCE
+      - TRADING_SUSPENDED
+      - UNSCHEDULED_MAINTENANCE
+      description: Reason a market is unavailable.
+    TimestampRange:
+      type: object
+      properties:
+        begin:
+          type: string
+          format: date-time
+          description: Only return records after this timestamp, inclusive. RFC3339 format, like `2006-01-02T15:04:05Z`.
+        end:
+          type: string
+          format: date-time
+          description: Only return records before this timestamp, inclusive. RFC3339 format, like `2006-01-02T15:04:05Z`.
+    MaintenanceRecurrence:
+      type: string
+      enum:
+      - MAINTENANCE_RECURRENCE_UNSPECIFIED
+      - NONE
+      - DAILY
+      - WEEKLY
+      description: "How often a maintenance window repeats.\n\n - NONE: A one-off maintenance window that will not repeat.\n - DAILY: The window recurs every day at the same time.\n - WEEKLY: The window recurs every week on the same day and time."
+    Market:
+      type: string
+      enum:
+      - ETHEUR
+      - ETHSGD
+      - ETHUSD
+      - BTCEUR
+      - BTCSGD
+      - BTCUSD
+      - PAXGUSD
+      - BCHUSD
+      - LTCUSD
+      - USDPUSD
+      - LINKUSD
+      - AAVEUSD
+      - UNIUSD
+      - PEPEUSD
+      - TRUMPUSD
+      - SHIBUSD
+      - ARBUSD
+      - BONKUSD
+      - ENAUSD
+      - MNTUSD
+      - ONDOUSD
+      - PENGUUSD
+      - QNTUSD
+      - RENDERUSD
+      - SKYUSD
+      - WIFUSD
+      - WLDUSD
+      - DOGEUSD
+      - AVAXUSD
+      - SUIUSD
+      - POLUSD
+      - XLMUSD
+      - BNBUSD
+      title: ''
+    ExchangeStats:
+      type: object
+      properties:
+        high:
+          type: string
+          format: decimal
+          description: Highest price in range.
+        low:
+          type: string
+          format: decimal
+          description: Lowest price in range.
+        open:
+          type: string
+          format: decimal
+          description: First price in range.
+        volume:
+          type: string
+          format: decimal
+          title: Total Volume in Time Period
+        volume_weighted_average_price:
+          type: string
+          format: decimal
+          description: Volume-Weighted Average Price over Time Period.
+        range:
+          $ref: '#/components/schemas/TimestampRange'
+    TickerRecord:
+      type: object
+      properties:
+        market:
+          $ref: '#/components/schemas/PricePriceMarket'
+        best_bid:
+          $ref: '#/components/schemas/BookLevel'
+        best_ask:
+          $ref: '#/components/schemas/BookLevel'
+        last_execution:
+          $ref: '#/components/schemas/BookLevel'
+        last_day:
+          $ref: '#/components/schemas/ExchangeStats'
+        today:
+          $ref: '#/components/schemas/ExchangeStats'
+        snapshot_at:
+          type: string
+          format: date-time
+          description: The time at which this data was retrieved.
+    ListMarketsResponse:
+      type: object
+      properties:
+        markets:
+          type: array
+          items:
+            $ref: '#/components/schemas/MarketDetails'
+    MarketStatus:
+      type: object
+      properties:
+        buy_status:
+          $ref: '#/components/schemas/MarketTradingStatus'
+        buy_reason:
+          $ref: '#/components/schemas/MarketStatusReason'
+        sell_status:
+          $ref: '#/components/schemas/MarketTradingStatus'
+        sell_reason:
+          $ref: '#/components/schemas/MarketStatusReason'
+        updated_at:
+          type: string
+          format: date-time
+        scheduled_maintenance:
+          type: array
+          items:
+            $ref: '#/components/schemas/ScheduledMaintenance'
+      description: 'Current trading status of a market, including availability, reason codes,
+
+        and scheduled maintenance windows.'
+    MarketTradingStatus:
+      type: string
+      enum:
+      - MARKET_TRADING_STATUS_UNSPECIFIED
+      - AVAILABLE
+      - UNAVAILABLE
+      description: "Trading status of a market.\n\n - AVAILABLE: The market is open and accepting orders.\n - UNAVAILABLE: The market is not currently accepting IOC or FOK orders."
+    BookLevel:
+      type: object
+      properties:
+        price:
+          type: string
+          format: decimal
+          description: Price at level.
+        amount:
+          type: string
+          format: decimal
+          description: Amount of orders at pricing level.
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      description: 'Paxos APIs use [OAuth 2](https://tools.ietf.org/html/rfc6749) with the [client credentials](https://tools.ietf.org/html/rfc6749#section-4.4) grant flow.
+
+
+        **Token URLs:**
+
+        - Production: https://oauth.paxos.com/oauth2/token
+
+        - Sandbox: https://oauth.sandbox.paxos.com/oauth2/token
+
+
+        Learn more in the [API credentials guide →](https://docs.paxos.com/developer/credentials)
+
+        '
+      flows:
+        clientCredentials:
+          tokenUrl: https://oauth.paxos.com/oauth2/token
+          scopes:
+            conversion:read_conversion_stablecoin: Retrieve stablecoin conversion details
+            conversion:write_conversion_stablecoin: Create or cancel a stablecoin conversion
+            exchange:historical_prices: Retrieve marketnaverage prices at a certain time increment
+            exchange:read_order: Retrieve order or order execution details
+            exchange:read_quote: Retrieve quote details for buying or selling an asset
+            exchange:read_quote_execution: Retrieve quote execution details
+            exchange:write_quote_execution: Create a quote execution for buying or selling an asset
+            exchange:write_order: Create or cancel an order for buying or selling an asset
+            fee:write_crypto_withdrawal_fee: Create a guaranteed fee for crypto withdrawal
+            funding:read_bank_balance: Retrieve Paxos dedicated bank account balance
+            funding:read_profile: Retrieve Profile details and deposit funds in Sandbox
+            funding:write_profile: Create a Profile
+            identity:read_account: Retrieve Account details
+            identity:read_identity: Retrieve Identity details or documents
+            identity:write_account: Create or update Account and Account Members
+            identity:write_identity: Create or update Identity details and set Sandbox Identify Status
+            settlement:read_transaction: Retrieve settlement transaction details
+            settlement:write_transaction: Create, affirm or cancel a settlement transaction
+            tax:read_tax_form: Retrieve tax details
+            tax:read_tax_lot: Retrieve tax lot details
+            tax:write_tax_lot: Update the given tax-lot ID
+            transfer:read_deposit_address: Retrieve deposit address details
+            transfer:read_fiat_account: Retrieve Fiat Account details
+            transfer:read_fiat_deposit_instructions: Retrieve fiat deposit instruction details
+            transfer:read_transfer: Retrieve transfer details
+            transfer:read_transfer_limit: Retrieve limits for the given transaction type
+            transfer:reject_crypto_deposit: Reject a crypto deposit (travel rule)
+            transfer:update_crypto_deposit: Provide required travel-rule details
+            transfer:write_crypto_withdrawal: Withdraw asset to a specified destination address
+            transfer:write_deposit_address: Create an deposit address on a blockchain network
+            transfer:write_fiat_account: Create, update or delete a Fiat Account
+            transfer:write_fiat_deposit_instructions: Create, update or delete fiat deposit instructions
+            transfer:write_internal_transfer: Transfer assets between two Profiles
+            transfer:write_sandbox_fiat_deposit: Initiate a test fiat deposit in the Sandbox environment
+            transfer:write_fiat_withdrawal: Withdraw fiat to the given destination
+            events:read_event: Retrieve events
+x-tagGroups:
+- name: Deposits and Withdrawals
+  tags:
+  - Transfers
+  - Fiat Transfers
+  - Deposit Addresses
+  - Crypto Deposits
+  - Crypto Withdrawals
+  - Fees
+  - Internal Transfers
+  - Paxos Transfers
+  - Limits
+- name: Identity
+  tags:
+  - Identity
+  - Institution Members
+  - Accounts
+  - Account Members
+  - Identity Documents
+- name: API Credentials
+  tags:
+  - API Credentials
+- name: Profiles
+  tags:
+  - Profiles
+- name: Sandbox
+  tags:
+  - Sandbox Deposits
+  - Sandbox Identity
+  - Sandbox Fiat Transfers
+- name: Settlements
+  tags:
+  - Settlement
+- name: Stablecoin Conversion
+  tags:
+  - Stablecoin Conversion
+- name: Taxes
+  tags:
+  - Tax Forms
+- name: Trading
+  tags:
+  - Market Data
+  - Orders
+  - Quotes
+  - Quote Executions
+  - Pricing
+  - Issuer Quotes
+- name: Rewards
+  tags:
+  - Monitoring Addresses
+  - Statements
+  - Payments
+- name: Rewards (Alpha)
+  tags:
+  - Reward Addresses
+  - Claims
+  - Payout Groups
+  - Rewards
+- name: Events
+  tags:
+  - Events
+  - Event Types
+  - Event Objects

@@ -1,0 +1,522 @@
+openapi: 3.0.0
+info:
+  title: Paxos Account Members Issuer Quotes API
+  version: '2.0'
+  description: '<p>Welcome to Paxos APIs. At Paxos, our mission is to enable the movement of any asset, any time, in a trustworthy way. These APIs serve that mission by making it easier than ever for you to directly integrate our product capabilities into your application, leveraging the speed, stability, and security of the Paxos platform.</p> <p>The documentation that follows gives you access to our Crypto Brokerage, Trading, and Exchange products. It includes APIs for market data, orders, and the held rate quote flow.</p> <p>To test in our sandbox environment, <a href="https://account.sandbox.paxos.com" target="_blank">sign up</a> for an account. For more information about Paxos and our APIs, visit <a href="https://www.paxos.com/" target="_blank">Paxos.com</a>.</p>
+
+    '
+  x-logo:
+    url: /docs/paxos.svg
+    backgroundColor: '#FFFFFF'
+    altText: Paxos logo
+servers:
+- url: https://api.paxos.com/v2
+  description: Production
+- url: https://api.sandbox.paxos.com/v2
+  description: Sandbox
+tags:
+- name: Issuer Quotes
+  description: 'Issuer Quotes are "held rates" offered by Paxos to mint or redeem Paxos-issued assets at a specific price within a period of time - for example, the option to buy PAXG within the next 5 seconds for $3,000.
+
+
+    The typical Issuer Quotes workflow is as follows:
+
+
+    1. Call [Create Issuer Quote](#operation/CreateIssuerQuote) to get a quote for the asset you want to mint or redeem to a specific profile.
+
+    1. Call [Create Issuer Quote Execution](#operation/CreateIssuerQuoteExecution) with the quote ID and profile ID.
+
+
+    You can call [List Issuer Quote Executions](#operation/ListIssuerQuoteExecutions) to review or construct reports on issuer quote execution activity.
+
+    '
+paths:
+  /issuer-quote:
+    post:
+      summary: Create Issuer Quote
+      description: Creates a request for a quote where Paxos is the issuer. Note that PAXG quotes will be unavailable when the London gold market is closed.
+      operationId: CreateIssuerQuote
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateIssuerQuoteResponse'
+              examples:
+                response:
+                  value:
+                    quote_id: 2ce28645-2e1c-4a5d-8799-90e7b6e02673
+                    market: PAXGUSD
+                    side: SELL
+                    quantity: '0.05'
+                    price: '11.33'
+                    fee: '0.02'
+                    quote_amount: '0.34'
+                    expires_at: '2025-09-11T11:23:03.327913249Z'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateIssuerQuoteRequest'
+        required: true
+      tags:
+      - Issuer Quotes
+      security:
+      - OAuth2:
+        - exchange:write_issuer_quote
+  /issuer-quote/settlement-availability:
+    get:
+      summary: Get Issuer Quote Settlement Availability
+      description: 'Returns the maximum PAXG quantity available for immediate (T+0) purchase.
+
+        Note that availability will be zero when the London gold market is closed or unavailable.
+
+        Sell settlement is always T+1, so sell_quantity is always "0.000".'
+      operationId: GetIssuerQuoteSettlementAvailability
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetIssuerQuoteSettlementAvailabilityResponse'
+              examples:
+                response:
+                  value:
+                    buy_quantity: '123.456'
+                    sell_quantity: '0.000'
+                    market: PAXGUSD
+                    snapshot_at: '2025-01-01T00:00:00Z'
+      parameters:
+      - name: market
+        description: Trading pair for the quote. Only "PAXGUSD" is currently supported.
+        in: query
+        required: true
+        schema:
+          type: string
+      tags:
+      - Issuer Quotes
+      security:
+      - OAuth2:
+        - exchange:write_issuer_quote
+  /issuer-quote/{quote_id}:
+    post:
+      summary: Create Issuer Quote Execution
+      description: Executes on a quote where Paxos is the issuer.
+      operationId: CreateIssuerQuoteExecution
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateIssuerQuoteExecutionResponse'
+              examples:
+                response:
+                  value:
+                    id: ce9c514e-ed82-401c-9d85-37da3736a0d0
+      parameters:
+      - name: quote_id
+        description: The ID of the associated issuer quote to execute.
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExchangePublicCreateIssuerQuoteExecutionBody'
+        required: true
+      tags:
+      - Issuer Quotes
+      security:
+      - OAuth2:
+        - exchange:write_issuer_quote_execution
+  /issuer-quotes:
+    get:
+      summary: List Issuer Quote Executions
+      description: Retrieves full details of quote executions where Paxos is the issuer.
+      operationId: ListIssuerQuoteExecutions
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListIssuerQuoteExecutionsResponse'
+              examples:
+                response:
+                  value:
+                    issuer_quote_executions:
+                    - id: ce9c514e-ed82-401c-9d85-37da3736a0d0
+                      created_at: '2025-09-11T11:23:01.022425Z'
+                      asset_type: PAXG
+                      principal: '0.34'
+                      fee: '0'
+                      status: PENDING
+                      ref_id: 2ce28645-2e1c-4a5d-8799-90e7b6e02673
+                      token_fee: '0.02'
+                      token_price: '11.33'
+                      token_principal: '-0.03'
+                      profile_id: e6b30762-0689-46fa-b208-35eb347e284c
+                    next_page_cursor: CgsIxom6iQYQwO39XBDbsdVz
+      parameters:
+      - name: profile_id
+        description: Optionally filter by the target profile of the issuer quote execution.
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: status
+        description: Optionally filter by status.
+        in: query
+        required: false
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - PENDING
+            - COMPLETE
+            - FAILED
+      - name: created_range.begin
+        description: Only return records after this timestamp, inclusive. RFC3339 format, like `2006-01-02T15:04:05Z`.
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: created_range.end
+        description: Only return records before this timestamp, inclusive. RFC3339 format, like `2006-01-02T15:04:05Z`.
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: limit
+        description: Number of results to return. Defaults to 100 if no limit provided. Maximum 1000.
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: page_cursor
+        description: 'Cursor for getting the next page of results. When the number of items returned is fewer
+
+          than the limit, there is currently no next page.'
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: order
+        description: 'Determines whether the items are returned in ascending (ASC), or descending (DESC) order.
+
+          Sorted by created at timestamp. Defaults to DESC.'
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - DESC
+          - ASC
+      tags:
+      - Issuer Quotes
+      security:
+      - OAuth2:
+        - exchange:read_issuer_quote_execution
+components:
+  schemas:
+    IssuerQuoteExecutionStatus:
+      type: string
+      enum:
+      - PENDING
+      - COMPLETE
+      - FAILED
+    IssuerQuoteExecution:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The UUID of the issuer quote execution.
+        created_at:
+          type: string
+          format: date-time
+          description: The time at which the issuer quote execution was created.
+        asset_type:
+          type: string
+          description: The crypto asset bought or sold with the issuer quote execution.
+        principal:
+          type: string
+          format: decimal
+          description: The notional amount of the issuer quote execution.
+        fee:
+          type: string
+          format: decimal
+          description: The fee charged for the issuer quote execution.
+        status:
+          $ref: '#/components/schemas/IssuerQuoteExecutionStatus'
+        ref_id:
+          type: string
+          description: A unique identifier for the quote execution (for idempotence).
+        token_fee:
+          type: string
+          format: decimal
+          description: The creation or destruction fee, denominated in crypto units.
+        token_price:
+          type: string
+          format: decimal
+          description: The price of the crypto asset at the time of the transaction.
+        token_principal:
+          type: string
+          format: decimal
+          description: The net amount of the crypto asset received. Can be negative.
+        profile_id:
+          type: string
+          description: The profile ID under which the issuer quote is executed.
+      required:
+      - id
+      - created_at
+      - asset_type
+      - principal
+      - fee
+      - status
+      - token_fee
+      - token_price
+      - token_principal
+      - profile_id
+    GetIssuerQuoteSettlementAvailabilityResponse:
+      type: object
+      properties:
+        buy_quantity:
+          type: string
+          description: 'Maximum PAXG quantity available for immediate (T+0) purchase, to 3 decimal places.
+
+            Returns "0.000" when the gold market is closed or unavailable.'
+        sell_quantity:
+          type: string
+          description: Always "0.000" — PAXG sell settlement is T+1, not instant.
+        market:
+          type: string
+          description: Trading pair for the issuer quote.
+        snapshot_at:
+          type: string
+          format: date-time
+          description: Approximate time at which availability was computed.
+      required:
+      - buy_quantity
+      - sell_quantity
+      - market
+      - snapshot_at
+    CreateIssuerQuoteRequest:
+      type: object
+      properties:
+        profile_id:
+          type: string
+          description: The profile ID under which to execute this order.
+        market:
+          type: string
+          description: Trading pair for the quote. Only "PAXGUSD" is currently supported.
+        side:
+          $ref: '#/components/schemas/OrderSide'
+        base_amount:
+          type: string
+          format: decimal
+          description: The amount of assets (crypto) to mint or redeem.
+      required:
+      - profile_id
+      - market
+      - side
+      - base_amount
+    ListIssuerQuoteExecutionsResponse:
+      type: object
+      properties:
+        issuer_quote_executions:
+          type: array
+          items:
+            $ref: '#/components/schemas/IssuerQuoteExecution'
+        next_page_cursor:
+          type: string
+    CreateIssuerQuoteResponse:
+      type: object
+      properties:
+        quote_id:
+          type: string
+          description: The ID of the held issuer quote for buying or selling an asset.
+        market:
+          type: string
+          description: Trading pair for the issuer quote.
+        side:
+          $ref: '#/components/schemas/OrderSide'
+        quantity:
+          type: string
+          format: decimal
+          description: Amount of asset (crypto) in the issuer quote.
+        price:
+          type: string
+          format: decimal
+          description: Cost per unit of the asset.
+        fee:
+          type: string
+          format: decimal
+          description: Fee to pay for the transaction.
+        quote_amount:
+          type: string
+          format: decimal
+          description: Amount of fiat to spend or acquire using the issuer quote, excluding fees.
+        expires_at:
+          type: string
+          format: date-time
+          description: The time at which the issuer quote expires.
+      required:
+      - quote_id
+      - market
+      - side
+      - quantity
+      - price
+      - fee
+      - quote_amount
+      - expires_at
+    OrderSide:
+      type: string
+      enum:
+      - BUY
+      - SELL
+      description: Trade side.
+    ExchangePublicCreateIssuerQuoteExecutionBody:
+      type: object
+      properties:
+        profile_id:
+          type: string
+          description: The profile ID under which to execute this order.
+      required:
+      - profile_id
+    CreateIssuerQuoteExecutionResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The UUID of the issuer quote execution.
+      required:
+      - id
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      description: 'Paxos APIs use [OAuth 2](https://tools.ietf.org/html/rfc6749) with the [client credentials](https://tools.ietf.org/html/rfc6749#section-4.4) grant flow.
+
+
+        **Token URLs:**
+
+        - Production: https://oauth.paxos.com/oauth2/token
+
+        - Sandbox: https://oauth.sandbox.paxos.com/oauth2/token
+
+
+        Learn more in the [API credentials guide →](https://docs.paxos.com/developer/credentials)
+
+        '
+      flows:
+        clientCredentials:
+          tokenUrl: https://oauth.paxos.com/oauth2/token
+          scopes:
+            conversion:read_conversion_stablecoin: Retrieve stablecoin conversion details
+            conversion:write_conversion_stablecoin: Create or cancel a stablecoin conversion
+            exchange:historical_prices: Retrieve marketnaverage prices at a certain time increment
+            exchange:read_order: Retrieve order or order execution details
+            exchange:read_quote: Retrieve quote details for buying or selling an asset
+            exchange:read_quote_execution: Retrieve quote execution details
+            exchange:write_quote_execution: Create a quote execution for buying or selling an asset
+            exchange:write_order: Create or cancel an order for buying or selling an asset
+            fee:write_crypto_withdrawal_fee: Create a guaranteed fee for crypto withdrawal
+            funding:read_bank_balance: Retrieve Paxos dedicated bank account balance
+            funding:read_profile: Retrieve Profile details and deposit funds in Sandbox
+            funding:write_profile: Create a Profile
+            identity:read_account: Retrieve Account details
+            identity:read_identity: Retrieve Identity details or documents
+            identity:write_account: Create or update Account and Account Members
+            identity:write_identity: Create or update Identity details and set Sandbox Identify Status
+            settlement:read_transaction: Retrieve settlement transaction details
+            settlement:write_transaction: Create, affirm or cancel a settlement transaction
+            tax:read_tax_form: Retrieve tax details
+            tax:read_tax_lot: Retrieve tax lot details
+            tax:write_tax_lot: Update the given tax-lot ID
+            transfer:read_deposit_address: Retrieve deposit address details
+            transfer:read_fiat_account: Retrieve Fiat Account details
+            transfer:read_fiat_deposit_instructions: Retrieve fiat deposit instruction details
+            transfer:read_transfer: Retrieve transfer details
+            transfer:read_transfer_limit: Retrieve limits for the given transaction type
+            transfer:reject_crypto_deposit: Reject a crypto deposit (travel rule)
+            transfer:update_crypto_deposit: Provide required travel-rule details
+            transfer:write_crypto_withdrawal: Withdraw asset to a specified destination address
+            transfer:write_deposit_address: Create an deposit address on a blockchain network
+            transfer:write_fiat_account: Create, update or delete a Fiat Account
+            transfer:write_fiat_deposit_instructions: Create, update or delete fiat deposit instructions
+            transfer:write_internal_transfer: Transfer assets between two Profiles
+            transfer:write_sandbox_fiat_deposit: Initiate a test fiat deposit in the Sandbox environment
+            transfer:write_fiat_withdrawal: Withdraw fiat to the given destination
+            events:read_event: Retrieve events
+x-tagGroups:
+- name: Deposits and Withdrawals
+  tags:
+  - Transfers
+  - Fiat Transfers
+  - Deposit Addresses
+  - Crypto Deposits
+  - Crypto Withdrawals
+  - Fees
+  - Internal Transfers
+  - Paxos Transfers
+  - Limits
+- name: Identity
+  tags:
+  - Identity
+  - Institution Members
+  - Accounts
+  - Account Members
+  - Identity Documents
+- name: API Credentials
+  tags:
+  - API Credentials
+- name: Profiles
+  tags:
+  - Profiles
+- name: Sandbox
+  tags:
+  - Sandbox Deposits
+  - Sandbox Identity
+  - Sandbox Fiat Transfers
+- name: Settlements
+  tags:
+  - Settlement
+- name: Stablecoin Conversion
+  tags:
+  - Stablecoin Conversion
+- name: Taxes
+  tags:
+  - Tax Forms
+- name: Trading
+  tags:
+  - Market Data
+  - Orders
+  - Quotes
+  - Quote Executions
+  - Pricing
+  - Issuer Quotes
+- name: Rewards
+  tags:
+  - Monitoring Addresses
+  - Statements
+  - Payments
+- name: Rewards (Alpha)
+  tags:
+  - Reward Addresses
+  - Claims
+  - Payout Groups
+  - Rewards
+- name: Events
+  tags:
+  - Events
+  - Event Types
+  - Event Objects

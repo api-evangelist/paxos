@@ -1,0 +1,403 @@
+openapi: 3.0.0
+info:
+  title: Paxos Account Members Crypto Deposits API
+  version: '2.0'
+  description: '<p>Welcome to Paxos APIs. At Paxos, our mission is to enable the movement of any asset, any time, in a trustworthy way. These APIs serve that mission by making it easier than ever for you to directly integrate our product capabilities into your application, leveraging the speed, stability, and security of the Paxos platform.</p> <p>The documentation that follows gives you access to our Crypto Brokerage, Trading, and Exchange products. It includes APIs for market data, orders, and the held rate quote flow.</p> <p>To test in our sandbox environment, <a href="https://account.sandbox.paxos.com" target="_blank">sign up</a> for an account. For more information about Paxos and our APIs, visit <a href="https://www.paxos.com/" target="_blank">Paxos.com</a>.</p>
+
+    '
+  x-logo:
+    url: /docs/paxos.svg
+    backgroundColor: '#FFFFFF'
+    altText: Paxos logo
+servers:
+- url: https://api.paxos.com/v2
+  description: Production
+- url: https://api.sandbox.paxos.com/v2
+  description: Sandbox
+tags:
+- name: Crypto Deposits
+  description: 'For [Paxos Global PTE Ltd](https://help.paxos.com/hc/en-us/articles/9647005243284) users, update or reject a crypto deposit that does not contain the required [travel rule](https://help.paxos.com/hc/en-us/articles/25928845778068) information.
+
+    Deposits with the `NEEDS_INFO` status require additional sender information before they can be processed.
+
+    - For individuals, both first and last name are required.
+
+    - For institutions, the institution name is required.
+
+
+    If a deposit is rejected, the funds will no longer be available.
+
+    '
+  externalDocs:
+    description: Learn more about travel rule udpates →
+    url: https://help.paxos.com/hc/en-us/articles/25422999706900
+paths:
+  /transfer/crypto-deposits/{id}/reject:
+    post:
+      summary: Reject Crypto Deposit
+      description: 'Reject a crypto deposit which is waiting for required travel rule information about the originator address.
+
+        If the rejected deposit has any status other than `NEEDS_INFO`, the request will return an error.
+
+        Only the creator of the crypto deposit can reject it.'
+      operationId: RejectCryptoDeposit
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RejectCryptoDepositResponse'
+              example: {}
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+              example:
+                type: about:blank
+                title: Bad Request
+                status: 400
+                detail: id must be uuid, given 2d929a0d-e1e3-4781-b7f8-7b34e66f
+          description: Bad Request
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+              example:
+                type: about:blank
+                title: Not Found
+                status: 404
+                detail: 'no crypto deposit found for id: 2d929a0d-e1e3-4781-b7f8-7b34e66f7832'
+          description: Could not find deposit
+        '409':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+              example:
+                type: about:blank
+                title: Conflict
+                status: 409
+                detail: crypto deposit 2d929a0d-e1e3-4781-b7f8-7b34e66f7832 does not need info
+          description: Deposit does not need info
+      parameters:
+      - name: id
+        description: 'Paxos ID of the crypto deposit to reject.
+
+          To retrieve the ID, log in to your Paxos account and go to the [Activity](https://account.paxos.com/wallet/activity) tab.
+
+          Download the CSV activity file and check the ID column.'
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransferPublicRejectCryptoDepositBody'
+        required: true
+      tags:
+      - Crypto Deposits
+      security:
+      - OAuth2:
+        - transfer:reject_crypto_deposit
+  /transfer/crypto-deposits/{id}/update:
+    post:
+      summary: Update Crypto Deposit
+      description: 'Crypto deposits that do not meet the minimum travel rule requirements are blocked.
+
+        To update a crypto deposit, provide the required travel rule information about the originator address.'
+      operationId: UpdateCryptoDeposit
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateCryptoDepositResponse'
+              example: {}
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+              example:
+                type: about:blank
+                title: Bad Request
+                status: 400
+                detail: id must be uuid, given 2d929a0d-e1e3-4781-b7f8-7b34e66f
+          description: Bad Request
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+              example:
+                type: about:blank
+                title: Not Found
+                status: 404
+                detail: 'no crypto deposit found for id: 2d929a0d-e1e3-4781-b7f8-7b34e66f7832'
+          description: Could not find deposit
+        '409':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+              example:
+                type: about:blank
+                title: Conflict
+                status: 409
+                detail: crypto deposit 2d929a0d-e1e3-4781-b7f8-7b34e66f7832 does not need info
+          description: Deposit does not need info
+      parameters:
+      - name: id
+        description: 'Paxos ID of the crypto deposit to update.
+
+          To retrieve the ID, log in to your Paxos account and go to the [Activity](https://account.paxos.com/wallet/activity) tab.
+
+          Download the CSV activity file and check the ID column.'
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransferPublicUpdateCryptoDepositBody'
+        required: true
+      tags:
+      - Crypto Deposits
+      security:
+      - OAuth2:
+        - transfer:update_crypto_deposit
+components:
+  schemas:
+    TransferPublicRejectCryptoDepositBody:
+      type: object
+      example:
+        identity_id: 54385e67-d7ef-40d1-b488-ceda6dd9b264
+      properties:
+        identity_id:
+          type: string
+          description: The Identity (`identity_id`) of the end user that requests to reject the deposit.
+      title: RejectCryptoDepositRequest
+      required:
+      - identity_id
+    InstitutionInfo:
+      type: object
+      properties:
+        institution_name:
+          type: string
+      required:
+      - institution_name
+    TransferPublicUpdateCryptoDepositBody:
+      type: object
+      example:
+        identity_id: 54385e67-d7ef-40d1-b488-ceda6dd9b264
+        originator_address_info:
+          first_name: John
+          last_name: Doe
+      properties:
+        identity_id:
+          type: string
+          description: The Identity (`identity_id`) of the end user updating the deposit.
+        originator_address_info:
+          $ref: '#/components/schemas/AddressInfo'
+      title: UpdateCryptoDepositRequest
+      required:
+      - identity_id
+      - originator_address_info
+    AddressInfo:
+      type: object
+      properties:
+        individual_info:
+          $ref: '#/components/schemas/IndividualInfo'
+        institution_info:
+          $ref: '#/components/schemas/InstitutionInfo'
+    RejectCryptoDepositResponse:
+      type: object
+    IndividualInfo:
+      type: object
+      properties:
+        first_name:
+          type: string
+        last_name:
+          type: string
+      required:
+      - first_name
+      - last_name
+    Problem:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+          description: 'An absolute URI that identifies the problem type.  When dereferenced,
+
+            it SHOULD provide human-readable documentation for the problem type
+
+            (e.g., using HTML).
+
+            '
+          default: about:blank
+          example: https://api.paxos.com/v2/problems/insufficient_funds
+        title:
+          type: string
+          description: 'A short, summary of the problem type. Written in english and readable
+
+            for engineers (usually not suited for non technical stakeholders and
+
+            not localized); example: Service Unavailable
+
+            '
+          example: Insufficient Funds
+        status:
+          type: integer
+          format: int32
+          description: 'The HTTP status code generated by the origin server for this occurrence
+
+            of the problem.
+
+            '
+          minimum: 100
+          maximum: 600
+          exclusiveMaximum: true
+          example: 403
+        detail:
+          type: string
+          description: 'A human readable explanation specific to this occurrence of the
+
+            problem.
+
+            '
+          example: Not enough funds in account.
+        meta:
+          type: object
+          description: 'Additional structured metadata about the error.
+
+            '
+    UpdateCryptoDepositResponse:
+      type: object
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      description: 'Paxos APIs use [OAuth 2](https://tools.ietf.org/html/rfc6749) with the [client credentials](https://tools.ietf.org/html/rfc6749#section-4.4) grant flow.
+
+
+        **Token URLs:**
+
+        - Production: https://oauth.paxos.com/oauth2/token
+
+        - Sandbox: https://oauth.sandbox.paxos.com/oauth2/token
+
+
+        Learn more in the [API credentials guide →](https://docs.paxos.com/developer/credentials)
+
+        '
+      flows:
+        clientCredentials:
+          tokenUrl: https://oauth.paxos.com/oauth2/token
+          scopes:
+            conversion:read_conversion_stablecoin: Retrieve stablecoin conversion details
+            conversion:write_conversion_stablecoin: Create or cancel a stablecoin conversion
+            exchange:historical_prices: Retrieve marketnaverage prices at a certain time increment
+            exchange:read_order: Retrieve order or order execution details
+            exchange:read_quote: Retrieve quote details for buying or selling an asset
+            exchange:read_quote_execution: Retrieve quote execution details
+            exchange:write_quote_execution: Create a quote execution for buying or selling an asset
+            exchange:write_order: Create or cancel an order for buying or selling an asset
+            fee:write_crypto_withdrawal_fee: Create a guaranteed fee for crypto withdrawal
+            funding:read_bank_balance: Retrieve Paxos dedicated bank account balance
+            funding:read_profile: Retrieve Profile details and deposit funds in Sandbox
+            funding:write_profile: Create a Profile
+            identity:read_account: Retrieve Account details
+            identity:read_identity: Retrieve Identity details or documents
+            identity:write_account: Create or update Account and Account Members
+            identity:write_identity: Create or update Identity details and set Sandbox Identify Status
+            settlement:read_transaction: Retrieve settlement transaction details
+            settlement:write_transaction: Create, affirm or cancel a settlement transaction
+            tax:read_tax_form: Retrieve tax details
+            tax:read_tax_lot: Retrieve tax lot details
+            tax:write_tax_lot: Update the given tax-lot ID
+            transfer:read_deposit_address: Retrieve deposit address details
+            transfer:read_fiat_account: Retrieve Fiat Account details
+            transfer:read_fiat_deposit_instructions: Retrieve fiat deposit instruction details
+            transfer:read_transfer: Retrieve transfer details
+            transfer:read_transfer_limit: Retrieve limits for the given transaction type
+            transfer:reject_crypto_deposit: Reject a crypto deposit (travel rule)
+            transfer:update_crypto_deposit: Provide required travel-rule details
+            transfer:write_crypto_withdrawal: Withdraw asset to a specified destination address
+            transfer:write_deposit_address: Create an deposit address on a blockchain network
+            transfer:write_fiat_account: Create, update or delete a Fiat Account
+            transfer:write_fiat_deposit_instructions: Create, update or delete fiat deposit instructions
+            transfer:write_internal_transfer: Transfer assets between two Profiles
+            transfer:write_sandbox_fiat_deposit: Initiate a test fiat deposit in the Sandbox environment
+            transfer:write_fiat_withdrawal: Withdraw fiat to the given destination
+            events:read_event: Retrieve events
+x-tagGroups:
+- name: Deposits and Withdrawals
+  tags:
+  - Transfers
+  - Fiat Transfers
+  - Deposit Addresses
+  - Crypto Deposits
+  - Crypto Withdrawals
+  - Fees
+  - Internal Transfers
+  - Paxos Transfers
+  - Limits
+- name: Identity
+  tags:
+  - Identity
+  - Institution Members
+  - Accounts
+  - Account Members
+  - Identity Documents
+- name: API Credentials
+  tags:
+  - API Credentials
+- name: Profiles
+  tags:
+  - Profiles
+- name: Sandbox
+  tags:
+  - Sandbox Deposits
+  - Sandbox Identity
+  - Sandbox Fiat Transfers
+- name: Settlements
+  tags:
+  - Settlement
+- name: Stablecoin Conversion
+  tags:
+  - Stablecoin Conversion
+- name: Taxes
+  tags:
+  - Tax Forms
+- name: Trading
+  tags:
+  - Market Data
+  - Orders
+  - Quotes
+  - Quote Executions
+  - Pricing
+  - Issuer Quotes
+- name: Rewards
+  tags:
+  - Monitoring Addresses
+  - Statements
+  - Payments
+- name: Rewards (Alpha)
+  tags:
+  - Reward Addresses
+  - Claims
+  - Payout Groups
+  - Rewards
+- name: Events
+  tags:
+  - Events
+  - Event Types
+  - Event Objects

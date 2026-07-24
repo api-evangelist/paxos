@@ -1,0 +1,1070 @@
+openapi: 3.0.0
+info:
+  title: Paxos Account Members Orders API
+  version: '2.0'
+  description: '<p>Welcome to Paxos APIs. At Paxos, our mission is to enable the movement of any asset, any time, in a trustworthy way. These APIs serve that mission by making it easier than ever for you to directly integrate our product capabilities into your application, leveraging the speed, stability, and security of the Paxos platform.</p> <p>The documentation that follows gives you access to our Crypto Brokerage, Trading, and Exchange products. It includes APIs for market data, orders, and the held rate quote flow.</p> <p>To test in our sandbox environment, <a href="https://account.sandbox.paxos.com" target="_blank">sign up</a> for an account. For more information about Paxos and our APIs, visit <a href="https://www.paxos.com/" target="_blank">Paxos.com</a>.</p>
+
+    '
+  x-logo:
+    url: /docs/paxos.svg
+    backgroundColor: '#FFFFFF'
+    altText: Paxos logo
+servers:
+- url: https://api.paxos.com/v2
+  description: Production
+- url: https://api.sandbox.paxos.com/v2
+  description: Sandbox
+tags:
+- name: Orders
+  description: '<p>There are three types of orders: market, limit and post-only.</p>
+
+    <p>Market orders guarantee execution at a variable price and quantity. Limit orders guarantee price and quantity at the time of execution but do not guarantee execution. Post-only is an order type that will only be placed on the order book if it is the maker side of a trade.</p>
+
+    '
+paths:
+  /executions:
+    get:
+      summary: List Executions
+      description: 'Retrieves full details of underlying executions with optional filters.
+
+        Notes:
+
+        - This endpoint returns a maximum of 1000 items per page.
+
+        - Filtering options are `account_id`, `profile_id` or neither (all executions).'
+      operationId: ListExecutions
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListExecutionsResponse'
+              examples:
+                response:
+                  value:
+                    items:
+                    - execution_id: '12422531'
+                      order_id: cb379c30-a9f8-4685-aa38-47d6e87ff09d
+                      executed_at: '2022-08-01T21:01:27.217Z'
+                      market: BTCUSD
+                      side: BUY
+                      amount: '0.00432539'
+                      price: '23119.25'
+                      commission: '0.34999920465125'
+                      commission_asset: USD
+                      rebate: '0'
+                      rebate_asset: USD
+                      gross_trade_amount: '99.9997727575'
+                    next_page_cursor: CgwI-Iu6iQYQgPGVoQEQg5v2BQ
+      parameters:
+      - name: profile_id
+        description: Filter executions by the Profile ID associated with the orders.
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: account_id
+        description: Filter executions by the Account ID associated with the orders.
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: order_id
+        description: Filter executions for a single order ID.
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: since_execution_id
+        description: Excludes executions after the given ID.
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: range.begin
+        description: Only return records after this timestamp, inclusive. RFC3339 format, like `2006-01-02T15:04:05Z`.
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: range.end
+        description: Only return records before this timestamp, inclusive. RFC3339 format, like `2006-01-02T15:04:05Z`.
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: page_cursor
+        description: Cursor token for fetching the next page.
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: limit
+        description: Number of results to return.
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      tags:
+      - Orders
+      security:
+      - OAuth2:
+        - exchange:read_order
+  /orders:
+    get:
+      summary: List Orders
+      description: 'Retrieves full details of orders associated with a Profile ID, with optional filters.
+
+
+        - Historical data prior to May 16, 2022 is unavailable.
+
+        - Pagination Limit has a max of 1000. Pagination Offset is now deprecated and nonfunctional.
+
+        - Filtering options are `account_id`, `profile_id` or neither (all orders).'
+      operationId: ListOrders
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListOrdersResponse'
+              examples:
+                response:
+                  value:
+                    items:
+                    - id: f190b163-208f-4d73-8deb-4fb8b24add00
+                      profile_id: b7b77d82-e6a7-4ae9-9904-36231aedf985
+                      ref_id: my-order-1
+                      status: FILLED
+                      market: ETHUSD
+                      side: BUY
+                      type: LIMIT
+                      price: '190.23'
+                      base_amount: '2.35781498'
+                      quote_amount: '0'
+                      metadata:
+                        customer_id: 9b8c9cba-801e-4418-adc0-ede709df6339
+                      amount_filled: '2.35781498'
+                      volume_weighted_average_price: '190.23'
+                      time_in_force: GTC
+                      is_triggered: false
+                    - id: 81e26e1d-eddb-455a-8b44-e3d845432de7
+                      profile_id: b7b77d82-e6a7-4ae9-9904-36231aedf985
+                      ref_id: my-order-2
+                      status: FILLED
+                      market: BTCUSD
+                      side: BUY
+                      type: MARKET
+                      price: '0'
+                      base_amount: '0'
+                      quote_amount: '500.00'
+                      metadata:
+                        customer_id: 9b8c9cba-801e-4418-adc0-ede709df6339
+                      amount_filled: '0.05142181'
+                      volume_weighted_average_price: '9723.50'
+                      time_in_force: FOK
+                      is_triggered: false
+                    next_page_cursor: CgsIxom6iQYQwO39XBDbsdVz
+      parameters:
+      - name: profile_id
+        description: The profile associated with the orders.
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: account_id
+        description: The account under which these orders are placed.
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: market
+        description: Filter by the trading pair.
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - ETHEUR
+          - ETHSGD
+          - ETHUSD
+          - BTCEUR
+          - BTCSGD
+          - BTCUSD
+          - PAXGUSD
+          - BCHUSD
+          - LTCUSD
+          - USDPUSD
+          - LINKUSD
+          - AAVEUSD
+          - UNIUSD
+          - PEPEUSD
+          - TRUMPUSD
+          - SHIBUSD
+          - ARBUSD
+          - BONKUSD
+          - ENAUSD
+          - MNTUSD
+          - ONDOUSD
+          - PENGUUSD
+          - QNTUSD
+          - RENDERUSD
+          - SKYUSD
+          - WIFUSD
+          - WLDUSD
+          - DOGEUSD
+          - AVAXUSD
+          - SUIUSD
+          - POLUSD
+          - XLMUSD
+          - BNBUSD
+      - name: status
+        description: Filter by the status of the order.
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - PENDING_SUBMISSION
+          - SUBMITTED
+          - OPEN
+          - FILLED
+          - CANCELLED
+          - REJECTED
+          - EXPIRED
+      - name: order_time.begin
+        description: Only return records after this timestamp, inclusive. RFC3339 format, like `2006-01-02T15:04:05Z`.
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: order_time.end
+        description: Only return records before this timestamp, inclusive. RFC3339 format, like `2006-01-02T15:04:05Z`.
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: ref_ids
+        description: The idempotence IDs provided during order creation.
+        in: query
+        required: false
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      - name: page_cursor
+        description: Cursor token for fetching the next page. If using this then do not use paginationLimit and paginationOffset fields.
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: limit
+        description: Number of results to return. If using this then do not use paginationLimit and paginationOffset fields.
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      tags:
+      - Orders
+      security:
+      - OAuth2:
+        - exchange:read_order
+  /profiles/{profile_id}/orders:
+    post:
+      summary: Create Order
+      description: 'For limit orders, create an order for buying or selling an asset:
+
+
+        - To buy, set `side = BUY` and set `base_amount` to the crypto amount you want to buy.
+
+        - To sell, set `side = SELL` and set `base_amount` to the crypto amount you want to sell.
+
+
+        For market orders, create an order for buying or selling an asset:
+
+
+        - To buy, set `side = BUY` and set `quote_amount` to the dollar amount you want to spend.
+
+        - To sell, set `side = SELL` and set `base_amount` to the crypto amount you want to sell.
+
+
+        There are five types of orders:
+
+
+        - Limit Orders: Buy or sell at a specified price or better. Execution not guaranteed. Taker orders will be rejected if price deviates 15% from midpoint.
+
+        - Post-Only Limit Orders: have the same properties as Limit Orders, but get rejected if they cross the orderbook.
+
+        - Market Orders: Operate as Immediate or Cancel (IOC) orders. Price is variable, executes at best available price at time of order.
+
+        - Stop Market Orders: Will convert to a market sell order with the specified quantity when the stop price is hit. The stop price does not guarantee that it will be executed at that price. Market conditions (price) might change between the order being triggered and order being executed. Currently only sell stop loss orders are supported.
+
+        - Stop Limit Orders: have a Stop Price which when hit, will convert to a limit sell order that will be executed at a specified price (or better)
+
+
+        Order size limits vary by asset and order type. For current limits, see
+
+        https://docs.paxos.com/guides/crypto-brokerage/orders-precision-rounding#order-limitations'
+      operationId: CreateOrder
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+              examples:
+                response:
+                  value:
+                    id: f190b163-208f-4d73-8deb-4fb8b24add00
+                    profile_id: b7b77d82-e6a7-4ae9-9904-36231aedf985
+                    ref_id: my-order-1
+                    status: SUBMITTED
+                    market: ETHUSD
+                    side: BUY
+                    type: LIMIT
+                    price: '190.23'
+                    base_amount: '2.35781498'
+                    quote_amount: ''
+                    metadata:
+                      customer_id: 9b8c9cba-801e-4418-adc0-ede709df6339
+                    amount_filled: '0.00000000'
+                    volume_weighted_average_price: '0.00000000'
+                    time_in_force: GTC
+        '400':
+          $ref: '#/components/responses/bad_request_trade'
+        '403':
+          description: Could not create order
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+              examples:
+                Insufficient Funds:
+                  $ref: '#/components/examples/Problem_insufficient_funds'
+                Notional Value Too Large:
+                  $ref: '#/components/examples/Problem_notional_value_too_large'
+                Market Conditions Prevented Execution:
+                  $ref: '#/components/examples/Problem_market_conditions_prevented_execution'
+        '409':
+          description: Order already created
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+              examples:
+                Already Exists:
+                  $ref: '#/components/examples/Problem_already_exists_order'
+      parameters:
+      - name: profile_id
+        description: The profileId the order will be associated with.
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExchangePublicCreateOrderBody'
+            examples:
+              Limit Buy:
+                value:
+                  side: BUY
+                  market: ETHUSD
+                  type: LIMIT
+                  price: '190.23'
+                  base_amount: '2.35781498'
+                  metadata:
+                    customer_id: 9b8c9cba-801e-4418-adc0-ede709df6339
+              Limit Sell:
+                value:
+                  side: SELL
+                  market: ETHUSD
+                  type: LIMIT
+                  price: '190.23'
+                  base_amount: '2.35781498'
+                  metadata:
+                    customer_id: 9b8c9cba-801e-4418-adc0-ede709df6339
+              Market Buy:
+                value:
+                  side: BUY
+                  market: ETHUSD
+                  type: MARKET
+                  quote_amount: '300.00'
+                  metadata:
+                    customer_id: 9b8c9cba-801e-4418-adc0-ede709df6339
+              Market Sell:
+                value:
+                  side: SELL
+                  market: ETHUSD
+                  type: MARKET
+                  base_amount: '3.48127123'
+                  metadata:
+                    customer_id: 9b8c9cba-801e-4418-adc0-ede709df6339
+        required: true
+      tags:
+      - Orders
+      security:
+      - OAuth2:
+        - exchange:write_order
+  /profiles/{profile_id}/orders/{id}:
+    get:
+      summary: Get Order
+      description: 'Retrieves the current state of an order.
+
+        - Historical data prior to May 16, 2022 is unavailable.'
+      operationId: GetOrder
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+              examples:
+                response:
+                  value:
+                    id: f190b163-208f-4d73-8deb-4fb8b24add00
+                    profile_id: b7b77d82-e6a7-4ae9-9904-36231aedf985
+                    ref_id: my-order-1
+                    status: SUBMITTED
+                    market: ETHUSD
+                    side: BUY
+                    type: LIMIT
+                    price: '190.23'
+                    base_amount: '2.35781498'
+                    quote_amount: ''
+                    metadata:
+                      customer_id: 9b8c9cba-801e-4418-adc0-ede709df6339
+                    amount_filled: '0.00000000'
+                    volume_weighted_average_price: '0.00000000'
+                    time_in_force: GTC
+                    is_triggered: false
+      parameters:
+      - name: profile_id
+        description: The profile ID associated with the order.
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: id
+        description: The UUID of the Order.
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - Orders
+      security:
+      - OAuth2:
+        - exchange:read_order
+    delete:
+      summary: Cancel Order
+      description: 'Submits a cancellation request. A response indicates that the request has been acknowledged and provides no
+
+        guarantee the order has been cancelled.'
+      operationId: CancelOrder
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CancelOrderResponse'
+              examples:
+                response:
+                  value: {}
+        '403':
+          description: Could not cancel order
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+              examples:
+                Not Cancellable:
+                  $ref: '#/components/examples/Problem_forbidden_order_cancel'
+      parameters:
+      - name: profile_id
+        description: The profile ID associated with the order.
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: id
+        description: The UUID of the Order.
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - Orders
+      security:
+      - OAuth2:
+        - exchange:write_order
+components:
+  examples:
+    Problem_market_conditions_prevented_execution:
+      value:
+        type: https://developer.paxos.com/docs/v2/problems/market-conditions-prevented-execution
+        title: Market Conditions Prevented Execution
+        status: 403
+        detail: market conditions have invalidated this order
+    Problem_bad_request:
+      value:
+        type: about:blank
+        title: Bad Request
+        status: 400
+        detail: 'base_amount invalid: invalid amount ''-10'': must be positive decimal'
+    Problem_insufficient_funds:
+      value:
+        type: https://developer.paxos.com/docs/v2/problems/insufficient-funds
+        title: Insufficient Funds
+        status: 403
+        detail: 'insufficient USD funds in profile b7b77d82-e6a7-4ae9-9904-36231aedf985: 100 needed, 50 available'
+        meta:
+          profile_id: b7b77d82-e6a7-4ae9-9904-36231aedf985
+          asset: USD
+          available: '50'
+          needed: '100'
+    Problem_already_exists_order:
+      value:
+        type: https://developer.paxos.com/docs/v2/problems/already-exists
+        title: Already Exists
+        status: 409
+        detail: order already exists with ref_id 'already_used_ref_id'
+        meta:
+          existing:
+            id: f190b163-208f-4d73-8deb-4fb8b24add00
+            profile_id: b7b77d82-e6a7-4ae9-9904-36231aedf985
+            ref_id: already_used_ref_id
+            status: SUBMITTED
+            side: BUY
+            market: BTCUSD
+            quote_amount: '100.00'
+    Problem_notional_value_too_large:
+      value:
+        type: https://developer.paxos.com/docs/v2/problems/notional-value-too-large
+        title: Notional Value Too Large
+        status: 403
+        detail: 'notional value too large for BTCUSD LIMIT order: order had notional value 1501234.56, but maximum allowed notional value is 1500000'
+        meta:
+          market: BTCUSD
+          order_type: LIMIT
+          order_notional_value: '1501234.56'
+          max_notional_value: '1500000'
+    Problem_forbidden_order_cancel:
+      value:
+        type: about:blank
+        title: Forbidden
+        status: 403
+        detail: order is not in cancellable state
+  schemas:
+    Execution:
+      type: object
+      properties:
+        execution_id:
+          type: string
+          format: uint64
+          title: Unique Execution id
+        order_id:
+          type: string
+          description: The UUID of the order associated with the execution.
+        executed_at:
+          type: string
+          format: date-time
+          description: Timestamp of the execution.
+        market:
+          $ref: '#/components/schemas/Market'
+        side:
+          $ref: '#/components/schemas/OrderSide'
+        amount:
+          type: string
+          format: decimal
+          description: Execution amount.
+        price:
+          type: string
+          format: decimal
+          description: Execution price.
+        commission:
+          type: string
+          format: decimal
+          description: Amount of commission paid.
+        commission_asset:
+          type: string
+          description: Currency of Commission payment. Fiat Only (USD, EUR, SGD).
+        rebate:
+          type: string
+          format: decimal
+          description: Amount of rebate applied.
+        rebate_asset:
+          type: string
+          description: Currency of the rebate. Fiat Only (USD, EUR, SGD).
+        account_id:
+          type: string
+          description: Account ID associated with the execution.
+        gross_trade_amount:
+          type: string
+          format: decimal
+          description: The total asset traded (asset amount multiplied by price paid).
+    CancelOrderResponse:
+      type: object
+    ExchangePublicCreateOrderBody:
+      type: object
+      example:
+        side: BUY
+        market: ETHUSD
+        type: LIMIT
+        price: '190.23'
+        base_amount: '2.35781498'
+        metadata:
+          customer_id: 9b8c9cba-801e-4418-adc0-ede709df6339
+      properties:
+        ref_id:
+          type: string
+          description: The idempotence ID for order creation. Can be reused if the order has been closed for more than 24 hours.
+        side:
+          $ref: '#/components/schemas/OrderSide'
+        market:
+          $ref: '#/components/schemas/Market'
+        type:
+          $ref: '#/components/schemas/OrderType'
+        base_amount:
+          type: string
+          description: The base currency amount for any limit order or the exact amount to sell for a market sell order.
+          pattern: ^[0-9]*\.?[0-9]+$
+        price:
+          type: string
+          format: decimal
+          description: The quote price.
+        quote_amount:
+          type: string
+          description: The quote currency amount of purchase for a market buy order.
+          pattern: ^[0-9]*\.?[0-9]+$
+        metadata:
+          type: object
+          additionalProperties:
+            type: string
+          description: 'Metadata to store on the quote and created order.
+
+            Up to 6 key/value pairs may be stored, with each key and value at most 100 characters.'
+        await_fill_millis:
+          type: integer
+          format: int64
+          description: "The amount of time to wait for the order to fill, in milliseconds.\nWhen `await_fill_millis` is set to a non-zero value, the Create Order call does not return immediately on order creation. Instead, the call blocks until either:\n  1. The order has filled completely\n  2. The time `await_fill_millis` has elapsed\nThe maximum wait timeout is 10 seconds (10000 milliseconds)."
+          maximum: 10000
+        time_in_force:
+          $ref: '#/components/schemas/TimeInForce'
+        expiration_date:
+          type: string
+          format: uint64
+          description: 'The date the order will expire if not completed when specified time in force is GTT.
+
+            Format is a unix timestamp in milliseconds (13-digits) UTC (total milliseconds that have elapsed since January 1st, 1970 UTC).'
+        identity_id:
+          type: string
+          description: The end user that requests the trade. This field must be used in conjunction with `identity_account_id`, otherwise the order is rejected. Depending on your integration type, `identity_id` and `identity_account_id` may be required.
+        identity_account_id:
+          type: string
+          description: The account under which this order is placed. The provided identity must be allowed to trade on behalf of this account. This field must be used in conjunction with `identity_id`, otherwise the order is rejected. Depending on your integration type, `identity_account_id` and `identity_id` may be required.
+        stop_price:
+          type: string
+          format: decimal
+          title: The stop price at which a stop order will trigger
+        recipient_profile_id:
+          type: string
+          description: The profileId that will receive settled currency (base for buy orders, quote for sell orders).
+        self_match_prevention_id:
+          type: string
+          description: 'The string field used to prevent matching against an opposite side order submitted by the same Crypto Brokerage customer. If this field is not submitted, an order that matches against another order submitted by the same customer will cancel the original resting order. Up to 36 characters are supported.
+
+            This field requires additional permissions only available to certain accounts. Reach out to your Paxos Representative for more information.'
+      title: Create Order Request
+      required:
+      - side
+      - market
+      - type
+    OrderStatus:
+      type: string
+      enum:
+      - PENDING_SUBMISSION
+      - SUBMITTED
+      - OPEN
+      - FILLED
+      - CANCELLED
+      - REJECTED
+      - EXPIRED
+      description: 'Status of the order. The `EXPIRED` status is only applicable
+
+        for Smart Order Routing customers.
+
+        '
+    ListExecutionsResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Execution'
+        next_page_cursor:
+          type: string
+          description: Cursor token required for fetching the next page.
+    Order:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The UUID of the order.
+        profile_id:
+          type: string
+          description: The profile ID the order is associated with.
+        ref_id:
+          type: string
+          description: The idempotence ID for order creation. Can be reused if the order has been closed for more than 24 hours.
+        status:
+          $ref: '#/components/schemas/OrderStatus'
+        side:
+          $ref: '#/components/schemas/OrderSide'
+        market:
+          $ref: '#/components/schemas/Market'
+        type:
+          $ref: '#/components/schemas/OrderType'
+        base_amount:
+          type: string
+          format: decimal
+          description: The base amount or purchase amount for a market sell order.
+        price:
+          type: string
+          format: decimal
+          description: The quote price.
+        quote_amount:
+          type: string
+          format: decimal
+          description: The quote amount of purchase for a market buy order.
+        metadata:
+          type: object
+          additionalProperties:
+            type: string
+          description: Client-specified metadata.
+        created_at:
+          type: string
+          format: date-time
+          description: The time at which the order was created.
+        modified_at:
+          type: string
+          format: date-time
+          description: The time at which the order was last modified.
+        amount_filled:
+          type: string
+          format: decimal
+          description: The amount that was filled.
+        volume_weighted_average_price:
+          type: string
+          format: decimal
+          description: The volume-weighted average price.
+        time_in_force:
+          $ref: '#/components/schemas/TimeInForce'
+        expiration_date:
+          type: string
+          format: date-time
+          description: The date the order will expire if not completed when specified time in force is GTT.
+        identity_id:
+          type: string
+          description: The end user that requests the trade. This field must be used in conjunction with `identity_account_id`, otherwise the order is rejected. Depending on your integration type, `identity_id` and `identity_account_id` may be required.
+        identity_account_id:
+          type: string
+          description: The account under which this order is placed. The provided identity must be allowed to trade on behalf of this account. This field must be used in conjunction with `identity_id`, otherwise the order is rejected. Depending on your integration type, `identity_account_id` and `identity_id` may be required.
+        stop_price:
+          type: string
+          format: decimal
+          title: The stop price for a stop order
+        recipient_profile_id:
+          type: string
+          description: The profileId that will receive settled currency (base for buy orders, quote for sell orders).
+        is_triggered:
+          type: boolean
+          description: Returns `true` when a stop order has been triggered.
+    TimeInForce:
+      type: string
+      enum:
+      - GTC
+      - FOK
+      - IOC
+      - GTT
+      description: 'How long an order will remain active before it expires.
+
+        - Immediate-or-Cancel (IOC): Cancel if not executed immediately, partial fills allowed.
+
+        - Good-Til-Canceled (GTC): Order can be canceled at any point until executed.
+
+        - Good-Til-Time (GTT): Expires if not executed by a specified time. GTT must be greater than 10 seconds after the order is placed, otherwise the order will be rejected.
+
+        - Fill-or-Kill (FOK): Fill entire order only or cancel entire order, does not allow for partial filling.
+
+
+        **Time in Force validity for Order Types**
+
+
+        | Order type      | Immediate or Cancel (IOC) | Good Til Canceled (GTC) | Good Til Time (GTT) | Fill or Kill (FOK) |
+
+        | --------------- | ------------------------- | ----------------------- | ------------------- | ------------------ |
+
+        | Market Order    | Default                   |  -                      |  -                  |  -                 |
+
+        | Limit Order     | Valid                     | Default                 | Valid               | Valid              |
+
+        | Post Only Limit | Valid                     | Default                 | Valid               | Valid              |
+
+        | Stop Market     |  -                        | Default                 | Valid               |  -                 |
+
+        | Stop Limit      |  -                        | Default                 | Valid               |  -                 |'
+    ListOrdersResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Order'
+        next_page_cursor:
+          type: string
+          description: Cursor token required for fetching the next page.
+    OrderType:
+      type: string
+      enum:
+      - LIMIT
+      - MARKET
+      - POST_ONLY_LIMIT
+      - STOP_MARKET
+      - STOP_LIMIT
+      description: Trade type.
+    Market:
+      type: string
+      enum:
+      - ETHEUR
+      - ETHSGD
+      - ETHUSD
+      - BTCEUR
+      - BTCSGD
+      - BTCUSD
+      - PAXGUSD
+      - BCHUSD
+      - LTCUSD
+      - USDPUSD
+      - LINKUSD
+      - AAVEUSD
+      - UNIUSD
+      - PEPEUSD
+      - TRUMPUSD
+      - SHIBUSD
+      - ARBUSD
+      - BONKUSD
+      - ENAUSD
+      - MNTUSD
+      - ONDOUSD
+      - PENGUUSD
+      - QNTUSD
+      - RENDERUSD
+      - SKYUSD
+      - WIFUSD
+      - WLDUSD
+      - DOGEUSD
+      - AVAXUSD
+      - SUIUSD
+      - POLUSD
+      - XLMUSD
+      - BNBUSD
+      title: ''
+    OrderSide:
+      type: string
+      enum:
+      - BUY
+      - SELL
+      description: Trade side.
+    Problem:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+          description: 'An absolute URI that identifies the problem type.  When dereferenced,
+
+            it SHOULD provide human-readable documentation for the problem type
+
+            (e.g., using HTML).
+
+            '
+          default: about:blank
+          example: https://api.paxos.com/v2/problems/insufficient_funds
+        title:
+          type: string
+          description: 'A short, summary of the problem type. Written in english and readable
+
+            for engineers (usually not suited for non technical stakeholders and
+
+            not localized); example: Service Unavailable
+
+            '
+          example: Insufficient Funds
+        status:
+          type: integer
+          format: int32
+          description: 'The HTTP status code generated by the origin server for this occurrence
+
+            of the problem.
+
+            '
+          minimum: 100
+          maximum: 600
+          exclusiveMaximum: true
+          example: 403
+        detail:
+          type: string
+          description: 'A human readable explanation specific to this occurrence of the
+
+            problem.
+
+            '
+          example: Not enough funds in account.
+        meta:
+          type: object
+          description: 'Additional structured metadata about the error.
+
+            '
+  responses:
+    bad_request_trade:
+      description: Bad Request
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+          examples:
+            Invalid Base Amount:
+              $ref: '#/components/examples/Problem_bad_request'
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      description: 'Paxos APIs use [OAuth 2](https://tools.ietf.org/html/rfc6749) with the [client credentials](https://tools.ietf.org/html/rfc6749#section-4.4) grant flow.
+
+
+        **Token URLs:**
+
+        - Production: https://oauth.paxos.com/oauth2/token
+
+        - Sandbox: https://oauth.sandbox.paxos.com/oauth2/token
+
+
+        Learn more in the [API credentials guide →](https://docs.paxos.com/developer/credentials)
+
+        '
+      flows:
+        clientCredentials:
+          tokenUrl: https://oauth.paxos.com/oauth2/token
+          scopes:
+            conversion:read_conversion_stablecoin: Retrieve stablecoin conversion details
+            conversion:write_conversion_stablecoin: Create or cancel a stablecoin conversion
+            exchange:historical_prices: Retrieve marketnaverage prices at a certain time increment
+            exchange:read_order: Retrieve order or order execution details
+            exchange:read_quote: Retrieve quote details for buying or selling an asset
+            exchange:read_quote_execution: Retrieve quote execution details
+            exchange:write_quote_execution: Create a quote execution for buying or selling an asset
+            exchange:write_order: Create or cancel an order for buying or selling an asset
+            fee:write_crypto_withdrawal_fee: Create a guaranteed fee for crypto withdrawal
+            funding:read_bank_balance: Retrieve Paxos dedicated bank account balance
+            funding:read_profile: Retrieve Profile details and deposit funds in Sandbox
+            funding:write_profile: Create a Profile
+            identity:read_account: Retrieve Account details
+            identity:read_identity: Retrieve Identity details or documents
+            identity:write_account: Create or update Account and Account Members
+            identity:write_identity: Create or update Identity details and set Sandbox Identify Status
+            settlement:read_transaction: Retrieve settlement transaction details
+            settlement:write_transaction: Create, affirm or cancel a settlement transaction
+            tax:read_tax_form: Retrieve tax details
+            tax:read_tax_lot: Retrieve tax lot details
+            tax:write_tax_lot: Update the given tax-lot ID
+            transfer:read_deposit_address: Retrieve deposit address details
+            transfer:read_fiat_account: Retrieve Fiat Account details
+            transfer:read_fiat_deposit_instructions: Retrieve fiat deposit instruction details
+            transfer:read_transfer: Retrieve transfer details
+            transfer:read_transfer_limit: Retrieve limits for the given transaction type
+            transfer:reject_crypto_deposit: Reject a crypto deposit (travel rule)
+            transfer:update_crypto_deposit: Provide required travel-rule details
+            transfer:write_crypto_withdrawal: Withdraw asset to a specified destination address
+            transfer:write_deposit_address: Create an deposit address on a blockchain network
+            transfer:write_fiat_account: Create, update or delete a Fiat Account
+            transfer:write_fiat_deposit_instructions: Create, update or delete fiat deposit instructions
+            transfer:write_internal_transfer: Transfer assets between two Profiles
+            transfer:write_sandbox_fiat_deposit: Initiate a test fiat deposit in the Sandbox environment
+            transfer:write_fiat_withdrawal: Withdraw fiat to the given destination
+            events:read_event: Retrieve events
+x-tagGroups:
+- name: Deposits and Withdrawals
+  tags:
+  - Transfers
+  - Fiat Transfers
+  - Deposit Addresses
+  - Crypto Deposits
+  - Crypto Withdrawals
+  - Fees
+  - Internal Transfers
+  - Paxos Transfers
+  - Limits
+- name: Identity
+  tags:
+  - Identity
+  - Institution Members
+  - Accounts
+  - Account Members
+  - Identity Documents
+- name: API Credentials
+  tags:
+  - API Credentials
+- name: Profiles
+  tags:
+  - Profiles
+- name: Sandbox
+  tags:
+  - Sandbox Deposits
+  - Sandbox Identity
+  - Sandbox Fiat Transfers
+- name: Settlements
+  tags:
+  - Settlement
+- name: Stablecoin Conversion
+  tags:
+  - Stablecoin Conversion
+- name: Taxes
+  tags:
+  - Tax Forms
+- name: Trading
+  tags:
+  - Market Data
+  - Orders
+  - Quotes
+  - Quote Executions
+  - Pricing
+  - Issuer Quotes
+- name: Rewards
+  tags:
+  - Monitoring Addresses
+  - Statements
+  - Payments
+- name: Rewards (Alpha)
+  tags:
+  - Reward Addresses
+  - Claims
+  - Payout Groups
+  - Rewards
+- name: Events
+  tags:
+  - Events
+  - Event Types
+  - Event Objects

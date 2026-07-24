@@ -1,0 +1,679 @@
+openapi: 3.0.0
+info:
+  title: Paxos Account Members Internal Transfers API
+  version: '2.0'
+  description: '<p>Welcome to Paxos APIs. At Paxos, our mission is to enable the movement of any asset, any time, in a trustworthy way. These APIs serve that mission by making it easier than ever for you to directly integrate our product capabilities into your application, leveraging the speed, stability, and security of the Paxos platform.</p> <p>The documentation that follows gives you access to our Crypto Brokerage, Trading, and Exchange products. It includes APIs for market data, orders, and the held rate quote flow.</p> <p>To test in our sandbox environment, <a href="https://account.sandbox.paxos.com" target="_blank">sign up</a> for an account. For more information about Paxos and our APIs, visit <a href="https://www.paxos.com/" target="_blank">Paxos.com</a>.</p>
+
+    '
+  x-logo:
+    url: /docs/paxos.svg
+    backgroundColor: '#FFFFFF'
+    altText: Paxos logo
+servers:
+- url: https://api.paxos.com/v2
+  description: Production
+- url: https://api.sandbox.paxos.com/v2
+  description: Sandbox
+tags:
+- name: Internal Transfers
+paths:
+  /transfer/internal:
+    post:
+      summary: Create Internal Transfer
+      description: Transfer assets between two profiles belonging to the same customer.
+      operationId: CreateInternalTransfer
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Transfer'
+              examples:
+                Internal Transfer:
+                  value:
+                    amount: '10'
+                    asset: BTC
+                    auto_conversion: {}
+                    balance_asset: BTC
+                    created_at: '2022-04-28T22:07:56.436854Z'
+                    customer_id: 66325f47-455d-4e0c-9d38-70c047b41dbe
+                    direction: DEBIT
+                    fee: '0'
+                    id: 5ab7e995-5589-4b3f-a333-c14b42ac6eaf
+                    metadata:
+                      my_id: TEST-v2-Profile-transfer-428169
+                    profile_id: 0acfa5a6-6f2e-41af-a833-48e301197ffd
+                    ref_id: TEST-v2-profile-transfer-ref_id-428169
+                    status: PENDING
+                    total: '10'
+                    type: INTERNAL_TRANSFER_DEBIT
+                    group_id: 55e98066-d9ad-483b-9f10-d3aa252ebbe3
+                Internal Transfer with 3rd-Party Integrations:
+                  value:
+                    account_id: bffc91a9-a5ff-4648-80f1-0542ba18c218
+                    amount: '10'
+                    asset: BTC
+                    auto_conversion: {}
+                    balance_asset: BTC
+                    created_at: '2022-04-28T22:07:56.436854Z'
+                    customer_id: 66325f47-455d-4e0c-9d38-70c047b41dbe
+                    direction: DEBIT
+                    fee: '0'
+                    id: 5ab7e995-5589-4b3f-a333-c14b42ac6eaf
+                    identity_id: 1ad1e93c-6652-4b9b-99d5-9a13d20f32cc
+                    metadata:
+                      my_id: TEST-v2-Profile-transfer-428169
+                    profile_id: 0acfa5a6-6f2e-41af-a833-48e301197ffd
+                    ref_id: TEST-v2-profile-transfer-ref_id-428169
+                    status: PENDING
+                    total: '10'
+                    type: INTERNAL_TRANSFER_DEBIT
+                    group_id: 55e98066-d9ad-483b-9f10-d3aa252ebbe3
+        '403':
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+              examples:
+                Insufficient Funds:
+                  $ref: '#/components/examples/Problem_insufficient_funds'
+          description: Insufficient funds
+        '404':
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+              examples:
+                Profile Not Found:
+                  $ref: '#/components/examples/Problem_not_found'
+          description: Could not find profile
+        '409':
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+              example:
+                type: https://api.paxos.com/v2/problems/already-exists
+                detail: Transfer with ref_id already exists
+                status: 409
+                title: Already exists
+          description: Transfer already exists
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateInternalTransferRequest'
+            examples:
+              Internal Transfer:
+                value:
+                  ref_id: idempotence_id
+                  from_profile_id: b7b77d82-e6a7-4ae9-9904-36231aedf985
+                  to_profile_id: 37867177-f88c-45cc-b9b5-d786e7079609
+                  asset: BTC
+                  amount: '0.05'
+                  metadata:
+                    my_id: 4024ee50-eefb-4f2e-85c7-e7899c0b7da5
+              Internal Transfer with 3rd-Party Integrations:
+                value:
+                  ref_id: idempotence_id
+                  from_profile_id: b7b77d82-e6a7-4ae9-9904-36231aedf985
+                  to_profile_id: 37867177-f88c-45cc-b9b5-d786e7079609
+                  asset: BTC
+                  amount: '0.05'
+                  metadata:
+                    my_id: 4024ee50-eefb-4f2e-85c7-e7899c0b7da5
+                  from_account_id: bffc91a9-a5ff-4648-80f1-0542ba18c218
+                  from_identity_id: 1ad1e93c-6652-4b9b-99d5-9a13d20f32cc
+                  to_account_id: 8f9af45d-3c01-49ba-95c5-64e4f90ae7a3
+                  to_identity_id: 79c7ae81-1a6c-406c-9e9f-97999cf96819
+        required: true
+      tags:
+      - Internal Transfers
+      security:
+      - OAuth2:
+        - transfer:write_internal_transfer
+components:
+  schemas:
+    Problem:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+          description: 'An absolute URI that identifies the problem type.  When dereferenced,
+
+            it SHOULD provide human-readable documentation for the problem type
+
+            (e.g., using HTML).
+
+            '
+          default: about:blank
+          example: https://api.paxos.com/v2/problems/insufficient_funds
+        title:
+          type: string
+          description: 'A short, summary of the problem type. Written in english and readable
+
+            for engineers (usually not suited for non technical stakeholders and
+
+            not localized); example: Service Unavailable
+
+            '
+          example: Insufficient Funds
+        status:
+          type: integer
+          format: int32
+          description: 'The HTTP status code generated by the origin server for this occurrence
+
+            of the problem.
+
+            '
+          minimum: 100
+          maximum: 600
+          exclusiveMaximum: true
+          example: 403
+        detail:
+          type: string
+          description: 'A human readable explanation specific to this occurrence of the
+
+            problem.
+
+            '
+          example: Not enough funds in account.
+        meta:
+          type: object
+          description: 'Additional structured metadata about the error.
+
+            '
+    TransferType:
+      type: string
+      enum:
+      - INTERNAL_TRANSFER_DEBIT
+      - INTERNAL_TRANSFER_CREDIT
+      - CRYPTO_DEPOSIT
+      - CRYPTO_WITHDRAWAL
+      - WIRE_DEPOSIT
+      - WIRE_WITHDRAWAL
+      - SEN_DEPOSIT
+      - SEN_WITHDRAWAL
+      - BANK_DEPOSIT
+      - BANK_WITHDRAWAL
+      - PAXOS_TRANSFER_DEBIT
+      - PAXOS_TRANSFER_CREDIT
+      - SIGNET_DEPOSIT
+      - SIGNET_WITHDRAWAL
+      - CBIT_WITHDRAWAL
+      - CBIT_DEPOSIT
+      - CUBIX_DEPOSIT
+      - CUBIX_WITHDRAWAL
+      - RTP_DEPOSIT
+      description: Type of transfer.
+    AutoConversion:
+      type: object
+      properties:
+        from_transfer_id:
+          type: string
+          title: Transfer Id of the deposit triggering this transfer (only on withdrawal transfers)
+        to_transfer_id:
+          type: string
+          title: Transfer Id of the withdrawal triggered by this deposit(only on deposit transfers)
+    TransferDirection:
+      type: string
+      enum:
+      - CREDIT
+      - DEBIT
+      description: Direction of the transfer.
+    TransferStatusDetails:
+      type: object
+      properties:
+        missing_trustline:
+          $ref: '#/components/schemas/MissingTrustline'
+        max_rent_exceeded:
+          $ref: '#/components/schemas/MaxRentExceeded'
+        pending_customer_approval:
+          $ref: '#/components/schemas/PendingCustomerApproval'
+        stale_fee_quote:
+          $ref: '#/components/schemas/StaleFeeQuote'
+        invalid_destination_address:
+          $ref: '#/components/schemas/InvalidDestinationAddress'
+      description: 'TransferStatusDetails provides additional information about why a transfer
+
+        is in its current state. This field is only populated when a transfer
+
+        encounters specific error conditions or requires additional context.'
+    PendingCustomerApproval:
+      type: object
+      properties:
+        message:
+          type: string
+          title: Human-readable explanation
+      description: PendingCustomerApproval represents that this resource is awaiting customer approval.
+    SecondaryStatusName:
+      type: string
+      enum:
+      - TRAVEL_RULE_INFO_REQUESTED
+      - TRAVEL_RULE_REJECTED
+      - CUSTOMER_REJECTED
+      - PENDING_CUSTOMER_APPROVAL
+      description: "Identifier for secondary status.\n\n - TRAVEL_RULE_INFO_REQUESTED: Travel rule information is required to continue processing the transfer.\n - TRAVEL_RULE_REJECTED: Transfer has been terminally rejected due to failing travel rule checks.\n - CUSTOMER_REJECTED: Transfer was rejected by a customer.\n - PENDING_CUSTOMER_APPROVAL: Transfer is pending customer approval."
+    TransferStatus:
+      type: string
+      enum:
+      - PENDING
+      - COMPLETED
+      - FAILED
+    InvalidDestinationAddress:
+      type: object
+      properties:
+        message:
+          type: string
+          title: Human-readable explanation of the error
+        destination_address:
+          type: string
+          title: The destination address that caused the cancellation
+      description: 'InvalidDestinationAddress represents a transfer cancelled because the destination address
+
+        cannot receive the requested asset (e.g. it is a token account for a different mint).'
+    CreateInternalTransferRequest:
+      type: object
+      example:
+        ref_id: idempotence_id
+        from_profile_id: b7b77d82-e6a7-4ae9-9904-36231aedf985
+        to_profile_id: 37867177-f88c-45cc-b9b5-d786e7079609
+        asset: BTC
+        amount: '0.05'
+        metadata:
+          my_id: 4024ee50-eefb-4f2e-85c7-e7899c0b7da5
+        recipient_metadata:
+          your_id: 43ab8d28-be1e-4729-8731-37fd976b167b
+      properties:
+        ref_id:
+          type: string
+          description: Client-specified ID for replay protection and lookup.
+        from_profile_id:
+          type: string
+          description: The profile from which to send funds.
+        to_profile_id:
+          type: string
+          description: The destination profile.
+        amount:
+          type: string
+          description: The amount to transfer.
+          pattern: ^[0-9]*\.?[0-9]+$
+        asset:
+          type: string
+          description: The asset to transfer, e.g. "USD", "BTC", "ETH".
+        metadata:
+          type: object
+          additionalProperties:
+            type: string
+          description: 'Optional client-specified metadata for the sender side of the transaction.
+
+            Up to 6 key/value pairs may be provided.
+
+            Each key and value must be less than or equal to 100 characters.'
+        from_identity_id:
+          type: string
+          description: The Paxos Identity (`identity_id`) of the sending user.
+        from_account_id:
+          type: string
+          description: 'The Paxos Account (`account_id`) of the sending user.
+
+            Required only for customers with [3rd-Party integrations](https://docs.paxos.com/crypto-brokerage/ledger-type#fiat-and-crypto-subledger) initiating transfers on behalf of their end users.'
+        to_identity_id:
+          type: string
+          description: The Paxos Identity (`identity_id`) of the destination user.
+        to_account_id:
+          type: string
+          description: 'The Paxos Account (`account_id`) of the destination user.
+
+            Required only for customers with [3rd-Party integrations](https://docs.paxos.com/crypto-brokerage/ledger-type#fiat-and-crypto-subledger) initiating transfers on behalf of their end users.'
+        recipient_metadata:
+          type: object
+          additionalProperties:
+            type: string
+          description: 'Optional client-specified metadata for the recipient side of the transaction.
+
+            Up to 6 key/value pairs may be provided.
+
+            Each key and value must be less than or equal to 100 characters.'
+      required:
+      - from_profile_id
+      - to_profile_id
+      - amount
+      - asset
+    MaxRentExceeded:
+      type: object
+      properties:
+        message:
+          type: string
+          title: Human-readable explanation of the error
+        destination_address:
+          type: string
+          title: The destination account address that triggered the check
+      description: 'MaxRentExceeded represents a failed transfer that was flagged for system abuse.
+
+        When a withdrawal''s rent calculation for the destination account exceeds the
+
+        maximum allowed rent threshold, it may indicate malicious behavior. This status
+
+        detail is set when such transfers are automatically cancelled.'
+    CryptoNetwork:
+      type: string
+      enum:
+      - BITCOIN
+      - ETHEREUM
+      - BITCOIN_CASH
+      - LITECOIN
+      - SOLANA
+      - POLYGON_POS
+      - BASE
+      - ARBITRUM_ONE
+      - STELLAR
+      - INK
+      - XLAYER
+      - AVALANCHE
+      - DOGECOIN
+      - SUI
+      - ROBINHOOD
+      - BNB
+      description: A CryptoNetwork is a blockchain transmitting cryptocurrencies.
+    MissingTrustline:
+      type: object
+      properties:
+        message:
+          type: string
+          title: Human-readable explanation of the error
+        destination_address:
+          type: string
+          title: The destination account address that is missing the trustline
+        asset:
+          type: string
+          title: The asset that requires a trustline
+      description: 'MissingTrustline represents a failed transfer where the destination account
+
+        lacks the required asset trustline.'
+    Transfer:
+      type: object
+      example:
+        id: f190b163-208f-4d73-8deb-4fb8b24add00
+        ref_id: idempotence_id
+        customer_id: 9b8c9cba-801e-4418-adc0-ede709df6339
+        profile_id: b7b77d82-e6a7-4ae9-9904-36231aedf985
+        amount: '0.10000000'
+        total: '0.10000023'
+        fee: '0.00000023'
+        asset: BTC
+        balance_asset: BTC
+        direction: WITHDRAWAL
+        type: CRYPTO_WITHDRAWAL
+        status: COMPLETED
+        created_at: '2020-01-17T18:36:08.737Z'
+        updated_at: '2020-01-17T18:37:08.737Z'
+        crypto_network: BITCOIN
+        crypto_tx_hash: f4184fc596403b9d638783cf57adfe4c75c605f6356fbc91338530e9831e9e16
+        crypto_tx_index: '0'
+        destination_address: 1BvBMSEYstWetqTFn5Au4m4GFg7xJaNVN2
+        notional_value: '1.02'
+        metadata:
+          my_id: 4024ee50-eefb-4f2e-85c7-e7899c0b7da5
+      properties:
+        id:
+          type: string
+          description: The Paxos transfer ID.
+        customer_id:
+          type: string
+          description: The Paxos customer ID.
+        profile_id:
+          type: string
+          description: The target Profile of the transfer. The profile asset balance is debited or credited by the transfer.
+        identity_id:
+          type: string
+          description: The Paxos ID of the Identity associated with the transfer.
+        ref_id:
+          type: string
+          description: The optional client-specified ID for replay protection and lookup.
+        amount:
+          type: string
+          description: The amount sent in the transfer.
+          pattern: ^[0-9]*\.?[0-9]+$
+        total:
+          type: string
+          description: 'The balance change from this transfer: amount - fee for deposits, and amount + fee for withdrawals. Unsigned.'
+          pattern: ^[0-9]*\.?[0-9]+$
+        fee:
+          type: string
+          description: The fee paid for the transfer.
+          pattern: ^[0-9]*\.?[0-9]+$
+        asset:
+          type: string
+          description: The asset for this transfer. This profile's balance of this asset will be debited or credited.
+        balance_asset:
+          type: string
+          description: The balance_asset represents what asset's balance was affected at Paxos with this transfer. It only differs from Asset when the transfer includes conversion.
+        direction:
+          $ref: '#/components/schemas/TransferDirection'
+        type:
+          $ref: '#/components/schemas/TransferType'
+        status:
+          $ref: '#/components/schemas/TransferStatus'
+        secondary_status:
+          $ref: '#/components/schemas/SecondaryStatus'
+        status_details:
+          $ref: '#/components/schemas/TransferStatusDetails'
+        created_at:
+          type: string
+          format: date-time
+          description: The time at which this transfer record was created.
+        updated_at:
+          type: string
+          format: date-time
+          description: The time at which this transfer record was most recently updated.
+        metadata:
+          type: object
+          additionalProperties:
+            type: string
+          description: 'Optional client-specified stored metadata. For deposit event transfers
+
+            this metadata is copied from the crypto deposit address or fiat deposit
+
+            memo used for attribution.
+
+            Up to 6 key/value pairs may be returned.
+
+            Each key and value must be less than or equal to 100 characters.'
+        destination_address:
+          type: string
+          description: The destination crypto address.
+        crypto_network:
+          $ref: '#/components/schemas/CryptoNetwork'
+        crypto_tx_hash:
+          type: string
+          description: For crypto transactions, the on-chain transaction hash.
+        crypto_tx_index:
+          type: string
+          description: For crypto transactions, the output index or output address.
+        account_id:
+          type: string
+          description: The Paxos ID of the Account associated with the transfer.
+        auto_conversion:
+          $ref: '#/components/schemas/AutoConversion'
+        group_id:
+          type: string
+          description: Unique identifier linking the debit and credit sides of an internal or Paxos transfer.
+        fiat_account_id:
+          type: string
+          description: For fiat withdrawals, the Paxos ID of the owner's fiat account (UUID).
+        notional_value:
+          type: string
+          format: decimal
+          description: For crypto withdrawals and deposits, the USD value of the combined amount and fee at the time of the transfer.
+        memo:
+          type: string
+          description: An optional memo to be included with the transfer as an identifier.
+      required:
+      - id
+      - customer_id
+      - profile_id
+      - amount
+      - total
+      - fee
+      - created_at
+      - updated_at
+      - asset
+      - status
+      - direction
+      - type
+    SecondaryStatus:
+      type: object
+      properties:
+        name:
+          $ref: '#/components/schemas/SecondaryStatusName'
+        detail:
+          type: string
+          description: Additional information about the current status of the transfer (e.g. if information is missing).
+      description: Secondary status for the transfer, used for more granular explanation of the transfer status.
+    StaleFeeQuote:
+      type: object
+      properties:
+        message:
+          type: string
+          title: Human-readable explanation
+      description: StaleFeeQuote represents a transfer cancelled because on-chain state changed after the fee was quoted.
+  examples:
+    Problem_not_found:
+      value:
+        type: about:blank
+        title: Not Found
+        status: 404
+        detail: 'profile not found: b7b77d82-e6a7-4ae9-9904-36231aedf985'
+    Problem_insufficient_funds:
+      value:
+        type: https://developer.paxos.com/docs/v2/problems/insufficient-funds
+        title: Insufficient Funds
+        status: 403
+        detail: 'insufficient USD funds in profile b7b77d82-e6a7-4ae9-9904-36231aedf985: 100 needed, 50 available'
+        meta:
+          profile_id: b7b77d82-e6a7-4ae9-9904-36231aedf985
+          asset: USD
+          available: '50'
+          needed: '100'
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      description: 'Paxos APIs use [OAuth 2](https://tools.ietf.org/html/rfc6749) with the [client credentials](https://tools.ietf.org/html/rfc6749#section-4.4) grant flow.
+
+
+        **Token URLs:**
+
+        - Production: https://oauth.paxos.com/oauth2/token
+
+        - Sandbox: https://oauth.sandbox.paxos.com/oauth2/token
+
+
+        Learn more in the [API credentials guide →](https://docs.paxos.com/developer/credentials)
+
+        '
+      flows:
+        clientCredentials:
+          tokenUrl: https://oauth.paxos.com/oauth2/token
+          scopes:
+            conversion:read_conversion_stablecoin: Retrieve stablecoin conversion details
+            conversion:write_conversion_stablecoin: Create or cancel a stablecoin conversion
+            exchange:historical_prices: Retrieve marketnaverage prices at a certain time increment
+            exchange:read_order: Retrieve order or order execution details
+            exchange:read_quote: Retrieve quote details for buying or selling an asset
+            exchange:read_quote_execution: Retrieve quote execution details
+            exchange:write_quote_execution: Create a quote execution for buying or selling an asset
+            exchange:write_order: Create or cancel an order for buying or selling an asset
+            fee:write_crypto_withdrawal_fee: Create a guaranteed fee for crypto withdrawal
+            funding:read_bank_balance: Retrieve Paxos dedicated bank account balance
+            funding:read_profile: Retrieve Profile details and deposit funds in Sandbox
+            funding:write_profile: Create a Profile
+            identity:read_account: Retrieve Account details
+            identity:read_identity: Retrieve Identity details or documents
+            identity:write_account: Create or update Account and Account Members
+            identity:write_identity: Create or update Identity details and set Sandbox Identify Status
+            settlement:read_transaction: Retrieve settlement transaction details
+            settlement:write_transaction: Create, affirm or cancel a settlement transaction
+            tax:read_tax_form: Retrieve tax details
+            tax:read_tax_lot: Retrieve tax lot details
+            tax:write_tax_lot: Update the given tax-lot ID
+            transfer:read_deposit_address: Retrieve deposit address details
+            transfer:read_fiat_account: Retrieve Fiat Account details
+            transfer:read_fiat_deposit_instructions: Retrieve fiat deposit instruction details
+            transfer:read_transfer: Retrieve transfer details
+            transfer:read_transfer_limit: Retrieve limits for the given transaction type
+            transfer:reject_crypto_deposit: Reject a crypto deposit (travel rule)
+            transfer:update_crypto_deposit: Provide required travel-rule details
+            transfer:write_crypto_withdrawal: Withdraw asset to a specified destination address
+            transfer:write_deposit_address: Create an deposit address on a blockchain network
+            transfer:write_fiat_account: Create, update or delete a Fiat Account
+            transfer:write_fiat_deposit_instructions: Create, update or delete fiat deposit instructions
+            transfer:write_internal_transfer: Transfer assets between two Profiles
+            transfer:write_sandbox_fiat_deposit: Initiate a test fiat deposit in the Sandbox environment
+            transfer:write_fiat_withdrawal: Withdraw fiat to the given destination
+            events:read_event: Retrieve events
+x-tagGroups:
+- name: Deposits and Withdrawals
+  tags:
+  - Transfers
+  - Fiat Transfers
+  - Deposit Addresses
+  - Crypto Deposits
+  - Crypto Withdrawals
+  - Fees
+  - Internal Transfers
+  - Paxos Transfers
+  - Limits
+- name: Identity
+  tags:
+  - Identity
+  - Institution Members
+  - Accounts
+  - Account Members
+  - Identity Documents
+- name: API Credentials
+  tags:
+  - API Credentials
+- name: Profiles
+  tags:
+  - Profiles
+- name: Sandbox
+  tags:
+  - Sandbox Deposits
+  - Sandbox Identity
+  - Sandbox Fiat Transfers
+- name: Settlements
+  tags:
+  - Settlement
+- name: Stablecoin Conversion
+  tags:
+  - Stablecoin Conversion
+- name: Taxes
+  tags:
+  - Tax Forms
+- name: Trading
+  tags:
+  - Market Data
+  - Orders
+  - Quotes
+  - Quote Executions
+  - Pricing
+  - Issuer Quotes
+- name: Rewards
+  tags:
+  - Monitoring Addresses
+  - Statements
+  - Payments
+- name: Rewards (Alpha)
+  tags:
+  - Reward Addresses
+  - Claims
+  - Payout Groups
+  - Rewards
+- name: Events
+  tags:
+  - Events
+  - Event Types
+  - Event Objects

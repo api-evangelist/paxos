@@ -1,0 +1,756 @@
+openapi: 3.0.0
+info:
+  title: Paxos Account Members Transfers API
+  version: '2.0'
+  description: '<p>Welcome to Paxos APIs. At Paxos, our mission is to enable the movement of any asset, any time, in a trustworthy way. These APIs serve that mission by making it easier than ever for you to directly integrate our product capabilities into your application, leveraging the speed, stability, and security of the Paxos platform.</p> <p>The documentation that follows gives you access to our Crypto Brokerage, Trading, and Exchange products. It includes APIs for market data, orders, and the held rate quote flow.</p> <p>To test in our sandbox environment, <a href="https://account.sandbox.paxos.com" target="_blank">sign up</a> for an account. For more information about Paxos and our APIs, visit <a href="https://www.paxos.com/" target="_blank">Paxos.com</a>.</p>
+
+    '
+  x-logo:
+    url: /docs/paxos.svg
+    backgroundColor: '#FFFFFF'
+    altText: Paxos logo
+servers:
+- url: https://api.paxos.com/v2
+  description: Production
+- url: https://api.sandbox.paxos.com/v2
+  description: Sandbox
+tags:
+- name: Transfers
+  description: 'Each deposit to and withdrawal from a Paxos account is a Transfer.
+
+    A Transfer is associated with a particular Profile, and increases or
+
+    decreases the available balance of a single asset in that Profile.
+
+    '
+paths:
+  /transfer/transfers:
+    get:
+      summary: List Transfers
+      description: 'List all transfers, optionally filtering and paging the results.
+
+
+        By default, transfers are returned in reverse chronological (descending)
+
+        order by creation time.
+
+
+        The recommended polling workflow is to query the results in ascending
+
+        order (by setting `order_by` to `CREATED_AT`), keeping track of the
+
+        `created_at` timestamp of the most recent transfer in the paged results.
+
+        Once transfers are discovered, the caller should store the returned `ID`
+
+        and query GetTransfer to retrieve status updates.'
+      operationId: ListTransfers
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListTransfersResponse'
+      parameters:
+      - name: profile_ids
+        description: 'Optionally filter by the target profiles of the transfers. Limit 100.
+
+          Can be combined with created_at.* or updated_at.* filtering options only.'
+        in: query
+        required: false
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      - name: identity_ids
+        description: 'Optionally filter by the Identities associated with the transfers. Limit 100.
+
+          Can be combined with created_at.* or updated_at.* filtering options only.'
+        in: query
+        required: false
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      - name: ref_ids
+        description: 'The client-specified IDs provided during transfer creation. Limit 100.
+
+          Can be combined with created_at.* or updated_at.* filtering options only.'
+        in: query
+        required: false
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      - name: created_at.lt
+        description: Include timestamps strictly less than lt. RFC3339 format, like `2006-01-02T15:04:05Z`.
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: created_at.lte
+        description: Include timestamps less than or equal to lte. RFC3339 format, like `2006-01-02T15:04:05Z`.
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: created_at.eq
+        description: Include timestamps exactly equal to eq. RFC3339 format, like `2006-01-02T15:04:05Z`.
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: created_at.gte
+        description: Include timestamps greater than or equal to gte. RFC3339 format, like `2006-01-02T15:04:05Z`.
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: created_at.gt
+        description: Include timestamps strictly greater than gt. RFC3339 format, like `2006-01-02T15:04:05Z`.
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: updated_at.lt
+        description: Include timestamps strictly less than lt. RFC3339 format, like `2006-01-02T15:04:05Z`.
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: updated_at.lte
+        description: Include timestamps less than or equal to lte. RFC3339 format, like `2006-01-02T15:04:05Z`.
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: updated_at.eq
+        description: Include timestamps exactly equal to eq. RFC3339 format, like `2006-01-02T15:04:05Z`.
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: updated_at.gte
+        description: Include timestamps greater than or equal to gte. RFC3339 format, like `2006-01-02T15:04:05Z`.
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: updated_at.gt
+        description: Include timestamps strictly greater than gt. RFC3339 format, like `2006-01-02T15:04:05Z`.
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: limit
+        description: Number of results to return. Defaults to 100 if no limit is provided. Maximum 1000.
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: order
+        description: 'Determines whether the items are returned in ascending (ASC), or descending (DESC) order.
+
+          Defaults to ASC if `order_by` is UPDATED_AT. Otherwise defaults to DESC.'
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - DESC
+          - ASC
+      - name: order_by
+        description: 'The specific method by which the returned results will be ordered.
+
+          When specifying both `order_by` and a timestamp filter, `order_by` must equal the timestamp filter type.
+
+          For example:
+
+
+          `updated_at.gte = 2022-07-01T03:02:01Z`, `order_by = UPDATED_AT`
+
+
+          Using `updated_at.gte = 2022-07-01T03:02:01Z`, `order_by = CREATED_AT` is an invalid pairing.'
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - CREATED_AT
+          - UPDATED_AT
+      - name: page_cursor
+        description: 'Optional: Cursor for getting the next page of results. When the number of items returned is fewer
+
+          than the limit, there is currently no next page.'
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: account_ids
+        description: 'Optionally filter by the Accounts associated with the transfers. Limit 100.
+
+          Can be combined with created_at.* or updated_at.* filtering options only.'
+        in: query
+        required: false
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      - name: ids
+        description: 'Optionally filter by the transfer ids. Limit 100.
+
+          Can be combined with created_at.* or updated_at.* filtering options only.'
+        in: query
+        required: false
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      - name: type
+        description: 'Retrieve all (default) or the specified transfers.
+
+          Optionally filter by transfer `type`.
+
+          To retrieve multiple transfer types, use query parameters: e.g., `type=CRYPTO_DEPOSIT&type=CRYPTO_WITHDRAWAL`.
+
+          Can be combined with `created_at.*` or `updated_at.*` filtering options only.'
+        in: query
+        required: false
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - INTERNAL_TRANSFER_DEBIT
+            - INTERNAL_TRANSFER_CREDIT
+            - CRYPTO_DEPOSIT
+            - CRYPTO_WITHDRAWAL
+            - WIRE_DEPOSIT
+            - WIRE_WITHDRAWAL
+            - SEN_DEPOSIT
+            - SEN_WITHDRAWAL
+            - BANK_DEPOSIT
+            - BANK_WITHDRAWAL
+            - PAXOS_TRANSFER_DEBIT
+            - PAXOS_TRANSFER_CREDIT
+            - SIGNET_DEPOSIT
+            - SIGNET_WITHDRAWAL
+            - CBIT_WITHDRAWAL
+            - CBIT_DEPOSIT
+            - CUBIX_DEPOSIT
+            - CUBIX_WITHDRAWAL
+            - RTP_DEPOSIT
+      - name: group_ids
+        description: Optionally filter by transfer `group_ids`. Limit 100.
+        in: query
+        required: false
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      - name: crypto_tx_hashes
+        description: Optionally filter by the on-chain transaction hash for crypto transactions. Limit 100.
+        in: query
+        required: false
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      - name: secondary_statuses
+        description: "Optionally filter by secondary status.\n\n - TRAVEL_RULE_INFO_REQUESTED: Travel rule information is required to continue processing the transfer.\n - TRAVEL_RULE_REJECTED: Transfer has been terminally rejected due to failing travel rule checks.\n - CUSTOMER_REJECTED: Transfer was rejected by a customer.\n - PENDING_CUSTOMER_APPROVAL: Transfer is pending customer approval."
+        in: query
+        required: false
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - TRAVEL_RULE_INFO_REQUESTED
+            - TRAVEL_RULE_REJECTED
+            - CUSTOMER_REJECTED
+            - PENDING_CUSTOMER_APPROVAL
+      - name: statuses
+        description: Optionally filter by status.
+        in: query
+        required: false
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - PENDING
+            - COMPLETED
+            - FAILED
+      tags:
+      - Transfers
+      security:
+      - OAuth2:
+        - transfer:read_transfer
+  /transfer/transfers/{id}:
+    get:
+      summary: Get Transfer
+      description: 'Get a single transfer by ID.
+
+
+        In the polling workflow, this endpoint can be called to monitor transfer
+
+        status changes.'
+      operationId: GetTransfer
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Transfer'
+      parameters:
+      - name: id
+        description: The Paxos transfer UUID.
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - Transfers
+      security:
+      - OAuth2:
+        - transfer:read_transfer
+components:
+  schemas:
+    TransferType:
+      type: string
+      enum:
+      - INTERNAL_TRANSFER_DEBIT
+      - INTERNAL_TRANSFER_CREDIT
+      - CRYPTO_DEPOSIT
+      - CRYPTO_WITHDRAWAL
+      - WIRE_DEPOSIT
+      - WIRE_WITHDRAWAL
+      - SEN_DEPOSIT
+      - SEN_WITHDRAWAL
+      - BANK_DEPOSIT
+      - BANK_WITHDRAWAL
+      - PAXOS_TRANSFER_DEBIT
+      - PAXOS_TRANSFER_CREDIT
+      - SIGNET_DEPOSIT
+      - SIGNET_WITHDRAWAL
+      - CBIT_WITHDRAWAL
+      - CBIT_DEPOSIT
+      - CUBIX_DEPOSIT
+      - CUBIX_WITHDRAWAL
+      - RTP_DEPOSIT
+      description: Type of transfer.
+    AutoConversion:
+      type: object
+      properties:
+        from_transfer_id:
+          type: string
+          title: Transfer Id of the deposit triggering this transfer (only on withdrawal transfers)
+        to_transfer_id:
+          type: string
+          title: Transfer Id of the withdrawal triggered by this deposit(only on deposit transfers)
+    TransferDirection:
+      type: string
+      enum:
+      - CREDIT
+      - DEBIT
+      description: Direction of the transfer.
+    TransferStatusDetails:
+      type: object
+      properties:
+        missing_trustline:
+          $ref: '#/components/schemas/MissingTrustline'
+        max_rent_exceeded:
+          $ref: '#/components/schemas/MaxRentExceeded'
+        pending_customer_approval:
+          $ref: '#/components/schemas/PendingCustomerApproval'
+        stale_fee_quote:
+          $ref: '#/components/schemas/StaleFeeQuote'
+        invalid_destination_address:
+          $ref: '#/components/schemas/InvalidDestinationAddress'
+      description: 'TransferStatusDetails provides additional information about why a transfer
+
+        is in its current state. This field is only populated when a transfer
+
+        encounters specific error conditions or requires additional context.'
+    ListTransfersResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Transfer'
+        next_page_cursor:
+          type: string
+    PendingCustomerApproval:
+      type: object
+      properties:
+        message:
+          type: string
+          title: Human-readable explanation
+      description: PendingCustomerApproval represents that this resource is awaiting customer approval.
+    SecondaryStatusName:
+      type: string
+      enum:
+      - TRAVEL_RULE_INFO_REQUESTED
+      - TRAVEL_RULE_REJECTED
+      - CUSTOMER_REJECTED
+      - PENDING_CUSTOMER_APPROVAL
+      description: "Identifier for secondary status.\n\n - TRAVEL_RULE_INFO_REQUESTED: Travel rule information is required to continue processing the transfer.\n - TRAVEL_RULE_REJECTED: Transfer has been terminally rejected due to failing travel rule checks.\n - CUSTOMER_REJECTED: Transfer was rejected by a customer.\n - PENDING_CUSTOMER_APPROVAL: Transfer is pending customer approval."
+    TransferStatus:
+      type: string
+      enum:
+      - PENDING
+      - COMPLETED
+      - FAILED
+    InvalidDestinationAddress:
+      type: object
+      properties:
+        message:
+          type: string
+          title: Human-readable explanation of the error
+        destination_address:
+          type: string
+          title: The destination address that caused the cancellation
+      description: 'InvalidDestinationAddress represents a transfer cancelled because the destination address
+
+        cannot receive the requested asset (e.g. it is a token account for a different mint).'
+    MaxRentExceeded:
+      type: object
+      properties:
+        message:
+          type: string
+          title: Human-readable explanation of the error
+        destination_address:
+          type: string
+          title: The destination account address that triggered the check
+      description: 'MaxRentExceeded represents a failed transfer that was flagged for system abuse.
+
+        When a withdrawal''s rent calculation for the destination account exceeds the
+
+        maximum allowed rent threshold, it may indicate malicious behavior. This status
+
+        detail is set when such transfers are automatically cancelled.'
+    CryptoNetwork:
+      type: string
+      enum:
+      - BITCOIN
+      - ETHEREUM
+      - BITCOIN_CASH
+      - LITECOIN
+      - SOLANA
+      - POLYGON_POS
+      - BASE
+      - ARBITRUM_ONE
+      - STELLAR
+      - INK
+      - XLAYER
+      - AVALANCHE
+      - DOGECOIN
+      - SUI
+      - ROBINHOOD
+      - BNB
+      description: A CryptoNetwork is a blockchain transmitting cryptocurrencies.
+    MissingTrustline:
+      type: object
+      properties:
+        message:
+          type: string
+          title: Human-readable explanation of the error
+        destination_address:
+          type: string
+          title: The destination account address that is missing the trustline
+        asset:
+          type: string
+          title: The asset that requires a trustline
+      description: 'MissingTrustline represents a failed transfer where the destination account
+
+        lacks the required asset trustline.'
+    Transfer:
+      type: object
+      example:
+        id: f190b163-208f-4d73-8deb-4fb8b24add00
+        ref_id: idempotence_id
+        customer_id: 9b8c9cba-801e-4418-adc0-ede709df6339
+        profile_id: b7b77d82-e6a7-4ae9-9904-36231aedf985
+        amount: '0.10000000'
+        total: '0.10000023'
+        fee: '0.00000023'
+        asset: BTC
+        balance_asset: BTC
+        direction: WITHDRAWAL
+        type: CRYPTO_WITHDRAWAL
+        status: COMPLETED
+        created_at: '2020-01-17T18:36:08.737Z'
+        updated_at: '2020-01-17T18:37:08.737Z'
+        crypto_network: BITCOIN
+        crypto_tx_hash: f4184fc596403b9d638783cf57adfe4c75c605f6356fbc91338530e9831e9e16
+        crypto_tx_index: '0'
+        destination_address: 1BvBMSEYstWetqTFn5Au4m4GFg7xJaNVN2
+        notional_value: '1.02'
+        metadata:
+          my_id: 4024ee50-eefb-4f2e-85c7-e7899c0b7da5
+      properties:
+        id:
+          type: string
+          description: The Paxos transfer ID.
+        customer_id:
+          type: string
+          description: The Paxos customer ID.
+        profile_id:
+          type: string
+          description: The target Profile of the transfer. The profile asset balance is debited or credited by the transfer.
+        identity_id:
+          type: string
+          description: The Paxos ID of the Identity associated with the transfer.
+        ref_id:
+          type: string
+          description: The optional client-specified ID for replay protection and lookup.
+        amount:
+          type: string
+          description: The amount sent in the transfer.
+          pattern: ^[0-9]*\.?[0-9]+$
+        total:
+          type: string
+          description: 'The balance change from this transfer: amount - fee for deposits, and amount + fee for withdrawals. Unsigned.'
+          pattern: ^[0-9]*\.?[0-9]+$
+        fee:
+          type: string
+          description: The fee paid for the transfer.
+          pattern: ^[0-9]*\.?[0-9]+$
+        asset:
+          type: string
+          description: The asset for this transfer. This profile's balance of this asset will be debited or credited.
+        balance_asset:
+          type: string
+          description: The balance_asset represents what asset's balance was affected at Paxos with this transfer. It only differs from Asset when the transfer includes conversion.
+        direction:
+          $ref: '#/components/schemas/TransferDirection'
+        type:
+          $ref: '#/components/schemas/TransferType'
+        status:
+          $ref: '#/components/schemas/TransferStatus'
+        secondary_status:
+          $ref: '#/components/schemas/SecondaryStatus'
+        status_details:
+          $ref: '#/components/schemas/TransferStatusDetails'
+        created_at:
+          type: string
+          format: date-time
+          description: The time at which this transfer record was created.
+        updated_at:
+          type: string
+          format: date-time
+          description: The time at which this transfer record was most recently updated.
+        metadata:
+          type: object
+          additionalProperties:
+            type: string
+          description: 'Optional client-specified stored metadata. For deposit event transfers
+
+            this metadata is copied from the crypto deposit address or fiat deposit
+
+            memo used for attribution.
+
+            Up to 6 key/value pairs may be returned.
+
+            Each key and value must be less than or equal to 100 characters.'
+        destination_address:
+          type: string
+          description: The destination crypto address.
+        crypto_network:
+          $ref: '#/components/schemas/CryptoNetwork'
+        crypto_tx_hash:
+          type: string
+          description: For crypto transactions, the on-chain transaction hash.
+        crypto_tx_index:
+          type: string
+          description: For crypto transactions, the output index or output address.
+        account_id:
+          type: string
+          description: The Paxos ID of the Account associated with the transfer.
+        auto_conversion:
+          $ref: '#/components/schemas/AutoConversion'
+        group_id:
+          type: string
+          description: Unique identifier linking the debit and credit sides of an internal or Paxos transfer.
+        fiat_account_id:
+          type: string
+          description: For fiat withdrawals, the Paxos ID of the owner's fiat account (UUID).
+        notional_value:
+          type: string
+          format: decimal
+          description: For crypto withdrawals and deposits, the USD value of the combined amount and fee at the time of the transfer.
+        memo:
+          type: string
+          description: An optional memo to be included with the transfer as an identifier.
+      required:
+      - id
+      - customer_id
+      - profile_id
+      - amount
+      - total
+      - fee
+      - created_at
+      - updated_at
+      - asset
+      - status
+      - direction
+      - type
+    SecondaryStatus:
+      type: object
+      properties:
+        name:
+          $ref: '#/components/schemas/SecondaryStatusName'
+        detail:
+          type: string
+          description: Additional information about the current status of the transfer (e.g. if information is missing).
+      description: Secondary status for the transfer, used for more granular explanation of the transfer status.
+    StaleFeeQuote:
+      type: object
+      properties:
+        message:
+          type: string
+          title: Human-readable explanation
+      description: StaleFeeQuote represents a transfer cancelled because on-chain state changed after the fee was quoted.
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      description: 'Paxos APIs use [OAuth 2](https://tools.ietf.org/html/rfc6749) with the [client credentials](https://tools.ietf.org/html/rfc6749#section-4.4) grant flow.
+
+
+        **Token URLs:**
+
+        - Production: https://oauth.paxos.com/oauth2/token
+
+        - Sandbox: https://oauth.sandbox.paxos.com/oauth2/token
+
+
+        Learn more in the [API credentials guide →](https://docs.paxos.com/developer/credentials)
+
+        '
+      flows:
+        clientCredentials:
+          tokenUrl: https://oauth.paxos.com/oauth2/token
+          scopes:
+            conversion:read_conversion_stablecoin: Retrieve stablecoin conversion details
+            conversion:write_conversion_stablecoin: Create or cancel a stablecoin conversion
+            exchange:historical_prices: Retrieve marketnaverage prices at a certain time increment
+            exchange:read_order: Retrieve order or order execution details
+            exchange:read_quote: Retrieve quote details for buying or selling an asset
+            exchange:read_quote_execution: Retrieve quote execution details
+            exchange:write_quote_execution: Create a quote execution for buying or selling an asset
+            exchange:write_order: Create or cancel an order for buying or selling an asset
+            fee:write_crypto_withdrawal_fee: Create a guaranteed fee for crypto withdrawal
+            funding:read_bank_balance: Retrieve Paxos dedicated bank account balance
+            funding:read_profile: Retrieve Profile details and deposit funds in Sandbox
+            funding:write_profile: Create a Profile
+            identity:read_account: Retrieve Account details
+            identity:read_identity: Retrieve Identity details or documents
+            identity:write_account: Create or update Account and Account Members
+            identity:write_identity: Create or update Identity details and set Sandbox Identify Status
+            settlement:read_transaction: Retrieve settlement transaction details
+            settlement:write_transaction: Create, affirm or cancel a settlement transaction
+            tax:read_tax_form: Retrieve tax details
+            tax:read_tax_lot: Retrieve tax lot details
+            tax:write_tax_lot: Update the given tax-lot ID
+            transfer:read_deposit_address: Retrieve deposit address details
+            transfer:read_fiat_account: Retrieve Fiat Account details
+            transfer:read_fiat_deposit_instructions: Retrieve fiat deposit instruction details
+            transfer:read_transfer: Retrieve transfer details
+            transfer:read_transfer_limit: Retrieve limits for the given transaction type
+            transfer:reject_crypto_deposit: Reject a crypto deposit (travel rule)
+            transfer:update_crypto_deposit: Provide required travel-rule details
+            transfer:write_crypto_withdrawal: Withdraw asset to a specified destination address
+            transfer:write_deposit_address: Create an deposit address on a blockchain network
+            transfer:write_fiat_account: Create, update or delete a Fiat Account
+            transfer:write_fiat_deposit_instructions: Create, update or delete fiat deposit instructions
+            transfer:write_internal_transfer: Transfer assets between two Profiles
+            transfer:write_sandbox_fiat_deposit: Initiate a test fiat deposit in the Sandbox environment
+            transfer:write_fiat_withdrawal: Withdraw fiat to the given destination
+            events:read_event: Retrieve events
+x-tagGroups:
+- name: Deposits and Withdrawals
+  tags:
+  - Transfers
+  - Fiat Transfers
+  - Deposit Addresses
+  - Crypto Deposits
+  - Crypto Withdrawals
+  - Fees
+  - Internal Transfers
+  - Paxos Transfers
+  - Limits
+- name: Identity
+  tags:
+  - Identity
+  - Institution Members
+  - Accounts
+  - Account Members
+  - Identity Documents
+- name: API Credentials
+  tags:
+  - API Credentials
+- name: Profiles
+  tags:
+  - Profiles
+- name: Sandbox
+  tags:
+  - Sandbox Deposits
+  - Sandbox Identity
+  - Sandbox Fiat Transfers
+- name: Settlements
+  tags:
+  - Settlement
+- name: Stablecoin Conversion
+  tags:
+  - Stablecoin Conversion
+- name: Taxes
+  tags:
+  - Tax Forms
+- name: Trading
+  tags:
+  - Market Data
+  - Orders
+  - Quotes
+  - Quote Executions
+  - Pricing
+  - Issuer Quotes
+- name: Rewards
+  tags:
+  - Monitoring Addresses
+  - Statements
+  - Payments
+- name: Rewards (Alpha)
+  tags:
+  - Reward Addresses
+  - Claims
+  - Payout Groups
+  - Rewards
+- name: Events
+  tags:
+  - Events
+  - Event Types
+  - Event Objects

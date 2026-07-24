@@ -1,0 +1,454 @@
+openapi: 3.0.0
+info:
+  title: Paxos Account Members Events API
+  version: '2.0'
+  description: '<p>Welcome to Paxos APIs. At Paxos, our mission is to enable the movement of any asset, any time, in a trustworthy way. These APIs serve that mission by making it easier than ever for you to directly integrate our product capabilities into your application, leveraging the speed, stability, and security of the Paxos platform.</p> <p>The documentation that follows gives you access to our Crypto Brokerage, Trading, and Exchange products. It includes APIs for market data, orders, and the held rate quote flow.</p> <p>To test in our sandbox environment, <a href="https://account.sandbox.paxos.com" target="_blank">sign up</a> for an account. For more information about Paxos and our APIs, visit <a href="https://www.paxos.com/" target="_blank">Paxos.com</a>.</p>
+
+    '
+  x-logo:
+    url: /docs/paxos.svg
+    backgroundColor: '#FFFFFF'
+    altText: Paxos logo
+servers:
+- url: https://api.paxos.com/v2
+  description: Production
+- url: https://api.sandbox.paxos.com/v2
+  description: Sandbox
+tags:
+- name: Events
+  description: 'The Events API allows you to fetch events that occurred on the Paxos platform with the full event payload. This REST API can be used as part of your webhook integrations (including rebuilding your event history should your webhook consumer exceed its retries), or standalone by polling for events related to your identities.
+
+    '
+paths:
+  /events:
+    get:
+      summary: List Events
+      description: 'This endpoint enables you to fetch a list of events that have been created by the system.
+
+        You can use query parameters to filter the results by the `created_at` time using `created_at.lt`, `created_at.gt`, etc. and you can
+
+        `limit` the number of events returned.
+
+
+        Use `page_cursor` from the previous response to paginate through results. Use `order` to control sort direction (ASC or DESC by created_at).
+
+        Events returned will be ordered by `created_at` in ascending order by default.'
+      operationId: ListEvents
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListEventsResponse'
+              example:
+                events:
+                - id: d99a03ee-6b88-4362-89da-087c2c8cd4a7
+                  type: identity.approved
+                  object_type: identity_summary_status_change
+                  object:
+                    id: d840cf31-352f-4190-a476-7522bf3eafda
+                    identity_id: 4fd025ab-f29f-47e6-a02e-df90a61c7ec9
+                    new_summary_status: APPROVED
+                    old_summary_status: PENDING
+                  created_at: '2023-08-25T14:25:41.648489333Z'
+                  undelivered_webhooks: 0
+                - id: 19c0ae8e-fdfc-4b27-88af-07762af8f2a8
+                  type: identity.documents_required
+                  object_type: identity_required_documents
+                  object:
+                    id: d11aba88-39cd-4445-acbb-e4d127588def
+                    identity_id: fc9dcae4-5411-464c-a20e-f0911ee1c5c1
+                    required_documents:
+                    - TAX_IDENTIFICATION
+                    - PROOF_OF_RESIDENCY
+                    - PROOF_OF_FUNDS
+                  created_at: '2023-08-24T18:29:41.648489493Z'
+                  undelivered_webhooks: 0
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+              examples:
+                Bad limit:
+                  value:
+                    type: about:blank
+                    title: Bad Request
+                    status: 400
+                    detail: limit must be between 1 and 100
+        '403':
+          description: Insufficient scopes
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+              examples:
+                Insufficient scopes:
+                  value:
+                    type: about:blank
+                    title: Forbidden
+                    status: 403
+                    detail: 'insufficient scopes: found ''identity:read_identity'', required one of ''[event:read_event]'''
+      parameters:
+      - name: created_at.lt
+        description: Include timestamps strictly less than lt. RFC3339 format, like `2006-01-02T15:04:05Z`.
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: created_at.lte
+        description: Include timestamps less than or equal to lte. RFC3339 format, like `2006-01-02T15:04:05Z`.
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: created_at.eq
+        description: Include timestamps exactly equal to eq. RFC3339 format, like `2006-01-02T15:04:05Z`.
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: created_at.gte
+        description: Include timestamps greater than or equal to gte. RFC3339 format, like `2006-01-02T15:04:05Z`.
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: created_at.gt
+        description: Include timestamps strictly greater than gt. RFC3339 format, like `2006-01-02T15:04:05Z`.
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: limit
+        description: Number of results to return. Defaults to 100 if no limit is provided.
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: type
+        description: Retrieve all (default) or optionally filter by event type.
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: is_test
+        description: Filter for test events (true) or real events (false). Defaults to false (real events only).
+        in: query
+        required: false
+        schema:
+          type: boolean
+      - name: order
+        description: Sort order for results by created_at. Defaults to ASC (oldest first).
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - DESC
+          - ASC
+      - name: page_cursor
+        description: Cursor from a previous response to fetch the next page.
+        in: query
+        required: false
+        schema:
+          type: string
+      tags:
+      - Events
+      security:
+      - OAuth2:
+        - events:read_event
+  /events/{id}:
+    get:
+      summary: Get Event
+      description: 'Get an Event by its (event) id, the event must have been created by the system and you must be the owner of the
+
+        the event, you can get an event id by either listing events or via a webhook integration.'
+      operationId: GetEvent
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Event'
+              example:
+                id: d99a03ee-6b88-4362-89da-087c2c8cd4a7
+                type: identity.approved
+                object_type: identity_summary_status_change
+                object:
+                  id: d840cf31-352f-4190-a476-7522bf3eafda
+                  identity_id: 4fd025ab-f29f-47e6-a02e-df90a61c7ec9
+                  new_summary_status: APPROVED
+                  old_summary_status: PENDING
+                created_at: '2023-08-25T14:25:41.648489333Z'
+                undelivered_webhooks: 0
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+              examples:
+                Bad event id:
+                  value:
+                    type: about:blank
+                    title: Bad Request
+                    status: 400
+                    detail: error parsing event id
+        '403':
+          description: Insufficient scopes
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+              examples:
+                Insufficient scopes:
+                  value:
+                    type: about:blank
+                    title: Forbidden
+                    status: 403
+                    detail: 'insufficient scopes: found ''identity:read_identity'', required one of ''[event:read_event]'''
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+              examples:
+                Not Found:
+                  value:
+                    status: 404
+                    title: Not Found
+                    type: about:blank
+      parameters:
+      - name: id
+        description: The unique `id` in the `Event` object.
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: is_test
+        description: Filter for test events (true) or real events (false). Defaults to false (real events only).
+        in: query
+        required: false
+        schema:
+          type: boolean
+      tags:
+      - Events
+      security:
+      - OAuth2:
+        - events:read_event
+components:
+  schemas:
+    Event:
+      type: object
+      properties:
+        id:
+          type: string
+          title: The event identifier used to query or refer to a specific event
+        type:
+          type: string
+          title: The type of event representing an action in the system
+        object_type:
+          type: string
+          title: The type of the `object` associated with the event
+        object:
+          type: object
+          title: The structured payload of type `object_type` associated with the event
+        created_at:
+          type: string
+          format: date-time
+          description: The timestamp when the event was first created, RFC3339 format, like `YYYY-MM-DDTHH:MM:SS.sssZ`.
+        undelivered_webhooks:
+          type: integer
+          format: int32
+          title: The number of undelivered webhooks
+    Problem:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+          description: 'An absolute URI that identifies the problem type.  When dereferenced,
+
+            it SHOULD provide human-readable documentation for the problem type
+
+            (e.g., using HTML).
+
+            '
+          default: about:blank
+          example: https://api.paxos.com/v2/problems/insufficient_funds
+        title:
+          type: string
+          description: 'A short, summary of the problem type. Written in english and readable
+
+            for engineers (usually not suited for non technical stakeholders and
+
+            not localized); example: Service Unavailable
+
+            '
+          example: Insufficient Funds
+        status:
+          type: integer
+          format: int32
+          description: 'The HTTP status code generated by the origin server for this occurrence
+
+            of the problem.
+
+            '
+          minimum: 100
+          maximum: 600
+          exclusiveMaximum: true
+          example: 403
+        detail:
+          type: string
+          description: 'A human readable explanation specific to this occurrence of the
+
+            problem.
+
+            '
+          example: Not enough funds in account.
+        meta:
+          type: object
+          description: 'Additional structured metadata about the error.
+
+            '
+    ListEventsResponse:
+      type: object
+      properties:
+        events:
+          type: array
+          items:
+            $ref: '#/components/schemas/Event'
+          description: Events ordered by `created_at` timestamp in the direction specified by the `order` parameter (ascending by default).
+        next_page_cursor:
+          type: string
+          description: Cursor to pass in the next request to fetch the next page. Empty when no more results.
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      description: 'Paxos APIs use [OAuth 2](https://tools.ietf.org/html/rfc6749) with the [client credentials](https://tools.ietf.org/html/rfc6749#section-4.4) grant flow.
+
+
+        **Token URLs:**
+
+        - Production: https://oauth.paxos.com/oauth2/token
+
+        - Sandbox: https://oauth.sandbox.paxos.com/oauth2/token
+
+
+        Learn more in the [API credentials guide →](https://docs.paxos.com/developer/credentials)
+
+        '
+      flows:
+        clientCredentials:
+          tokenUrl: https://oauth.paxos.com/oauth2/token
+          scopes:
+            conversion:read_conversion_stablecoin: Retrieve stablecoin conversion details
+            conversion:write_conversion_stablecoin: Create or cancel a stablecoin conversion
+            exchange:historical_prices: Retrieve marketnaverage prices at a certain time increment
+            exchange:read_order: Retrieve order or order execution details
+            exchange:read_quote: Retrieve quote details for buying or selling an asset
+            exchange:read_quote_execution: Retrieve quote execution details
+            exchange:write_quote_execution: Create a quote execution for buying or selling an asset
+            exchange:write_order: Create or cancel an order for buying or selling an asset
+            fee:write_crypto_withdrawal_fee: Create a guaranteed fee for crypto withdrawal
+            funding:read_bank_balance: Retrieve Paxos dedicated bank account balance
+            funding:read_profile: Retrieve Profile details and deposit funds in Sandbox
+            funding:write_profile: Create a Profile
+            identity:read_account: Retrieve Account details
+            identity:read_identity: Retrieve Identity details or documents
+            identity:write_account: Create or update Account and Account Members
+            identity:write_identity: Create or update Identity details and set Sandbox Identify Status
+            settlement:read_transaction: Retrieve settlement transaction details
+            settlement:write_transaction: Create, affirm or cancel a settlement transaction
+            tax:read_tax_form: Retrieve tax details
+            tax:read_tax_lot: Retrieve tax lot details
+            tax:write_tax_lot: Update the given tax-lot ID
+            transfer:read_deposit_address: Retrieve deposit address details
+            transfer:read_fiat_account: Retrieve Fiat Account details
+            transfer:read_fiat_deposit_instructions: Retrieve fiat deposit instruction details
+            transfer:read_transfer: Retrieve transfer details
+            transfer:read_transfer_limit: Retrieve limits for the given transaction type
+            transfer:reject_crypto_deposit: Reject a crypto deposit (travel rule)
+            transfer:update_crypto_deposit: Provide required travel-rule details
+            transfer:write_crypto_withdrawal: Withdraw asset to a specified destination address
+            transfer:write_deposit_address: Create an deposit address on a blockchain network
+            transfer:write_fiat_account: Create, update or delete a Fiat Account
+            transfer:write_fiat_deposit_instructions: Create, update or delete fiat deposit instructions
+            transfer:write_internal_transfer: Transfer assets between two Profiles
+            transfer:write_sandbox_fiat_deposit: Initiate a test fiat deposit in the Sandbox environment
+            transfer:write_fiat_withdrawal: Withdraw fiat to the given destination
+            events:read_event: Retrieve events
+x-tagGroups:
+- name: Deposits and Withdrawals
+  tags:
+  - Transfers
+  - Fiat Transfers
+  - Deposit Addresses
+  - Crypto Deposits
+  - Crypto Withdrawals
+  - Fees
+  - Internal Transfers
+  - Paxos Transfers
+  - Limits
+- name: Identity
+  tags:
+  - Identity
+  - Institution Members
+  - Accounts
+  - Account Members
+  - Identity Documents
+- name: API Credentials
+  tags:
+  - API Credentials
+- name: Profiles
+  tags:
+  - Profiles
+- name: Sandbox
+  tags:
+  - Sandbox Deposits
+  - Sandbox Identity
+  - Sandbox Fiat Transfers
+- name: Settlements
+  tags:
+  - Settlement
+- name: Stablecoin Conversion
+  tags:
+  - Stablecoin Conversion
+- name: Taxes
+  tags:
+  - Tax Forms
+- name: Trading
+  tags:
+  - Market Data
+  - Orders
+  - Quotes
+  - Quote Executions
+  - Pricing
+  - Issuer Quotes
+- name: Rewards
+  tags:
+  - Monitoring Addresses
+  - Statements
+  - Payments
+- name: Rewards (Alpha)
+  tags:
+  - Reward Addresses
+  - Claims
+  - Payout Groups
+  - Rewards
+- name: Events
+  tags:
+  - Events
+  - Event Types
+  - Event Objects

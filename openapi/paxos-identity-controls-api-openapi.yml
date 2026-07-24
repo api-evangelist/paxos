@@ -1,0 +1,323 @@
+openapi: 3.0.0
+info:
+  title: Paxos Account Members Identity Controls API
+  version: '2.0'
+  description: '<p>Welcome to Paxos APIs. At Paxos, our mission is to enable the movement of any asset, any time, in a trustworthy way. These APIs serve that mission by making it easier than ever for you to directly integrate our product capabilities into your application, leveraging the speed, stability, and security of the Paxos platform.</p> <p>The documentation that follows gives you access to our Crypto Brokerage, Trading, and Exchange products. It includes APIs for market data, orders, and the held rate quote flow.</p> <p>To test in our sandbox environment, <a href="https://account.sandbox.paxos.com" target="_blank">sign up</a> for an account. For more information about Paxos and our APIs, visit <a href="https://www.paxos.com/" target="_blank">Paxos.com</a>.</p>
+
+    '
+  x-logo:
+    url: /docs/paxos.svg
+    backgroundColor: '#FFFFFF'
+    altText: Paxos logo
+servers:
+- url: https://api.paxos.com/v2
+  description: Production
+- url: https://api.sandbox.paxos.com/v2
+  description: Sandbox
+tags:
+- name: Identity Controls
+paths:
+  /identity/controls:
+    get:
+      summary: List Identity Controls
+      description: List identity controls associated with an identity.
+      operationId: ListIdentityControls
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListIdentityControlsResponse'
+      parameters:
+      - name: identity_id
+        description: The Identity ID whose controls to retrieve.
+        in: query
+        required: true
+        schema:
+          type: string
+      - name: include_deleted
+        description: Include deleted controls in the response.
+        in: query
+        required: false
+        schema:
+          type: boolean
+      - name: limit
+        description: Number of results to return. Defaults to 100 if no limit is provided. Maximum 1000.
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: page_cursor
+        description: Cursor for getting the next page of results.
+        in: query
+        required: false
+        schema:
+          type: string
+      tags:
+      - Identity Controls
+      security:
+      - OAuth2:
+        - identity:read_identity_control
+    delete:
+      summary: Delete Identity Control
+      description: Delete an identity control on an identity.
+      operationId: DeleteIdentityControl
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteIdentityControlResponse'
+      parameters:
+      - name: control_id
+        description: The control ID to be deleted.
+        in: query
+        required: true
+        schema:
+          type: string
+      - name: reason
+        description: Reason for deleting the identity control.
+        in: query
+        required: false
+        schema:
+          type: string
+      tags:
+      - Identity Controls
+      security:
+      - OAuth2:
+        - identity:write_identity_control
+    post:
+      summary: Create Identity Control
+      description: Create a new identity control on an identity.
+      operationId: CreateIdentityControl
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdentityControl'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateIdentityControlRequest'
+        required: true
+      tags:
+      - Identity Controls
+      security:
+      - OAuth2:
+        - identity:write_identity_control
+components:
+  schemas:
+    IdentityControlReasonCode:
+      type: string
+      enum:
+      - OTHER
+      - END_USER_REQUEST
+      - INACTIVITY
+      - COMPLIANCE_KYC
+      - COMPLIANCE_EDD
+      - COMPLIANCE_SCREENING
+      - COMPLIANCE_INVESTIGATION
+      - COMPLIANCE_INCOMPLETE
+      - RISK_FRAUD
+      - LEGAL_ORDER
+      - ADMINISTRATIVE
+      description: " - OTHER: Miscellaneous reason not captured by existing categories.\n - END_USER_REQUEST: Control applied at the end user's request.\n - INACTIVITY: Control applied due to prolonged inactivity in accordance with dormancy or lifecycle management policies.\n - COMPLIANCE_KYC: Control applied due to unmet KYC requirements, including missing, expired, failed, or unresponsiveness to refresh obligations.\n - COMPLIANCE_EDD: Control applied due to Enhanced Due Diligence (EDD) requirements, including failure to complete EDD reviews, provide requested information, or satisfy heightened risk assessment criteria.\n - COMPLIANCE_SCREENING: Control applied as a result of sanctions, politically exposed person (PEP), or adverse media screening hits.\n - COMPLIANCE_INVESTIGATION: Control applied while an identity is under active compliance, risk, or regulatory investigation, including reviews triggered by monitoring alerts or external inquiries.\n - COMPLIANCE_INCOMPLETE: Control applied because the onboarding process was not successfully completed, including failure to respond to requests for information or provide required documentation.\n - RISK_FRAUD: Control applied due to suspected or confirmed fraud, abuse, or security risk, including account compromise, transaction fraud, or policy violations.\n - LEGAL_ORDER: Control applied to comply with a legal, regulatory, or law-enforcement directive, including court orders, asset preservation requests, or regulatory instructions.\n - ADMINISTRATIVE: Control applied for operational or platform-initiated reasons not attributable to the end user or compliance failure, such as system remediation or account restructuring."
+    DeleteIdentityControlResponse:
+      type: object
+    IdentityControlSetBy:
+      type: string
+      enum:
+      - SET_BY_PAXOS
+      - SET_BY_CLIENT
+    ListIdentityControlsResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/IdentityControl'
+          description: The list of identity controls.
+        next_page_cursor:
+          type: string
+          description: Cursor token for fetching the next page. Empty if there are no more pages.
+    IdentityControlType:
+      type: string
+      enum:
+      - SELL_ONLY
+      - CLOSED
+      - FROZEN
+      - DORMANT
+    CreateIdentityControlRequestClientIdentityControlType:
+      type: string
+      enum:
+      - SELL_ONLY
+      - DORMANT
+      - CLOSED
+    IdentityControl:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          $ref: '#/components/schemas/IdentityControlType'
+        set_by:
+          $ref: '#/components/schemas/IdentityControlSetBy'
+        is_overridable:
+          type: boolean
+        reason_code:
+          $ref: '#/components/schemas/IdentityControlReasonCode'
+        reason:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        deleted_at:
+          type: string
+          format: date-time
+      required:
+      - id
+      - type
+      - set_by
+      - created_at
+    CreateIdentityControlRequest:
+      type: object
+      properties:
+        identity_id:
+          type: string
+          description: The Identity ID.
+        type:
+          $ref: '#/components/schemas/CreateIdentityControlRequestClientIdentityControlType'
+        reason_code:
+          $ref: '#/components/schemas/IdentityControlReasonCode'
+        reason:
+          type: string
+          description: Freetext reason for setting the control.
+      required:
+      - identity_id
+      - type
+      - reason_code
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      description: 'Paxos APIs use [OAuth 2](https://tools.ietf.org/html/rfc6749) with the [client credentials](https://tools.ietf.org/html/rfc6749#section-4.4) grant flow.
+
+
+        **Token URLs:**
+
+        - Production: https://oauth.paxos.com/oauth2/token
+
+        - Sandbox: https://oauth.sandbox.paxos.com/oauth2/token
+
+
+        Learn more in the [API credentials guide →](https://docs.paxos.com/developer/credentials)
+
+        '
+      flows:
+        clientCredentials:
+          tokenUrl: https://oauth.paxos.com/oauth2/token
+          scopes:
+            conversion:read_conversion_stablecoin: Retrieve stablecoin conversion details
+            conversion:write_conversion_stablecoin: Create or cancel a stablecoin conversion
+            exchange:historical_prices: Retrieve marketnaverage prices at a certain time increment
+            exchange:read_order: Retrieve order or order execution details
+            exchange:read_quote: Retrieve quote details for buying or selling an asset
+            exchange:read_quote_execution: Retrieve quote execution details
+            exchange:write_quote_execution: Create a quote execution for buying or selling an asset
+            exchange:write_order: Create or cancel an order for buying or selling an asset
+            fee:write_crypto_withdrawal_fee: Create a guaranteed fee for crypto withdrawal
+            funding:read_bank_balance: Retrieve Paxos dedicated bank account balance
+            funding:read_profile: Retrieve Profile details and deposit funds in Sandbox
+            funding:write_profile: Create a Profile
+            identity:read_account: Retrieve Account details
+            identity:read_identity: Retrieve Identity details or documents
+            identity:write_account: Create or update Account and Account Members
+            identity:write_identity: Create or update Identity details and set Sandbox Identify Status
+            settlement:read_transaction: Retrieve settlement transaction details
+            settlement:write_transaction: Create, affirm or cancel a settlement transaction
+            tax:read_tax_form: Retrieve tax details
+            tax:read_tax_lot: Retrieve tax lot details
+            tax:write_tax_lot: Update the given tax-lot ID
+            transfer:read_deposit_address: Retrieve deposit address details
+            transfer:read_fiat_account: Retrieve Fiat Account details
+            transfer:read_fiat_deposit_instructions: Retrieve fiat deposit instruction details
+            transfer:read_transfer: Retrieve transfer details
+            transfer:read_transfer_limit: Retrieve limits for the given transaction type
+            transfer:reject_crypto_deposit: Reject a crypto deposit (travel rule)
+            transfer:update_crypto_deposit: Provide required travel-rule details
+            transfer:write_crypto_withdrawal: Withdraw asset to a specified destination address
+            transfer:write_deposit_address: Create an deposit address on a blockchain network
+            transfer:write_fiat_account: Create, update or delete a Fiat Account
+            transfer:write_fiat_deposit_instructions: Create, update or delete fiat deposit instructions
+            transfer:write_internal_transfer: Transfer assets between two Profiles
+            transfer:write_sandbox_fiat_deposit: Initiate a test fiat deposit in the Sandbox environment
+            transfer:write_fiat_withdrawal: Withdraw fiat to the given destination
+            events:read_event: Retrieve events
+x-tagGroups:
+- name: Deposits and Withdrawals
+  tags:
+  - Transfers
+  - Fiat Transfers
+  - Deposit Addresses
+  - Crypto Deposits
+  - Crypto Withdrawals
+  - Fees
+  - Internal Transfers
+  - Paxos Transfers
+  - Limits
+- name: Identity
+  tags:
+  - Identity
+  - Institution Members
+  - Accounts
+  - Account Members
+  - Identity Documents
+- name: API Credentials
+  tags:
+  - API Credentials
+- name: Profiles
+  tags:
+  - Profiles
+- name: Sandbox
+  tags:
+  - Sandbox Deposits
+  - Sandbox Identity
+  - Sandbox Fiat Transfers
+- name: Settlements
+  tags:
+  - Settlement
+- name: Stablecoin Conversion
+  tags:
+  - Stablecoin Conversion
+- name: Taxes
+  tags:
+  - Tax Forms
+- name: Trading
+  tags:
+  - Market Data
+  - Orders
+  - Quotes
+  - Quote Executions
+  - Pricing
+  - Issuer Quotes
+- name: Rewards
+  tags:
+  - Monitoring Addresses
+  - Statements
+  - Payments
+- name: Rewards (Alpha)
+  tags:
+  - Reward Addresses
+  - Claims
+  - Payout Groups
+  - Rewards
+- name: Events
+  tags:
+  - Events
+  - Event Types
+  - Event Objects

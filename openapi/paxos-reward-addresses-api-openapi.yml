@@ -1,0 +1,523 @@
+openapi: 3.0.0
+info:
+  title: Paxos Account Members Reward Addresses API
+  version: '2.0'
+  description: '<p>Welcome to Paxos APIs. At Paxos, our mission is to enable the movement of any asset, any time, in a trustworthy way. These APIs serve that mission by making it easier than ever for you to directly integrate our product capabilities into your application, leveraging the speed, stability, and security of the Paxos platform.</p> <p>The documentation that follows gives you access to our Crypto Brokerage, Trading, and Exchange products. It includes APIs for market data, orders, and the held rate quote flow.</p> <p>To test in our sandbox environment, <a href="https://account.sandbox.paxos.com" target="_blank">sign up</a> for an account. For more information about Paxos and our APIs, visit <a href="https://www.paxos.com/" target="_blank">Paxos.com</a>.</p>
+
+    '
+  x-logo:
+    url: /docs/paxos.svg
+    backgroundColor: '#FFFFFF'
+    altText: Paxos logo
+servers:
+- url: https://api.paxos.com/v2
+  description: Production
+- url: https://api.sandbox.paxos.com/v2
+  description: Sandbox
+tags:
+- name: Reward Addresses
+  description: 'Reward addresses are blockchain addresses registered for reward attribution.
+
+
+    Custody Rewards: For EVM chains, Paxos registers these addresses on-chain for reward calculation and accrual in the token contract. For Solana, provide the **owner account** (not a token account) — Paxos will derive and register the associated token account on-chain for the given asset. Providing a token account will result in a derived address with no meaning. For other non-EVM chains, Paxos tracks on-chain activity for custody reward calculation.
+
+
+    Non-Custody Rewards: Paxos tracks on-chain activity for these addresses to calculate and distribute non-custody rewards to your organization.
+
+
+    *These endpoints are only relevant for whitelisted Rewards partners.*
+
+    '
+paths:
+  /rewards/addresses:
+    get:
+      summary: List reward addresses
+      description: Returns a paginated list of reward addresses
+      operationId: ListAttributionAddresses
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListAttributionAddressesResponse'
+      parameters:
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: customer_id
+        description: Optional for public API - extracted from auth context if not provided.
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: ledger
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - PAXOS
+          - ETHEREUM
+          - SOLANA
+          - INK
+          - XLAYER
+          - ARBITRUM_ONE
+          - ROBINHOOD
+      - name: address
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: order
+        description: Optional, sort order for results based on created_at. The default sort order is DESC.
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - DESC
+          - ASC
+      - name: page_cursor
+        description: Optional, cursor token for fetching the next page.
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: id
+        description: Optional, address id.
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: payout_group_id
+        description: Optional, filter by payout group. Pass the zero UUID (00000000-0000-0000-0000-000000000000) to return only addresses with no payout group assigned.
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: include_balance
+        description: When true, fetch and include balance for each address
+        in: query
+        required: false
+        schema:
+          type: boolean
+      - name: balance_timestamp
+        description: Point-in-time for balance query (optional, defaults to now)
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: asset_type
+        description: When set, only addresses belonging to payout groups with this asset type are returned.
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: onchain_statuses
+        description: Optional, filter by one or more onchain registration statuses.
+        in: query
+        required: false
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - ONCHAIN_STATUS_TYPE_UNSPECIFIED
+            - UNREGISTERED
+            - PENDING_REGISTRATION
+            - NEEDS_REREGISTRATION
+            - ACTIVE
+            - FAILED_REGISTRATION
+            - PENDING_DELETION
+            - FAILED_DELETION
+            - PENDING_MULTIPLIER_UPDATE
+            - MULTIPLIER_UPDATE_FAILED
+      tags:
+      - Reward Addresses
+      security:
+      - OAuth2:
+        - rewards:read_monitoring_address
+    post:
+      summary: Create a reward address
+      description: Creates a new reward address for reward attribution
+      operationId: CreateAttributionAddress
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateAttributionAddressResponse'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateAttributionAddressRequest'
+        required: true
+      tags:
+      - Reward Addresses
+      security:
+      - OAuth2:
+        - rewards:write_monitoring_address
+  /rewards/addresses/batch:
+    post:
+      summary: Batch create reward addresses
+      description: Creates multiple reward addresses in a single request
+      operationId: BatchCreateAttributionAddresses
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BatchCreateAttributionAddressesResponse'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BatchCreateAttributionAddressesRequest'
+        required: true
+      tags:
+      - Reward Addresses
+      security:
+      - OAuth2:
+        - rewards:write_monitoring_address
+  /rewards/addresses/{id}:
+    delete:
+      summary: Delete a reward address
+      description: Deletes a reward address. A 200 response indicates the request was accepted; however, if the address is registered on a blockchain, it may continue to appear for up to a few minutes while the on-chain removal is confirmed. Once confirmed, the address will no longer appear.
+      operationId: DeleteAttributionAddress
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteAttributionAddressResponse'
+      parameters:
+      - name: id
+        description: 'Two deletion modes are supported:
+
+          1. ID-based (REST API): Provide ''id'', customer_id is extracted from auth context.
+
+          2. Legacy (internal gRPC): Provide ''customer_id'', ''ledger'', and ''address''.
+
+
+          Address ID for deletion (preferred for REST API).'
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: customer_id
+        description: Partner ID (used for legacy deletion or when auth context unavailable).
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: ledger
+        description: Ledger type (required for legacy deletion).
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - PAXOS
+          - ETHEREUM
+          - SOLANA
+          - INK
+          - XLAYER
+          - ARBITRUM_ONE
+          - ROBINHOOD
+      - name: address
+        description: Wallet address (required for legacy deletion).
+        in: query
+        required: false
+        schema:
+          type: string
+      tags:
+      - Reward Addresses
+      security:
+      - OAuth2:
+        - rewards:write_monitoring_address
+    put:
+      summary: Update a reward address
+      description: Updates an existing reward address
+      operationId: UpdateAttributionAddress
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateAttributionAddressResponse'
+      parameters:
+      - name: id
+        description: 'id is the address ID used as the URL path parameter.
+
+          Must match address.id when both are provided.'
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AttributionAddress'
+        required: true
+      tags:
+      - Reward Addresses
+      security:
+      - OAuth2:
+        - rewards:write_monitoring_address
+components:
+  schemas:
+    AttributionAddressError:
+      type: object
+      properties:
+        address:
+          $ref: '#/components/schemas/AttributionAddress'
+        error:
+          type: string
+          title: Error message
+      title: Failed address with error details
+    ListAttributionAddressesResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/AttributionAddress'
+          description: Monitored addresses in this page of results.
+        next_page_cursor:
+          type: string
+          description: Token for the next page of results; empty if no more results.
+    BatchCreateAttributionAddressesRequest:
+      type: object
+      properties:
+        addresses:
+          type: array
+          items:
+            $ref: '#/components/schemas/AttributionAddress'
+    CreateAttributionAddressResponse:
+      type: object
+      properties:
+        address:
+          $ref: '#/components/schemas/AttributionAddress'
+    AttributionAddress:
+      type: object
+      properties:
+        customer_id:
+          type: string
+          title: 'ie: partner_id'
+        ledger:
+          $ref: '#/components/schemas/AttributionLedgerType'
+        address:
+          type: string
+        name:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        effective_at:
+          type: string
+          format: date-time
+        id:
+          type: string
+          title: 'ie: address ID'
+        payout_group_id:
+          type: string
+          title: UUID of the payout group this address belongs to
+        balance:
+          type: string
+          title: Total custody at address (only populated when include_balance=true in request)
+        status:
+          type: string
+          description: Output only. Registration status (UNREGISTERED, PENDING, ACTIVE, FAILED). Server-managed; ignored on create/update.
+          readOnly: true
+        asset_type:
+          type: string
+          description: Asset this address is scoped to (e.g. "PYUSD", "USDG"). Null/empty means all assets.
+        verification_proof_id:
+          type: string
+          description: Output only. ID of the latest address-ownership proof. Absent when no proof exists.
+          readOnly: true
+        verification_status:
+          type: string
+          description: Output only. Status of the latest proof (PENDING, APPROVED, EXPIRED). Absent when no proof exists.
+          readOnly: true
+        verification_method:
+          type: string
+          description: Output only. Method of the latest proof (SIGNATURE, SMALL_DEPOSIT, MANUAL). Absent when no proof exists.
+          readOnly: true
+        verification_expires_at:
+          type: string
+          format: date-time
+          description: Output only. Expiry of the latest proof. Absent when no proof exists.
+          readOnly: true
+      title: All data associated with an attribution address
+    CreateAttributionAddressRequest:
+      type: object
+      properties:
+        address:
+          $ref: '#/components/schemas/AttributionAddress'
+    DeleteAttributionAddressResponse:
+      type: object
+    BatchCreateAttributionAddressesResponse:
+      type: object
+      properties:
+        successful_addresses:
+          type: array
+          items:
+            $ref: '#/components/schemas/AttributionAddress'
+        failed_addresses:
+          type: array
+          items:
+            $ref: '#/components/schemas/AttributionAddressError'
+    AttributionLedgerType:
+      type: string
+      enum:
+      - PAXOS
+      - ETHEREUM
+      - SOLANA
+      - INK
+      - XLAYER
+      - ARBITRUM_ONE
+      - ROBINHOOD
+      description: 'An AttributionLedgerType is a data source which produces events which cause monitored
+
+        to occur. Examples include blockchains and the Paxos platform. Each event includes
+
+        a source and/or destination address which will be compared against the addresses
+
+        configured relative to the same ledger type.'
+    UpdateAttributionAddressResponse:
+      type: object
+      properties:
+        address:
+          $ref: '#/components/schemas/AttributionAddress'
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      description: 'Paxos APIs use [OAuth 2](https://tools.ietf.org/html/rfc6749) with the [client credentials](https://tools.ietf.org/html/rfc6749#section-4.4) grant flow.
+
+
+        **Token URLs:**
+
+        - Production: https://oauth.paxos.com/oauth2/token
+
+        - Sandbox: https://oauth.sandbox.paxos.com/oauth2/token
+
+
+        Learn more in the [API credentials guide →](https://docs.paxos.com/developer/credentials)
+
+        '
+      flows:
+        clientCredentials:
+          tokenUrl: https://oauth.paxos.com/oauth2/token
+          scopes:
+            conversion:read_conversion_stablecoin: Retrieve stablecoin conversion details
+            conversion:write_conversion_stablecoin: Create or cancel a stablecoin conversion
+            exchange:historical_prices: Retrieve marketnaverage prices at a certain time increment
+            exchange:read_order: Retrieve order or order execution details
+            exchange:read_quote: Retrieve quote details for buying or selling an asset
+            exchange:read_quote_execution: Retrieve quote execution details
+            exchange:write_quote_execution: Create a quote execution for buying or selling an asset
+            exchange:write_order: Create or cancel an order for buying or selling an asset
+            fee:write_crypto_withdrawal_fee: Create a guaranteed fee for crypto withdrawal
+            funding:read_bank_balance: Retrieve Paxos dedicated bank account balance
+            funding:read_profile: Retrieve Profile details and deposit funds in Sandbox
+            funding:write_profile: Create a Profile
+            identity:read_account: Retrieve Account details
+            identity:read_identity: Retrieve Identity details or documents
+            identity:write_account: Create or update Account and Account Members
+            identity:write_identity: Create or update Identity details and set Sandbox Identify Status
+            settlement:read_transaction: Retrieve settlement transaction details
+            settlement:write_transaction: Create, affirm or cancel a settlement transaction
+            tax:read_tax_form: Retrieve tax details
+            tax:read_tax_lot: Retrieve tax lot details
+            tax:write_tax_lot: Update the given tax-lot ID
+            transfer:read_deposit_address: Retrieve deposit address details
+            transfer:read_fiat_account: Retrieve Fiat Account details
+            transfer:read_fiat_deposit_instructions: Retrieve fiat deposit instruction details
+            transfer:read_transfer: Retrieve transfer details
+            transfer:read_transfer_limit: Retrieve limits for the given transaction type
+            transfer:reject_crypto_deposit: Reject a crypto deposit (travel rule)
+            transfer:update_crypto_deposit: Provide required travel-rule details
+            transfer:write_crypto_withdrawal: Withdraw asset to a specified destination address
+            transfer:write_deposit_address: Create an deposit address on a blockchain network
+            transfer:write_fiat_account: Create, update or delete a Fiat Account
+            transfer:write_fiat_deposit_instructions: Create, update or delete fiat deposit instructions
+            transfer:write_internal_transfer: Transfer assets between two Profiles
+            transfer:write_sandbox_fiat_deposit: Initiate a test fiat deposit in the Sandbox environment
+            transfer:write_fiat_withdrawal: Withdraw fiat to the given destination
+            events:read_event: Retrieve events
+x-tagGroups:
+- name: Deposits and Withdrawals
+  tags:
+  - Transfers
+  - Fiat Transfers
+  - Deposit Addresses
+  - Crypto Deposits
+  - Crypto Withdrawals
+  - Fees
+  - Internal Transfers
+  - Paxos Transfers
+  - Limits
+- name: Identity
+  tags:
+  - Identity
+  - Institution Members
+  - Accounts
+  - Account Members
+  - Identity Documents
+- name: API Credentials
+  tags:
+  - API Credentials
+- name: Profiles
+  tags:
+  - Profiles
+- name: Sandbox
+  tags:
+  - Sandbox Deposits
+  - Sandbox Identity
+  - Sandbox Fiat Transfers
+- name: Settlements
+  tags:
+  - Settlement
+- name: Stablecoin Conversion
+  tags:
+  - Stablecoin Conversion
+- name: Taxes
+  tags:
+  - Tax Forms
+- name: Trading
+  tags:
+  - Market Data
+  - Orders
+  - Quotes
+  - Quote Executions
+  - Pricing
+  - Issuer Quotes
+- name: Rewards
+  tags:
+  - Monitoring Addresses
+  - Statements
+  - Payments
+- name: Rewards (Alpha)
+  tags:
+  - Reward Addresses
+  - Claims
+  - Payout Groups
+  - Rewards
+- name: Events
+  tags:
+  - Events
+  - Event Types
+  - Event Objects
