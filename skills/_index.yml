@@ -1,0 +1,20 @@
+generated: '2026-07-20'
+method: generated
+source: openapi/paxos-v2-openapi-original.json
+skills:
+- file: paxos-onboard-identity-and-account.md
+  name: Onboard an identity and open an account
+  api: openapi/paxos-v2-openapi-original.json
+  operations: [CreateIdentity, SandboxSetIdentityStatus, CreateAccount, CreateProfile, ListProfileBalances]
+- file: paxos-buy-crypto-with-quote.md
+  name: Buy crypto with a held-rate quote
+  api: openapi/paxos-v2-openapi-original.json
+  operations: [ListQuotes, CreateQuoteExecution, GetQuoteExecution]
+- file: paxos-convert-and-withdraw-stablecoin.md
+  name: Convert to a stablecoin and withdraw on-chain
+  api: openapi/paxos-v2-openapi-original.json
+  operations: [CreateStablecoinConversion, GetStablecoinConversion, CreateDepositAddress, CreateCryptoWithdrawal]
+- file: paxos-trade-on-exchange.md
+  name: Place and manage an exchange order
+  api: openapi/paxos-v2-openapi-original.json
+  operations: [ListMarkets, GetOrderBook, CreateOrder, GetOrder, CancelOrder]

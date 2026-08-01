@@ -1,0 +1,25 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for Paxos v2 API
+  version: 1.0.0
+extends: openapi/paxos-v2-openapi-original.json
+actions:
+- target: $.info
+  update:
+    x-apievangelist-provider: paxos
+    x-apievangelist-category: [stablecoin, crypto-brokerage, payments, custody, trading]
+    x-authentication: authentication/paxos-authentication.yml
+    x-oauth-scopes: scopes/paxos-scopes.yml
+    x-conventions: conventions/paxos-conventions.yml
+    x-error-catalog: errors/paxos-problem-types.yml
+    x-webhooks: asyncapi/paxos-webhooks.yml
+    x-idempotency:
+      supported: true
+      field: ref_id
+      scope: request-body
+- target: $.info
+  update:
+    x-lifecycle: lifecycle/paxos-lifecycle.yml
+    x-changelog: changelog/paxos-changelog.yml
+    x-sandbox: sandbox/paxos-sandbox.yml
+    x-data-model: data-model/paxos-data-model.yml

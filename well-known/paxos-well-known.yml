@@ -1,0 +1,32 @@
+generated: '2026-07-20'
+method: searched
+source: live probes of /.well-known/ on Paxos hosts
+hosts:
+- host: https://oauth.paxos.com
+  documents:
+  - path: /.well-known/openid-configuration
+    status: 200
+    file: paxos-openid-configuration.json
+    note: OIDC discovery for the Paxos OAuth 2 authorization server
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+- host: https://api.paxos.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+- host: https://paxos.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+notes: |-
+  The production/sandbox APIs (api.paxos.com, api.sandbox.paxos.com) authenticate via
+  the dedicated OAuth 2 authorization server at oauth.paxos.com, which publishes a valid
+  OpenID Connect discovery document. Authorization endpoint https://oauth.paxos.com/oauth2/auth,
+  token endpoint https://oauth.paxos.com/oauth2/token, JWKS https://oauth.paxos.com/.well-known/jwks.json.
+  No security.txt or api-catalog were published at the probed hosts.

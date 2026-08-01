@@ -1,0 +1,39 @@
+generated: '2026-07-20'
+method: derived
+source:
+- openapi/paxos-v2-openapi-original.json
+- well-known/paxos-openid-configuration.json
+standards:
+- id: oauth2
+  conforms: true
+  evidence: securitySchemes declares OAuth2 with the clientCredentials flow (tokenUrl oauth.paxos.com/oauth2/token)
+- id: oauth2-client-credentials
+  conforms: true
+  evidence: RFC 6749 section 4.4 client credentials grant used for all API auth
+- id: oidc-discovery
+  conforms: true
+  evidence: /.well-known/openid-configuration served at oauth.paxos.com (issuer, jwks_uri, token/authorization endpoints)
+- id: rfc9457-problem-details
+  conforms: true
+  evidence: 4xx responses use application/problem+json across the v2 API
+- id: rfc6749-oauth
+  conforms: true
+  evidence: standard OAuth 2.0 authorization server with authorization/token/userinfo endpoints and JWKS
+- id: fix-4.2
+  conforms: true
+  evidence: Crypto Brokerage exposes a QuickFIX-compatible FIX 4.2 interface (data dictionary, execution reports)
+- id: cursor-pagination
+  conforms: true
+  evidence: list endpoints use next_page cursor + page_cursor/limit params
+- id: idempotency
+  conforms: true
+  evidence: create operations accept a client-supplied ref_id for idempotency protection
+- id: fatf-travel-rule
+  conforms: true
+  evidence: crypto deposit/withdrawal endpoints and VASP directory enforce FATF Travel Rule originator/beneficiary data
+- id: json-api
+  conforms: false
+- id: fhir-r4
+  conforms: false
+- id: scim2
+  conforms: false

@@ -1,0 +1,1913 @@
+generated: '2026-07-20'
+method: generated
+source: openapi/paxos-v2-openapi-original.json
+description: Recommended x-agentic-access execution contracts, classified heuristically from
+  the OpenAPI. A governance starting point for exposing this API to AI agents — review and bind
+  audience per deployment. See research/curity/agentic-governance/.
+summary:
+  operations: 125
+  by_action_class:
+    connected: 64
+    acting: 61
+  by_consequence:
+    read: 64
+    write: 38
+    physical: 20
+    safety-critical: 3
+  human_in_the_loop_required: 3
+operations:
+- path: /profiles
+  method: get
+  operationId: ListProfiles
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - funding:read_profile
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /profiles
+  method: post
+  operationId: CreateProfile
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - funding:write_profile
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /profiles/{profile_id}
+  method: get
+  operationId: GetProfile
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - funding:read_profile
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /profiles/{profile_id}
+  method: put
+  operationId: UpdateProfile
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - funding:write_profile
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /profiles/{profile_id}/balances
+  method: get
+  operationId: ListProfileBalances
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - funding:read_profile
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /profiles/{profile_id}/balances/{asset}
+  method: get
+  operationId: GetProfileBalance
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - funding:read_profile
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /profiles/{profile_id}/deactivate
+  method: put
+  operationId: DeactivateProfile
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - funding:write_profile
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /sandbox/profiles/{profile_id}/deposit
+  method: post
+  operationId: CreateSandboxDeposit
+  x-agentic-access:
+    action-class: acting
+    consequence: physical
+    subject: required
+    scope:
+    - funding:read_profile
+    audience: null
+    token:
+      max-ttl: 300
+      exchange: true
+      purpose-required: true
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /identity/controls
+  method: get
+  operationId: ListIdentityControls
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - identity:read_identity_control
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /identity/controls
+  method: delete
+  operationId: DeleteIdentityControl
+  x-agentic-access:
+    action-class: acting
+    consequence: safety-critical
+    subject: required
+    scope:
+    - identity:write_identity_control
+    audience: null
+    token:
+      max-ttl: 120
+      exchange: true
+      purpose-required: true
+      proof-of-possession: true
+    escalation:
+      human-in-the-loop: required
+    audit: required
+- path: /identity/controls
+  method: post
+  operationId: CreateIdentityControl
+  x-agentic-access:
+    action-class: acting
+    consequence: safety-critical
+    subject: required
+    scope:
+    - identity:write_identity_control
+    audience: null
+    token:
+      max-ttl: 120
+      exchange: true
+      purpose-required: true
+      proof-of-possession: true
+    escalation:
+      human-in-the-loop: required
+    audit: required
+- path: /identity/identities
+  method: get
+  operationId: ListIdentities
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - identity:read_identity
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /identity/identities
+  method: post
+  operationId: CreateIdentity
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - identity:write_identity
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /identity/identities/{identity_id}/documents
+  method: get
+  operationId: ListIdentityDocuments
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - identity:read_identity
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /identity/identities/{identity_id}/documents
+  method: put
+  operationId: DocumentUpload
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - identity:write_identity
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /identity/identities/{id}
+  method: get
+  operationId: GetIdentity
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - identity:read_identity
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /identity/identities/{id}
+  method: put
+  operationId: UpdateIdentity
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - identity:write_identity
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /identity/institution-members
+  method: post
+  operationId: AddInstitutionMembers
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - identity:write_identity
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /identity/institution-members/{id}
+  method: delete
+  operationId: DeleteInstitutionMember
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - identity:write_identity
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /identity/accounts
+  method: get
+  operationId: ListAccounts
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - identity:read_account
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /identity/accounts
+  method: post
+  operationId: CreateAccount
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - identity:write_account
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /identity/accounts
+  method: put
+  operationId: UpdateAccount
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - identity:write_account
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /identity/accounts/{id}
+  method: get
+  operationId: GetAccount
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - identity:read_account
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /identity/account-members
+  method: post
+  operationId: AddAccountMembers
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - identity:write_account
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /identity/account-members/{id}
+  method: delete
+  operationId: DeleteAccountMember
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - identity:write_account
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /identity/identities/{identity_id}/kyc-refresh
+  method: post
+  operationId: SandboxStartKycRefresh
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - identity:write_identity
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /identity/identities/{id}/sandbox-status
+  method: put
+  operationId: SandboxSetIdentityStatus
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - identity:write_identity
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /identity/kycrefresh/force-start
+  method: post
+  operationId: SandboxForceStartKycRefresh
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - identity:write_identity
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /identity/kycrefresh/reset
+  method: post
+  operationId: SandboxResetKycRefresh
+  x-agentic-access:
+    action-class: acting
+    consequence: safety-critical
+    subject: required
+    scope:
+    - identity:write_identity
+    audience: null
+    token:
+      max-ttl: 120
+      exchange: true
+      purpose-required: true
+      proof-of-possession: true
+    escalation:
+      human-in-the-loop: required
+    audit: required
+- path: /all-markets/prices
+  method: get
+  operationId: ListPrices
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /executions
+  method: get
+  operationId: ListExecutions
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - exchange:read_order
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /issuer-quote
+  method: post
+  operationId: CreateIssuerQuote
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - exchange:write_issuer_quote
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /issuer-quote/settlement-availability
+  method: get
+  operationId: GetIssuerQuoteSettlementAvailability
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - exchange:write_issuer_quote
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /issuer-quote/{quote_id}
+  method: post
+  operationId: CreateIssuerQuoteExecution
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - exchange:write_issuer_quote_execution
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /issuer-quotes
+  method: get
+  operationId: ListIssuerQuoteExecutions
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - exchange:read_issuer_quote_execution
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /markets
+  method: get
+  operationId: ListMarkets
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /markets/{market}/historical-prices
+  method: get
+  operationId: ListHistoricalPrices
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - exchange:historical_prices
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /markets/{market}/order-book
+  method: get
+  operationId: GetOrderBook
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /markets/{market}/recent-executions
+  method: get
+  operationId: ListRecentExecutions
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /markets/{market}/ticker
+  method: get
+  operationId: GetTicker
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /orders
+  method: get
+  operationId: ListOrders
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - exchange:read_order
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /profiles/{profile_id}/executions
+  method: get
+  operationId: ListProfileExecutions
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - exchange:read_order
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /profiles/{profile_id}/orders
+  method: get
+  operationId: ListProfileOrders
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - exchange:read_order
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /profiles/{profile_id}/orders
+  method: post
+  operationId: CreateOrder
+  x-agentic-access:
+    action-class: acting
+    consequence: physical
+    subject: required
+    scope:
+    - exchange:write_order
+    audience: null
+    token:
+      max-ttl: 300
+      exchange: true
+      purpose-required: true
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /profiles/{profile_id}/orders/{id}
+  method: get
+  operationId: GetOrder
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - exchange:read_order
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /profiles/{profile_id}/orders/{id}
+  method: delete
+  operationId: CancelOrder
+  x-agentic-access:
+    action-class: acting
+    consequence: physical
+    subject: required
+    scope:
+    - exchange:write_order
+    audience: null
+    token:
+      max-ttl: 300
+      exchange: true
+      purpose-required: true
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /profiles/{profile_id}/quote-executions
+  method: get
+  operationId: ListQuoteExecutions
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - exchange:read_quote_execution
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /profiles/{profile_id}/quote-executions
+  method: post
+  operationId: CreateQuoteExecution
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - exchange:write_quote_execution
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /profiles/{profile_id}/quote-executions/{id}
+  method: get
+  operationId: GetQuoteExecution
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - exchange:read_quote_execution
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /quotes
+  method: get
+  operationId: ListQuotes
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - exchange:read_quote
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /sandbox/fiat-deposits
+  method: post
+  operationId: InitiateSandboxFiatDeposit
+  x-agentic-access:
+    action-class: acting
+    consequence: physical
+    subject: required
+    scope:
+    - transfer:write_sandbox_fiat_deposit
+    audience: null
+    token:
+      max-ttl: 300
+      exchange: true
+      purpose-required: true
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /transfer/crypto-deposits/{id}/reject
+  method: post
+  operationId: RejectCryptoDeposit
+  x-agentic-access:
+    action-class: acting
+    consequence: physical
+    subject: required
+    scope:
+    - transfer:reject_crypto_deposit
+    audience: null
+    token:
+      max-ttl: 300
+      exchange: true
+      purpose-required: true
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /transfer/crypto-deposits/{id}/update
+  method: post
+  operationId: UpdateCryptoDeposit
+  x-agentic-access:
+    action-class: acting
+    consequence: physical
+    subject: required
+    scope:
+    - transfer:update_crypto_deposit
+    audience: null
+    token:
+      max-ttl: 300
+      exchange: true
+      purpose-required: true
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /transfer/crypto-destination-address
+  method: put
+  operationId: PutCryptoDestinationAddress
+  x-agentic-access:
+    action-class: acting
+    consequence: physical
+    subject: required
+    scope:
+    - transfer:write_crypto_destination_address
+    audience: null
+    token:
+      max-ttl: 300
+      exchange: true
+      purpose-required: true
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /transfer/crypto-destination-addresses
+  method: get
+  operationId: ListCryptoDestinationAddresses
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - transfer:read_crypto_destination_address
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /transfer/crypto-withdrawals
+  method: post
+  operationId: CreateCryptoWithdrawal
+  x-agentic-access:
+    action-class: acting
+    consequence: physical
+    subject: required
+    scope:
+    - transfer:write_crypto_withdrawal
+    audience: null
+    token:
+      max-ttl: 300
+      exchange: true
+      purpose-required: true
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /transfer/deposit-addresses
+  method: get
+  operationId: ListDepositAddresses
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - transfer:read_deposit_address
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /transfer/deposit-addresses
+  method: post
+  operationId: CreateDepositAddress
+  x-agentic-access:
+    action-class: acting
+    consequence: physical
+    subject: required
+    scope:
+    - transfer:write_deposit_address
+    audience: null
+    token:
+      max-ttl: 300
+      exchange: true
+      purpose-required: true
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /transfer/fees/crypto-withdrawal
+  method: post
+  operationId: CreateCryptoWithdrawalFee
+  x-agentic-access:
+    action-class: acting
+    consequence: physical
+    subject: required
+    scope:
+    - fee:write_crypto_withdrawal_fee
+    audience: null
+    token:
+      max-ttl: 300
+      exchange: true
+      purpose-required: true
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /transfer/fiat-accounts
+  method: get
+  operationId: ListFiatAccounts
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - transfer:read_fiat_account
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /transfer/fiat-accounts
+  method: post
+  operationId: CreateFiatAccount
+  x-agentic-access:
+    action-class: acting
+    consequence: physical
+    subject: required
+    scope:
+    - transfer:write_fiat_account
+    audience: null
+    token:
+      max-ttl: 300
+      exchange: true
+      purpose-required: true
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /transfer/fiat-accounts/{id}
+  method: get
+  operationId: GetFiatAccount
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - transfer:read_fiat_account
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /transfer/fiat-accounts/{id}
+  method: delete
+  operationId: DeleteFiatAccount
+  x-agentic-access:
+    action-class: acting
+    consequence: physical
+    subject: required
+    scope:
+    - transfer:write_fiat_account
+    audience: null
+    token:
+      max-ttl: 300
+      exchange: true
+      purpose-required: true
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /transfer/fiat-accounts/{id}
+  method: put
+  operationId: UpdateFiatAccount
+  x-agentic-access:
+    action-class: acting
+    consequence: physical
+    subject: required
+    scope:
+    - transfer:write_fiat_account
+    audience: null
+    token:
+      max-ttl: 300
+      exchange: true
+      purpose-required: true
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /transfer/fiat-deposit-instructions
+  method: get
+  operationId: ListFiatDepositInstructions
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - transfer:read_fiat_deposit_instructions
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /transfer/fiat-deposit-instructions
+  method: post
+  operationId: CreateFiatDepositInstructions
+  x-agentic-access:
+    action-class: acting
+    consequence: physical
+    subject: required
+    scope:
+    - transfer:write_fiat_deposit_instructions
+    audience: null
+    token:
+      max-ttl: 300
+      exchange: true
+      purpose-required: true
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /transfer/fiat-deposit-instructions/{id}
+  method: get
+  operationId: GetFiatDepositInstructions
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - transfer:read_fiat_deposit_instructions
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /transfer/fiat-withdrawals
+  method: post
+  operationId: CreateFiatWithdrawal
+  x-agentic-access:
+    action-class: acting
+    consequence: physical
+    subject: required
+    scope:
+    - transfer:write_fiat_withdrawal
+    audience: null
+    token:
+      max-ttl: 300
+      exchange: true
+      purpose-required: true
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /transfer/internal
+  method: post
+  operationId: CreateInternalTransfer
+  x-agentic-access:
+    action-class: acting
+    consequence: physical
+    subject: required
+    scope:
+    - transfer:write_internal_transfer
+    audience: null
+    token:
+      max-ttl: 300
+      exchange: true
+      purpose-required: true
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /transfer/limits/utilizations
+  method: get
+  operationId: ListTransferLimits
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - transfer:read_transfer_limit
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /transfer/paxos
+  method: post
+  operationId: CreatePaxosTransfer
+  x-agentic-access:
+    action-class: acting
+    consequence: physical
+    subject: required
+    scope:
+    - transfer:write_paxos_transfer
+    audience: null
+    token:
+      max-ttl: 300
+      exchange: true
+      purpose-required: true
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /transfer/transfers
+  method: get
+  operationId: ListTransfers
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - transfer:read_transfer
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /transfer/transfers/{id}
+  method: get
+  operationId: GetTransfer
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - transfer:read_transfer
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /travelrule/vasps
+  method: get
+  operationId: ListVasps
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /travelrule/vasps/{id}
+  method: get
+  operationId: GetVasp
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /tax/tax-form-revisions
+  method: get
+  operationId: ListTaxFormRevisions
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - tax:read_tax_form
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /tax/tax-forms
+  method: get
+  operationId: ListTaxForms
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - tax:read_tax_form
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /conversion/stablecoins
+  method: get
+  operationId: ListStablecoinConversions
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - conversion:read_conversion_stablecoin
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /conversion/stablecoins
+  method: post
+  operationId: CreateStablecoinConversion
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - conversion:write_conversion_stablecoin
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /conversion/stablecoins/{id}
+  method: get
+  operationId: GetStablecoinConversion
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - conversion:read_conversion_stablecoin
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /conversion/stablecoins/{id}
+  method: delete
+  operationId: CancelStablecoinConversion
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - conversion:write_conversion_stablecoin
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /settlement/transactions
+  method: get
+  operationId: ListTransactions
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - settlement:read_transaction
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /settlement/transactions
+  method: post
+  operationId: CreateTransaction
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - settlement:write_transaction
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /settlement/transactions/{transaction_id}
+  method: get
+  operationId: GetTransaction
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - settlement:read_transaction
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /settlement/transactions/{transaction_id}
+  method: delete
+  operationId: CancelTransaction
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - settlement:write_transaction
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /settlement/transactions/{transaction_id}/affirm
+  method: put
+  operationId: AffirmTransaction
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - settlement:write_transaction
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /rewards/monitor/address
+  method: get
+  operationId: ListMonitoringAddress
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - rewards:read_monitoring_address
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /rewards/monitor/address
+  method: post
+  operationId: CreateMonitoringAddress
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - rewards:write_monitoring_address
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /rewards/monitor/address/{id}
+  method: get
+  operationId: GetMonitoringAddress
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - rewards:read_monitoring_address
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /rewards/monitor/address/{id}
+  method: put
+  operationId: UpdateMonitoringAddress
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - rewards:write_monitoring_address
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /statements
+  method: get
+  operationId: ListStatements
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - statements:read_statement
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /statements/payments
+  method: get
+  operationId: ListPayments
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - statements:read_payment
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /events
+  method: get
+  operationId: ListEvents
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - events:read_event
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /events/{id}
+  method: get
+  operationId: GetEvent
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - events:read_event
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api-creds/credentials
+  method: get
+  operationId: ListApiCredentials
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - api_creds:read_credentials
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api-creds/credentials/{client_id}
+  method: delete
+  operationId: DeleteApiCredentials
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - api_creds:delete_credentials
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /orchestration/orchestrations
+  method: get
+  operationId: ListOrchestrations
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - orchestration:read_orchestration
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /orchestration/orchestrations
+  method: post
+  operationId: CreateOrchestration
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - orchestration:write_orchestration
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /orchestration/orchestrations/{id}
+  method: get
+  operationId: GetOrchestration
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - orchestration:read_orchestration
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /orchestration/rules
+  method: get
+  operationId: ListOrchestrationRules
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - orchestration:read_orchestration_rule
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /orchestration/rules
+  method: post
+  operationId: CreateOrchestrationRule
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - orchestration:write_orchestration_rule
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /orchestration/rules/{id}
+  method: delete
+  operationId: DeleteOrchestrationRule
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - orchestration:write_orchestration_rule
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /rewards/claim-schedules
+  method: get
+  operationId: ListClaimSchedules
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - rewards:read_claims_schedule
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /rewards/claim-schedules
+  method: post
+  operationId: CreateClaimSchedule
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - rewards:write_claims_schedule
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /rewards/claim-schedules/{id}
+  method: delete
+  operationId: DeleteClaimSchedule
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - rewards:write_claims_schedule
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /rewards/claim-schedules/{id}
+  method: put
+  operationId: UpdateClaimSchedule
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - rewards:write_claims_schedule
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /rewards/claims
+  method: get
+  operationId: ListClaims
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - rewards:read_claims
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /rewards/details
+  method: get
+  operationId: GetRewardDetails
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - rewards:read_rewards_details
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /rewards/rates
+  method: get
+  operationId: GetRewardsRates
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - rewards:read_rewards_details
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /rewards/addresses
+  method: get
+  operationId: ListAttributionAddresses
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - rewards:read_monitoring_address
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /rewards/addresses
+  method: post
+  operationId: CreateAttributionAddress
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - rewards:write_monitoring_address
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /rewards/addresses/batch
+  method: post
+  operationId: BatchCreateAttributionAddresses
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - rewards:write_monitoring_address
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /rewards/addresses/{id}
+  method: delete
+  operationId: DeleteAttributionAddress
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - rewards:write_monitoring_address
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /rewards/addresses/{id}
+  method: put
+  operationId: UpdateAttributionAddress
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - rewards:write_monitoring_address
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /rewards/payout-groups
+  method: get
+  operationId: ListPayoutGroups
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - rewards:read_payout_groups
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /rewards/payout-groups
+  method: post
+  operationId: CreatePayoutGroup
+  x-agentic-access:
+    action-class: acting
+    consequence: physical
+    subject: required
+    scope:
+    - rewards:create_payout_groups
+    - rewards:write_payout_groups
+    audience: null
+    token:
+      max-ttl: 300
+      exchange: true
+      purpose-required: true
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /rewards/payout-groups/{id}
+  method: delete
+  operationId: DeletePayoutGroup
+  x-agentic-access:
+    action-class: acting
+    consequence: physical
+    subject: required
+    scope:
+    - rewards:delete_payout_groups
+    - rewards:write_payout_groups
+    audience: null
+    token:
+      max-ttl: 300
+      exchange: true
+      purpose-required: true
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /rewards/payout-groups/{id}
+  method: put
+  operationId: UpdatePayoutGroup
+  x-agentic-access:
+    action-class: acting
+    consequence: physical
+    subject: required
+    scope:
+    - rewards:update_payout_groups
+    - rewards:write_payout_groups
+    audience: null
+    token:
+      max-ttl: 300
+      exchange: true
+      purpose-required: true
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /rewards/statements
+  method: get
+  operationId: ListRewardsStatements
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - rewards:read_statements
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /rewards/statements/{id}
+  method: get
+  operationId: GetRewardsStatement
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - rewards:read_statements
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /markets/{market}/historical-candles
+  method: get
+  operationId: ListHistoricalCandles
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - exchange:historical_prices
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /addresses/verifications
+  method: get
+  operationId: ListVerifications
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - address_ownership:read_verification
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /addresses/verifications
+  method: post
+  operationId: CreateVerification
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - address_ownership:write_verification
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /addresses/verifications/signature
+  method: post
+  operationId: SubmitSignature
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - address_ownership:write_verification
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /addresses/verifications/{id}
+  method: get
+  operationId: GetVerification
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - address_ownership:read_verification
+    token:
+      max-ttl: 3600
+    audit: none

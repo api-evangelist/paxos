@@ -1,0 +1,327 @@
+generated: '2026-07-20'
+method: searched
+source: openapi/paxos-v2-openapi-original.json
+docs: https://docs.paxos.com/api-reference/introduction
+authorization_endpoint: https://oauth.paxos.com/oauth2/auth
+token_endpoint: https://oauth.paxos.com/oauth2/token
+schemes:
+- name: OAuth2
+  source: openapi/paxos-v2-openapi-original.json
+  flows:
+  - flow: clientCredentials
+    tokenUrl: https://oauth.paxos.com/oauth2/token
+  description: |-
+    Paxos APIs use [OAuth 2](https://tools.ietf.org/html/rfc6749) with the [client credentials](https://tools.ietf.org/html/rfc6749#section-4.4) grant flow.
+
+    **Token URLs:**
+    - Production: https://oauth.paxos.com/oauth2/token
+    - Sandbox: https://oauth.sandbox.paxos.com/oauth2/token
+
+    Learn more in the [API credentials guide →](https://docs.paxos.com/developer/credentials)
+scopes:
+- scope: address_ownership:read_verification
+  sources:
+  - openapi/paxos-v2-openapi-original.json
+- scope: address_ownership:write_verification
+  sources:
+  - openapi/paxos-v2-openapi-original.json
+- scope: api_creds:delete_credentials
+  sources:
+  - openapi/paxos-v2-openapi-original.json
+- scope: api_creds:read_credentials
+  sources:
+  - openapi/paxos-v2-openapi-original.json
+- scope: conversion:read_conversion_stablecoin
+  description: Retrieve stablecoin conversion details
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/paxos-v2-openapi-original.json
+- scope: conversion:write_conversion_stablecoin
+  description: Create or cancel a stablecoin conversion
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/paxos-v2-openapi-original.json
+- scope: events:read_event
+  description: Retrieve events
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/paxos-v2-openapi-original.json
+- scope: exchange:historical_prices
+  description: Retrieve marketnaverage prices at a certain time increment
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/paxos-v2-openapi-original.json
+- scope: exchange:read_issuer_quote_execution
+  sources:
+  - openapi/paxos-v2-openapi-original.json
+- scope: exchange:read_order
+  description: Retrieve order or order execution details
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/paxos-v2-openapi-original.json
+- scope: exchange:read_quote
+  description: Retrieve quote details for buying or selling an asset
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/paxos-v2-openapi-original.json
+- scope: exchange:read_quote_execution
+  description: Retrieve quote execution details
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/paxos-v2-openapi-original.json
+- scope: exchange:write_issuer_quote
+  sources:
+  - openapi/paxos-v2-openapi-original.json
+- scope: exchange:write_issuer_quote_execution
+  sources:
+  - openapi/paxos-v2-openapi-original.json
+- scope: exchange:write_order
+  description: Create or cancel an order for buying or selling an asset
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/paxos-v2-openapi-original.json
+- scope: exchange:write_quote_execution
+  description: Create a quote execution for buying or selling an asset
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/paxos-v2-openapi-original.json
+- scope: fee:write_crypto_withdrawal_fee
+  description: Create a guaranteed fee for crypto withdrawal
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/paxos-v2-openapi-original.json
+- scope: funding:read_bank_balance
+  description: Retrieve Paxos dedicated bank account balance
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/paxos-v2-openapi-original.json
+- scope: funding:read_profile
+  description: Retrieve Profile details and deposit funds in Sandbox
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/paxos-v2-openapi-original.json
+- scope: funding:write_profile
+  description: Create a Profile
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/paxos-v2-openapi-original.json
+- scope: identity:read_account
+  description: Retrieve Account details
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/paxos-v2-openapi-original.json
+- scope: identity:read_identity
+  description: Retrieve Identity details or documents
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/paxos-v2-openapi-original.json
+- scope: identity:read_identity_control
+  sources:
+  - openapi/paxos-v2-openapi-original.json
+- scope: identity:write_account
+  description: Create or update Account and Account Members
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/paxos-v2-openapi-original.json
+- scope: identity:write_identity
+  description: Create or update Identity details and set Sandbox Identify Status
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/paxos-v2-openapi-original.json
+- scope: identity:write_identity_control
+  sources:
+  - openapi/paxos-v2-openapi-original.json
+- scope: orchestration:read_orchestration
+  sources:
+  - openapi/paxos-v2-openapi-original.json
+- scope: orchestration:read_orchestration_rule
+  sources:
+  - openapi/paxos-v2-openapi-original.json
+- scope: orchestration:write_orchestration
+  sources:
+  - openapi/paxos-v2-openapi-original.json
+- scope: orchestration:write_orchestration_rule
+  sources:
+  - openapi/paxos-v2-openapi-original.json
+- scope: rewards:create_payout_groups
+  sources:
+  - openapi/paxos-v2-openapi-original.json
+- scope: rewards:delete_payout_groups
+  sources:
+  - openapi/paxos-v2-openapi-original.json
+- scope: rewards:read_claims
+  sources:
+  - openapi/paxos-v2-openapi-original.json
+- scope: rewards:read_claims_schedule
+  sources:
+  - openapi/paxos-v2-openapi-original.json
+- scope: rewards:read_monitoring_address
+  sources:
+  - openapi/paxos-v2-openapi-original.json
+- scope: rewards:read_payout_groups
+  sources:
+  - openapi/paxos-v2-openapi-original.json
+- scope: rewards:read_rewards_details
+  sources:
+  - openapi/paxos-v2-openapi-original.json
+- scope: rewards:read_statements
+  sources:
+  - openapi/paxos-v2-openapi-original.json
+- scope: rewards:update_payout_groups
+  sources:
+  - openapi/paxos-v2-openapi-original.json
+- scope: rewards:write_claims_schedule
+  sources:
+  - openapi/paxos-v2-openapi-original.json
+- scope: rewards:write_monitoring_address
+  sources:
+  - openapi/paxos-v2-openapi-original.json
+- scope: rewards:write_payout_groups
+  sources:
+  - openapi/paxos-v2-openapi-original.json
+- scope: settlement:read_transaction
+  description: Retrieve settlement transaction details
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/paxos-v2-openapi-original.json
+- scope: settlement:write_transaction
+  description: Create, affirm or cancel a settlement transaction
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/paxos-v2-openapi-original.json
+- scope: statements:read_payment
+  sources:
+  - openapi/paxos-v2-openapi-original.json
+- scope: statements:read_statement
+  sources:
+  - openapi/paxos-v2-openapi-original.json
+- scope: tax:read_tax_form
+  description: Retrieve tax details
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/paxos-v2-openapi-original.json
+- scope: tax:read_tax_lot
+  description: Retrieve tax lot details
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/paxos-v2-openapi-original.json
+- scope: tax:write_tax_lot
+  description: Update the given tax-lot ID
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/paxos-v2-openapi-original.json
+- scope: transfer:read_crypto_destination_address
+  sources:
+  - openapi/paxos-v2-openapi-original.json
+- scope: transfer:read_deposit_address
+  description: Retrieve deposit address details
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/paxos-v2-openapi-original.json
+- scope: transfer:read_fiat_account
+  description: Retrieve Fiat Account details
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/paxos-v2-openapi-original.json
+- scope: transfer:read_fiat_deposit_instructions
+  description: Retrieve fiat deposit instruction details
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/paxos-v2-openapi-original.json
+- scope: transfer:read_transfer
+  description: Retrieve transfer details
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/paxos-v2-openapi-original.json
+- scope: transfer:read_transfer_limit
+  description: Retrieve limits for the given transaction type
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/paxos-v2-openapi-original.json
+- scope: transfer:reject_crypto_deposit
+  description: Reject a crypto deposit (travel rule)
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/paxos-v2-openapi-original.json
+- scope: transfer:update_crypto_deposit
+  description: Provide required travel-rule details
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/paxos-v2-openapi-original.json
+- scope: transfer:write_crypto_destination_address
+  sources:
+  - openapi/paxos-v2-openapi-original.json
+- scope: transfer:write_crypto_withdrawal
+  description: Withdraw asset to a specified destination address
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/paxos-v2-openapi-original.json
+- scope: transfer:write_deposit_address
+  description: Create an deposit address on a blockchain network
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/paxos-v2-openapi-original.json
+- scope: transfer:write_fiat_account
+  description: Create, update or delete a Fiat Account
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/paxos-v2-openapi-original.json
+- scope: transfer:write_fiat_deposit_instructions
+  description: Create, update or delete fiat deposit instructions
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/paxos-v2-openapi-original.json
+- scope: transfer:write_fiat_withdrawal
+  description: Withdraw fiat to the given destination
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/paxos-v2-openapi-original.json
+- scope: transfer:write_internal_transfer
+  description: Transfer assets between two Profiles
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/paxos-v2-openapi-original.json
+- scope: transfer:write_paxos_transfer
+  sources:
+  - openapi/paxos-v2-openapi-original.json
+- scope: transfer:write_sandbox_fiat_deposit
+  description: Initiate a test fiat deposit in the Sandbox environment
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/paxos-v2-openapi-original.json

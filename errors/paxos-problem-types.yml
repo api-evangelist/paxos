@@ -1,0 +1,46 @@
+generated: '2026-07-20'
+method: searched
+format: rfc9457
+source:
+- openapi/paxos-v2-openapi-original.json
+- https://docs.paxos.com/api-reference/problems/
+envelope:
+  media_type: application/problem+json
+  note: Paxos returns RFC 9457 problem+json bodies on 4xx errors across the v2 API.
+problems:
+- status: 400
+  slug: unsupported-address
+  title: Unsupported Address
+  docs: https://docs.paxos.com/api-reference/problems/unsupported-address.md
+  meaning: The supplied blockchain/destination address is not supported for the requested asset or network.
+- status: 403
+  slug: expired
+  title: Expired
+  docs: https://docs.paxos.com/api-reference/problems/expired.md
+  meaning: A held rate / quote or time-boxed resource has expired and can no longer be executed.
+- status: 403
+  slug: insufficient-funds
+  title: Insufficient Funds
+  docs: https://docs.paxos.com/api-reference/problems/insufficient-funds.md
+  meaning: The profile lacks sufficient available balance to complete the requested transfer, order, or conversion.
+- status: 403
+  slug: rejected
+  title: Rejected
+  docs: https://docs.paxos.com/api-reference/problems/rejected.md
+  meaning: The request was rejected by risk, compliance, or business rules (e.g. limit, screening, approval).
+- status: 403
+  slug: travel-rule-information-required
+  title: Travel Rule Information Required
+  docs: https://docs.paxos.com/api-reference/problems/travel-rule-information-required.md
+  meaning: Required FATF Travel Rule originator/beneficiary information is missing for the transfer.
+- status: 409
+  slug: already-exists
+  title: Rejected (Already Exists)
+  docs: https://docs.paxos.com/api-reference/problems/already-exists.md
+  meaning: A resource with the same client ref_id already exists (idempotency conflict) — e.g. order,
+    deposit address, identity, or quote execution already created.
+derived_status_summary:
+  '400': 22 operations return Bad Request
+  '403': 22 operations return Forbidden / policy rejections
+  '404': 21 operations return Not Found
+  '409': 14 operations return Conflict / Already Exists (idempotency)

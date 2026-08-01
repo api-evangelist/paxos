@@ -1,0 +1,386 @@
+generated: '2026-07-20'
+method: derived
+status: candidate
+source: openapi/paxos-v2-openapi-original.json
+note: No official hosted Paxos MCP server was found. Candidate tool list derived one-per-operation from
+  the Paxos v2 OpenAPI; each maps to a real operationId.
+server:
+  name: paxos
+  transport: stdio
+tool_count: 125
+tools:
+- name: ListProfiles
+  description: List Profiles
+  source_operation: openapi/paxos-v2-openapi-original.json#ListProfiles
+- name: CreateProfile
+  description: Create Profile
+  source_operation: openapi/paxos-v2-openapi-original.json#CreateProfile
+- name: GetProfile
+  description: Get Profile
+  source_operation: openapi/paxos-v2-openapi-original.json#GetProfile
+- name: UpdateProfile
+  description: Update Profile
+  source_operation: openapi/paxos-v2-openapi-original.json#UpdateProfile
+- name: ListProfileBalances
+  description: List Profile Balances
+  source_operation: openapi/paxos-v2-openapi-original.json#ListProfileBalances
+- name: GetProfileBalance
+  description: Get Profile Balance
+  source_operation: openapi/paxos-v2-openapi-original.json#GetProfileBalance
+- name: DeactivateProfile
+  description: Deactivate Profile
+  source_operation: openapi/paxos-v2-openapi-original.json#DeactivateProfile
+- name: CreateSandboxDeposit
+  description: Create Sandbox Deposit
+  source_operation: openapi/paxos-v2-openapi-original.json#CreateSandboxDeposit
+- name: ListIdentityControls
+  description: List Identity Controls
+  source_operation: openapi/paxos-v2-openapi-original.json#ListIdentityControls
+- name: DeleteIdentityControl
+  description: Delete Identity Control
+  source_operation: openapi/paxos-v2-openapi-original.json#DeleteIdentityControl
+- name: CreateIdentityControl
+  description: Create Identity Control
+  source_operation: openapi/paxos-v2-openapi-original.json#CreateIdentityControl
+- name: ListIdentities
+  description: List Identities
+  source_operation: openapi/paxos-v2-openapi-original.json#ListIdentities
+- name: CreateIdentity
+  description: Create Identity
+  source_operation: openapi/paxos-v2-openapi-original.json#CreateIdentity
+- name: ListIdentityDocuments
+  description: List Identity Documents
+  source_operation: openapi/paxos-v2-openapi-original.json#ListIdentityDocuments
+- name: DocumentUpload
+  description: Document Upload
+  source_operation: openapi/paxos-v2-openapi-original.json#DocumentUpload
+- name: GetIdentity
+  description: Get Identity
+  source_operation: openapi/paxos-v2-openapi-original.json#GetIdentity
+- name: UpdateIdentity
+  description: Update Identity
+  source_operation: openapi/paxos-v2-openapi-original.json#UpdateIdentity
+- name: AddInstitutionMembers
+  description: Add Institution Members
+  source_operation: openapi/paxos-v2-openapi-original.json#AddInstitutionMembers
+- name: DeleteInstitutionMember
+  description: Remove Institution Member
+  source_operation: openapi/paxos-v2-openapi-original.json#DeleteInstitutionMember
+- name: ListAccounts
+  description: List Accounts
+  source_operation: openapi/paxos-v2-openapi-original.json#ListAccounts
+- name: CreateAccount
+  description: Create Account
+  source_operation: openapi/paxos-v2-openapi-original.json#CreateAccount
+- name: UpdateAccount
+  description: Update Account
+  source_operation: openapi/paxos-v2-openapi-original.json#UpdateAccount
+- name: GetAccount
+  description: GetAccount
+  source_operation: openapi/paxos-v2-openapi-original.json#GetAccount
+- name: AddAccountMembers
+  description: Add Account Members
+  source_operation: openapi/paxos-v2-openapi-original.json#AddAccountMembers
+- name: DeleteAccountMember
+  description: Remove Account Member
+  source_operation: openapi/paxos-v2-openapi-original.json#DeleteAccountMember
+- name: SandboxStartKycRefresh
+  description: Sandbox Start KYC Refresh
+  source_operation: openapi/paxos-v2-openapi-original.json#SandboxStartKycRefresh
+- name: SandboxSetIdentityStatus
+  description: Sandbox Set Identity Status
+  source_operation: openapi/paxos-v2-openapi-original.json#SandboxSetIdentityStatus
+- name: SandboxForceStartKycRefresh
+  description: Sandbox Force Start KYC Refresh
+  source_operation: openapi/paxos-v2-openapi-original.json#SandboxForceStartKycRefresh
+- name: SandboxResetKycRefresh
+  description: Sandbox Reset KYC Refresh
+  source_operation: openapi/paxos-v2-openapi-original.json#SandboxResetKycRefresh
+- name: ListPrices
+  description: List Prices
+  source_operation: openapi/paxos-v2-openapi-original.json#ListPrices
+- name: ListExecutions
+  description: List Executions
+  source_operation: openapi/paxos-v2-openapi-original.json#ListExecutions
+- name: CreateIssuerQuote
+  description: Create Issuer Quote
+  source_operation: openapi/paxos-v2-openapi-original.json#CreateIssuerQuote
+- name: GetIssuerQuoteSettlementAvailability
+  description: Get Issuer Quote Settlement Availability
+  source_operation: openapi/paxos-v2-openapi-original.json#GetIssuerQuoteSettlementAvailability
+- name: CreateIssuerQuoteExecution
+  description: Create Issuer Quote Execution
+  source_operation: openapi/paxos-v2-openapi-original.json#CreateIssuerQuoteExecution
+- name: ListIssuerQuoteExecutions
+  description: List Issuer Quote Executions
+  source_operation: openapi/paxos-v2-openapi-original.json#ListIssuerQuoteExecutions
+- name: ListMarkets
+  description: List Markets
+  source_operation: openapi/paxos-v2-openapi-original.json#ListMarkets
+- name: ListHistoricalPrices
+  description: List Historical Prices
+  source_operation: openapi/paxos-v2-openapi-original.json#ListHistoricalPrices
+- name: GetOrderBook
+  description: Get Order Book
+  source_operation: openapi/paxos-v2-openapi-original.json#GetOrderBook
+- name: ListRecentExecutions
+  description: List Recent Executions
+  source_operation: openapi/paxos-v2-openapi-original.json#ListRecentExecutions
+- name: GetTicker
+  description: Get Ticker
+  source_operation: openapi/paxos-v2-openapi-original.json#GetTicker
+- name: ListOrders
+  description: List Orders
+  source_operation: openapi/paxos-v2-openapi-original.json#ListOrders
+- name: ListProfileExecutions
+  description: List Executions
+  source_operation: openapi/paxos-v2-openapi-original.json#ListProfileExecutions
+- name: ListProfileOrders
+  description: List Orders
+  source_operation: openapi/paxos-v2-openapi-original.json#ListProfileOrders
+- name: CreateOrder
+  description: Create Order
+  source_operation: openapi/paxos-v2-openapi-original.json#CreateOrder
+- name: GetOrder
+  description: Get Order
+  source_operation: openapi/paxos-v2-openapi-original.json#GetOrder
+- name: CancelOrder
+  description: Cancel Order
+  source_operation: openapi/paxos-v2-openapi-original.json#CancelOrder
+- name: ListQuoteExecutions
+  description: List Quote Executions
+  source_operation: openapi/paxos-v2-openapi-original.json#ListQuoteExecutions
+- name: CreateQuoteExecution
+  description: Create Quote Execution
+  source_operation: openapi/paxos-v2-openapi-original.json#CreateQuoteExecution
+- name: GetQuoteExecution
+  description: Get Quote Execution
+  source_operation: openapi/paxos-v2-openapi-original.json#GetQuoteExecution
+- name: ListQuotes
+  description: List Quotes
+  source_operation: openapi/paxos-v2-openapi-original.json#ListQuotes
+- name: InitiateSandboxFiatDeposit
+  description: Initiate Sandbox Fiat Deposit
+  source_operation: openapi/paxos-v2-openapi-original.json#InitiateSandboxFiatDeposit
+- name: RejectCryptoDeposit
+  description: Reject Crypto Deposit
+  source_operation: openapi/paxos-v2-openapi-original.json#RejectCryptoDeposit
+- name: UpdateCryptoDeposit
+  description: Update Crypto Deposit
+  source_operation: openapi/paxos-v2-openapi-original.json#UpdateCryptoDeposit
+- name: PutCryptoDestinationAddress
+  description: Put Crypto Destination Addresses
+  source_operation: openapi/paxos-v2-openapi-original.json#PutCryptoDestinationAddress
+- name: ListCryptoDestinationAddresses
+  description: List Crypto Destination Addresses
+  source_operation: openapi/paxos-v2-openapi-original.json#ListCryptoDestinationAddresses
+- name: CreateCryptoWithdrawal
+  description: Create Crypto Withdrawal
+  source_operation: openapi/paxos-v2-openapi-original.json#CreateCryptoWithdrawal
+- name: ListDepositAddresses
+  description: List Deposit Addresses
+  source_operation: openapi/paxos-v2-openapi-original.json#ListDepositAddresses
+- name: CreateDepositAddress
+  description: Create Deposit Address
+  source_operation: openapi/paxos-v2-openapi-original.json#CreateDepositAddress
+- name: CreateCryptoWithdrawalFee
+  description: Create Crypto Withdrawal Fee
+  source_operation: openapi/paxos-v2-openapi-original.json#CreateCryptoWithdrawalFee
+- name: ListFiatAccounts
+  description: List Fiat Accounts
+  source_operation: openapi/paxos-v2-openapi-original.json#ListFiatAccounts
+- name: CreateFiatAccount
+  description: Create Fiat Account
+  source_operation: openapi/paxos-v2-openapi-original.json#CreateFiatAccount
+- name: GetFiatAccount
+  description: Get Fiat Account
+  source_operation: openapi/paxos-v2-openapi-original.json#GetFiatAccount
+- name: DeleteFiatAccount
+  description: Delete Fiat Account
+  source_operation: openapi/paxos-v2-openapi-original.json#DeleteFiatAccount
+- name: UpdateFiatAccount
+  description: Update Fiat Account
+  source_operation: openapi/paxos-v2-openapi-original.json#UpdateFiatAccount
+- name: ListFiatDepositInstructions
+  description: List Fiat Deposit Instructions
+  source_operation: openapi/paxos-v2-openapi-original.json#ListFiatDepositInstructions
+- name: CreateFiatDepositInstructions
+  description: Create Fiat Deposit Instructions
+  source_operation: openapi/paxos-v2-openapi-original.json#CreateFiatDepositInstructions
+- name: GetFiatDepositInstructions
+  description: Get Fiat Deposit Instructions
+  source_operation: openapi/paxos-v2-openapi-original.json#GetFiatDepositInstructions
+- name: CreateFiatWithdrawal
+  description: Create Fiat Withdrawal
+  source_operation: openapi/paxos-v2-openapi-original.json#CreateFiatWithdrawal
+- name: CreateInternalTransfer
+  description: Create Internal Transfer
+  source_operation: openapi/paxos-v2-openapi-original.json#CreateInternalTransfer
+- name: ListTransferLimits
+  description: List Transfer Limits
+  source_operation: openapi/paxos-v2-openapi-original.json#ListTransferLimits
+- name: CreatePaxosTransfer
+  description: Create Paxos Transfer
+  source_operation: openapi/paxos-v2-openapi-original.json#CreatePaxosTransfer
+- name: ListTransfers
+  description: List Transfers
+  source_operation: openapi/paxos-v2-openapi-original.json#ListTransfers
+- name: GetTransfer
+  description: Get Transfer
+  source_operation: openapi/paxos-v2-openapi-original.json#GetTransfer
+- name: ListVasps
+  description: ListVasps
+  source_operation: openapi/paxos-v2-openapi-original.json#ListVasps
+- name: GetVasp
+  description: GetVasp
+  source_operation: openapi/paxos-v2-openapi-original.json#GetVasp
+- name: ListTaxFormRevisions
+  description: List Tax Form Revisions
+  source_operation: openapi/paxos-v2-openapi-original.json#ListTaxFormRevisions
+- name: ListTaxForms
+  description: List Tax Forms
+  source_operation: openapi/paxos-v2-openapi-original.json#ListTaxForms
+- name: ListStablecoinConversions
+  description: List Stablecoin Conversions
+  source_operation: openapi/paxos-v2-openapi-original.json#ListStablecoinConversions
+- name: CreateStablecoinConversion
+  description: Create Stablecoin Conversion
+  source_operation: openapi/paxos-v2-openapi-original.json#CreateStablecoinConversion
+- name: GetStablecoinConversion
+  description: Get Stablecoin Conversion
+  source_operation: openapi/paxos-v2-openapi-original.json#GetStablecoinConversion
+- name: CancelStablecoinConversion
+  description: Cancel Stablecoin Conversion
+  source_operation: openapi/paxos-v2-openapi-original.json#CancelStablecoinConversion
+- name: ListTransactions
+  description: List Transactions
+  source_operation: openapi/paxos-v2-openapi-original.json#ListTransactions
+- name: CreateTransaction
+  description: Create Transaction
+  source_operation: openapi/paxos-v2-openapi-original.json#CreateTransaction
+- name: GetTransaction
+  description: Get Transaction
+  source_operation: openapi/paxos-v2-openapi-original.json#GetTransaction
+- name: CancelTransaction
+  description: Cancel Transaction
+  source_operation: openapi/paxos-v2-openapi-original.json#CancelTransaction
+- name: AffirmTransaction
+  description: Affirm Transaction
+  source_operation: openapi/paxos-v2-openapi-original.json#AffirmTransaction
+- name: ListMonitoringAddress
+  description: List Monitoring Address
+  source_operation: openapi/paxos-v2-openapi-original.json#ListMonitoringAddress
+- name: CreateMonitoringAddress
+  description: Create Monitoring Address
+  source_operation: openapi/paxos-v2-openapi-original.json#CreateMonitoringAddress
+- name: GetMonitoringAddress
+  description: Get Monitoring Address
+  source_operation: openapi/paxos-v2-openapi-original.json#GetMonitoringAddress
+- name: UpdateMonitoringAddress
+  description: Update Monitoring Address
+  source_operation: openapi/paxos-v2-openapi-original.json#UpdateMonitoringAddress
+- name: ListStatements
+  description: List Statements
+  source_operation: openapi/paxos-v2-openapi-original.json#ListStatements
+- name: ListPayments
+  description: List Payments
+  source_operation: openapi/paxos-v2-openapi-original.json#ListPayments
+- name: ListEvents
+  description: List Events
+  source_operation: openapi/paxos-v2-openapi-original.json#ListEvents
+- name: GetEvent
+  description: Get Event
+  source_operation: openapi/paxos-v2-openapi-original.json#GetEvent
+- name: ListApiCredentials
+  description: List API Credentials
+  source_operation: openapi/paxos-v2-openapi-original.json#ListApiCredentials
+- name: DeleteApiCredentials
+  description: Delete API Credentials
+  source_operation: openapi/paxos-v2-openapi-original.json#DeleteApiCredentials
+- name: ListOrchestrations
+  description: List Orchestrations
+  source_operation: openapi/paxos-v2-openapi-original.json#ListOrchestrations
+- name: CreateOrchestration
+  description: Create Orchestration
+  source_operation: openapi/paxos-v2-openapi-original.json#CreateOrchestration
+- name: GetOrchestration
+  description: Get Orchestration
+  source_operation: openapi/paxos-v2-openapi-original.json#GetOrchestration
+- name: ListOrchestrationRules
+  description: List Orchestration Rules
+  source_operation: openapi/paxos-v2-openapi-original.json#ListOrchestrationRules
+- name: CreateOrchestrationRule
+  description: Create Orchestration Rule
+  source_operation: openapi/paxos-v2-openapi-original.json#CreateOrchestrationRule
+- name: DeleteOrchestrationRule
+  description: Delete Orchestration Rule
+  source_operation: openapi/paxos-v2-openapi-original.json#DeleteOrchestrationRule
+- name: ListClaimSchedules
+  description: List claim schedules
+  source_operation: openapi/paxos-v2-openapi-original.json#ListClaimSchedules
+- name: CreateClaimSchedule
+  description: Create a claim schedule
+  source_operation: openapi/paxos-v2-openapi-original.json#CreateClaimSchedule
+- name: DeleteClaimSchedule
+  description: Delete a claim schedule
+  source_operation: openapi/paxos-v2-openapi-original.json#DeleteClaimSchedule
+- name: UpdateClaimSchedule
+  description: Update a claim schedule
+  source_operation: openapi/paxos-v2-openapi-original.json#UpdateClaimSchedule
+- name: ListClaims
+  description: List claims
+  source_operation: openapi/paxos-v2-openapi-original.json#ListClaims
+- name: GetRewardDetails
+  description: Get reward details
+  source_operation: openapi/paxos-v2-openapi-original.json#GetRewardDetails
+- name: GetRewardsRates
+  description: Get reward rates
+  source_operation: openapi/paxos-v2-openapi-original.json#GetRewardsRates
+- name: ListAttributionAddresses
+  description: List reward addresses
+  source_operation: openapi/paxos-v2-openapi-original.json#ListAttributionAddresses
+- name: CreateAttributionAddress
+  description: Create a reward address
+  source_operation: openapi/paxos-v2-openapi-original.json#CreateAttributionAddress
+- name: BatchCreateAttributionAddresses
+  description: Batch create reward addresses
+  source_operation: openapi/paxos-v2-openapi-original.json#BatchCreateAttributionAddresses
+- name: DeleteAttributionAddress
+  description: Delete a reward address
+  source_operation: openapi/paxos-v2-openapi-original.json#DeleteAttributionAddress
+- name: UpdateAttributionAddress
+  description: Update a reward address
+  source_operation: openapi/paxos-v2-openapi-original.json#UpdateAttributionAddress
+- name: ListPayoutGroups
+  description: List Payout Groups
+  source_operation: openapi/paxos-v2-openapi-original.json#ListPayoutGroups
+- name: CreatePayoutGroup
+  description: Create Payout Group
+  source_operation: openapi/paxos-v2-openapi-original.json#CreatePayoutGroup
+- name: DeletePayoutGroup
+  description: Delete Payout Group
+  source_operation: openapi/paxos-v2-openapi-original.json#DeletePayoutGroup
+- name: UpdatePayoutGroup
+  description: Update Payout Group
+  source_operation: openapi/paxos-v2-openapi-original.json#UpdatePayoutGroup
+- name: ListRewardsStatements
+  description: List Rewards Statements
+  source_operation: openapi/paxos-v2-openapi-original.json#ListRewardsStatements
+- name: GetRewardsStatement
+  description: Get Rewards Statement
+  source_operation: openapi/paxos-v2-openapi-original.json#GetRewardsStatement
+- name: ListHistoricalCandles
+  description: List Historical Candles
+  source_operation: openapi/paxos-v2-openapi-original.json#ListHistoricalCandles
+- name: ListVerifications
+  description: List address verifications
+  source_operation: openapi/paxos-v2-openapi-original.json#ListVerifications
+- name: CreateVerification
+  description: Create address verification
+  source_operation: openapi/paxos-v2-openapi-original.json#CreateVerification
+- name: SubmitSignature
+  description: Submit address verification signature
+  source_operation: openapi/paxos-v2-openapi-original.json#SubmitSignature
+- name: GetVerification
+  description: Get address verification
+  source_operation: openapi/paxos-v2-openapi-original.json#GetVerification

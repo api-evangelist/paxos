@@ -1,0 +1,48 @@
+generated: '2026-07-20'
+method: searched
+source:
+- https://docs.paxos.com/guides/developer/account
+- https://docs.paxos.com/api-reference/endpoints/sandbox-identity/sandbox-set-identity-status.md
+- openapi/paxos-v2-openapi-original.json
+environments:
+  sandbox:
+    api_base_url: https://api.sandbox.paxos.com/v2
+    dashboard: https://dashboard.sandbox.paxos.com
+    token_url: https://oauth.sandbox.paxos.com/oauth2/token
+  production:
+    api_base_url: https://api.paxos.com/v2
+    token_url: https://oauth.paxos.com/oauth2/token
+access:
+  steps:
+  - Create an institutional account on the Sandbox dashboard.
+  - Verify email with the code from Paxos and set up a passkey.
+  - Complete or skip onboarding.
+  - Contact support to activate the Developer role.
+  - Create OAuth2 API credentials (client_id / client_secret) in the dashboard.
+  note: Test funds are only available in Sandbox and have no real value.
+test_tooling:
+  - name: Create Sandbox Deposit
+    operation: createSandboxDeposit
+    purpose: Create a test crypto/asset deposit to fund a profile in Sandbox.
+  - name: Initiate Sandbox Fiat Deposit
+    operation: initiateSandboxFiatDeposit
+    purpose: Initiate a test fiat deposit in Sandbox.
+  - name: Sandbox Set Identity Status
+    operation: sandboxSetIdentityStatus
+    purpose: Force identity verification statuses so a test identity can transact.
+  - name: Sandbox Start/Reset/Force KYC Refresh
+    operations: [sandboxStartKycRefresh, sandboxResetKycRefresh, sandboxForceStartKycRefresh]
+    purpose: Drive KYC-refresh workflows on demand in Sandbox.
+magic_values:
+  identity_status_enum: [PENDING, ERROR, APPROVED, DENIED, DISABLED]
+  enable_person_to_transact:
+    id_verification_status: APPROVED
+    sanctions_verification_status: APPROVED
+  enable_institution_to_transact:
+    sanctions_verification_status: APPROVED
+  example_request:
+    id: <identity_id>
+    id_verification_status: APPROVED
+    sanctions_verification_status: APPROVED
+notes: Never use production credentials against Sandbox or vice versa; the two environments are fully isolated
+  with separate OAuth authorization servers.

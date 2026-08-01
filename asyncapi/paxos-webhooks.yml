@@ -1,0 +1,196 @@
+generated: '2026-07-20'
+method: searched
+spec_type: Webhooks
+source: https://docs.paxos.com/guides/dashboard/webhooks
+note: Paxos delivers real-time event notifications via webhooks (managed in the Dashboard) and via the Events API. No published
+  AsyncAPI document; this is the webhook event catalog. Real-time market/execution feeds are also available over WebSocket.
+delivery:
+  transport: https-post
+  management: Dashboard > Webhooks
+  events_api:
+  - listEvents
+  - getEvent
+event_count: 59
+events:
+- event: identity.approved
+  docs: https://docs.paxos.com/api-reference/webhooks/identity-approved.md
+  description: Webhook triggered when an identity verification is approved
+- event: identity.control.created
+  docs: https://docs.paxos.com/api-reference/webhooks/identity-control-created.md
+  description: Webhook triggered when an identity control is created
+- event: identity.control.deleted
+  docs: https://docs.paxos.com/api-reference/webhooks/identity-control-deleted.md
+  description: Webhook triggered when an identity control is removed
+- event: identity.denied
+  docs: https://docs.paxos.com/api-reference/webhooks/identity-denied.md
+  description: Webhook triggered when an identity verification is denied
+- event: identity.disabled
+  docs: https://docs.paxos.com/api-reference/webhooks/identity-disabled.md
+  description: Webhook triggered when an identity is disabled
+- event: identity.documents_required
+  docs: https://docs.paxos.com/api-reference/webhooks/identity-documents-required.md
+  description: Webhook triggered when additional documents are required for identity verification
+- event: identity.kyc_refresh.completed
+  docs: https://docs.paxos.com/api-reference/webhooks/identity-kyc-refresh-completed.md
+  description: Webhook triggered when a KYC refresh process is successfully completed
+- event: identity.kyc_refresh.expired
+  docs: https://docs.paxos.com/api-reference/webhooks/identity-kyc-refresh-expired.md
+  description: Webhook triggered when a KYC refresh process expires without completion
+- event: identity.kyc_refresh.started
+  docs: https://docs.paxos.com/api-reference/webhooks/identity-kyc-refresh-started.md
+  description: Webhook triggered when a KYC refresh process is initiated
+- event: orchestration.completed
+  docs: https://docs.paxos.com/api-reference/webhooks/orchestration-completed.md
+  description: Webhook triggered when an orchestration completes successfully
+- event: orchestration.failed
+  docs: https://docs.paxos.com/api-reference/webhooks/orchestration-failed.md
+  description: Webhook triggered when an orchestration fails
+- event: orchestration.processing
+  docs: https://docs.paxos.com/api-reference/webhooks/orchestration-processing.md
+  description: Webhook triggered when an orchestration enters processing status
+- event: transfer.act_deposit.completed
+  docs: https://docs.paxos.com/api-reference/webhooks/transfer-act-deposit-completed.md
+  description: Webhook triggered when a fiat deposit via DBS is completed and funds are available
+- event: transfer.act_deposit.failed
+  docs: https://docs.paxos.com/api-reference/webhooks/transfer-act-deposit-failed.md
+  description: Webhook triggered when a fiat deposit via DBS has failed or been cancelled
+- event: transfer.act_deposit.pending
+  docs: https://docs.paxos.com/api-reference/webhooks/transfer-act-deposit-pending.md
+  description: Webhook triggered when a fiat deposit via DBS has been initiated and is pending
+- event: transfer.act_withdrawal.completed
+  docs: https://docs.paxos.com/api-reference/webhooks/transfer-act-withdrawal-completed.md
+  description: Webhook triggered when a fiat withdrawal via DBS is completed and sent to destination
+- event: transfer.act_withdrawal.failed
+  docs: https://docs.paxos.com/api-reference/webhooks/transfer-act-withdrawal-failed.md
+  description: Webhook triggered when a fiat withdrawal via DBS has failed or been cancelled
+- event: transfer.act_withdrawal.pending
+  docs: https://docs.paxos.com/api-reference/webhooks/transfer-act-withdrawal-pending.md
+  description: Webhook triggered when a fiat withdrawal via DBS has been initiated and is pending
+- event: transfer.banking_circle_intrabank_deposit.completed
+  docs: https://docs.paxos.com/api-reference/webhooks/transfer-banking-circle-intrabank-deposit-completed.md
+  description: Webhook triggered when a Banking Circle intrabank deposit has completed
+- event: transfer.banking_circle_intrabank_deposit.failed
+  docs: https://docs.paxos.com/api-reference/webhooks/transfer-banking-circle-intrabank-deposit-failed.md
+  description: Webhook triggered when a Banking Circle intrabank deposit has failed
+- event: transfer.banking_circle_intrabank_deposit.pending
+  docs: https://docs.paxos.com/api-reference/webhooks/transfer-banking-circle-intrabank-deposit-pending.md
+  description: Webhook triggered when a Banking Circle intrabank deposit has been initiated and is pending
+- event: transfer.banking_circle_intrabank_withdrawal.completed
+  docs: https://docs.paxos.com/api-reference/webhooks/transfer-banking-circle-intrabank-withdrawal-completed.md
+  description: Webhook triggered when a Banking Circle intrabank withdrawal has completed
+- event: transfer.banking_circle_intrabank_withdrawal.failed
+  docs: https://docs.paxos.com/api-reference/webhooks/transfer-banking-circle-intrabank-withdrawal-failed.md
+  description: Webhook triggered when a Banking Circle intrabank withdrawal has failed
+- event: transfer.banking_circle_intrabank_withdrawal.pending
+  docs: https://docs.paxos.com/api-reference/webhooks/transfer-banking-circle-intrabank-withdrawal-pending.md
+  description: Webhook triggered when a Banking Circle intrabank withdrawal has been initiated and is pending
+- event: transfer.bny_intrabank_deposit.completed
+  docs: https://docs.paxos.com/api-reference/webhooks/transfer-bny-intrabank-deposit-completed.md
+  description: Webhook triggered when a BNY intrabank deposit has completed
+- event: transfer.bny_intrabank_deposit.failed
+  docs: https://docs.paxos.com/api-reference/webhooks/transfer-bny-intrabank-deposit-failed.md
+  description: Webhook triggered when a BNY intrabank deposit has failed
+- event: transfer.bny_intrabank_deposit.pending
+  docs: https://docs.paxos.com/api-reference/webhooks/transfer-bny-intrabank-deposit-pending.md
+  description: Webhook triggered when a BNY intrabank deposit has been initiated and is pending
+- event: transfer.bny_intrabank_withdrawal.completed
+  docs: https://docs.paxos.com/api-reference/webhooks/transfer-bny-intrabank-withdrawal-completed.md
+  description: Webhook triggered when a BNY intrabank withdrawal has completed
+- event: transfer.bny_intrabank_withdrawal.failed
+  docs: https://docs.paxos.com/api-reference/webhooks/transfer-bny-intrabank-withdrawal-failed.md
+  description: Webhook triggered when a BNY intrabank withdrawal has failed
+- event: transfer.bny_intrabank_withdrawal.pending
+  docs: https://docs.paxos.com/api-reference/webhooks/transfer-bny-intrabank-withdrawal-pending.md
+  description: Webhook triggered when a BNY intrabank withdrawal has been initiated and is pending
+- event: transfer.crypto_deposit.completed
+  docs: https://docs.paxos.com/api-reference/webhooks/transfer-crypto-deposit-completed.md
+  description: Webhook triggered when a crypto deposit is completed and funds are available
+- event: transfer.crypto_deposit.failed
+  docs: https://docs.paxos.com/api-reference/webhooks/transfer-crypto-deposit-failed.md
+  description: Webhook triggered when a crypto deposit has failed or been cancelled
+- event: transfer.crypto_deposit.pending
+  docs: https://docs.paxos.com/api-reference/webhooks/transfer-crypto-deposit-pending.md
+  description: Webhook triggered when a crypto deposit is detected on-chain and is pending confirmation
+- event: transfer.crypto_withdrawal.completed
+  docs: https://docs.paxos.com/api-reference/webhooks/transfer-crypto-withdrawal-completed.md
+  description: Webhook triggered when a crypto withdrawal is completed and sent to destination
+- event: transfer.crypto_withdrawal.failed
+  docs: https://docs.paxos.com/api-reference/webhooks/transfer-crypto-withdrawal-failed.md
+  description: Webhook triggered when a crypto withdrawal has failed or been cancelled
+- event: transfer.crypto_withdrawal.pending
+  docs: https://docs.paxos.com/api-reference/webhooks/transfer-crypto-withdrawal-pending.md
+  description: Webhook triggered when a crypto withdrawal has been initiated and is pending
+- event: transfer.cubix_deposit.completed
+  docs: https://docs.paxos.com/api-reference/webhooks/transfer-cubix-deposit-completed.md
+  description: Webhook triggered when a Cubix deposit has completed
+- event: transfer.cubix_deposit.failed
+  docs: https://docs.paxos.com/api-reference/webhooks/transfer-cubix-deposit-failed.md
+  description: Webhook triggered when a Cubix deposit has failed
+- event: transfer.cubix_deposit.pending
+  docs: https://docs.paxos.com/api-reference/webhooks/transfer-cubix-deposit-pending.md
+  description: Webhook triggered when a Cubix deposit has been initiated and is pending
+- event: transfer.cubix_withdrawal.completed
+  docs: https://docs.paxos.com/api-reference/webhooks/transfer-cubix-withdrawal-completed.md
+  description: Webhook triggered when a Cubix withdrawal has completed
+- event: transfer.cubix_withdrawal.failed
+  docs: https://docs.paxos.com/api-reference/webhooks/transfer-cubix-withdrawal-failed.md
+  description: Webhook triggered when a Cubix withdrawal has failed
+- event: transfer.cubix_withdrawal.pending
+  docs: https://docs.paxos.com/api-reference/webhooks/transfer-cubix-withdrawal-pending.md
+  description: Webhook triggered when a Cubix withdrawal has been initiated and is pending
+- event: transfer.internal_transfer_credit.completed
+  docs: https://docs.paxos.com/api-reference/webhooks/transfer-internal-transfer-credit-completed.md
+  description: Webhook triggered when an internal transfer credit has completed
+- event: transfer.internal_transfer_debit.completed
+  docs: https://docs.paxos.com/api-reference/webhooks/transfer-internal-transfer-debit-completed.md
+  description: Webhook triggered when an internal transfer debit has completed
+- event: transfer.rtp_deposit.completed
+  docs: https://docs.paxos.com/api-reference/webhooks/transfer-rtp-deposit-completed.md
+  description: Webhook triggered when an RTP deposit has completed
+- event: transfer.rtp_deposit.failed
+  docs: https://docs.paxos.com/api-reference/webhooks/transfer-rtp-deposit-failed.md
+  description: Webhook triggered when an RTP deposit has failed
+- event: transfer.rtp_deposit.pending
+  docs: https://docs.paxos.com/api-reference/webhooks/transfer-rtp-deposit-pending.md
+  description: Webhook triggered when an RTP deposit has been initiated and is pending
+- event: transfer.scb_intrabank_deposit.completed
+  docs: https://docs.paxos.com/api-reference/webhooks/transfer-scb-intrabank-deposit-completed.md
+  description: Webhook triggered when an SCB intrabank deposit has completed
+- event: transfer.scb_intrabank_deposit.failed
+  docs: https://docs.paxos.com/api-reference/webhooks/transfer-scb-intrabank-deposit-failed.md
+  description: Webhook triggered when an SCB intrabank deposit has failed
+- event: transfer.scb_intrabank_deposit.pending
+  docs: https://docs.paxos.com/api-reference/webhooks/transfer-scb-intrabank-deposit-pending.md
+  description: Webhook triggered when an SCB intrabank deposit has been initiated and is pending
+- event: transfer.scb_intrabank_withdrawal.completed
+  docs: https://docs.paxos.com/api-reference/webhooks/transfer-scb-intrabank-withdrawal-completed.md
+  description: Webhook triggered when an SCB intrabank withdrawal has completed
+- event: transfer.scb_intrabank_withdrawal.failed
+  docs: https://docs.paxos.com/api-reference/webhooks/transfer-scb-intrabank-withdrawal-failed.md
+  description: Webhook triggered when an SCB intrabank withdrawal has failed
+- event: transfer.scb_intrabank_withdrawal.pending
+  docs: https://docs.paxos.com/api-reference/webhooks/transfer-scb-intrabank-withdrawal-pending.md
+  description: Webhook triggered when an SCB intrabank withdrawal has been initiated and is pending
+- event: transfer.wire_deposit.completed
+  docs: https://docs.paxos.com/api-reference/webhooks/transfer-wire-deposit-completed.md
+  description: Webhook triggered when a wire deposit has completed
+- event: transfer.wire_deposit.failed
+  docs: https://docs.paxos.com/api-reference/webhooks/transfer-wire-deposit-failed.md
+  description: Webhook triggered when a wire deposit has failed
+- event: transfer.wire_deposit.pending
+  docs: https://docs.paxos.com/api-reference/webhooks/transfer-wire-deposit-pending.md
+  description: Webhook triggered when a wire deposit has been initiated and is pending
+- event: transfer.wire_withdrawal.completed
+  docs: https://docs.paxos.com/api-reference/webhooks/transfer-wire-withdrawal-completed.md
+  description: Webhook triggered when a wire withdrawal has completed
+- event: transfer.wire_withdrawal.failed
+  docs: https://docs.paxos.com/api-reference/webhooks/transfer-wire-withdrawal-failed.md
+  description: Webhook triggered when a wire withdrawal has failed
+- event: transfer.wire_withdrawal.pending
+  docs: https://docs.paxos.com/api-reference/webhooks/transfer-wire-withdrawal-pending.md
+  description: Webhook triggered when a wire withdrawal has been initiated and is pending
+websocket_feeds:
+- Market Data (all/per market)
+- Execution Data (all/per market)
+- Stablecoin market price feed
+- 'Smart Order Routing: market data, top of book, execution data, heartbeat'

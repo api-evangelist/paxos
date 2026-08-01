@@ -1,0 +1,61 @@
+generated: '2026-07-20'
+method: searched
+source: https://docs.paxos.com/changelog
+scheme: dated-semantic
+current_version: v2
+entries:
+- date: '2026-07-16'
+  area: Identity
+  type: additive
+  title: Sandbox KYC Refresh endpoints
+  highlight: Three sandbox-only endpoints so partners can self-service test KYC-refresh workflows.
+- date: '2026-07-14'
+  area: Documentation
+  type: documentation
+  title: Account Openers ID Requirements
+  highlight: Account Openers must provide a valid government-issued ID and Proof of Residential Address.
+- date: '2026-07-09'
+  area: Networks
+  type: additive
+  title: PYUSD on Polygon PoS and X Layer
+  highlight: PayPal USD (PYUSD) is live on Polygon PoS and X Layer.
+- date: '2026-07-02'
+  area: Identity
+  type: documentation
+  title: Identity Developer Guides
+  highlight: Comprehensive restructuring and rewrite of Identity documentation.
+- date: '2026-07-01'
+  area: Networks
+  type: additive
+  title: USDG on Robinhood Chain
+  highlight: Global Dollar (USDG) is live on Robinhood Chain.
+- date: '2026-07-01'
+  area: Rewards Engine
+  type: breaking
+  title: Rewards Engine GA; Legacy APIs Deprecated
+  highlight: Legacy monitoring and payment endpoints will be removed in a future release.
+- date: '2026-06-30'
+  area: Travel Rule
+  type: breaking
+  title: VASP Directory and Metadata
+  highlight: New fields accepted; enforcement starting November 30, 2026.
+- date: '2026-06-30'
+  area: Orchestrations
+  type: breaking
+  title: address_id Deprecated
+  highlight: crypto_address_id request field is deprecated and will be removed.
+- date: '2026-06-24'
+  area: Identity
+  type: additive
+  title: Sole Proprietorship Support
+  highlight: SOLE_PROPRIETORSHIP is available as an institution type.
+- date: '2026-06-11'
+  area: Pricing
+  type: additive
+  title: Historical Candles Endpoint
+  highlight: Added a List Historical Candles endpoint (OHLCV) for a given market.
+- date: '2026-05-11'
+  area: Platform
+  type: breaking
+  title: End of Life - Wallet UI and itBit Platform
+  highlight: Effective August 9, 2026, Paxos is retiring the Wallet UI and itBit platform.

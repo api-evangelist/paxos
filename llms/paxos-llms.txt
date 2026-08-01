@@ -1,0 +1,388 @@
+# Paxos Documentation
+
+## Docs
+
+- [Add Account Members](https://docs.paxos.com/api-reference/endpoints/account-members/add-account-members.md): Add one or more account members to a given account.
+- [Overview](https://docs.paxos.com/api-reference/endpoints/account-members/overview.md): Account Members allow you to associate an Identity with an Account on our Platform.
+- [Remove Account Member](https://docs.paxos.com/api-reference/endpoints/account-members/remove-account-member.md): Removes an account member from an account.
+- [Create Account](https://docs.paxos.com/api-reference/endpoints/accounts/create-account.md): Create an account for a given identity, via the `identity_id` field. This identity is the primary owner of the account for all tax-related purposes.
+- [Get account](https://docs.paxos.com/api-reference/endpoints/accounts/get-identityaccounts.md)
+- [List Accounts](https://docs.paxos.com/api-reference/endpoints/accounts/list-accounts.md): List accounts with pagination. Every response will contain a `next_page` field, as long as the end of the list has not been reached. Pass this value into the `page_cursor` field of the next request to retrieve the next page of results.
+- [Overview](https://docs.paxos.com/api-reference/endpoints/accounts/overview.md): Accounts connect Identities (persons or institutions) to Profiles (asset balances).
+- [Update Account](https://docs.paxos.com/api-reference/endpoints/accounts/update-account.md): This enables you to update an existing account with new information. Please refer to the following table for fields that can be updated via this endpoint.
+- [Create address verification](https://docs.paxos.com/api-reference/endpoints/address-verification/create-verification.md): For SIGNATURE method: EVM messages follow EIP-191; Solana messages are JSON payloads signed with ed25519.
+- [Get address verification](https://docs.paxos.com/api-reference/endpoints/address-verification/get-verification.md)
+- [List address verifications](https://docs.paxos.com/api-reference/endpoints/address-verification/list-verifications.md)
+- [Submit address verification signature](https://docs.paxos.com/api-reference/endpoints/address-verification/submit-signature.md)
+- [Delete API Credentials](https://docs.paxos.com/api-reference/endpoints/api-credentials/delete-api-credentials.md): Delete the given API Credentials, preventing them from being used for authentication.
+- [List API Credentials](https://docs.paxos.com/api-reference/endpoints/api-credentials/list-api-credentials.md): List all API credentials that have been created.
+- [Overview](https://docs.paxos.com/api-reference/endpoints/api-credentials/overview.md): The API Credentials API allows clients to create and manage API credentials for accessing Paxos services.
+- [Create a claim schedule](https://docs.paxos.com/api-reference/endpoints/claims/create-claim-schedule.md): Creates a new claim schedule for automatic reward claims
+- [Delete a claim schedule](https://docs.paxos.com/api-reference/endpoints/claims/delete-claim-schedule.md): Deletes a claim schedule
+- [List claim schedules](https://docs.paxos.com/api-reference/endpoints/claims/list-claim-schedules.md): Returns a paginated list of claim schedules
+- [List claims](https://docs.paxos.com/api-reference/endpoints/claims/list-claims.md): Returns a paginated list of claims with optional filtering
+- [Overview](https://docs.paxos.com/api-reference/endpoints/claims/overview.md): Claim Schedules define when and how your organization receives reward payouts.
+- [Update a claim schedule](https://docs.paxos.com/api-reference/endpoints/claims/update-claim-schedule.md): Updates an existing claim schedule
+- [Overview](https://docs.paxos.com/api-reference/endpoints/crypto-deposits/overview.md): For Paxos Global PTE Ltd users, update or reject a crypto deposit that does not contain the required travel rule information.
+- [Reject Crypto Deposit](https://docs.paxos.com/api-reference/endpoints/crypto-deposits/reject-crypto-deposit.md): Reject a crypto deposit which is waiting for required travel rule information about the originator address. If the rejected deposit has any status other than `NEEDS_INFO`, the request will return an error. Only the creator of the crypto deposit can reject it.
+- [Update Crypto Deposit](https://docs.paxos.com/api-reference/endpoints/crypto-deposits/update-crypto-deposit.md): Crypto deposits that do not meet the minimum travel rule requirements are blocked. To update a crypto deposit, provide the required travel rule information about the originator address.
+- [List Crypto Destination Addresses](https://docs.paxos.com/api-reference/endpoints/crypto-destination-addresses/list-crypto-destination-addresses.md): List all crypto destination addresses, optionally filtering and paging the results
+- [Put Crypto Destination Addresses](https://docs.paxos.com/api-reference/endpoints/crypto-destination-addresses/put-crypto-destination-address.md): Updates a specified crypto destination address. If the address does not exist, it will be created
+- [Create Crypto Withdrawal](https://docs.paxos.com/api-reference/endpoints/crypto-withdrawals/create-crypto-withdrawal.md): Withdraw a cryptocurrency asset to a specified destination address.
+- [Create Deposit Address](https://docs.paxos.com/api-reference/endpoints/deposit-addresses/create-deposit-address.md): Create a deposit address on a blockchain network for depositing to a profile.
+- [List Deposit Addresses](https://docs.paxos.com/api-reference/endpoints/deposit-addresses/list-deposit-addresses.md): List all deposit addresses, optionally filtering and paging the results.
+- [Get Event](https://docs.paxos.com/api-reference/endpoints/events/get-event.md): Get an Event by its (event) id, the event must have been created by the system and you must be the owner of the the event, you can get an event id by either listing events or via a webhook integration.
+- [List Events](https://docs.paxos.com/api-reference/endpoints/events/list-events.md): This endpoint enables you to fetch a list of events that have been created by the system. You can use query parameters to filter the results by the `created_at` time using `created_at.lt`, `created_at.gt`, etc. and you can `limit` the number of events returned.
+- [Overview](https://docs.paxos.com/api-reference/endpoints/events/overview.md): Retrieve events from your Paxos account
+- [Create Crypto Withdrawal Fee](https://docs.paxos.com/api-reference/endpoints/fees/create-crypto-withdrawal-fee.md): Get a guaranteed fee for the given currency, valid for a period of time. Specify exactly one of `amount` or `total`, otherwise an error is returned.
+- [Create Fiat Account](https://docs.paxos.com/api-reference/endpoints/fiat-transfers/create-fiat-account.md): Create an account to initiate a fiat withdrawal.
+- [Create Fiat Deposit Instructions](https://docs.paxos.com/api-reference/endpoints/fiat-transfers/create-fiat-deposit-instructions.md): Create instructions for depositing fiat.
+- [Create Fiat Withdrawal](https://docs.paxos.com/api-reference/endpoints/fiat-transfers/create-fiat-withdrawal.md): Withdraw fiat to the given destination.
+- [Delete Fiat Account](https://docs.paxos.com/api-reference/endpoints/fiat-transfers/delete-fiat-account.md): Delete a Fiat Account. Once a Fiat Account is deleted, transfers cannot be initiated to it.
+- [Get Fiat Account](https://docs.paxos.com/api-reference/endpoints/fiat-transfers/get-fiat-account.md): Get a single Fiat Account by ID.
+- [Get Fiat Deposit Instructions](https://docs.paxos.com/api-reference/endpoints/fiat-transfers/get-fiat-deposit-instructions.md): Get instructions for depositing fiat using a Paxos Fiat Deposit Instructions ID. The Fiat Deposit Instructions ID (`id`) is provided in the response of the [Create Fiat Deposit Instructions](#operation/CreateFiatDepositInstructions).
+- [List Fiat Accounts](https://docs.paxos.com/api-reference/endpoints/fiat-transfers/list-fiat-accounts.md): List all Fiat Accounts, optionally filtering and paging the results. The response includes an abbreviated `FiatAccount` object:
+- [List Fiat Deposit Instructions](https://docs.paxos.com/api-reference/endpoints/fiat-transfers/list-fiat-deposit-instructions.md): Return the associated Fiat Deposit Instructions matching the search criteria for the current Account. The paginated results default to the maximum limit of 1,000 Fiat Deposit instructions, unless otherwise specified with the `limit` parameter. Every paginated response contains a `next_page` field un…
+- [Overview](https://docs.paxos.com/api-reference/endpoints/fiat-transfers/overview.md): The Fiat Transfers API allows clients to deposit and withdraw fiat via Wire (Fedwire and SWIFT) and CUBIX networks.
+- [Update Fiat Account](https://docs.paxos.com/api-reference/endpoints/fiat-transfers/update-fiat-account.md): Change an existing value or add a new value on one or more fields for the given Fiat Account and return the modified Fiat Account in `PENDING` status. Update fields in **either** `fiat_account_owner.person_details` or `fiat_account_owner.institution_details`. Attempts to convert the `fiat_account_ow…
+- [Create Identity Control](https://docs.paxos.com/api-reference/endpoints/identity-controls/create-identity-control.md): Create a new identity control on an identity.
+- [Delete Identity Control](https://docs.paxos.com/api-reference/endpoints/identity-controls/delete-identity-control.md): Delete an identity control on an identity.
+- [List Identity Controls](https://docs.paxos.com/api-reference/endpoints/identity-controls/list-identity-controls.md): List identity controls associated with an identity.
+- [Overview](https://docs.paxos.com/api-reference/endpoints/identity-controls/overview.md): Identity Controls API reference
+- [Document Upload](https://docs.paxos.com/api-reference/endpoints/identity-documents/document-upload.md): This endpoint enables you to receive a URL to upload a document to Paxos for identity verification or enhanced due diligence purposes. When uploading a document you must specify the document type. You will receive a URL where you can upload the document using a POST request.
+- [List Identity Documents](https://docs.paxos.com/api-reference/endpoints/identity-documents/list-identity-documents.md): This endpoint enables you to get a list of all documents associated with an identity.
+- [Overview](https://docs.paxos.com/api-reference/endpoints/identity-documents/overview.md): The Identity Documents API allows clients to send documents to Paxos to validate identities during the KYC process.
+- [Create Identity](https://docs.paxos.com/api-reference/endpoints/identity/create-identity.md): Creates a new Person or Institution Identity on the Paxos Platform.
+- [Get Identity](https://docs.paxos.com/api-reference/endpoints/identity/get-identity.md): Get an Identity by its (identity) id. You can only see identities created by you.
+- [List Identities](https://docs.paxos.com/api-reference/endpoints/identity/list-identities.md): This endpoint enables you to fetch a list of Identities. You can use query parameters to filter the results returned by `created_at`, `updated_at`, `summary_status` and `identity_type`
+- [Overview](https://docs.paxos.com/api-reference/endpoints/identity/overview.md): An Identity represents a person or institution who is able to take actions on the Paxos Platform.
+- [Update Identity](https://docs.paxos.com/api-reference/endpoints/identity/update-identity.md): Updates an Identity, this action performs a delta of what is submitted in the update and the existing identity. - Updating details (`person_details` or `institution_details`) might lead to the identity being re-verified (e.g. re-screening name changes), which could impact the identity's ability to t…
+- [Add Institution Members](https://docs.paxos.com/api-reference/endpoints/institution-members/add-institution-members.md): Add one or more institution members to a given institution.
+- [Overview](https://docs.paxos.com/api-reference/endpoints/institution-members/overview.md): Institution Members allow you to associate persons with an institution on our Platform.
+- [Remove Institution Member](https://docs.paxos.com/api-reference/endpoints/institution-members/remove-institution-member.md): Removes an institution member from an institution.
+- [Create Internal Transfer](https://docs.paxos.com/api-reference/endpoints/internal-transfers/create-internal-transfer.md): Transfer assets between two profiles belonging to the same customer.
+- [Create Issuer Quote](https://docs.paxos.com/api-reference/endpoints/issuer-quotes/create-issuer-quote.md): Creates a request for a quote where Paxos is the issuer. Note that PAXG quotes will be unavailable when the London gold market is closed.
+- [Create Issuer Quote Execution](https://docs.paxos.com/api-reference/endpoints/issuer-quotes/create-issuer-quote-execution.md): Executes on a quote where Paxos is the issuer.
+- [Get Issuer Quote Settlement Availability](https://docs.paxos.com/api-reference/endpoints/issuer-quotes/get-issuer-quote-settlement-availability.md): Returns the maximum PAXG quantity available for immediate (T+0) purchase. Note that availability will be zero when the London gold market is closed or unavailable. Sell settlement is always T+1, so sell_quantity is always "0.000".
+- [List Issuer Quote Executions](https://docs.paxos.com/api-reference/endpoints/issuer-quotes/list-issuer-quote-executions.md): Retrieves full details of quote executions where Paxos is the issuer.
+- [Overview](https://docs.paxos.com/api-reference/endpoints/issuer-quotes/overview.md): Issuer Quotes are 'held rates' offered by Paxos to mint or redeem Paxos-issued assets at a specific price within a period of time.
+- [List Transfer Limits](https://docs.paxos.com/api-reference/endpoints/limits/list-transfer-limits.md): List all limits that apply to the given transaction type.
+- [Get Order Book](https://docs.paxos.com/api-reference/endpoints/market-data/get-order-book.md): Retrieves the full list of bids and asks of the order book at individual price levels with resting quantities per level.
+- [Get Ticker](https://docs.paxos.com/api-reference/endpoints/market-data/get-ticker.md): Retrieves order book statistics of the exchange over the last 24 hours and from midnight UTC until current time.
+- [List Markets](https://docs.paxos.com/api-reference/endpoints/market-data/list-markets.md): Retrieves the set of current available markets for trading with details.
+- [List Recent Executions](https://docs.paxos.com/api-reference/endpoints/market-data/list-recent-executions.md): Retrieves the list of 2000 most recent executions by all users to occur in the order book.
+- [Overview](https://docs.paxos.com/api-reference/endpoints/market-data/overview.md): Market data provides various parameters of the order book and historical order data.
+- [Create Monitoring Address](https://docs.paxos.com/api-reference/endpoints/monitoring-addresses/create-monitoring-address.md): Adds an address to be monitored for rewards tracking.
+- [Get Monitoring Address](https://docs.paxos.com/api-reference/endpoints/monitoring-addresses/get-monitoring-address.md): Retrieves a monitoring address by ID
+- [List Monitoring Address](https://docs.paxos.com/api-reference/endpoints/monitoring-addresses/list-monitoring-address.md): Retrieve a list of monitoring address
+- [Overview](https://docs.paxos.com/api-reference/endpoints/monitoring-addresses/overview.md): A Monitoring Address is a blockchain address that Paxos monitors daily for eligible stablecoin activity.
+- [Update Monitoring Address](https://docs.paxos.com/api-reference/endpoints/monitoring-addresses/update-monitoring-address.md): Updates a monitored address name
+- [Create Orchestration Rule](https://docs.paxos.com/api-reference/endpoints/orchestration-rules/create-orchestration-rule.md): Creates a persistent orchestration rule that automatically triggers orchestrations when matching deposits are received.
+- [Delete Orchestration Rule](https://docs.paxos.com/api-reference/endpoints/orchestration-rules/delete-orchestration-rule.md): Deactivates an orchestration rule by updating its status to DELETED. Once deleted, the rule will no longer trigger new orchestrations. Any orchestrations previously created by the rule will continue to be processed.
+- [List Orchestration Rules](https://docs.paxos.com/api-reference/endpoints/orchestration-rules/list-orchestration-rules.md): List all orchestration rules, optionally filtering and paging the results.
+- [Overview](https://docs.paxos.com/api-reference/endpoints/orchestration-rules/overview.md): Automate conversions triggered by deposits with orchestration rules.
+- [Create Orchestration](https://docs.paxos.com/api-reference/endpoints/orchestration/create-orchestration.md): Creates a one-time orchestration that moves assets from a source profile to a destination. Use this endpoint when funds already reside on the Paxos platform and need to be transferred or converted as part of a single workflow.
+- [Get Orchestration](https://docs.paxos.com/api-reference/endpoints/orchestration/get-orchestration.md): Retreives a specific orchestration using its orchestration ID.
+- [List Orchestrations](https://docs.paxos.com/api-reference/endpoints/orchestration/list-orchestrations.md): List all orchestrations, optionally filtering and paging the results.
+- [Overview](https://docs.paxos.com/api-reference/endpoints/orchestration/overview.md): Execute fiat and stablecoin conversions with orchestration workflows.
+- [Overview](https://docs.paxos.com/api-reference/endpoints/orchestrations-conversions/overview.md): The Orchestrations API provides a single interface for executing fiat and stablecoin conversions on the Paxos platform.
+- [Cancel Order](https://docs.paxos.com/api-reference/endpoints/orders/cancel-order.md): Submits a cancellation request. A response indicates that the request has been acknowledged and provides no guarantee the order has been cancelled.
+- [Create Order](https://docs.paxos.com/api-reference/endpoints/orders/create-order.md): For limit orders, create an order for buying or selling an asset:
+- [Get Order](https://docs.paxos.com/api-reference/endpoints/orders/get-order.md): Retrieves the current state of an order. - Historical data prior to May 16, 2022 is unavailable.
+- [List Executions](https://docs.paxos.com/api-reference/endpoints/orders/list-executions.md): Retrieves full details of underlying executions with optional filters. Notes: - This endpoint returns a maximum of 1000 items per page. - Filtering options are `account_id`, `profile_id` or neither (all executions).
+- [List Orders](https://docs.paxos.com/api-reference/endpoints/orders/list-orders.md): Retrieves full details of orders associated with a Profile ID, with optional filters.
+- [Overview](https://docs.paxos.com/api-reference/endpoints/orders/overview.md): Order management for market, limit, and post-only orders.
+- [Create Paxos Transfer](https://docs.paxos.com/api-reference/endpoints/paxos-transfers/create-paxos-transfer.md): Transfer assets between two Profiles belonging to different [Entities](https://docs.paxos.com/dashboard/organization#entity).
+- [Overview](https://docs.paxos.com/api-reference/endpoints/paxos-transfers/overview.md): Move assets between two Entities belonging to the same Organization or to a different Organization on the Paxos platform.
+- [List Payments](https://docs.paxos.com/api-reference/endpoints/payments/list-payments.md): List payments based on the provided filters
+- [Overview](https://docs.paxos.com/api-reference/endpoints/payments/overview.md): Payments represent actual transfers of rewards to the payout address associated with a given statement.
+- [Create Payout Group](https://docs.paxos.com/api-reference/endpoints/payout-groups/create-payout-group.md): Adds a payout group. A payout group encapsulates common rewards characteristics. All monitored addresses which reference this payout group will accumulate rewards at the same rate and claim their rewards to the payout destination specified for this group.
+- [Delete Payout Group](https://docs.paxos.com/api-reference/endpoints/payout-groups/delete-payout-group.md): Deletes a payout group. A 200 response indicates the request was accepted; however, if the payout group is registered on a blockchain, it may continue to appear for up to a few minutes while the on-chain removal is confirmed. Once confirmed, the payout group will no longer appear.
+- [List Payout Groups](https://docs.paxos.com/api-reference/endpoints/payout-groups/list-payout-groups.md): Retrieves a list of payout groups.
+- [Overview](https://docs.paxos.com/api-reference/endpoints/payout-groups/overview.md): A Payout Group is a collection of reward addresses that receive reward distributions (claims) collectively.
+- [Update Payout Group](https://docs.paxos.com/api-reference/endpoints/payout-groups/update-payout-group.md): Updates a payout group. Any changes to a payout group which has an on-chain component will cause the unclaimed rewards for that group to be implicitly claimed. No details of the implicit claiming are returned in this API response.
+- [List Historical Candles](https://docs.paxos.com/api-reference/endpoints/pricing/list-historical-candles.md): Returns OHLCV Candlesticks data for the given market. To control the count, use either  `increment` or `max_data_points`. List Historical Candles returns an error when an unexpected value is given, or when `increment` and  `max_data_points` are both given or omitted.
+- [List Historical Prices](https://docs.paxos.com/api-reference/endpoints/pricing/list-historical-prices.md): Retrieves a set of average prices at a certain increment of time for the requested market. This endpoint is suitable for retrieving historical average price trends where price precision, execution, and other detailed information is not required. To control the count, use either  `increment` or `max_…
+- [List Prices](https://docs.paxos.com/api-reference/endpoints/pricing/list-prices.md): Retrieve current prices, as well as 24 hour prior (yesterday) prices, for the specified markets. Any single market that failed to be retrieved is excluded from the response.
+- [Overview](https://docs.paxos.com/api-reference/endpoints/pricing/overview.md): Pricing provides historical data related to charting of asset prices.
+- [Create Profile](https://docs.paxos.com/api-reference/endpoints/profiles/create-profile.md): Create a new profile for this account. Profiles created using this endpoint always have a type of `NORMAL`.
+- [Deactivate Profile](https://docs.paxos.com/api-reference/endpoints/profiles/deactivate-profile.md): Deactivate the given `profile_id`. The default profile cannot be deactivated. Deactivated profiles won't be visible for deposits. Profiles with more than zero balances cannot be deactivated. If a deactivated profile has a non-zero balance it will be reactivated.
+- [Get Profile](https://docs.paxos.com/api-reference/endpoints/profiles/get-profile.md): Read a single profile by its UUID, or read the default profile using the alias "default".
+- [Get Profile Balance](https://docs.paxos.com/api-reference/endpoints/profiles/get-profile-balance.md): Get the balance of `asset` in a profile.
+- [List Profile Balances](https://docs.paxos.com/api-reference/endpoints/profiles/list-profile-balances.md): Retrieve the Profile’s available and trading balances. Use query parameters to retrieve a defined set of assets. Omit query parameters to retrieve all asset balances.
+- [List Profiles](https://docs.paxos.com/api-reference/endpoints/profiles/list-profiles.md): Return the associated Profiles for the current Account. The paginated results default to the maximum limit of 1,000 Profiles, unless otherwise specified with the `limit` parameter. Every paginated response contains a `next_page` field until the last page is reached. Pass the `next_page` value into t…
+- [Overview](https://docs.paxos.com/api-reference/endpoints/profiles/overview.md): Profiles hold asset balances, and every Paxos transaction is on a particular profile.
+- [Update Profile](https://docs.paxos.com/api-reference/endpoints/profiles/update-profile.md): Change the `nickname` label for the given `profile_id` (Profile).
+- [Create Quote Execution](https://docs.paxos.com/api-reference/endpoints/quote-executions/create-quote-execution.md): Execute on a quote for buying or selling an asset.
+- [Get Quote Execution](https://docs.paxos.com/api-reference/endpoints/quote-executions/get-quote-execution.md): Get an existing quote execution for buying or selling an asset.
+- [List Quote Executions](https://docs.paxos.com/api-reference/endpoints/quote-executions/list-quote-executions.md): List quote executions within a particular profile.
+- [Overview](https://docs.paxos.com/api-reference/endpoints/quote-executions/overview.md): Quote Executions buy or sell assets using a Quote obtained from the Quotes flow.
+- [List Quotes](https://docs.paxos.com/api-reference/endpoints/quotes/list-quotes.md): List quotes for buying or selling assets. By default, the list will include the latest available quotes for both buying and selling all supported assets.
+- [Overview](https://docs.paxos.com/api-reference/endpoints/quotes/overview.md): Quotes are 'held rates' offered by Paxos to buy or sell assets at a specific price within a period of time.
+- [Create a reward address](https://docs.paxos.com/api-reference/endpoints/reward-addresses/create-reward-address.md): Creates a new reward address for reward attribution
+- [Delete a reward address](https://docs.paxos.com/api-reference/endpoints/reward-addresses/delete-reward-address.md): Deletes a reward address. A 200 response indicates the request was accepted; however, if the address is registered on a blockchain, it may continue to appear for up to a few minutes while the on-chain removal is confirmed. Once confirmed, the address will no longer appear.
+- [List reward addresses](https://docs.paxos.com/api-reference/endpoints/reward-addresses/list-reward-addresses.md): Returns a paginated list of reward addresses
+- [Overview](https://docs.paxos.com/api-reference/endpoints/reward-addresses/overview.md): A Reward Address is a blockchain address that accumulates rewards for eligible stablecoin activity.
+- [Update a reward address](https://docs.paxos.com/api-reference/endpoints/reward-addresses/update-reward-address.md): Updates an existing reward address
+- [Get reward details](https://docs.paxos.com/api-reference/endpoints/reward-details/get-reward-details.md): Returns current reward rates, next accrual time, lifetime earned, and total available rewards
+- [Overview](https://docs.paxos.com/api-reference/endpoints/reward-details/overview.md): Reward details provide a breakdown of the rewards your organization has earned for eligible stablecoin activity.
+- [Get Rewards Statement](https://docs.paxos.com/api-reference/endpoints/rewards-statements/get-reward-statement.md): Returns a single rewards statement with presigned download URLs for each generated file (PDF, CSV).
+- [List Rewards Statements](https://docs.paxos.com/api-reference/endpoints/rewards-statements/list-reward-statements.md): Returns monthly rewards statements for the authenticated partner, ordered by period newest first. Summary fields (total_accrued, avg_daily_balance) are included in list responses. Presigned download URLs are populated on files for completed statements only.
+- [Overview](https://docs.paxos.com/api-reference/endpoints/rewards-statements/overview.md): A Rewards Statement is a monthly summary of rewards earned for eligible stablecoin activity, available for download as a PDF or CSV.
+- [Create Sandbox Deposit](https://docs.paxos.com/api-reference/endpoints/sandbox-deposits/create-sandbox-deposit.md): Create a test deposit to fund a profile in the sandbox environment.
+- [Initiate Sandbox Fiat Deposit](https://docs.paxos.com/api-reference/endpoints/sandbox-fiat-transfers/initiate-sandbox-fiat-deposit.md): Initiate a test fiat deposit in the sandbox environment.
+- [Sandbox Force Start KYC Refresh](https://docs.paxos.com/api-reference/endpoints/sandbox-identity/sandbox-force-start-kyc-refresh.md): Force-starts a KYC refresh workflow (bypassing eligibility checks) for the given Identity, which must belong to the authenticated customer. Sandbox only.
+- [Sandbox Reset KYC Refresh](https://docs.paxos.com/api-reference/endpoints/sandbox-identity/sandbox-reset-kyc-refresh.md): Resets the KYC refresh state for the given Identity, which must belong to the authenticated customer. Sandbox only.
+- [Sandbox Set Identity Status](https://docs.paxos.com/api-reference/endpoints/sandbox-identity/sandbox-set-identity-status.md): Set the various statuses for the given Identity. To enable the Person Identity to transact, set both `id_verification_status` and `sanctions_verification_status` to `"APPROVED"`. To enable the Institution to transact, set both `sanctions_verification_status` to `"APPROVED"`. This endpoint also allow…
+- [Sandbox Start KYC Refresh](https://docs.paxos.com/api-reference/endpoints/sandbox-identity/sandbox-start-kyc-refresh.md): Starts a KYC refresh workflow for the given Identity. The Identity must belong to the authenticated customer and be eligible for a refresh. Sandbox only.
+- [Cancel Stablecoin Conversion](https://docs.paxos.com/api-reference/endpoints/stablecoin-conversion/cancel-stablecoin-conversion.md): Cancel a single conversion using the `id` from the [Create Stablecoin Conversion](#operation/CreateStablecoinConversion) response.
+- [Create Stablecoin Conversion](https://docs.paxos.com/api-reference/endpoints/stablecoin-conversion/create-stablecoin-conversion.md): Create a Conversion request to exchange assets 1:1.
+- [Get Stablecoin Conversion](https://docs.paxos.com/api-reference/endpoints/stablecoin-conversion/get-stablecoin-conversion.md): Retrieve a single conversion using the transaction `id` from the [Create Stablecoin Conversion](#operation/CreateStablecoinConversion) response.
+- [List Stablecoin Conversions](https://docs.paxos.com/api-reference/endpoints/stablecoin-conversion/list-stablecoin-conversions.md): List all conversions, optionally filtering and paging the results.
+- [Overview](https://docs.paxos.com/api-reference/endpoints/stablecoin-conversion/overview.md): Convert funds already on platform between fiat and stablecoin using the Stablecoin Conversion API.
+- [List Statements](https://docs.paxos.com/api-reference/endpoints/statements/list-statements.md): List statements based on the provided filters
+- [Overview](https://docs.paxos.com/api-reference/endpoints/statements/overview.md): A Statement summarizes all eligible stablecoin rewards for a given organization over a fixed time period.
+- [List Tax Form Revisions](https://docs.paxos.com/api-reference/endpoints/tax-forms/list-tax-form-revisions.md): Used for more granular file retrieval for specific accounts that require updated tax forms. Lists all versions of a tax form for single account and tax year. Revisions will increment up as new tax forms are issued for the same account, tax year, and form type pairing. The highest value revision is t…
+- [List Tax Forms](https://docs.paxos.com/api-reference/endpoints/tax-forms/list-tax-forms.md): Used for bulk file transfer use cases. List tax forms for given account ids and tax year. The most recent revision number will be returned (revisions increment up; highest value revision for a specific account, tax year, and form type pairing is the most recent). Tax Form URL links will expire after…
+- [Overview](https://docs.paxos.com/api-reference/endpoints/tax-forms/overview.md): All tax forms are associated to a single account_id.
+- [Get Transfer](https://docs.paxos.com/api-reference/endpoints/transfers/get-transfer.md): Get a single transfer by ID.
+- [List Transfers](https://docs.paxos.com/api-reference/endpoints/transfers/list-transfers.md): List all transfers, optionally filtering and paging the results.
+- [Overview](https://docs.paxos.com/api-reference/endpoints/transfers/overview.md): Each deposit to and withdrawal from a Paxos account is a Transfer.
+- [Get VASP](https://docs.paxos.com/api-reference/endpoints/vasps/get-vasp.md)
+- [List VASPs](https://docs.paxos.com/api-reference/endpoints/vasps/list-vasps.md)
+- [identity_control](https://docs.paxos.com/api-reference/events/identity-control-object.md): Event object returned for identity control events
+- [identity_documents_required](https://docs.paxos.com/api-reference/events/identity-documents-required-object.md): Event object returned for identity.documents_required events
+- [identity_kyc_refresh](https://docs.paxos.com/api-reference/events/identity-kyc-refresh-object.md): Event object returned for KYC refresh events
+- [identity_summary_status_change](https://docs.paxos.com/api-reference/events/identity-summary-status-change-object.md): Event object returned for identity status change events
+- [orchestration_status_change](https://docs.paxos.com/api-reference/events/orchestration-status-change-object.md): Event object returned for orchestration status change events
+- [transfer_status_change](https://docs.paxos.com/api-reference/events/transfer-status-change-object.md): Event object returned for transfer status change events
+- [Paxos API](https://docs.paxos.com/api-reference/introduction.md): Welcome to Paxos APIs. At Paxos, our mission is to enable the movement of any asset, any time, in a trustworthy way.
+- [409 - Rejected](https://docs.paxos.com/api-reference/problems/already-exists.md)
+- [403 - Expired](https://docs.paxos.com/api-reference/problems/expired.md)
+- [403 - Insufficient Funds](https://docs.paxos.com/api-reference/problems/insufficient-funds.md)
+- [403 - Rejected](https://docs.paxos.com/api-reference/problems/rejected.md)
+- [403 - Travel Rule Information Required](https://docs.paxos.com/api-reference/problems/travel-rule-information-required.md)
+- [400 - Unsupported Address](https://docs.paxos.com/api-reference/problems/unsupported-address.md)
+- [identity.approved](https://docs.paxos.com/api-reference/webhooks/identity-approved.md): Webhook triggered when an identity verification is approved
+- [identity.control.created](https://docs.paxos.com/api-reference/webhooks/identity-control-created.md): Webhook triggered when an identity control is created
+- [identity.control.deleted](https://docs.paxos.com/api-reference/webhooks/identity-control-deleted.md): Webhook triggered when an identity control is removed
+- [identity.denied](https://docs.paxos.com/api-reference/webhooks/identity-denied.md): Webhook triggered when an identity verification is denied
+- [identity.disabled](https://docs.paxos.com/api-reference/webhooks/identity-disabled.md): Webhook triggered when an identity is disabled
+- [identity.documents_required](https://docs.paxos.com/api-reference/webhooks/identity-documents-required.md): Webhook triggered when additional documents are required for identity verification
+- [identity.kyc_refresh.completed](https://docs.paxos.com/api-reference/webhooks/identity-kyc-refresh-completed.md): Webhook triggered when a KYC refresh process is successfully completed
+- [identity.kyc_refresh.expired](https://docs.paxos.com/api-reference/webhooks/identity-kyc-refresh-expired.md): Webhook triggered when a KYC refresh process expires without completion
+- [identity.kyc_refresh.started](https://docs.paxos.com/api-reference/webhooks/identity-kyc-refresh-started.md): Webhook triggered when a KYC refresh process is initiated
+- [orchestration.completed](https://docs.paxos.com/api-reference/webhooks/orchestration-completed.md): Webhook triggered when an orchestration completes successfully
+- [orchestration.failed](https://docs.paxos.com/api-reference/webhooks/orchestration-failed.md): Webhook triggered when an orchestration fails
+- [orchestration.processing](https://docs.paxos.com/api-reference/webhooks/orchestration-processing.md): Webhook triggered when an orchestration enters processing status
+- [transfer.act_deposit.completed](https://docs.paxos.com/api-reference/webhooks/transfer-act-deposit-completed.md): Webhook triggered when a fiat deposit via DBS is completed and funds are available
+- [transfer.act_deposit.failed](https://docs.paxos.com/api-reference/webhooks/transfer-act-deposit-failed.md): Webhook triggered when a fiat deposit via DBS has failed or been cancelled
+- [transfer.act_deposit.pending](https://docs.paxos.com/api-reference/webhooks/transfer-act-deposit-pending.md): Webhook triggered when a fiat deposit via DBS has been initiated and is pending
+- [transfer.act_withdrawal.completed](https://docs.paxos.com/api-reference/webhooks/transfer-act-withdrawal-completed.md): Webhook triggered when a fiat withdrawal via DBS is completed and sent to destination
+- [transfer.act_withdrawal.failed](https://docs.paxos.com/api-reference/webhooks/transfer-act-withdrawal-failed.md): Webhook triggered when a fiat withdrawal via DBS has failed or been cancelled
+- [transfer.act_withdrawal.pending](https://docs.paxos.com/api-reference/webhooks/transfer-act-withdrawal-pending.md): Webhook triggered when a fiat withdrawal via DBS has been initiated and is pending
+- [transfer.banking_circle_intrabank_deposit.completed](https://docs.paxos.com/api-reference/webhooks/transfer-banking-circle-intrabank-deposit-completed.md): Webhook triggered when a Banking Circle intrabank deposit has completed
+- [transfer.banking_circle_intrabank_deposit.failed](https://docs.paxos.com/api-reference/webhooks/transfer-banking-circle-intrabank-deposit-failed.md): Webhook triggered when a Banking Circle intrabank deposit has failed
+- [transfer.banking_circle_intrabank_deposit.pending](https://docs.paxos.com/api-reference/webhooks/transfer-banking-circle-intrabank-deposit-pending.md): Webhook triggered when a Banking Circle intrabank deposit has been initiated and is pending
+- [transfer.banking_circle_intrabank_withdrawal.completed](https://docs.paxos.com/api-reference/webhooks/transfer-banking-circle-intrabank-withdrawal-completed.md): Webhook triggered when a Banking Circle intrabank withdrawal has completed
+- [transfer.banking_circle_intrabank_withdrawal.failed](https://docs.paxos.com/api-reference/webhooks/transfer-banking-circle-intrabank-withdrawal-failed.md): Webhook triggered when a Banking Circle intrabank withdrawal has failed
+- [transfer.banking_circle_intrabank_withdrawal.pending](https://docs.paxos.com/api-reference/webhooks/transfer-banking-circle-intrabank-withdrawal-pending.md): Webhook triggered when a Banking Circle intrabank withdrawal has been initiated and is pending
+- [transfer.bny_intrabank_deposit.completed](https://docs.paxos.com/api-reference/webhooks/transfer-bny-intrabank-deposit-completed.md): Webhook triggered when a BNY intrabank deposit has completed
+- [transfer.bny_intrabank_deposit.failed](https://docs.paxos.com/api-reference/webhooks/transfer-bny-intrabank-deposit-failed.md): Webhook triggered when a BNY intrabank deposit has failed
+- [transfer.bny_intrabank_deposit.pending](https://docs.paxos.com/api-reference/webhooks/transfer-bny-intrabank-deposit-pending.md): Webhook triggered when a BNY intrabank deposit has been initiated and is pending
+- [transfer.bny_intrabank_withdrawal.completed](https://docs.paxos.com/api-reference/webhooks/transfer-bny-intrabank-withdrawal-completed.md): Webhook triggered when a BNY intrabank withdrawal has completed
+- [transfer.bny_intrabank_withdrawal.failed](https://docs.paxos.com/api-reference/webhooks/transfer-bny-intrabank-withdrawal-failed.md): Webhook triggered when a BNY intrabank withdrawal has failed
+- [transfer.bny_intrabank_withdrawal.pending](https://docs.paxos.com/api-reference/webhooks/transfer-bny-intrabank-withdrawal-pending.md): Webhook triggered when a BNY intrabank withdrawal has been initiated and is pending
+- [transfer.crypto_deposit.completed](https://docs.paxos.com/api-reference/webhooks/transfer-crypto-deposit-completed.md): Webhook triggered when a crypto deposit is completed and funds are available
+- [transfer.crypto_deposit.failed](https://docs.paxos.com/api-reference/webhooks/transfer-crypto-deposit-failed.md): Webhook triggered when a crypto deposit has failed or been cancelled
+- [transfer.crypto_deposit.pending](https://docs.paxos.com/api-reference/webhooks/transfer-crypto-deposit-pending.md): Webhook triggered when a crypto deposit is detected on-chain and is pending confirmation
+- [transfer.crypto_withdrawal.completed](https://docs.paxos.com/api-reference/webhooks/transfer-crypto-withdrawal-completed.md): Webhook triggered when a crypto withdrawal is completed and sent to destination
+- [transfer.crypto_withdrawal.failed](https://docs.paxos.com/api-reference/webhooks/transfer-crypto-withdrawal-failed.md): Webhook triggered when a crypto withdrawal has failed or been cancelled
+- [transfer.crypto_withdrawal.pending](https://docs.paxos.com/api-reference/webhooks/transfer-crypto-withdrawal-pending.md): Webhook triggered when a crypto withdrawal has been initiated and is pending
+- [transfer.cubix_deposit.completed](https://docs.paxos.com/api-reference/webhooks/transfer-cubix-deposit-completed.md): Webhook triggered when a Cubix deposit has completed
+- [transfer.cubix_deposit.failed](https://docs.paxos.com/api-reference/webhooks/transfer-cubix-deposit-failed.md): Webhook triggered when a Cubix deposit has failed
+- [transfer.cubix_deposit.pending](https://docs.paxos.com/api-reference/webhooks/transfer-cubix-deposit-pending.md): Webhook triggered when a Cubix deposit has been initiated and is pending
+- [transfer.cubix_withdrawal.completed](https://docs.paxos.com/api-reference/webhooks/transfer-cubix-withdrawal-completed.md): Webhook triggered when a Cubix withdrawal has completed
+- [transfer.cubix_withdrawal.failed](https://docs.paxos.com/api-reference/webhooks/transfer-cubix-withdrawal-failed.md): Webhook triggered when a Cubix withdrawal has failed
+- [transfer.cubix_withdrawal.pending](https://docs.paxos.com/api-reference/webhooks/transfer-cubix-withdrawal-pending.md): Webhook triggered when a Cubix withdrawal has been initiated and is pending
+- [transfer.internal_transfer_credit.completed](https://docs.paxos.com/api-reference/webhooks/transfer-internal-transfer-credit-completed.md): Webhook triggered when an internal transfer credit has completed
+- [transfer.internal_transfer_debit.completed](https://docs.paxos.com/api-reference/webhooks/transfer-internal-transfer-debit-completed.md): Webhook triggered when an internal transfer debit has completed
+- [transfer.rtp_deposit.completed](https://docs.paxos.com/api-reference/webhooks/transfer-rtp-deposit-completed.md): Webhook triggered when an RTP deposit has completed
+- [transfer.rtp_deposit.failed](https://docs.paxos.com/api-reference/webhooks/transfer-rtp-deposit-failed.md): Webhook triggered when an RTP deposit has failed
+- [transfer.rtp_deposit.pending](https://docs.paxos.com/api-reference/webhooks/transfer-rtp-deposit-pending.md): Webhook triggered when an RTP deposit has been initiated and is pending
+- [transfer.scb_intrabank_deposit.completed](https://docs.paxos.com/api-reference/webhooks/transfer-scb-intrabank-deposit-completed.md): Webhook triggered when an SCB intrabank deposit has completed
+- [transfer.scb_intrabank_deposit.failed](https://docs.paxos.com/api-reference/webhooks/transfer-scb-intrabank-deposit-failed.md): Webhook triggered when an SCB intrabank deposit has failed
+- [transfer.scb_intrabank_deposit.pending](https://docs.paxos.com/api-reference/webhooks/transfer-scb-intrabank-deposit-pending.md): Webhook triggered when an SCB intrabank deposit has been initiated and is pending
+- [transfer.scb_intrabank_withdrawal.completed](https://docs.paxos.com/api-reference/webhooks/transfer-scb-intrabank-withdrawal-completed.md): Webhook triggered when an SCB intrabank withdrawal has completed
+- [transfer.scb_intrabank_withdrawal.failed](https://docs.paxos.com/api-reference/webhooks/transfer-scb-intrabank-withdrawal-failed.md): Webhook triggered when an SCB intrabank withdrawal has failed
+- [transfer.scb_intrabank_withdrawal.pending](https://docs.paxos.com/api-reference/webhooks/transfer-scb-intrabank-withdrawal-pending.md): Webhook triggered when an SCB intrabank withdrawal has been initiated and is pending
+- [transfer.wire_deposit.completed](https://docs.paxos.com/api-reference/webhooks/transfer-wire-deposit-completed.md): Webhook triggered when a wire deposit has completed
+- [transfer.wire_deposit.failed](https://docs.paxos.com/api-reference/webhooks/transfer-wire-deposit-failed.md): Webhook triggered when a wire deposit has failed
+- [transfer.wire_deposit.pending](https://docs.paxos.com/api-reference/webhooks/transfer-wire-deposit-pending.md): Webhook triggered when a wire deposit has been initiated and is pending
+- [transfer.wire_withdrawal.completed](https://docs.paxos.com/api-reference/webhooks/transfer-wire-withdrawal-completed.md): Webhook triggered when a wire withdrawal has completed
+- [transfer.wire_withdrawal.failed](https://docs.paxos.com/api-reference/webhooks/transfer-wire-withdrawal-failed.md): Webhook triggered when a wire withdrawal has failed
+- [transfer.wire_withdrawal.pending](https://docs.paxos.com/api-reference/webhooks/transfer-wire-withdrawal-pending.md): Webhook triggered when a wire withdrawal has been initiated and is pending
+- [Execution Data](https://docs.paxos.com/api-reference/websockets/execution-data.md): Execution data feed for all markets
+- [Execution Data (Market)](https://docs.paxos.com/api-reference/websockets/execution-data-market.md): Execution data feed for a specific market
+- [Market Data](https://docs.paxos.com/api-reference/websockets/market-data.md): Market data feed for all markets
+- [Market Data (Market)](https://docs.paxos.com/api-reference/websockets/market-data-market.md): Market data feed for a specific market
+- [Market Data (Stablecoin)](https://docs.paxos.com/api-reference/websockets/market-data-stablecoin.md): Stablecoin market price feed for all markets
+- [Market Data (Stablecoin Market)](https://docs.paxos.com/api-reference/websockets/market-data-stablecoin-market.md): Stablecoin market price feed for a specific market
+- [Overview](https://docs.paxos.com/api-reference/websockets/overview.md): Event-driven connectivity for payments and trading.
+- [Smart Order Routing Execution Data](https://docs.paxos.com/api-reference/websockets/smart-order-routing-execution-data.md): Real-time trade execution information for Smart Order Routing platform.
+- [Smart Order Routing Heartbeat](https://docs.paxos.com/api-reference/websockets/smart-order-routing-heartbeat.md): Logical-level liveness signal for Smart Order Routing platform.
+- [Smart Order Routing Market Data](https://docs.paxos.com/api-reference/websockets/smart-order-routing-market-data.md): Real-time order book updates for Smart Order Routing platform.
+- [Smart Order Routing WebSocket API](https://docs.paxos.com/api-reference/websockets/smart-order-routing-overview.md): Authenticated real-time market data for Smart Order Routing platform customers.
+- [Smart Order Routing Top of Book](https://docs.paxos.com/api-reference/websockets/smart-order-routing-top-of-book.md): Real-time best bid and ask updates for Smart Order Routing platform.
+- [Commissions and Rebates FAQ](https://docs.paxos.com/guides/crypto-brokerage/commissions-rebates.md): Get answers to common questions about commissions and rebates.
+- [FIX Best Practices](https://docs.paxos.com/guides/crypto-brokerage/fix/best-practices.md): Learn about connection management, sequence number management and testing.
+- [FIX Certification](https://docs.paxos.com/guides/crypto-brokerage/fix/certify.md): Test and verify the FIX implementation in Sandbox before going to Production.
+- [Overview](https://docs.paxos.com/guides/crypto-brokerage/fix/index.md): Leverage the FIX protocol for crypto trading.
+- [FIX Onboarding](https://docs.paxos.com/guides/crypto-brokerage/fix/onboard.md): Set Up a Paxos Account, configure connection then certify.
+- [Data Dictionary](https://docs.paxos.com/guides/crypto-brokerage/fix/reference/data-dictionary.md): QuickFIX-compatible FIX 4.2 data dictionary for the Paxos FIX interface.
+- [Encoded Tags](https://docs.paxos.com/guides/crypto-brokerage/fix/reference/encoded-tags.md): MsgType and ExecType lookup values for Paxos FIX 4.2.
+- [Execution Reports - Cancels](https://docs.paxos.com/guides/crypto-brokerage/fix/reference/execution-report-cancels.md): Pending cancel and canceled execution report message formats and fields.
+- [Execution Reports - Fills](https://docs.paxos.com/guides/crypto-brokerage/fix/reference/execution-report-fills.md): Partial fill and filled execution report message formats and fields.
+- [Execution Reports - New](https://docs.paxos.com/guides/crypto-brokerage/fix/reference/execution-report-new.md): Pending New and New execution report message formats and fields.
+- [Execution Reports - Rejected and Expired](https://docs.paxos.com/guides/crypto-brokerage/fix/reference/execution-report-reject-expired.md): Order reject and expired execution report message formats, rejection reason codes, and detailed failure messages.
+- [FIX API Reference](https://docs.paxos.com/guides/crypto-brokerage/fix/reference/index.md): Message types, required tags, and encoded values for Paxos FIX 4.2.
+- [New Order](https://docs.paxos.com/guides/crypto-brokerage/fix/reference/new-order.md): New Order Single message format and fields.
+- [Order Cancel Messages](https://docs.paxos.com/guides/crypto-brokerage/fix/reference/order-cancel.md): Order cancel request and reject message formats and fields.
+- [Order Status Messages](https://docs.paxos.com/guides/crypto-brokerage/fix/reference/order-status.md): Order status request and status execution report message formats and fields.
+- [Session Messages](https://docs.paxos.com/guides/crypto-brokerage/fix/reference/session-messages.md): Logon, logout, heartbeat, replay, and reject message formats and fields.
+- [Overview](https://docs.paxos.com/guides/crypto-brokerage/index.md): Add crypto to your application using REST, FIX and WebSocket APIs.
+- [Choosing a Ledgering Strategy](https://docs.paxos.com/guides/crypto-brokerage/ledger-type.md): Understand your options for ledgering fiat and cryptocurrency with Paxos.
+- [Orders, Precision and Rounding](https://docs.paxos.com/guides/crypto-brokerage/orders-precision-rounding.md): Learn about tick size, precision, rounding and other recommendations.
+- [Orders & Quotes FAQ](https://docs.paxos.com/guides/crypto-brokerage/orders-vs-hrq.md): Get answers to common questions about Orders & Quotes.
+- [Overview](https://docs.paxos.com/guides/crypto-brokerage/quotes/index.md): Held Rate Quotes (HRQ)
+- [HRQ Quickstart](https://docs.paxos.com/guides/crypto-brokerage/quotes/quickstart.md): Learn about Paxos's HRQ product and how to submit a quote in less than five minutes.
+- [Smart Order Routing WebSocket Integration](https://docs.paxos.com/guides/crypto-brokerage/smart-order-routing-websocket.md): Step-by-step guide to integrate with the Smart Order Routing WebSocket API.
+- [Connect to the WebSocket Market Data Feed](https://docs.paxos.com/guides/crypto-brokerage/websocket.md): Open a WebSocket connection to the Sandbox BTC Market Data feed.
+- [Create Business Account](https://docs.paxos.com/guides/dashboard/account.md): Get started through our self-service sign up.
+- [Account Recovery](https://docs.paxos.com/guides/dashboard/admin/account-recovery.md): Add a security question as a secondary login method.
+- [Agreements](https://docs.paxos.com/guides/dashboard/admin/agreements.md): Review and accept your organization's agreements with Paxos directly in the Dashboard.
+- [Configure API Credentials](https://docs.paxos.com/guides/dashboard/admin/api.md): Create and update an OAuth2 client.
+- [Approval Tiers](https://docs.paxos.com/guides/dashboard/admin/approval-tiers.md): Require more approvers for higher-value transactions using approval tiers.
+- [Approvals](https://docs.paxos.com/guides/dashboard/admin/approvals.md): Use Approvals to increase security and prevent mistakes on sensitive actions.
+- [Audit Logs](https://docs.paxos.com/guides/dashboard/admin/audit-logs.md): Monitor user activity across your organization to detect suspicious behavior and meet compliance requirements.
+- [Billing](https://docs.paxos.com/guides/dashboard/admin/billing.md): View invoices, make payments, and configure autopay for your Paxos services.
+- [Review Entity Settings](https://docs.paxos.com/guides/dashboard/admin/entity.md): Get the Entity details and limits.
+- [Manage Passkeys](https://docs.paxos.com/guides/dashboard/admin/manage-passkeys.md): Add or remove a Passkey.
+- [Notifications](https://docs.paxos.com/guides/dashboard/admin/notifications.md): Stay on top of pending approvals, account alerts, and important events — all in one place.
+- [Reports](https://docs.paxos.com/guides/dashboard/admin/reports.md): View and download daily balance and transaction reconciliation reports.
+- [Team Access](https://docs.paxos.com/guides/dashboard/admin/team.md): Manage user access and roles within your Entity.
+- [Automate](https://docs.paxos.com/guides/dashboard/automate.md): Set up automation rules to automatically convert and route incoming deposits.
+- [Convert](https://docs.paxos.com/guides/dashboard/convert.md): Convert between USD and stablecoins, and send the result to a profile or external account.
+- [Deposit](https://docs.paxos.com/guides/dashboard/deposit.md): Send cash or crypto to the Paxos platform.
+- [Deposit Addresses](https://docs.paxos.com/guides/dashboard/deposit-addresses.md): Access saved crypto deposit addresses for receiving digital assets into your Paxos profile.
+- [Events](https://docs.paxos.com/guides/dashboard/events.md): View and monitor webhook events from the Paxos platform.
+- [Fiat Accounts](https://docs.paxos.com/guides/dashboard/fiat.md): View and manage banking information to deposit and withdrawal USD.
+- [Deposit Instructions](https://docs.paxos.com/guides/dashboard/fiat-deposit-instructions.md): Access saved fiat deposit instructions for receiving USD into your Paxos profile.
+- [Get Started with Rewards](https://docs.paxos.com/guides/dashboard/get-started-with-rewards.md): Sign up for the Global Dollar Network and start earning USDG rewards.
+- [Paxos Dashboard](https://docs.paxos.com/guides/dashboard/index.md): Securely deposit, withdraw, convert and custody assets with Paxos.
+- [Complete Onboarding](https://docs.paxos.com/guides/dashboard/onboard.md): Onboard an Entity to start using the Paxos platform.
+- [Organization, Entities and Profiles](https://docs.paxos.com/guides/dashboard/organization.md): Learn more about the multi-entity experience.
+- [Passkeys](https://docs.paxos.com/guides/dashboard/passkeys.md): Learn more about using passkeys with the Paxos Dashboard.
+- [PAXG](https://docs.paxos.com/guides/dashboard/paxg.md): Buy, Sell, or Transfer PAXG
+- [Claim rewards](https://docs.paxos.com/guides/dashboard/rewards-engine/claims.md): How rewards are claimed and distributed.
+- [Get access](https://docs.paxos.com/guides/dashboard/rewards-engine/get-access.md): Enable your account for the Rewards Engine and grant access to additional users.
+- [Overview](https://docs.paxos.com/guides/dashboard/rewards-engine/overview.md): Automate tracking, calculation, and distribution of rewards to partners.
+- [Create a payout group](https://docs.paxos.com/guides/dashboard/rewards-engine/payout-groups.md): Group rewards wallets and route their payouts to a destination address.
+- [View statements](https://docs.paxos.com/guides/dashboard/rewards-engine/statements.md): How rewards statements are delivered.
+- [Submit wallets](https://docs.paxos.com/guides/dashboard/rewards-engine/submit-wallets.md): Register reward wallets for monitoring.
+- [Manage Payouts](https://docs.paxos.com/guides/dashboard/rewards/manage-payouts.md): Set or update a payout address.
+- [Monitor Addresses](https://docs.paxos.com/guides/dashboard/rewards/monitor-addresses.md): Add your first monitoring address.
+- [Overview](https://docs.paxos.com/guides/dashboard/rewards/overview.md): Manage USDG rewards via the Paxos Dashboard.
+- [Timeline and Disputes](https://docs.paxos.com/guides/dashboard/rewards/timeline-and-disputes.md): Monthly Rewards Timeline.
+- [Roles and Responsibilities](https://docs.paxos.com/guides/dashboard/roles.md): Learn about org-level and entity-level roles for controlling Dashboard access.
+- [Access Business Account](https://docs.paxos.com/guides/dashboard/signin.md): Sign in to the Dashboard using a Passkey or SSO.
+- [Transactions](https://docs.paxos.com/guides/dashboard/transactions.md): Monitor Dashboard & API driven Paxos transactions and balances.
+- [Travel Rule Compliance](https://docs.paxos.com/guides/dashboard/travel-rule.md): Learn more about Travel Rule requirements and the blockchain.
+- [Verified Users for Sensitive Permissions](https://docs.paxos.com/guides/dashboard/verified-users-for-sensitive-permissions.md): Learn how Paxos verifies users who can initiate financial actions such as transfers, withdrawals, conversions, orchestration, and trading.
+- [Webhooks](https://docs.paxos.com/guides/dashboard/webhooks.md): Create and manage webhooks to receive real-time event notifications from the Paxos platform.
+- [Withdraw](https://docs.paxos.com/guides/dashboard/withdraw.md): Send funds from your Paxos account to an external destination or another Profile or Entity.
+- [Withdrawal Addresses](https://docs.paxos.com/guides/dashboard/withdrawal-addresses.md): Add and manage destination wallet addresses for crypto withdrawals.
+- [Create Developer Account](https://docs.paxos.com/guides/developer/account.md): Sign Up for access to the Sandbox environment.
+- [FAQ](https://docs.paxos.com/guides/developer/address-verification/faq.md): Common questions about address verification.
+- [Address Verification](https://docs.paxos.com/guides/developer/address-verification/index.md): Verify that a user or partner controls a blockchain address.
+- [Verification Statuses](https://docs.paxos.com/guides/developer/address-verification/statuses.md): Status transitions for address verification and what triggers each one.
+- [Verify an Address](https://docs.paxos.com/guides/developer/address-verification/verify-address.md): End-to-end walkthrough for verifying address control using a signature or small deposit.
+- [AI-Assisted Development](https://docs.paxos.com/guides/developer/ai-assisted-development.md): Use AI coding assistants effectively with Paxos documentation and API specifications.
+- [Migrate from v1 to v2 API](https://docs.paxos.com/guides/developer/api-migrate.md): Learn how to migrate your REST integrations.
+- [Authenticate](https://docs.paxos.com/guides/developer/authenticate.md): Generate an authentication token.
+- [Assets and Blockchains](https://docs.paxos.com/guides/developer/blockchains.md): Learn more about supported assets, stablecoins and blockchains.
+- [API Breaking Change Policy](https://docs.paxos.com/guides/developer/breaking-change/policy.md): Learn about what qualifies as a breaking change and the what happens when one is necessary.
+- [Configure API Credentials](https://docs.paxos.com/guides/developer/credentials.md): API credentials using Client ID and Secret. Set allowed scopes to access specific API endpoints.
+- [Paxos API FAQ](https://docs.paxos.com/guides/developer/faq.md): Get answers to commonly asked questions.
+- [Fiat Transfers FAQ](https://docs.paxos.com/guides/developer/fiat-transfers/fiat-transfers-faq.md): Get answers to common questions about the Fiat Transfers API.
+- [Overview](https://docs.paxos.com/guides/developer/fiat-transfers/index.md): Move USD on and off the Paxos Platform via wire transfer or CUBIX.
+- [Fiat Transfers Quickstart](https://docs.paxos.com/guides/developer/fiat-transfers/quickstart.md): Set up fiat funding and withdraw flows in the Sandbox environment.
+- [Statuses](https://docs.paxos.com/guides/developer/fiat-transfers/statuses.md): Learn more about Fiat Transfers statuses.
+- [Convert](https://docs.paxos.com/guides/developer/orchestrations/convert.md): Execute conversions between supported assets.
+- [Mint](https://docs.paxos.com/guides/developer/orchestrations/mint.md): Convert USD to Stablecoins and transfer all in one call.
+- [Overview](https://docs.paxos.com/guides/developer/orchestrations/orchestrations.md): Orchestrations power complex workflows.
+- [Redeem](https://docs.paxos.com/guides/developer/orchestrations/redeem.md): Convert stablecoins to USD and withdraw to your bank in one call.
+- [Rate Limits](https://docs.paxos.com/guides/developer/rate-limits.md): Review REST, WebSocket and FIX limits.
+- [Reports](https://docs.paxos.com/guides/developer/reports.md): View and download daily balance and transaction reconciliation reports.
+- [Make First API Request](https://docs.paxos.com/guides/developer/request.md): Use the access token to retrieve a list of Profiles.
+- [Request Signing](https://docs.paxos.com/guides/developer/request-signing.md): Use JWS to add an additional layer of security to every request.
+- [Sandbox](https://docs.paxos.com/guides/developer/sandbox.md): Use the Sandbox environment to mock flows, execute transfers and test integrations.
+- [Dormancy Lifecycle](https://docs.paxos.com/guides/identity/dormancy.md): Manage dormant identities on the Paxos Platform.
+- [Enhanced Due Diligence](https://docs.paxos.com/guides/identity/edd.md): Manage the enhanced due diligence of an Identity on the Paxos Platform.
+- [Identity Lifecycle](https://docs.paxos.com/guides/identity/identity-lifecycle.md): Understand identity statuses, requirements, and controls, and how to respond to them in your integration.
+- [Overview](https://docs.paxos.com/guides/identity/index.md): Understand when and how to use the Identity API to onboard persons and institutions to Paxos-powered financial services.
+- [Institution Types and Members](https://docs.paxos.com/guides/identity/institution-types.md): Learn about institution types, member roles, and requirements
+- [Periodic KYC Refresh](https://docs.paxos.com/guides/identity/kyc-refresh.md): Manage the periodic KYC refresh of an Identity on the Paxos Platform in an automated, compliant way.
+- [Onboard an Institution](https://docs.paxos.com/guides/identity/onboard-institution.md): Create an institution identity with required members and handle the onboarding decision on the Paxos Platform.
+- [Onboard a Person](https://docs.paxos.com/guides/identity/onboard-person.md): Create a person identity and handle the onboarding decision on the Paxos Platform.
+- [Required Details](https://docs.paxos.com/guides/identity/required-details.md): Learn more about what details are required when creating an Identity
+- [Payments FAQ](https://docs.paxos.com/guides/payments/faq.md): Get answers to common questions about payments.
+- [Overview](https://docs.paxos.com/guides/payments/index.md): Accept stablecoin pay-ins with real-time settlement. Issue on-chain refunds.
+- [Stablecoin Pay-ins Quickstart](https://docs.paxos.com/guides/payments/quickstart.md): Accept stablecoin pay-ins with real-time settlement. Issue on-chain refunds.
+- [Statuses](https://docs.paxos.com/guides/payments/status.md): Learn more about payment statuses.
+- [BUSD](https://docs.paxos.com/guides/stablecoin/busd.md): Redeem or convert BUSD on the Paxos platform.
+- [Stablecoins](https://docs.paxos.com/guides/stablecoin/index.md): Use Paxos-issued stablecoins for payments, money movement and more.
+- [Integrate with PYUSD on Ethereum](https://docs.paxos.com/guides/stablecoin/integrate-pyusd.md): The steps to integrate PYUSD on your platform are similar to executing smart contract functions for other ERC20 tokens.
+- [PAXG Overview](https://docs.paxos.com/guides/stablecoin/paxg/index.md): Use PAX Gold to buy, sell, and transfer tokenized physical gold on public blockchains.
+- [PAXG on Main Networks](https://docs.paxos.com/guides/stablecoin/paxg/mainnet.md): Get the PAXG mainnet addresses.
+- [PAXG on Test Networks](https://docs.paxos.com/guides/stablecoin/paxg/testnet.md): Get the PAXG testnet addresses.
+- [PYUSD Overview](https://docs.paxos.com/guides/stablecoin/pyusd/index.md): Use PayPal USD as the payments layer to build new services and products on public blockchains.
+- [PYUSD on Main Networks](https://docs.paxos.com/guides/stablecoin/pyusd/mainnet.md): Get the PYUSD mainnet addresses.
+- [PYUSD on Test Networks](https://docs.paxos.com/guides/stablecoin/pyusd/testnet.md): Get the PYUSD testnet addresses.
+- [USDG Overview](https://docs.paxos.com/guides/stablecoin/usdg/index.md): Use Global Dollar for payments, settlements, treasury and more.
+- [USDG on Main Networks](https://docs.paxos.com/guides/stablecoin/usdg/mainnet.md): Get the USDG token addresses.
+- [Getting Started with USDG (Global Dollar)](https://docs.paxos.com/guides/stablecoin/usdg/quickstart.md): How to Access USDG.
+- [USDG on Test Networks](https://docs.paxos.com/guides/stablecoin/usdg/testnet.md): Get the USDG token addresses.
+- [USDP Overview](https://docs.paxos.com/guides/stablecoin/usdp/index.md): Learn more about the Fully backed, legally protected, always available Pax Dollar.
+- [USDP on Main Networks](https://docs.paxos.com/guides/stablecoin/usdp/mainnet.md): Get the USDP mainnet addresses.
+- [USDP on Test Networks](https://docs.paxos.com/guides/stablecoin/usdp/testnet.md): Get the USDP testnet addresses.
+- [Collecting Travel Rule Information](https://docs.paxos.com/guides/travel-rule/collection-patterns.md): When and how to collect Travel Rule metadata from your end users.
+- [Travel Rule FAQ](https://docs.paxos.com/guides/travel-rule/faq.md)
+- [Field Reference](https://docs.paxos.com/guides/travel-rule/field-reference.md): Travel Rule fields on PUT /v2/transfer/crypto-destination-address.
+- [Overview](https://docs.paxos.com/guides/travel-rule/index.md): Collect and transmit beneficiary information for above-threshold crypto transfers.
+- [Rollout & Enforcement](https://docs.paxos.com/guides/travel-rule/rollout.md): Availability dates, enforcement timeline, and migration guidance.
+- [Webhooks FAQ](https://docs.paxos.com/guides/webhooks/faq.md): Get answers to common questions about webhooks.
+- [Overview](https://docs.paxos.com/guides/webhooks/index.md): Webhooks provide a way for notifications to be delivered to an external web server whenever certain events occur.
+- [Get Started with Webhooks](https://docs.paxos.com/guides/webhooks/quickstart.md): Create and register a webhook consumer to start receiving events.
+- [Retries and Limits](https://docs.paxos.com/guides/webhooks/retries-and-limits.md): Learn about webhook delivery retries, retry policies, and rate limits for Paxos webhooks.
+- [Settlement Times](https://docs.paxos.com/settlement-times.md): Interactive tool to estimate processing times across Paxos payment corridors.
+- [Build with Paxos](https://docs.paxos.com/welcome.md): Learn how to get started with the Paxos API and Platform.
+
+## OpenAPI Specs
+
+- [paxos-v2.openapi](https://developer.paxos.com/docs/paxos-v2.openapi.json)
+- [webhooks-openapi](https://docs.paxos.com/api-reference/webhooks/webhooks-openapi.json)
+- [paxos-v2-preview-orchestration.openapi](https://docs.paxos.com/preview/paxos-v2-preview-orchestration.openapi.json)
+- [paxos-v2-preview-identity-controls.openapi](https://docs.paxos.com/preview/paxos-v2-preview-identity-controls.openapi.json)
+
+## AsyncAPI Specs
+
+- [websocket-asyncapi](https://docs.paxos.com/api-reference/websocket-asyncapi.json)
+
+## Optional
+
+- [Changelog](https://docs.paxos.com/changelog)
+- [Status](https://status.paxos.com/)
+- [Blog](https://www.paxos.com/blog)
+- [Faucet](https://faucet.paxos.com/)
+- [Regulation and Transparency](https://www.paxos.com/regulation-and-transparency/)

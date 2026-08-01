@@ -1,0 +1,27 @@
+generated: '2026-07-20'
+method: searched
+source: openapi/paxos-v2-openapi-original.json
+docs: https://docs.paxos.com/api-reference/introduction
+oidc_discovery: well-known/paxos-openid-configuration.json
+summary:
+  types:
+  - oauth2
+  oauth2_flows:
+  - clientCredentials
+schemes:
+- name: OAuth2
+  type: oauth2
+  flows:
+  - flow: clientCredentials
+    tokenUrl: https://oauth.paxos.com/oauth2/token
+    scopes: 36
+  description: |-
+    Paxos APIs use [OAuth 2](https://tools.ietf.org/html/rfc6749) with the [client credentials](https://tools.ietf.org/html/rfc6749#section-4.4) grant flow.
+
+    **Token URLs:**
+    - Production: https://oauth.paxos.com/oauth2/token
+    - Sandbox: https://oauth.sandbox.paxos.com/oauth2/token
+
+    Learn more in the [API credentials guide →](https://docs.paxos.com/developer/credentials)
+  sources:
+  - openapi/paxos-v2-openapi-original.json

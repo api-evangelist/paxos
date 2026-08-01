@@ -1,0 +1,78 @@
+generated: '2026-07-20'
+method: derived
+source: openapi/paxos-v2-openapi-original.json
+note: |-
+  Entity-relationship graph derived from OpenAPI schema id-reference fields. Paxos models
+  Identities (persons/institutions) that own Accounts, which contain Profiles that hold asset
+  balances; all money movement (transfers, orders, quotes, conversions, orchestrations) is scoped
+  to a Profile. A client-supplied `ref_id` on create operations is the idempotency key.
+entities:
+- name: Identity
+  description: A person or institution able to take actions on the platform (KYC subject).
+  key_fields: [id, ref_id, identity_type, summary_status]
+  relationships:
+  - has_many: Account
+    via: identity_id
+- name: Account
+  description: Connects an Identity (owner) to Profiles for tax and ownership purposes.
+  key_fields: [id, identity_id, profile_id, ref_id]
+  relationships:
+  - belongs_to: Identity
+    via: identity_id
+  - has_many: Profile
+    via: account_id
+- name: Profile
+  description: Holds asset balances; every Paxos transaction is on a Profile.
+  key_fields: [id, account_id, nickname, type]
+  relationships:
+  - belongs_to: Account
+    via: account_id
+  - has_many: Transfer
+    via: profile_id
+- name: Transfer
+  description: Any deposit to or withdrawal from an account (crypto, fiat/wire, internal, Paxos transfer).
+  key_fields: [id, profile_id, account_id, identity_id, fiat_account_id, ref_id]
+  relationships:
+  - belongs_to: Profile
+    via: profile_id
+  - belongs_to: FiatAccount
+    via: fiat_account_id
+- name: Order
+  description: Market/limit/post-only trading order against a market.
+  key_fields: [id, profile_id, ref_id, market]
+  relationships:
+  - belongs_to: Profile
+    via: profile_id
+- name: QuoteExecution
+  description: Executes a held-rate quote to buy or sell an asset.
+  key_fields: [id, profile_id, quote_id, ref_id]
+  relationships:
+  - belongs_to: Profile
+    via: profile_id
+- name: StablecoinConversion
+  description: 1:1 conversion between fiat and a Paxos-issued stablecoin.
+  key_fields: [id, profile_id, ref_id]
+  relationships:
+  - belongs_to: Profile
+    via: profile_id
+- name: Orchestration
+  description: Single-workflow move/convert of assets, optionally triggered by an orchestration rule.
+  key_fields: [id, profile_id, orchestration_rule_id, ref_id]
+  relationships:
+  - belongs_to: Profile
+    via: profile_id
+  - belongs_to: OrchestrationRule
+    via: orchestration_rule_id
+- name: FiatAccount
+  description: Bank account used to initiate fiat deposits/withdrawals.
+  key_fields: [id, identity_id, account_id, ref_id]
+  relationships:
+  - belongs_to: Identity
+    via: identity_id
+- name: DepositAddress
+  description: Blockchain address for depositing crypto to a Profile.
+  key_fields: [id, profile_id, ref_id]
+  relationships:
+  - belongs_to: Profile
+    via: profile_id
+idempotency_key: ref_id

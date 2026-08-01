@@ -1,0 +1,62 @@
+generated: '2026-07-20'
+method: searched
+source:
+- openapi/paxos-v2-openapi-original.json
+- https://docs.paxos.com/api-reference/introduction
+authentication:
+  style: oauth2-client-credentials
+  token_url: https://oauth.paxos.com/oauth2/token
+  sandbox_token_url: https://oauth.sandbox.paxos.com/oauth2/token
+  bearer: 'Authorization: Bearer <access_token>'
+  scopes_model: space-delimited OAuth2 scopes requested at token time (see scopes/paxos-scopes.yml)
+  details: authentication/paxos-authentication.yml
+idempotency:
+  supported: true
+  mechanism: client-supplied ref_id
+  field: ref_id
+  scope: request body (create operations)
+  behavior: |-
+    Create operations (orders, transfers, conversions, orchestrations, identities, fiat accounts,
+    deposit addresses) accept a client- or system-specified unique `ref_id` used for idempotency
+    protection. Retries of a request should reuse the same `ref_id` to avoid duplicate transactions.
+    A repeated `ref_id` returns 409 (e.g. "Order already created", "Deposit address already exists").
+  retention: reference is retained for the lifetime of the created resource
+pagination:
+  style: cursor
+  request_params:
+  - limit
+  - page_cursor
+  response_fields:
+  - items
+  - next_page
+  default_limit: 1000
+  notes: |-
+    List endpoints return a `next_page` cursor while more results remain; pass it back as
+    `page_cursor` on the next request. Default and maximum page size is 1,000 for most
+    collections unless a smaller `limit` is supplied.
+filtering:
+  style: field-scoped comparators
+  example: created_at.gt / created_at.lt / updated_at.gt query parameters on list endpoints
+versioning:
+  scheme: uri-path
+  current: v2
+  base_url: https://api.paxos.com/v2
+  sandbox_base_url: https://api.sandbox.paxos.com/v2
+  policy: semantic versioning with a documented breaking-change policy; v1 reached end-of-life Feb 2025
+error_envelope:
+  format: rfc9457
+  media_type: application/problem+json
+  details: errors/paxos-problem-types.yml
+rate_limit_signal:
+  documented: false
+  notes: No public numeric rate-limit table published in the API reference; limits are governed
+    per entity and surfaced as transfer/transaction limits (List Transfer Limits endpoint).
+events:
+  webhooks: asyncapi/paxos-webhooks.yml
+  websockets: real-time market/execution data feeds documented under /api-reference/websockets
+cross_reference:
+  errors: errors/paxos-problem-types.yml
+  lifecycle: lifecycle/paxos-lifecycle.yml
+  authentication: authentication/paxos-authentication.yml
+  scopes: scopes/paxos-scopes.yml
+  sandbox: sandbox/paxos-sandbox.yml
