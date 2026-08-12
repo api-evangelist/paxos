@@ -9,6 +9,18 @@ description: >-
   client credentials, errors are RFC 9457 problem+json, and a full sandbox with test tooling is
   provided. Paxos issues PayPal USD (PYUSD) and the Global Dollar (USDG).
 url: https://raw.githubusercontent.com/api-evangelist/paxos/refs/heads/main/apis.yml
+deliveryModel:
+  model: saas
+  open_source: false
+  commercial: true
+  callable_host: true
+  label: Hosted service · you call their endpoint
+  confidence: high
+  source:
+  - openapi
+  - pricing
+  generated: '2026-08-11'
+  method: derived
 accessModel:
   pricing: unknown
   onboarding: self-serve
