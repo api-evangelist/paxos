@@ -1,0 +1,263 @@
+{
+  "item": [
+    {
+      "id": "767bc6bc-21c0-4c1a-9469-bace7b601c29",
+      "name": "Institution Members",
+      "description": {
+        "content": "Institution Members allow you to associate persons with an institution on our Platform.\nEach institution can have multiple members, with each member representing the relationship to a person identity.\n\nWhen creating an institution identity, you must designate at least one institution member.\nThis requirement ensures we have complete information about the institution's ownership structure\nand key personnel, which is necessary to onboard institutions.\n",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "d412fdb8-4faf-4ec8-a141-9a4a4e0d5fa5",
+          "name": "Add Institution Members",
+          "request": {
+            "name": "Add Institution Members",
+            "description": {
+              "content": "Add one or more institution members to a given institution.\n\nAdding new members doesn't affect existing members. For example, if an institution has three\nmembers, and adds two members using this API, then the institution would end up with five total members.\n\nFor details on the properties that can be specified when creating institution members,\nsee [Specifying Institution Members and Their Roles](#specifying-institution-members-and-their-roles).",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "identity",
+                "institution-members"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "conversion:read_conversion_stablecoin conversion:write_conversion_stablecoin exchange:historical_prices exchange:read_order exchange:read_quote exchange:read_quote_execution exchange:write_quote_execution exchange:write_order fee:write_crypto_withdrawal_fee funding:read_bank_balance funding:read_profile funding:write_profile identity:read_account identity:read_identity identity:write_account identity:write_identity settlement:read_transaction settlement:write_transaction tax:read_tax_form tax:read_tax_lot tax:write_tax_lot transfer:read_deposit_address transfer:read_fiat_account transfer:read_fiat_deposit_instructions transfer:read_transfer transfer:read_transfer_limit transfer:reject_crypto_deposit transfer:update_crypto_deposit transfer:write_crypto_withdrawal transfer:write_deposit_address transfer:write_fiat_account transfer:write_fiat_deposit_instructions transfer:write_internal_transfer transfer:write_sandbox_fiat_deposit transfer:write_fiat_withdrawal events:read_event"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://oauth.paxos.com/oauth2/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"institution_id\": \"<string>\",\n  \"members\": [\n    {\n      \"identity_id\": \"<string>\",\n      \"roles\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"ownership\": \"<decimal>\",\n      \"position\": \"<string>\",\n      \"name\": \"<string>\",\n      \"summary_status\": \"<string>\",\n      \"id\": \"<string>\"\n    },\n    {\n      \"identity_id\": \"<string>\",\n      \"roles\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"ownership\": \"<decimal>\",\n      \"position\": \"<string>\",\n      \"name\": \"<string>\",\n      \"summary_status\": \"<string>\",\n      \"id\": \"<string>\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "20c63339-6e8f-45af-ac61-83738c86f282",
+              "name": "A successful response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "identity",
+                    "institution-members"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"institution_id\": \"2908fa8b-427a-4089-b2cf-17654c604623\",\n  \"members\": [\n    {\n      \"identity_id\": \"31abdcbd-2801-4dbc-8986-adec3828391b\",\n      \"roles\": [\n        \"GRANTOR\"\n      ]\n    },\n    {\n      \"identity_id\": \"58def33e-b68f-47d3-bc2b-62b1f68f21e5\",\n      \"roles\": [\n        \"TRUSTEE\"\n      ]\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"institution_id\": \"2908fa8b-427a-4089-b2cf-17654c604623\",\n  \"members\": [\n    {\n      \"identity_id\": \"31abdcbd-2801-4dbc-8986-adec3828391b\",\n      \"roles\": [\n        \"GRANTOR\"\n      ],\n      \"id\": \"23ebbcd3-0fe6-48c8-9a2c-a35572b0e8ba\"\n    },\n    {\n      \"identity_id\": \"58def33e-b68f-47d3-bc2b-62b1f68f21e5\",\n      \"roles\": [\n        \"TRUSTEE\"\n      ],\n      \"id\": \"a0a0d270-0dd1-40b7-85ce-de713c47bcec\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "2f03d749-f40f-4793-805c-c7219256fc68",
+          "name": "Remove Institution Member",
+          "request": {
+            "name": "Remove Institution Member",
+            "description": {
+              "content": "Removes an institution member from an institution.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "identity",
+                "institution-members",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) The institution member ID that should be removed from the institution."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "conversion:read_conversion_stablecoin conversion:write_conversion_stablecoin exchange:historical_prices exchange:read_order exchange:read_quote exchange:read_quote_execution exchange:write_quote_execution exchange:write_order fee:write_crypto_withdrawal_fee funding:read_bank_balance funding:read_profile funding:write_profile identity:read_account identity:read_identity identity:write_account identity:write_identity settlement:read_transaction settlement:write_transaction tax:read_tax_form tax:read_tax_lot tax:write_tax_lot transfer:read_deposit_address transfer:read_fiat_account transfer:read_fiat_deposit_instructions transfer:read_transfer transfer:read_transfer_limit transfer:reject_crypto_deposit transfer:update_crypto_deposit transfer:write_crypto_withdrawal transfer:write_deposit_address transfer:write_fiat_account transfer:write_fiat_deposit_instructions transfer:write_internal_transfer transfer:write_sandbox_fiat_deposit transfer:write_fiat_withdrawal events:read_event"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://oauth.paxos.com/oauth2/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "2f4079ac-3e04-43d2-bb41-c02bed460b37",
+              "name": "A successful response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "identity",
+                    "institution-members",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The institution member ID that should be removed from the institution."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.paxos.com/v2",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "323166f1-2f6b-47ae-b006-8de443fec2cc",
+    "name": "Paxos Account Members Institution Members API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "<p>Welcome to Paxos APIs. At Paxos, our mission is to enable the movement of any asset, any time, in a trustworthy way. These APIs serve that mission by making it easier than ever for you to directly integrate our product capabilities into your application, leveraging the speed, stability, and security of the Paxos platform.</p> <p>The documentation that follows gives you access to our Crypto Brokerage, Trading, and Exchange products. It includes APIs for market data, orders, and the held rate quote flow.</p> <p>To test in our sandbox environment, <a href=\"https://account.sandbox.paxos.com\" target=\"_blank\">sign up</a> for an account. For more information about Paxos and our APIs, visit <a href=\"https://www.paxos.com/\" target=\"_blank\">Paxos.com</a>.</p>\n",
+      "type": "text/plain"
+    }
+  }
+}

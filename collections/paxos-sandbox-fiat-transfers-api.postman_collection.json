@@ -1,0 +1,201 @@
+{
+  "item": [
+    {
+      "id": "0387daed-ac9a-466c-bdc1-a43a51048e9b",
+      "name": "Sandbox Fiat Transfers",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "631813a0-1d3b-48a2-a255-adffa87de978",
+          "name": "Initiate Sandbox Fiat Deposit",
+          "request": {
+            "name": "Initiate Sandbox Fiat Deposit",
+            "description": {
+              "content": "Initiate a test fiat deposit in the sandbox environment.\n\nThe deposit will be processed based on `memo_id` from a previous Fiat Deposit Instructions response.\n\n*This functionality is only available in the sandbox environment.*",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "sandbox",
+                "fiat-deposits"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "conversion:read_conversion_stablecoin conversion:write_conversion_stablecoin exchange:historical_prices exchange:read_order exchange:read_quote exchange:read_quote_execution exchange:write_quote_execution exchange:write_order fee:write_crypto_withdrawal_fee funding:read_bank_balance funding:read_profile funding:write_profile identity:read_account identity:read_identity identity:write_account identity:write_identity settlement:read_transaction settlement:write_transaction tax:read_tax_form tax:read_tax_lot tax:write_tax_lot transfer:read_deposit_address transfer:read_fiat_account transfer:read_fiat_deposit_instructions transfer:read_transfer transfer:read_transfer_limit transfer:reject_crypto_deposit transfer:update_crypto_deposit transfer:write_crypto_withdrawal transfer:write_deposit_address transfer:write_fiat_account transfer:write_fiat_deposit_instructions transfer:write_internal_transfer transfer:write_sandbox_fiat_deposit transfer:write_fiat_withdrawal events:read_event"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://oauth.paxos.com/oauth2/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"amount\": \"<string>\",\n  \"asset\": \"<string>\",\n  \"memo_id\": \"<string>\",\n  \"fiat_network_instructions\": {\n    \"wire\": {\n      \"account_number\": \"<string>\",\n      \"fiat_account_owner_address\": {\n        \"country\": \"<string>\",\n        \"address1\": \"<string>\",\n        \"address2\": \"<string>\",\n        \"city\": \"<string>\",\n        \"province\": \"<string>\",\n        \"zip_code\": \"<string>\"\n      },\n      \"routing_details\": {\n        \"routing_number_type\": \"<string>\",\n        \"routing_number\": \"<string>\",\n        \"bank_name\": \"<string>\",\n        \"bank_address\": {\n          \"country\": \"<string>\",\n          \"address1\": \"<string>\",\n          \"address2\": \"<string>\",\n          \"city\": \"<string>\",\n          \"province\": \"<string>\",\n          \"zip_code\": \"<string>\"\n        }\n      },\n      \"intermediary_routing_details\": {\n        \"routing_number_type\": \"<string>\",\n        \"routing_number\": \"<string>\",\n        \"bank_name\": \"<string>\",\n        \"bank_address\": {\n          \"country\": \"<string>\",\n          \"address1\": \"<string>\",\n          \"address2\": \"<string>\",\n          \"city\": \"<string>\",\n          \"province\": \"<string>\",\n          \"zip_code\": \"<string>\"\n        }\n      }\n    },\n    \"cbit\": {\n      \"wallet_address\": \"<string>\"\n    },\n    \"dbs_act\": {\n      \"account_number\": \"<string>\"\n    },\n    \"cubix\": {\n      \"account_id\": \"<string>\"\n    },\n    \"scb\": {\n      \"account_number\": \"<string>\"\n    },\n    \"rtp\": {\n      \"account_number\": \"<string>\",\n      \"routing_details\": {\n        \"routing_number\": \"<string>\",\n        \"bank_name\": \"<string>\",\n        \"bank_address\": {\n          \"country\": \"<string>\",\n          \"address1\": \"<string>\",\n          \"address2\": \"<string>\",\n          \"city\": \"<string>\",\n          \"province\": \"<string>\",\n          \"zip_code\": \"<string>\"\n        }\n      },\n      \"fiat_account_owner_address\": {\n        \"country\": \"<string>\",\n        \"address1\": \"<string>\",\n        \"address2\": \"<string>\",\n        \"city\": \"<string>\",\n        \"province\": \"<string>\",\n        \"zip_code\": \"<string>\"\n      }\n    }\n  },\n  \"fiat_account_owner\": {\n    \"person_details\": {\n      \"first_name\": \"<string>\",\n      \"last_name\": \"<string>\"\n    },\n    \"institution_details\": {\n      \"name\": \"<string>\"\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "4ef133aa-0d0c-42e8-b7d3-8ac19a60b24e",
+              "name": "A successful response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "sandbox",
+                    "fiat-deposits"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"amount\": \"10.00\",\n  \"asset\": \"USD\",\n  \"memo_id\": \"3CFXQSCMSPLFHXLZ\",\n  \"fiat_network_instructions\": {\n    \"wire\": {\n      \"account_number\": \"12345678\",\n      \"fiat_account_owner_address\": {\n        \"country\": \"USA\",\n        \"address1\": \"456 Main Street, NY\",\n        \"city\": \"New York\",\n        \"province\": \"NY\",\n        \"address2\": \"\",\n        \"zip_code\": \"10101\"\n      },\n      \"routing_details\": {\n        \"routing_number_type\": \"ABA\",\n        \"routing_number\": \"123456789\",\n        \"bank_name\": \"Customers Bank\",\n        \"bank_address\": {\n          \"country\": \"USA\",\n          \"address1\": \"123 Bank Street\",\n          \"city\": \"New York\",\n          \"province\": \"NY\",\n          \"address2\": \"\",\n          \"zip_code\": \"10101\"\n        }\n      }\n    }\n  },\n  \"fiat_account_owner\": {\n    \"institution_details\": {\n      \"name\": \"SomeCorp, Inc.\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "11e5d1ee-6f98-4933-9be0-ff80676c2717",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "sandbox",
+                    "fiat-deposits"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/problem+json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"amount\": \"10.00\",\n  \"asset\": \"USD\",\n  \"memo_id\": \"3CFXQSCMSPLFHXLZ\",\n  \"fiat_network_instructions\": {\n    \"wire\": {\n      \"account_number\": \"12345678\",\n      \"fiat_account_owner_address\": {\n        \"country\": \"USA\",\n        \"address1\": \"456 Main Street, NY\",\n        \"city\": \"New York\",\n        \"province\": \"NY\",\n        \"address2\": \"\",\n        \"zip_code\": \"10101\"\n      },\n      \"routing_details\": {\n        \"routing_number_type\": \"ABA\",\n        \"routing_number\": \"123456789\",\n        \"bank_name\": \"Customers Bank\",\n        \"bank_address\": {\n          \"country\": \"USA\",\n          \"address1\": \"123 Bank Street\",\n          \"city\": \"New York\",\n          \"province\": \"NY\",\n          \"address2\": \"\",\n          \"zip_code\": \"10101\"\n        }\n      }\n    }\n  },\n  \"fiat_account_owner\": {\n    \"institution_details\": {\n      \"name\": \"SomeCorp, Inc.\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/problem+json"
+                }
+              ],
+              "body": "{\n  \"type\": \"about:blank\",\n  \"title\": \"Bad Request\",\n  \"status\": 400,\n  \"detail\": \"fiat network instructions required\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.paxos.com/v2",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "31c43f88-3795-4d99-afee-3d5b337ac3de",
+    "name": "Paxos Account Members Sandbox Fiat Transfers API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "<p>Welcome to Paxos APIs. At Paxos, our mission is to enable the movement of any asset, any time, in a trustworthy way. These APIs serve that mission by making it easier than ever for you to directly integrate our product capabilities into your application, leveraging the speed, stability, and security of the Paxos platform.</p> <p>The documentation that follows gives you access to our Crypto Brokerage, Trading, and Exchange products. It includes APIs for market data, orders, and the held rate quote flow.</p> <p>To test in our sandbox environment, <a href=\"https://account.sandbox.paxos.com\" target=\"_blank\">sign up</a> for an account. For more information about Paxos and our APIs, visit <a href=\"https://www.paxos.com/\" target=\"_blank\">Paxos.com</a>.</p>\n",
+      "type": "text/plain"
+    }
+  }
+}

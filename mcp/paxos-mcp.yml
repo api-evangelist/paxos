@@ -384,3 +384,9 @@ tools:
 - name: GetVerification
   description: Get address verification
   source_operation: openapi/paxos-v2-openapi-original.json#GetVerification
+deployment:
+  mode: none
+  verified: derived
+  tools: 125
+  checked: '2026-08-12'
+  source: catalog MCP census

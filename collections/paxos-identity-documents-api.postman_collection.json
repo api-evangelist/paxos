@@ -1,0 +1,663 @@
+{
+  "item": [
+    {
+      "id": "b1f99d6e-c07f-46d5-b6c6-3ee6295b6ac4",
+      "name": "Identity Documents",
+      "description": {
+        "content": "The Identity Documents API allows clients to send documents to Paxos to validate identities\nduring the KYC process. Files can be updated multiple times by re-sending the document type\nfor processing.\n\nWe currently accept the following file formats:\n- <code>pdf</code>\n- <code>jpg</code>\n- <code>png</code>\n\nSteps to upload a document are as follows:\n1. Send a <code>PUT</code> request to <code>/identity/identities/{id}/documents</code> to get\n  the upload URL.\n1. Send your document to the provided URL via a PUT request. Take the following example using curl:\n  <code>$ curl --upload-file Proof_of_residence.jpg $URI </code>\n\nUploaded document metadata will be available via <code>GET</code> request to <code>/identity/identities/{id}/documents</code>\n",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "99521cb1-fae2-4957-92f9-57af21aab4b9",
+          "name": "List Identity Documents",
+          "request": {
+            "name": "List Identity Documents",
+            "description": {
+              "content": "This endpoint enables you to get a list of all documents associated with an identity.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "identity",
+                "identities",
+                ":identity_id",
+                "documents"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "include_pending_docs",
+                  "value": "<boolean>",
+                  "description": "Add a list of pending document types for the identity"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "identity_id",
+                  "description": "(Required) id associated with the identity"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "conversion:read_conversion_stablecoin conversion:write_conversion_stablecoin exchange:historical_prices exchange:read_order exchange:read_quote exchange:read_quote_execution exchange:write_quote_execution exchange:write_order fee:write_crypto_withdrawal_fee funding:read_bank_balance funding:read_profile funding:write_profile identity:read_account identity:read_identity identity:write_account identity:write_identity settlement:read_transaction settlement:write_transaction tax:read_tax_form tax:read_tax_lot tax:write_tax_lot transfer:read_deposit_address transfer:read_fiat_account transfer:read_fiat_deposit_instructions transfer:read_transfer transfer:read_transfer_limit transfer:reject_crypto_deposit transfer:update_crypto_deposit transfer:write_crypto_withdrawal transfer:write_deposit_address transfer:write_fiat_account transfer:write_fiat_deposit_instructions transfer:write_internal_transfer transfer:write_sandbox_fiat_deposit transfer:write_fiat_withdrawal events:read_event"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://oauth.paxos.com/oauth2/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "e88a8bae-b07e-4024-8829-3bcfe869ec38",
+              "name": "A successful response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "identity",
+                    "identities",
+                    ":identity_id",
+                    "documents"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "include_pending_docs",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "identity_id",
+                      "description": "(Required) id associated with the identity"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"documents\": [\n    {\n      \"file_id\": \"e1959b03-8c3d-4bdd-9437-403ccf8772f5\",\n      \"name\": \"test_file.png\",\n      \"document_types\": [\n        \"OTHER_DOCUMENTS\",\n        \"APPLICATION\"\n      ],\n      \"created_at\": \"2023-07-07T23:03:19.170481Z\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4f16def5-8d07-42d0-a48d-e9e46108fea8",
+              "name": "Permissions Denied",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "identity",
+                    "identities",
+                    ":identity_id",
+                    "documents"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "include_pending_docs",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "identity_id",
+                      "description": "(Required) id associated with the identity"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Forbidden\",\n  \"status\": 403,\n  \"title\": \"Forbidden\",\n  \"type\": \"about:blank\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1cff8352-5c3f-4e6c-b5ab-bcc10dd344ff",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "identity",
+                    "identities",
+                    ":identity_id",
+                    "documents"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "include_pending_docs",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "identity_id",
+                      "description": "(Required) id associated with the identity"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Identity with id f6b1365a-dc8e-4526-aa3f-e688826c36be doesn't exist\",\n  \"status\": 404,\n  \"title\": \"Not Found\",\n  \"type\": \"about:blank\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "5a407ac5-75a5-4168-b583-d56c222182cb",
+          "name": "Document Upload",
+          "request": {
+            "name": "Document Upload",
+            "description": {
+              "content": "This endpoint enables you to receive a URL to upload a document to Paxos for identity verification or enhanced due diligence purposes.\nWhen uploading a document you must specify the document type. You will receive a\nURL where you can upload the document using a POST request.\n\nRequirements:\n- Uploaded documents must be less than 100 MB in size\n- Supported formats include PDF, JPG, and PNG\n\nFor more information on document requirements for enhanced due diligence, see [here](https://docs.paxos.com/identity/edd).",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "identity",
+                "identities",
+                ":identity_id",
+                "documents"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "identity_id",
+                  "description": "(Required) The id of the identity the document is associated with."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "conversion:read_conversion_stablecoin conversion:write_conversion_stablecoin exchange:historical_prices exchange:read_order exchange:read_quote exchange:read_quote_execution exchange:write_quote_execution exchange:write_order fee:write_crypto_withdrawal_fee funding:read_bank_balance funding:read_profile funding:write_profile identity:read_account identity:read_identity identity:write_account identity:write_identity settlement:read_transaction settlement:write_transaction tax:read_tax_form tax:read_tax_lot tax:write_tax_lot transfer:read_deposit_address transfer:read_fiat_account transfer:read_fiat_deposit_instructions transfer:read_transfer transfer:read_transfer_limit transfer:reject_crypto_deposit transfer:update_crypto_deposit transfer:write_crypto_withdrawal transfer:write_deposit_address transfer:write_fiat_account transfer:write_fiat_deposit_instructions transfer:write_internal_transfer transfer:write_sandbox_fiat_deposit transfer:write_fiat_withdrawal events:read_event"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://oauth.paxos.com/oauth2/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"<string>\",\n  \"document_types\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "b53e88a5-db8b-4da9-8782-1200445c8a8a",
+              "name": "A successful response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "identity",
+                    "identities",
+                    ":identity_id",
+                    "documents"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "identity_id",
+                      "description": "(Required) The id of the identity the document is associated with."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Proof_of_residence.jpg\",\n  \"document_types\": [\n    \"PROOF_OF_RESIDENCY\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"file_id\": \"f190b163-208f-4d73-8deb-4fb8b24add00\",\n  \"name\": \"Proof_of_residence.jpg\",\n  \"upload_url\": \"https://s3.amasonaws.com/pax...cec3f64fe20348685a\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ffb29735-76e2-495c-9c54-5652c11ab37c",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "identity",
+                    "identities",
+                    ":identity_id",
+                    "documents"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "identity_id",
+                      "description": "(Required) The id of the identity the document is associated with."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Proof_of_residence.jpg\",\n  \"document_types\": [\n    \"PROOF_OF_RESIDENCY\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"must provide a file name, up to 260 characters\",\n  \"status\": 400,\n  \"title\": \"Bad Request\",\n  \"type\": \"about:blank\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a01f14a2-bfc6-4c5c-b8d0-4e79ce7c3d69",
+              "name": "Permissions Denied",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "identity",
+                    "identities",
+                    ":identity_id",
+                    "documents"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "identity_id",
+                      "description": "(Required) The id of the identity the document is associated with."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Proof_of_residence.jpg\",\n  \"document_types\": [\n    \"PROOF_OF_RESIDENCY\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"document storage not enabled\",\n  \"status\": 403,\n  \"title\": \"Forbidden\",\n  \"type\": \"about:blank\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "96fef1fb-6168-4a67-a9a7-9ef4bac94189",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "identity",
+                    "identities",
+                    ":identity_id",
+                    "documents"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "identity_id",
+                      "description": "(Required) The id of the identity the document is associated with."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Proof_of_residence.jpg\",\n  \"document_types\": [\n    \"PROOF_OF_RESIDENCY\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"identity does not exist\",\n  \"status\": 404,\n  \"title\": \"Not Found\",\n  \"type\": \"about:blank\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "73d4d902-9040-4916-b491-bba86abd2ade",
+              "name": "Already Exists",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "identity",
+                    "identities",
+                    ":identity_id",
+                    "documents"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "identity_id",
+                      "description": "(Required) The id of the identity the document is associated with."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Proof_of_residence.jpg\",\n  \"document_types\": [\n    \"PROOF_OF_RESIDENCY\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"file named \\\"Proof_of_residence.jpg\\\" already exists\",\n  \"meta\": {\n    \"existing\": {\n      \"name\": \"Proof_of_residence.jpg\"\n    }\n  },\n  \"status\": 409,\n  \"title\": \"Already Exists\",\n  \"type\": \"https://developer.paxos.com/docs/v2/problems/already-exists\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.paxos.com/v2",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "0ad31ac5-2b20-47cb-9724-9a78722506f5",
+    "name": "Paxos Account Members Identity Documents API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "<p>Welcome to Paxos APIs. At Paxos, our mission is to enable the movement of any asset, any time, in a trustworthy way. These APIs serve that mission by making it easier than ever for you to directly integrate our product capabilities into your application, leveraging the speed, stability, and security of the Paxos platform.</p> <p>The documentation that follows gives you access to our Crypto Brokerage, Trading, and Exchange products. It includes APIs for market data, orders, and the held rate quote flow.</p> <p>To test in our sandbox environment, <a href=\"https://account.sandbox.paxos.com\" target=\"_blank\">sign up</a> for an account. For more information about Paxos and our APIs, visit <a href=\"https://www.paxos.com/\" target=\"_blank\">Paxos.com</a>.</p>\n",
+      "type": "text/plain"
+    }
+  }
+}

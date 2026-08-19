@@ -1,0 +1,777 @@
+{
+  "item": [
+    {
+      "id": "1eac961f-d699-4280-957d-10bdd6435625",
+      "name": "Monitoring Addresses",
+      "description": {
+        "content": "A Monitoring Address is a blockchain address that Paxos monitors daily for eligible stablecoin activity and determines the amount of rewards your organization will earn. We recommend adding any addresses you expect to hold, receive, or mint Paxos stablecoins as a monitoring address in order to receive rewards for all of your qualifying on-chain activity. \n\n> Monitoring addresses must be added by month end (`23:59 UTC+0`) in order to earn rewards for that month. Addresses added after month end will start earning rewards for the following month.\n\n*These endpoints are only relevant for Global Dollar Network (GDN) partners.*\n",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "680f2aad-482b-4666-8d79-1b6ed1f67565",
+          "name": "List Monitoring Address",
+          "request": {
+            "name": "List Monitoring Address",
+            "description": {
+              "content": "Retrieve a list of monitoring address\n\nFilter by network to retrieve a list of addresses on that network, or filter by network & address to retrieve a single record.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "rewards",
+                "monitor",
+                "address"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "address",
+                  "value": "<string>",
+                  "description": "On-chain address Paxos is monitoring for eligible reward activity. Must be valid for the specified network.\nFor `SOLANA` specify the wallet account (ie: not a derived/token account like an ATA)."
+                },
+                {
+                  "disabled": false,
+                  "key": "crypto_network",
+                  "value": "<string>",
+                  "description": "Network the address belongs to. Supported: `ETHEREUM`, `SOLANA`, `INK`, `XLAYER`."
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "<integer>",
+                  "description": "Number of results to return. Defaults to `100` if no limit is provided. Maximum `1000`."
+                },
+                {
+                  "disabled": false,
+                  "key": "order",
+                  "value": "<string>",
+                  "description": "Results are ordered by `created_at`. Specify the ordering of the results. Defaults to `DESC`."
+                },
+                {
+                  "disabled": false,
+                  "key": "page_cursor",
+                  "value": "<string>",
+                  "description": "Cursor for pagination"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "conversion:read_conversion_stablecoin conversion:write_conversion_stablecoin exchange:historical_prices exchange:read_order exchange:read_quote exchange:read_quote_execution exchange:write_quote_execution exchange:write_order fee:write_crypto_withdrawal_fee funding:read_bank_balance funding:read_profile funding:write_profile identity:read_account identity:read_identity identity:write_account identity:write_identity settlement:read_transaction settlement:write_transaction tax:read_tax_form tax:read_tax_lot tax:write_tax_lot transfer:read_deposit_address transfer:read_fiat_account transfer:read_fiat_deposit_instructions transfer:read_transfer transfer:read_transfer_limit transfer:reject_crypto_deposit transfer:update_crypto_deposit transfer:write_crypto_withdrawal transfer:write_deposit_address transfer:write_fiat_account transfer:write_fiat_deposit_instructions transfer:write_internal_transfer transfer:write_sandbox_fiat_deposit transfer:write_fiat_withdrawal events:read_event"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://oauth.paxos.com/oauth2/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "13845b39-a0d6-4e35-86d8-7884f184e021",
+              "name": "A successful response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "rewards",
+                    "monitor",
+                    "address"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "address",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "crypto_network",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "order",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "page_cursor",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"addresses\": [\n    {\n      \"address\": \"0xD6E012522DB5075694ac9907BABBDB4825A1c822\",\n      \"id\": \"6477f17d-7c17-43a5-84cc-a6a104a89d81\",\n      \"crypto_network\": \"ETHEREUM\",\n      \"name\": \"Address 1\",\n      \"created_at\": \"2025-03-21T14:45:22.682768Z\"\n    },\n    {\n      \"address\": \"0xD6E012522DB5075694ac9907BABBDB4825A1c822\",\n      \"id\": \"6477f17d-7c17-43a5-84cc-a6a104a89d81\",\n      \"crypto_network\": \"ETHEREUM\",\n      \"created_at\": \"2025-02-20T14:45:22.682768Z\"\n    },\n    {\n      \"address\": \"14grJpemFaf88c8tiVb77W7TYg2W3ir6pfkKz3YjhhZ6\",\n      \"id\": \"6477f17d-7c17-43a5-84cc-a6a104a89d81\",\n      \"crypto_network\": \"SOLANA\",\n      \"created_at\": \"2025-01-10T14:45:22.682768Z\"\n    }\n  ],\n  \"next_page_cursor\": \"CgwI-Pr1vgYQyLLpswESJDM2NGU2MTgyLTRhZjctNDg4NC1iY2MxLTM0MThmNTA0MWYzYg\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "7d90398f-23bc-464d-ba38-8bddcaa90af1",
+          "name": "Create Monitoring Address",
+          "request": {
+            "name": "Create Monitoring Address",
+            "description": {
+              "content": "Adds an address to be monitored for rewards tracking.\n\nCurrently only `ETHEREUM`, `SOLANA`, `INK` & `XLAYER` addresses are supported.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "rewards",
+                "monitor",
+                "address"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "conversion:read_conversion_stablecoin conversion:write_conversion_stablecoin exchange:historical_prices exchange:read_order exchange:read_quote exchange:read_quote_execution exchange:write_quote_execution exchange:write_order fee:write_crypto_withdrawal_fee funding:read_bank_balance funding:read_profile funding:write_profile identity:read_account identity:read_identity identity:write_account identity:write_identity settlement:read_transaction settlement:write_transaction tax:read_tax_form tax:read_tax_lot tax:write_tax_lot transfer:read_deposit_address transfer:read_fiat_account transfer:read_fiat_deposit_instructions transfer:read_transfer transfer:read_transfer_limit transfer:reject_crypto_deposit transfer:update_crypto_deposit transfer:write_crypto_withdrawal transfer:write_deposit_address transfer:write_fiat_account transfer:write_fiat_deposit_instructions transfer:write_internal_transfer transfer:write_sandbox_fiat_deposit transfer:write_fiat_withdrawal events:read_event"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://oauth.paxos.com/oauth2/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"crypto_network\": \"<string>\",\n  \"address\": \"<string>\",\n  \"name\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "b20ea394-c0df-4566-a8b1-a99ac8f66ece",
+              "name": "A successful response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "rewards",
+                    "monitor",
+                    "address"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"crypto_network\": \"ETHEREUM\",\n  \"address\": \"0x2D2849217C027494ae0D7Af2fC7f9b798Ddd5aB9\",\n  \"name\": \"New Address\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"address\": {\n    \"address\": \"0x2D2849217C027494ae0D7Af2fC7f9b798Ddd5aB9\",\n    \"crypto_network\": \"ETHEREUM\",\n    \"name\": \"New Address\",\n    \"created_at\": \"2025-03-21T15:22:05.474383Z\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "495d07ef-4ce1-4633-b682-815beaec0b6d",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "rewards",
+                    "monitor",
+                    "address"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"crypto_network\": \"ETHEREUM\",\n  \"address\": \"0x2D2849217C027494ae0D7Af2fC7f9b798Ddd5aB9\",\n  \"name\": \"New Address\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"about:blank\",\n  \"title\": \"Bad Request\",\n  \"status\": 400,\n  \"detail\": \"invalid address\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "839d6dd7-3c86-44f7-9cfe-3f5fd744bbca",
+          "name": "Get Monitoring Address",
+          "request": {
+            "name": "Get Monitoring Address",
+            "description": {
+              "content": "Retrieves a monitoring address by ID",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "rewards",
+                "monitor",
+                "address",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) UUID direct reference to a particular monitored address."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "conversion:read_conversion_stablecoin conversion:write_conversion_stablecoin exchange:historical_prices exchange:read_order exchange:read_quote exchange:read_quote_execution exchange:write_quote_execution exchange:write_order fee:write_crypto_withdrawal_fee funding:read_bank_balance funding:read_profile funding:write_profile identity:read_account identity:read_identity identity:write_account identity:write_identity settlement:read_transaction settlement:write_transaction tax:read_tax_form tax:read_tax_lot tax:write_tax_lot transfer:read_deposit_address transfer:read_fiat_account transfer:read_fiat_deposit_instructions transfer:read_transfer transfer:read_transfer_limit transfer:reject_crypto_deposit transfer:update_crypto_deposit transfer:write_crypto_withdrawal transfer:write_deposit_address transfer:write_fiat_account transfer:write_fiat_deposit_instructions transfer:write_internal_transfer transfer:write_sandbox_fiat_deposit transfer:write_fiat_withdrawal events:read_event"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://oauth.paxos.com/oauth2/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "2c585568-087c-4b3a-9aea-da2f024cdf52",
+              "name": "A successful response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "rewards",
+                    "monitor",
+                    "address",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) UUID direct reference to a particular monitored address."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"address\": \"0xD6E012522DB5075694ac9907BABBDB4825A1c822\",\n  \"id\": \"6477f17d-7c17-43a5-84cc-a6a104a89d81\",\n  \"crypto_network\": \"ETHEREUM\",\n  \"name\": \"Address 1\",\n  \"created_at\": \"2025-03-21T14:45:22.682768Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f7fde388-cd7d-4be5-bacd-18ba34f9e132",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "rewards",
+                    "monitor",
+                    "address",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) UUID direct reference to a particular monitored address."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"about:blank\",\n  \"title\": \"Bad Request\",\n  \"status\": 400,\n  \"detail\": \"invalid address id\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4db098f5-aeeb-4327-bb61-a0557da737f5",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "rewards",
+                    "monitor",
+                    "address",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) UUID direct reference to a particular monitored address."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"about:blank\",\n  \"title\": \"Not Found\",\n  \"status\": 404,\n  \"detail\": \"address not found\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "e454cf4e-fdf7-4e1c-86b4-60f62893916d",
+          "name": "Update Monitoring Address",
+          "request": {
+            "name": "Update Monitoring Address",
+            "description": {
+              "content": "Updates a monitored address name",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "rewards",
+                "monitor",
+                "address",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) UUID direct reference to a particular monitored address."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "conversion:read_conversion_stablecoin conversion:write_conversion_stablecoin exchange:historical_prices exchange:read_order exchange:read_quote exchange:read_quote_execution exchange:write_quote_execution exchange:write_order fee:write_crypto_withdrawal_fee funding:read_bank_balance funding:read_profile funding:write_profile identity:read_account identity:read_identity identity:write_account identity:write_identity settlement:read_transaction settlement:write_transaction tax:read_tax_form tax:read_tax_lot tax:write_tax_lot transfer:read_deposit_address transfer:read_fiat_account transfer:read_fiat_deposit_instructions transfer:read_transfer transfer:read_transfer_limit transfer:reject_crypto_deposit transfer:update_crypto_deposit transfer:write_crypto_withdrawal transfer:write_deposit_address transfer:write_fiat_account transfer:write_fiat_deposit_instructions transfer:write_internal_transfer transfer:write_sandbox_fiat_deposit transfer:write_fiat_withdrawal events:read_event"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://oauth.paxos.com/oauth2/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "744f4947-a0ce-4677-a89a-d3e7ec7691b9",
+              "name": "A successful response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "rewards",
+                    "monitor",
+                    "address",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) UUID direct reference to a particular monitored address."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Address name\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"address\": {\n    \"id\": \"6477f17d-7c17-43a5-84cc-a6a104a89d81\",\n    \"address\": \"0x2D2849217C027494ae0D7Af2fC7f9b798Ddd5aB9\",\n    \"crypto_network\": \"ETHEREUM\",\n    \"name\": \"Address name\",\n    \"created_at\": \"2025-03-21T15:22:05.474383Z\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "64dde546-bac4-4a28-a917-b88979d24fac",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "rewards",
+                    "monitor",
+                    "address",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) UUID direct reference to a particular monitored address."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Address name\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"about:blank\",\n  \"title\": \"Bad Request\",\n  \"status\": 400,\n  \"detail\": \"name must be set\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.paxos.com/v2",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "fc4bbae2-a340-4164-a456-61036988fbeb",
+    "name": "Paxos Account Members Monitoring Addresses API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "<p>Welcome to Paxos APIs. At Paxos, our mission is to enable the movement of any asset, any time, in a trustworthy way. These APIs serve that mission by making it easier than ever for you to directly integrate our product capabilities into your application, leveraging the speed, stability, and security of the Paxos platform.</p> <p>The documentation that follows gives you access to our Crypto Brokerage, Trading, and Exchange products. It includes APIs for market data, orders, and the held rate quote flow.</p> <p>To test in our sandbox environment, <a href=\"https://account.sandbox.paxos.com\" target=\"_blank\">sign up</a> for an account. For more information about Paxos and our APIs, visit <a href=\"https://www.paxos.com/\" target=\"_blank\">Paxos.com</a>.</p>\n",
+      "type": "text/plain"
+    }
+  }
+}

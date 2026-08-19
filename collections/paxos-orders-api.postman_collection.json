@@ -1,0 +1,1043 @@
+{
+  "item": [
+    {
+      "id": "f135957e-019c-4209-896d-0710a49da660",
+      "name": "Orders",
+      "description": {
+        "content": "<p>There are three types of orders: market, limit and post-only.</p>\n<p>Market orders guarantee execution at a variable price and quantity. Limit orders guarantee price and quantity at the time of execution but do not guarantee execution. Post-only is an order type that will only be placed on the order book if it is the maker side of a trade.</p>\n",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "6819ab71-9a9e-48e1-8657-4514f8da4079",
+          "name": "List Executions",
+          "request": {
+            "name": "List Executions",
+            "description": {
+              "content": "Retrieves full details of underlying executions with optional filters.\nNotes:\n- This endpoint returns a maximum of 1000 items per page.\n- Filtering options are `account_id`, `profile_id` or neither (all executions).",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "executions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "profile_id",
+                  "value": "<string>",
+                  "description": "Filter executions by the Profile ID associated with the orders."
+                },
+                {
+                  "disabled": false,
+                  "key": "account_id",
+                  "value": "<string>",
+                  "description": "Filter executions by the Account ID associated with the orders."
+                },
+                {
+                  "disabled": false,
+                  "key": "order_id",
+                  "value": "<string>",
+                  "description": "Filter executions for a single order ID."
+                },
+                {
+                  "disabled": false,
+                  "key": "since_execution_id",
+                  "value": "<string>",
+                  "description": "Excludes executions after the given ID."
+                },
+                {
+                  "disabled": false,
+                  "key": "range.begin",
+                  "value": "<dateTime>",
+                  "description": "Only return records after this timestamp, inclusive. RFC3339 format, like `2006-01-02T15:04:05Z`."
+                },
+                {
+                  "disabled": false,
+                  "key": "range.end",
+                  "value": "<dateTime>",
+                  "description": "Only return records before this timestamp, inclusive. RFC3339 format, like `2006-01-02T15:04:05Z`."
+                },
+                {
+                  "disabled": false,
+                  "key": "page_cursor",
+                  "value": "<string>",
+                  "description": "Cursor token for fetching the next page."
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "<integer>",
+                  "description": "Number of results to return."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "conversion:read_conversion_stablecoin conversion:write_conversion_stablecoin exchange:historical_prices exchange:read_order exchange:read_quote exchange:read_quote_execution exchange:write_quote_execution exchange:write_order fee:write_crypto_withdrawal_fee funding:read_bank_balance funding:read_profile funding:write_profile identity:read_account identity:read_identity identity:write_account identity:write_identity settlement:read_transaction settlement:write_transaction tax:read_tax_form tax:read_tax_lot tax:write_tax_lot transfer:read_deposit_address transfer:read_fiat_account transfer:read_fiat_deposit_instructions transfer:read_transfer transfer:read_transfer_limit transfer:reject_crypto_deposit transfer:update_crypto_deposit transfer:write_crypto_withdrawal transfer:write_deposit_address transfer:write_fiat_account transfer:write_fiat_deposit_instructions transfer:write_internal_transfer transfer:write_sandbox_fiat_deposit transfer:write_fiat_withdrawal events:read_event"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://oauth.paxos.com/oauth2/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "12682410-87cd-48ec-8fa3-96ba43e1593b",
+              "name": "A successful response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "executions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "profile_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "account_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "order_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "since_execution_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "range.begin",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "range.end",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "page_cursor",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"items\": [\n    {\n      \"execution_id\": \"12422531\",\n      \"order_id\": \"cb379c30-a9f8-4685-aa38-47d6e87ff09d\",\n      \"executed_at\": \"2022-08-01T21:01:27.217Z\",\n      \"market\": \"BTCUSD\",\n      \"side\": \"BUY\",\n      \"amount\": \"0.00432539\",\n      \"price\": \"23119.25\",\n      \"commission\": \"0.34999920465125\",\n      \"commission_asset\": \"USD\",\n      \"rebate\": \"0\",\n      \"rebate_asset\": \"USD\",\n      \"gross_trade_amount\": \"99.9997727575\"\n    }\n  ],\n  \"next_page_cursor\": \"CgwI-Iu6iQYQgPGVoQEQg5v2BQ\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "6fa7af13-25bc-42ec-a042-89734a234a7b",
+          "name": "List Orders",
+          "request": {
+            "name": "List Orders",
+            "description": {
+              "content": "Retrieves full details of orders associated with a Profile ID, with optional filters.\n\n- Historical data prior to May 16, 2022 is unavailable.\n- Pagination Limit has a max of 1000. Pagination Offset is now deprecated and nonfunctional.\n- Filtering options are `account_id`, `profile_id` or neither (all orders).",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "orders"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "profile_id",
+                  "value": "<string>",
+                  "description": "The profile associated with the orders."
+                },
+                {
+                  "disabled": false,
+                  "key": "account_id",
+                  "value": "<string>",
+                  "description": "The account under which these orders are placed."
+                },
+                {
+                  "disabled": false,
+                  "key": "market",
+                  "value": "<string>",
+                  "description": "Filter by the trading pair."
+                },
+                {
+                  "disabled": false,
+                  "key": "status",
+                  "value": "<string>",
+                  "description": "Filter by the status of the order."
+                },
+                {
+                  "disabled": false,
+                  "key": "order_time.begin",
+                  "value": "<dateTime>",
+                  "description": "Only return records after this timestamp, inclusive. RFC3339 format, like `2006-01-02T15:04:05Z`."
+                },
+                {
+                  "disabled": false,
+                  "key": "order_time.end",
+                  "value": "<dateTime>",
+                  "description": "Only return records before this timestamp, inclusive. RFC3339 format, like `2006-01-02T15:04:05Z`."
+                },
+                {
+                  "disabled": false,
+                  "key": "ref_ids",
+                  "value": "<string>",
+                  "description": "The idempotence IDs provided during order creation."
+                },
+                {
+                  "disabled": false,
+                  "key": "ref_ids",
+                  "value": "<string>",
+                  "description": "The idempotence IDs provided during order creation."
+                },
+                {
+                  "disabled": false,
+                  "key": "page_cursor",
+                  "value": "<string>",
+                  "description": "Cursor token for fetching the next page. If using this then do not use paginationLimit and paginationOffset fields."
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "<integer>",
+                  "description": "Number of results to return. If using this then do not use paginationLimit and paginationOffset fields."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "conversion:read_conversion_stablecoin conversion:write_conversion_stablecoin exchange:historical_prices exchange:read_order exchange:read_quote exchange:read_quote_execution exchange:write_quote_execution exchange:write_order fee:write_crypto_withdrawal_fee funding:read_bank_balance funding:read_profile funding:write_profile identity:read_account identity:read_identity identity:write_account identity:write_identity settlement:read_transaction settlement:write_transaction tax:read_tax_form tax:read_tax_lot tax:write_tax_lot transfer:read_deposit_address transfer:read_fiat_account transfer:read_fiat_deposit_instructions transfer:read_transfer transfer:read_transfer_limit transfer:reject_crypto_deposit transfer:update_crypto_deposit transfer:write_crypto_withdrawal transfer:write_deposit_address transfer:write_fiat_account transfer:write_fiat_deposit_instructions transfer:write_internal_transfer transfer:write_sandbox_fiat_deposit transfer:write_fiat_withdrawal events:read_event"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://oauth.paxos.com/oauth2/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "de9c73f4-58a2-4c30-8f04-743e41ce85f5",
+              "name": "A successful response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orders"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "profile_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "account_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "market",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "status",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "order_time.begin",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "order_time.end",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "ref_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "ref_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "page_cursor",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"items\": [\n    {\n      \"id\": \"f190b163-208f-4d73-8deb-4fb8b24add00\",\n      \"profile_id\": \"b7b77d82-e6a7-4ae9-9904-36231aedf985\",\n      \"ref_id\": \"my-order-1\",\n      \"status\": \"FILLED\",\n      \"market\": \"ETHUSD\",\n      \"side\": \"BUY\",\n      \"type\": \"LIMIT\",\n      \"price\": \"190.23\",\n      \"base_amount\": \"2.35781498\",\n      \"quote_amount\": \"0\",\n      \"metadata\": {\n        \"customer_id\": \"9b8c9cba-801e-4418-adc0-ede709df6339\"\n      },\n      \"amount_filled\": \"2.35781498\",\n      \"volume_weighted_average_price\": \"190.23\",\n      \"time_in_force\": \"GTC\",\n      \"is_triggered\": false\n    },\n    {\n      \"id\": \"81e26e1d-eddb-455a-8b44-e3d845432de7\",\n      \"profile_id\": \"b7b77d82-e6a7-4ae9-9904-36231aedf985\",\n      \"ref_id\": \"my-order-2\",\n      \"status\": \"FILLED\",\n      \"market\": \"BTCUSD\",\n      \"side\": \"BUY\",\n      \"type\": \"MARKET\",\n      \"price\": \"0\",\n      \"base_amount\": \"0\",\n      \"quote_amount\": \"500.00\",\n      \"metadata\": {\n        \"customer_id\": \"9b8c9cba-801e-4418-adc0-ede709df6339\"\n      },\n      \"amount_filled\": \"0.05142181\",\n      \"volume_weighted_average_price\": \"9723.50\",\n      \"time_in_force\": \"FOK\",\n      \"is_triggered\": false\n    }\n  ],\n  \"next_page_cursor\": \"CgsIxom6iQYQwO39XBDbsdVz\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "9a65772e-186f-44c7-a823-e6b13ea80198",
+          "name": "Create Order",
+          "request": {
+            "name": "Create Order",
+            "description": {
+              "content": "For limit orders, create an order for buying or selling an asset:\n\n- To buy, set `side = BUY` and set `base_amount` to the crypto amount you want to buy.\n- To sell, set `side = SELL` and set `base_amount` to the crypto amount you want to sell.\n\nFor market orders, create an order for buying or selling an asset:\n\n- To buy, set `side = BUY` and set `quote_amount` to the dollar amount you want to spend.\n- To sell, set `side = SELL` and set `base_amount` to the crypto amount you want to sell.\n\nThere are five types of orders:\n\n- Limit Orders: Buy or sell at a specified price or better. Execution not guaranteed. Taker orders will be rejected if price deviates 15% from midpoint.\n- Post-Only Limit Orders: have the same properties as Limit Orders, but get rejected if they cross the orderbook.\n- Market Orders: Operate as Immediate or Cancel (IOC) orders. Price is variable, executes at best available price at time of order.\n- Stop Market Orders: Will convert to a market sell order with the specified quantity when the stop price is hit. The stop price does not guarantee that it will be executed at that price. Market conditions (price) might change between the order being triggered and order being executed. Currently only sell stop loss orders are supported.\n- Stop Limit Orders: have a Stop Price which when hit, will convert to a limit sell order that will be executed at a specified price (or better)\n\nOrder size limits vary by asset and order type. For current limits, see\nhttps://docs.paxos.com/guides/crypto-brokerage/orders-precision-rounding#order-limitations",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "profiles",
+                ":profile_id",
+                "orders"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "profile_id",
+                  "description": "(Required) The profileId the order will be associated with."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "conversion:read_conversion_stablecoin conversion:write_conversion_stablecoin exchange:historical_prices exchange:read_order exchange:read_quote exchange:read_quote_execution exchange:write_quote_execution exchange:write_order fee:write_crypto_withdrawal_fee funding:read_bank_balance funding:read_profile funding:write_profile identity:read_account identity:read_identity identity:write_account identity:write_identity settlement:read_transaction settlement:write_transaction tax:read_tax_form tax:read_tax_lot tax:write_tax_lot transfer:read_deposit_address transfer:read_fiat_account transfer:read_fiat_deposit_instructions transfer:read_transfer transfer:read_transfer_limit transfer:reject_crypto_deposit transfer:update_crypto_deposit transfer:write_crypto_withdrawal transfer:write_deposit_address transfer:write_fiat_account transfer:write_fiat_deposit_instructions transfer:write_internal_transfer transfer:write_sandbox_fiat_deposit transfer:write_fiat_withdrawal events:read_event"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://oauth.paxos.com/oauth2/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"side\": \"<string>\",\n  \"market\": \"<string>\",\n  \"type\": \"<string>\",\n  \"ref_id\": \"<string>\",\n  \"base_amount\": \"<string>\",\n  \"price\": \"<decimal>\",\n  \"quote_amount\": \"<string>\",\n  \"metadata\": {\n    \"key_0\": \"<string>\"\n  },\n  \"await_fill_millis\": \"<long>\",\n  \"time_in_force\": \"<string>\",\n  \"expiration_date\": \"<uint64>\",\n  \"identity_id\": \"<string>\",\n  \"identity_account_id\": \"<string>\",\n  \"stop_price\": \"<decimal>\",\n  \"recipient_profile_id\": \"<string>\",\n  \"self_match_prevention_id\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "78d22003-9f61-4eb9-ab00-c2195f55c837",
+              "name": "A successful response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "profiles",
+                    ":profile_id",
+                    "orders"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "profile_id",
+                      "description": "(Required) The profileId the order will be associated with."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"side\": \"BUY\",\n  \"market\": \"ETHUSD\",\n  \"type\": \"LIMIT\",\n  \"price\": \"190.23\",\n  \"base_amount\": \"2.35781498\",\n  \"metadata\": {\n    \"customer_id\": \"9b8c9cba-801e-4418-adc0-ede709df6339\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"f190b163-208f-4d73-8deb-4fb8b24add00\",\n  \"profile_id\": \"b7b77d82-e6a7-4ae9-9904-36231aedf985\",\n  \"ref_id\": \"my-order-1\",\n  \"status\": \"SUBMITTED\",\n  \"market\": \"ETHUSD\",\n  \"side\": \"BUY\",\n  \"type\": \"LIMIT\",\n  \"price\": \"190.23\",\n  \"base_amount\": \"2.35781498\",\n  \"quote_amount\": \"\",\n  \"metadata\": {\n    \"customer_id\": \"9b8c9cba-801e-4418-adc0-ede709df6339\"\n  },\n  \"amount_filled\": \"0.00000000\",\n  \"volume_weighted_average_price\": \"0.00000000\",\n  \"time_in_force\": \"GTC\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d8865e74-2916-45b1-bab0-cde601be09a3",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "profiles",
+                    ":profile_id",
+                    "orders"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "profile_id",
+                      "description": "(Required) The profileId the order will be associated with."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/problem+json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"side\": \"BUY\",\n  \"market\": \"ETHUSD\",\n  \"type\": \"LIMIT\",\n  \"price\": \"190.23\",\n  \"base_amount\": \"2.35781498\",\n  \"metadata\": {\n    \"customer_id\": \"9b8c9cba-801e-4418-adc0-ede709df6339\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/problem+json"
+                }
+              ],
+              "body": "{\n  \"type\": \"about:blank\",\n  \"title\": \"Bad Request\",\n  \"status\": 400,\n  \"detail\": \"base_amount invalid: invalid amount '-10': must be positive decimal\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a84ef75c-b595-468a-9334-53b6e788109a",
+              "name": "Could not create order",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "profiles",
+                    ":profile_id",
+                    "orders"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "profile_id",
+                      "description": "(Required) The profileId the order will be associated with."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/problem+json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"side\": \"BUY\",\n  \"market\": \"ETHUSD\",\n  \"type\": \"LIMIT\",\n  \"price\": \"190.23\",\n  \"base_amount\": \"2.35781498\",\n  \"metadata\": {\n    \"customer_id\": \"9b8c9cba-801e-4418-adc0-ede709df6339\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/problem+json"
+                }
+              ],
+              "body": "{\n  \"type\": \"https://developer.paxos.com/docs/v2/problems/insufficient-funds\",\n  \"title\": \"Insufficient Funds\",\n  \"status\": 403,\n  \"detail\": \"insufficient USD funds in profile b7b77d82-e6a7-4ae9-9904-36231aedf985: 100 needed, 50 available\",\n  \"meta\": {\n    \"profile_id\": \"b7b77d82-e6a7-4ae9-9904-36231aedf985\",\n    \"asset\": \"USD\",\n    \"available\": \"50\",\n    \"needed\": \"100\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "42aed4d2-c3f5-4b84-ac53-c6744a0002f8",
+              "name": "Order already created",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "profiles",
+                    ":profile_id",
+                    "orders"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "profile_id",
+                      "description": "(Required) The profileId the order will be associated with."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/problem+json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"side\": \"BUY\",\n  \"market\": \"ETHUSD\",\n  \"type\": \"LIMIT\",\n  \"price\": \"190.23\",\n  \"base_amount\": \"2.35781498\",\n  \"metadata\": {\n    \"customer_id\": \"9b8c9cba-801e-4418-adc0-ede709df6339\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/problem+json"
+                }
+              ],
+              "body": "{\n  \"type\": \"https://developer.paxos.com/docs/v2/problems/already-exists\",\n  \"title\": \"Already Exists\",\n  \"status\": 409,\n  \"detail\": \"order already exists with ref_id 'already_used_ref_id'\",\n  \"meta\": {\n    \"existing\": {\n      \"id\": \"f190b163-208f-4d73-8deb-4fb8b24add00\",\n      \"profile_id\": \"b7b77d82-e6a7-4ae9-9904-36231aedf985\",\n      \"ref_id\": \"already_used_ref_id\",\n      \"status\": \"SUBMITTED\",\n      \"side\": \"BUY\",\n      \"market\": \"BTCUSD\",\n      \"quote_amount\": \"100.00\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "84254945-a4ed-4994-8fd7-3614862a2024",
+          "name": "Get Order",
+          "request": {
+            "name": "Get Order",
+            "description": {
+              "content": "Retrieves the current state of an order.\n- Historical data prior to May 16, 2022 is unavailable.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "profiles",
+                ":profile_id",
+                "orders",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "profile_id",
+                  "description": "(Required) The profile ID associated with the order."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) The UUID of the Order."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "conversion:read_conversion_stablecoin conversion:write_conversion_stablecoin exchange:historical_prices exchange:read_order exchange:read_quote exchange:read_quote_execution exchange:write_quote_execution exchange:write_order fee:write_crypto_withdrawal_fee funding:read_bank_balance funding:read_profile funding:write_profile identity:read_account identity:read_identity identity:write_account identity:write_identity settlement:read_transaction settlement:write_transaction tax:read_tax_form tax:read_tax_lot tax:write_tax_lot transfer:read_deposit_address transfer:read_fiat_account transfer:read_fiat_deposit_instructions transfer:read_transfer transfer:read_transfer_limit transfer:reject_crypto_deposit transfer:update_crypto_deposit transfer:write_crypto_withdrawal transfer:write_deposit_address transfer:write_fiat_account transfer:write_fiat_deposit_instructions transfer:write_internal_transfer transfer:write_sandbox_fiat_deposit transfer:write_fiat_withdrawal events:read_event"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://oauth.paxos.com/oauth2/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "281a5df1-0d00-474b-bbf4-60cf9c124cde",
+              "name": "A successful response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "profiles",
+                    ":profile_id",
+                    "orders",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "profile_id",
+                      "description": "(Required) The profile ID associated with the order."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The UUID of the Order."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"f190b163-208f-4d73-8deb-4fb8b24add00\",\n  \"profile_id\": \"b7b77d82-e6a7-4ae9-9904-36231aedf985\",\n  \"ref_id\": \"my-order-1\",\n  \"status\": \"SUBMITTED\",\n  \"market\": \"ETHUSD\",\n  \"side\": \"BUY\",\n  \"type\": \"LIMIT\",\n  \"price\": \"190.23\",\n  \"base_amount\": \"2.35781498\",\n  \"quote_amount\": \"\",\n  \"metadata\": {\n    \"customer_id\": \"9b8c9cba-801e-4418-adc0-ede709df6339\"\n  },\n  \"amount_filled\": \"0.00000000\",\n  \"volume_weighted_average_price\": \"0.00000000\",\n  \"time_in_force\": \"GTC\",\n  \"is_triggered\": false\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "71aff8db-5535-4e64-b728-8592f2e1ba0c",
+          "name": "Cancel Order",
+          "request": {
+            "name": "Cancel Order",
+            "description": {
+              "content": "Submits a cancellation request. A response indicates that the request has been acknowledged and provides no\nguarantee the order has been cancelled.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "profiles",
+                ":profile_id",
+                "orders",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "profile_id",
+                  "description": "(Required) The profile ID associated with the order."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) The UUID of the Order."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "conversion:read_conversion_stablecoin conversion:write_conversion_stablecoin exchange:historical_prices exchange:read_order exchange:read_quote exchange:read_quote_execution exchange:write_quote_execution exchange:write_order fee:write_crypto_withdrawal_fee funding:read_bank_balance funding:read_profile funding:write_profile identity:read_account identity:read_identity identity:write_account identity:write_identity settlement:read_transaction settlement:write_transaction tax:read_tax_form tax:read_tax_lot tax:write_tax_lot transfer:read_deposit_address transfer:read_fiat_account transfer:read_fiat_deposit_instructions transfer:read_transfer transfer:read_transfer_limit transfer:reject_crypto_deposit transfer:update_crypto_deposit transfer:write_crypto_withdrawal transfer:write_deposit_address transfer:write_fiat_account transfer:write_fiat_deposit_instructions transfer:write_internal_transfer transfer:write_sandbox_fiat_deposit transfer:write_fiat_withdrawal events:read_event"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://oauth.paxos.com/oauth2/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "61eaf265-40b0-4c14-947e-295f30787b24",
+              "name": "A successful response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "profiles",
+                    ":profile_id",
+                    "orders",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "profile_id",
+                      "description": "(Required) The profile ID associated with the order."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The UUID of the Order."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a6c9bb35-901b-4e31-ba49-4140ad03d3e3",
+              "name": "Could not cancel order",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "profiles",
+                    ":profile_id",
+                    "orders",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "profile_id",
+                      "description": "(Required) The profile ID associated with the order."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The UUID of the Order."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/problem+json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/problem+json"
+                }
+              ],
+              "body": "{\n  \"type\": \"about:blank\",\n  \"title\": \"Forbidden\",\n  \"status\": 403,\n  \"detail\": \"order is not in cancellable state\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.paxos.com/v2",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "529aa18e-5d34-4c13-b29d-a66dd33ce951",
+    "name": "Paxos Account Members Orders API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "<p>Welcome to Paxos APIs. At Paxos, our mission is to enable the movement of any asset, any time, in a trustworthy way. These APIs serve that mission by making it easier than ever for you to directly integrate our product capabilities into your application, leveraging the speed, stability, and security of the Paxos platform.</p> <p>The documentation that follows gives you access to our Crypto Brokerage, Trading, and Exchange products. It includes APIs for market data, orders, and the held rate quote flow.</p> <p>To test in our sandbox environment, <a href=\"https://account.sandbox.paxos.com\" target=\"_blank\">sign up</a> for an account. For more information about Paxos and our APIs, visit <a href=\"https://www.paxos.com/\" target=\"_blank\">Paxos.com</a>.</p>\n",
+      "type": "text/plain"
+    }
+  }
+}

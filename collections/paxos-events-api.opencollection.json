@@ -1,0 +1,134 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Paxos Account Members Events API",
+    "version": "2.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Events",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Events",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.paxos.com/v2/events",
+            "params": [
+              {
+                "name": "created_at.lt",
+                "value": "",
+                "type": "query",
+                "description": "Include timestamps strictly less than lt. RFC3339 format, like `2006-01-02T15:04:05Z`."
+              },
+              {
+                "name": "created_at.lte",
+                "value": "",
+                "type": "query",
+                "description": "Include timestamps less than or equal to lte. RFC3339 format, like `2006-01-02T15:04:05Z`."
+              },
+              {
+                "name": "created_at.eq",
+                "value": "",
+                "type": "query",
+                "description": "Include timestamps exactly equal to eq. RFC3339 format, like `2006-01-02T15:04:05Z`."
+              },
+              {
+                "name": "created_at.gte",
+                "value": "",
+                "type": "query",
+                "description": "Include timestamps greater than or equal to gte. RFC3339 format, like `2006-01-02T15:04:05Z`."
+              },
+              {
+                "name": "created_at.gt",
+                "value": "",
+                "type": "query",
+                "description": "Include timestamps strictly greater than gt. RFC3339 format, like `2006-01-02T15:04:05Z`."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of results to return. Defaults to 100 if no limit is provided."
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "Retrieve all (default) or optionally filter by event type."
+              },
+              {
+                "name": "is_test",
+                "value": "",
+                "type": "query",
+                "description": "Filter for test events (true) or real events (false). Defaults to false (real events only)."
+              },
+              {
+                "name": "order",
+                "value": "",
+                "type": "query",
+                "description": "Sort order for results by created_at. Defaults to ASC (oldest first)."
+              },
+              {
+                "name": "page_cursor",
+                "value": "",
+                "type": "query",
+                "description": "Cursor from a previous response to fetch the next page."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://oauth.paxos.com/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "This endpoint enables you to fetch a list of events that have been created by the system.\nYou can use query parameters to filter the results by the `created_at` time using `created_at.lt`, `created_at.gt`, etc. and you can\n`limit` the number of events returned.\n\nUse `page_cursor` from the previous response to paginate through results. Use `order` to control sort direction (ASC or DESC by created_at).\nEvents returned will be ordered by `created_at` in ascending order by default."
+        },
+        {
+          "info": {
+            "name": "Get Event",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.paxos.com/v2/events/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The unique `id` in the `Event` object."
+              },
+              {
+                "name": "is_test",
+                "value": "",
+                "type": "query",
+                "description": "Filter for test events (true) or real events (false). Defaults to false (real events only)."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://oauth.paxos.com/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Get an Event by its (event) id, the event must have been created by the system and you must be the owner of the\nthe event, you can get an event id by either listing events or via a webhook integration."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

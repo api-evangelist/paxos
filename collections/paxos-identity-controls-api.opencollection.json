@@ -1,0 +1,122 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Paxos Account Members Identity Controls API",
+    "version": "2.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Identity Controls",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Identity Controls",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.paxos.com/v2/identity/controls",
+            "params": [
+              {
+                "name": "identity_id",
+                "value": "",
+                "type": "query",
+                "description": "The Identity ID whose controls to retrieve."
+              },
+              {
+                "name": "include_deleted",
+                "value": "",
+                "type": "query",
+                "description": "Include deleted controls in the response."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of results to return. Defaults to 100 if no limit is provided. Maximum 1000."
+              },
+              {
+                "name": "page_cursor",
+                "value": "",
+                "type": "query",
+                "description": "Cursor for getting the next page of results."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://oauth.paxos.com/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "List identity controls associated with an identity."
+        },
+        {
+          "info": {
+            "name": "Create Identity Control",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.paxos.com/v2/identity/controls",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://oauth.paxos.com/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Create a new identity control on an identity."
+        },
+        {
+          "info": {
+            "name": "Delete Identity Control",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.paxos.com/v2/identity/controls",
+            "params": [
+              {
+                "name": "control_id",
+                "value": "",
+                "type": "query",
+                "description": "The control ID to be deleted."
+              },
+              {
+                "name": "reason",
+                "value": "",
+                "type": "query",
+                "description": "Reason for deleting the identity control."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://oauth.paxos.com/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Delete an identity control on an identity."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

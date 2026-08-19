@@ -1,0 +1,220 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Paxos Account Members Address Verification API",
+    "version": "2.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Address Verification",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List address verifications",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.paxos.com/v2/addresses/verifications",
+            "params": [
+              {
+                "name": "verification_method",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "order",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "order_by",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "page_cursor",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "created_at.lt",
+                "value": "",
+                "type": "query",
+                "description": "Include timestamps strictly less than lt. RFC3339 format, like `2006-01-02T15:04:05Z`."
+              },
+              {
+                "name": "created_at.lte",
+                "value": "",
+                "type": "query",
+                "description": "Include timestamps less than or equal to lte. RFC3339 format, like `2006-01-02T15:04:05Z`."
+              },
+              {
+                "name": "created_at.eq",
+                "value": "",
+                "type": "query",
+                "description": "Include timestamps exactly equal to eq. RFC3339 format, like `2006-01-02T15:04:05Z`."
+              },
+              {
+                "name": "created_at.gte",
+                "value": "",
+                "type": "query",
+                "description": "Include timestamps greater than or equal to gte. RFC3339 format, like `2006-01-02T15:04:05Z`."
+              },
+              {
+                "name": "created_at.gt",
+                "value": "",
+                "type": "query",
+                "description": "Include timestamps strictly greater than gt. RFC3339 format, like `2006-01-02T15:04:05Z`."
+              },
+              {
+                "name": "deposit_address",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "network",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "address",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "updated_at.lt",
+                "value": "",
+                "type": "query",
+                "description": "Include timestamps strictly less than lt. RFC3339 format, like `2006-01-02T15:04:05Z`."
+              },
+              {
+                "name": "updated_at.lte",
+                "value": "",
+                "type": "query",
+                "description": "Include timestamps less than or equal to lte. RFC3339 format, like `2006-01-02T15:04:05Z`."
+              },
+              {
+                "name": "updated_at.eq",
+                "value": "",
+                "type": "query",
+                "description": "Include timestamps exactly equal to eq. RFC3339 format, like `2006-01-02T15:04:05Z`."
+              },
+              {
+                "name": "updated_at.gte",
+                "value": "",
+                "type": "query",
+                "description": "Include timestamps greater than or equal to gte. RFC3339 format, like `2006-01-02T15:04:05Z`."
+              },
+              {
+                "name": "updated_at.gt",
+                "value": "",
+                "type": "query",
+                "description": "Include timestamps strictly greater than gt. RFC3339 format, like `2006-01-02T15:04:05Z`."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://oauth.paxos.com/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "List address verifications"
+        },
+        {
+          "info": {
+            "name": "Create address verification",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.paxos.com/v2/addresses/verifications",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://oauth.paxos.com/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "For SIGNATURE method: EVM messages follow EIP-191; Solana messages are JSON payloads signed with ed25519."
+        },
+        {
+          "info": {
+            "name": "Submit address verification signature",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.paxos.com/v2/addresses/verifications/signature",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://oauth.paxos.com/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Submit address verification signature"
+        },
+        {
+          "info": {
+            "name": "Get address verification",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.paxos.com/v2/addresses/verifications/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://oauth.paxos.com/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Get address verification"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

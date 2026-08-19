@@ -1,0 +1,581 @@
+{
+  "item": [
+    {
+      "id": "ddf0ffd2-c0a3-46e8-9fb1-a63c258f32f6",
+      "name": "Orchestrations",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "40c2d33e-d88f-44d4-8ec2-fdd2e0610527",
+          "name": "List Orchestrations",
+          "request": {
+            "name": "List Orchestrations",
+            "description": {
+              "content": "List all orchestrations, optionally filtering and paging the results.\n\nBy default, orchestrations are returned in reverse chronological (descending)\norder by creation time. If no query parameters are supplied,\nthe response will include up to the last 100 orchestrations which\nwere created.\n\nThe paginated results default to display up to 100 orchestrations, unless\notherwise specified with the `limit` parameter. The maximum `limit` value is 1000.\nEvery paginated response contains a `next_page_cursor` field until the last page is reached.\n\nPass the `next_page_cursor` value into the `page_cursor` field of a new\nrequest to retrieve the next page of results.\n\nWhen filtering by profile IDs using the `profile_ids` parameter, there is a limit of 100 profiles\nthat can be specified in a single request.\n\nOrchestrations are provided for various operations including:\n- Deposits to a paxos-platform crypto address or bank account\n- Withdrawals to a customer-owned crypto address or bank account\n- Conversions from one asset to another\n- Orchestrated workflows involving some or all of the above\n- Invocation of an Orchestration Rule",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "orchestration",
+                "orchestrations"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "orchestration_rule_id",
+                  "value": "<string>",
+                  "description": "Optionally filter by the initiating orchestration rule ids. There is a limit of 100 orchestration rule ids that can be specified in a single request."
+                },
+                {
+                  "disabled": false,
+                  "key": "orchestration_rule_id",
+                  "value": "<string>",
+                  "description": "Optionally filter by the initiating orchestration rule ids. There is a limit of 100 orchestration rule ids that can be specified in a single request."
+                },
+                {
+                  "disabled": false,
+                  "key": "source_asset",
+                  "value": "<string>",
+                  "description": "Optionally filter by source assets. There is a limit of 100 source assets that can be specified in a single request."
+                },
+                {
+                  "disabled": false,
+                  "key": "source_asset",
+                  "value": "<string>",
+                  "description": "Optionally filter by source assets. There is a limit of 100 source assets that can be specified in a single request."
+                },
+                {
+                  "disabled": false,
+                  "key": "destination_asset",
+                  "value": "<string>",
+                  "description": "Optionally filter by destination assets. There is a limit of 100 destination assets ids that can be specified in a single request."
+                },
+                {
+                  "disabled": false,
+                  "key": "destination_asset",
+                  "value": "<string>",
+                  "description": "Optionally filter by destination assets. There is a limit of 100 destination assets ids that can be specified in a single request."
+                },
+                {
+                  "disabled": false,
+                  "key": "status",
+                  "value": "<string>",
+                  "description": "Optionally filter by statuses. There is a limit of 100 statuses that can be specified in a single request."
+                },
+                {
+                  "disabled": false,
+                  "key": "status",
+                  "value": "<string>",
+                  "description": "Optionally filter by statuses. There is a limit of 100 statuses that can be specified in a single request."
+                },
+                {
+                  "disabled": false,
+                  "key": "created_at.lt",
+                  "value": "<dateTime>",
+                  "description": "Include timestamps strictly less than lt. RFC3339 format, like `2006-01-02T15:04:05Z`."
+                },
+                {
+                  "disabled": false,
+                  "key": "created_at.lte",
+                  "value": "<dateTime>",
+                  "description": "Include timestamps less than or equal to lte. RFC3339 format, like `2006-01-02T15:04:05Z`."
+                },
+                {
+                  "disabled": false,
+                  "key": "created_at.eq",
+                  "value": "<dateTime>",
+                  "description": "Include timestamps exactly equal to eq. RFC3339 format, like `2006-01-02T15:04:05Z`."
+                },
+                {
+                  "disabled": false,
+                  "key": "created_at.gte",
+                  "value": "<dateTime>",
+                  "description": "Include timestamps greater than or equal to gte. RFC3339 format, like `2006-01-02T15:04:05Z`."
+                },
+                {
+                  "disabled": false,
+                  "key": "created_at.gt",
+                  "value": "<dateTime>",
+                  "description": "Include timestamps strictly greater than gt. RFC3339 format, like `2006-01-02T15:04:05Z`."
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "<integer>",
+                  "description": "Number of results to return. Defaults to 100 if no limit is provided. Maximum 1000."
+                },
+                {
+                  "disabled": false,
+                  "key": "order",
+                  "value": "<string>",
+                  "description": "Sort order for the results. Defaults to DESC by created_at time."
+                },
+                {
+                  "disabled": false,
+                  "key": "page_cursor",
+                  "value": "<string>",
+                  "description": "Optional Cursor for getting the next page of results."
+                },
+                {
+                  "disabled": false,
+                  "key": "orchestration_id",
+                  "value": "<string>",
+                  "description": "Optionally filter by a list of orchestration IDs. There is a limit of 100 orchestration ids that can be specified in a single request."
+                },
+                {
+                  "disabled": false,
+                  "key": "orchestration_id",
+                  "value": "<string>",
+                  "description": "Optionally filter by a list of orchestration IDs. There is a limit of 100 orchestration ids that can be specified in a single request."
+                },
+                {
+                  "disabled": false,
+                  "key": "profile_id",
+                  "value": "<string>",
+                  "description": "Optionally filter by the target profiles. There is a limit of 100 profiles that can be specified in a single request."
+                },
+                {
+                  "disabled": false,
+                  "key": "profile_id",
+                  "value": "<string>",
+                  "description": "Optionally filter by the target profiles. There is a limit of 100 profiles that can be specified in a single request."
+                },
+                {
+                  "disabled": false,
+                  "key": "ref_id",
+                  "value": "<string>",
+                  "description": "Optionally filter by client-provided reference IDs. There is a limit of 100 ref_ids that can be specified in a single request."
+                },
+                {
+                  "disabled": false,
+                  "key": "ref_id",
+                  "value": "<string>",
+                  "description": "Optionally filter by client-provided reference IDs. There is a limit of 100 ref_ids that can be specified in a single request."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "conversion:read_conversion_stablecoin conversion:write_conversion_stablecoin exchange:historical_prices exchange:read_order exchange:read_quote exchange:read_quote_execution exchange:write_quote_execution exchange:write_order fee:write_crypto_withdrawal_fee funding:read_bank_balance funding:read_profile funding:write_profile identity:read_account identity:read_identity identity:write_account identity:write_identity settlement:read_transaction settlement:write_transaction tax:read_tax_form tax:read_tax_lot tax:write_tax_lot transfer:read_deposit_address transfer:read_fiat_account transfer:read_fiat_deposit_instructions transfer:read_transfer transfer:read_transfer_limit transfer:reject_crypto_deposit transfer:update_crypto_deposit transfer:write_crypto_withdrawal transfer:write_deposit_address transfer:write_fiat_account transfer:write_fiat_deposit_instructions transfer:write_internal_transfer transfer:write_sandbox_fiat_deposit transfer:write_fiat_withdrawal events:read_event"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://oauth.paxos.com/oauth2/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "971be966-988e-4828-9906-4b283b226625",
+              "name": "A successful response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orchestration",
+                    "orchestrations"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "orchestration_rule_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "orchestration_rule_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "source_asset",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "source_asset",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "destination_asset",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "destination_asset",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "status",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "status",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "created_at.lt",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "created_at.lte",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "created_at.eq",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "created_at.gte",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "created_at.gt",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "order",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "page_cursor",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "orchestration_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "orchestration_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "profile_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "profile_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "ref_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "ref_id",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"orchestrations\": [\n    {\n      \"profile_id\": \"7c4e8f2a-1d3b-4a5e-9f6c-8b2d7e0a4f1c\",\n      \"customer_id\": \"a1b2c3d4-5e6f-7a8b-9c0d-e1f2a3b4c5d6\",\n      \"ref_id\": \"orch-usdc-usdg-a3b1c2d4\",\n      \"source_asset\": \"USDC\",\n      \"destination_asset\": \"USDG\",\n      \"source_amount\": \"100\",\n      \"status\": \"PROCESSING\",\n      \"source\": {\n        \"profile\": {\n          \"profile_id\": \"7c4e8f2a-1d3b-4a5e-9f6c-8b2d7e0a4f1c\"\n        }\n      },\n      \"destination\": {\n        \"crypto\": {\n          \"address_id\": \"d4e5f6a7-8b9c-0d1e-2f3a-b4c5d6e7f8a9\"\n        }\n      },\n      \"created_at\": \"2026-04-20T12:30:01.397730Z\",\n      \"updated_at\": \"2026-04-20T12:30:01.397730Z\",\n      \"metadata\": {\n        \"my_id\": \"4f8a2b6c-9d1e-4c3a-b5f7-0e2d8a7c1b9f\"\n      }\n    },\n    {\n      \"profile_id\": \"7c4e8f2a-1d3b-4a5e-9f6c-8b2d7e0a4f1c\",\n      \"customer_id\": \"a1b2c3d4-5e6f-7a8b-9c0d-e1f2a3b4c5d6\",\n      \"ref_id\": \"orch-usdc-usdg-a3b1c2d4\",\n      \"source_asset\": \"USDC\",\n      \"destination_asset\": \"USDG\",\n      \"source_amount\": \"100\",\n      \"status\": \"PROCESSING\",\n      \"source\": {\n        \"profile\": {\n          \"profile_id\": \"7c4e8f2a-1d3b-4a5e-9f6c-8b2d7e0a4f1c\"\n        }\n      },\n      \"destination\": {\n        \"crypto\": {\n          \"address_id\": \"d4e5f6a7-8b9c-0d1e-2f3a-b4c5d6e7f8a9\"\n        }\n      },\n      \"created_at\": \"2026-04-20T12:30:01.397730Z\",\n      \"updated_at\": \"2026-04-20T12:30:01.397730Z\",\n      \"metadata\": {\n        \"my_id\": \"4f8a2b6c-9d1e-4c3a-b5f7-0e2d8a7c1b9f\"\n      }\n    }\n  ],\n  \"next_page_cursor\": \"string\",\n  \"items\": [\n    {\n      \"profile_id\": \"7c4e8f2a-1d3b-4a5e-9f6c-8b2d7e0a4f1c\",\n      \"customer_id\": \"a1b2c3d4-5e6f-7a8b-9c0d-e1f2a3b4c5d6\",\n      \"ref_id\": \"orch-usdc-usdg-a3b1c2d4\",\n      \"source_asset\": \"USDC\",\n      \"destination_asset\": \"USDG\",\n      \"source_amount\": \"100\",\n      \"status\": \"PROCESSING\",\n      \"source\": {\n        \"profile\": {\n          \"profile_id\": \"7c4e8f2a-1d3b-4a5e-9f6c-8b2d7e0a4f1c\"\n        }\n      },\n      \"destination\": {\n        \"crypto\": {\n          \"address_id\": \"d4e5f6a7-8b9c-0d1e-2f3a-b4c5d6e7f8a9\"\n        }\n      },\n      \"created_at\": \"2026-04-20T12:30:01.397730Z\",\n      \"updated_at\": \"2026-04-20T12:30:01.397730Z\",\n      \"metadata\": {\n        \"my_id\": \"4f8a2b6c-9d1e-4c3a-b5f7-0e2d8a7c1b9f\"\n      }\n    },\n    {\n      \"profile_id\": \"7c4e8f2a-1d3b-4a5e-9f6c-8b2d7e0a4f1c\",\n      \"customer_id\": \"a1b2c3d4-5e6f-7a8b-9c0d-e1f2a3b4c5d6\",\n      \"ref_id\": \"orch-usdc-usdg-a3b1c2d4\",\n      \"source_asset\": \"USDC\",\n      \"destination_asset\": \"USDG\",\n      \"source_amount\": \"100\",\n      \"status\": \"PROCESSING\",\n      \"source\": {\n        \"profile\": {\n          \"profile_id\": \"7c4e8f2a-1d3b-4a5e-9f6c-8b2d7e0a4f1c\"\n        }\n      },\n      \"destination\": {\n        \"crypto\": {\n          \"address_id\": \"d4e5f6a7-8b9c-0d1e-2f3a-b4c5d6e7f8a9\"\n        }\n      },\n      \"created_at\": \"2026-04-20T12:30:01.397730Z\",\n      \"updated_at\": \"2026-04-20T12:30:01.397730Z\",\n      \"metadata\": {\n        \"my_id\": \"4f8a2b6c-9d1e-4c3a-b5f7-0e2d8a7c1b9f\"\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "144a58c6-f9b1-463e-98df-c34d7573062b",
+          "name": "Create Orchestration",
+          "request": {
+            "name": "Create Orchestration",
+            "description": {
+              "content": "Creates a one-time orchestration that moves assets from a source profile to a destination.\nUse this endpoint when funds already reside on the Paxos platform and need to be transferred or converted as part of a single workflow.\n\nA request to create an orchestration can fail with one of the following\ntypes of errors:\n - [Insufficient Funds](https://developer.paxos.com/docs/v2/problems/insufficient-funds)\n   if the Profile (`profile_id`) has insufficient available balance to\n   fund the execution.\n - [Already Exists](https://developer.paxos.com/docs/v2/problems/already-exists)\n   if an orchestration with the same external ID (`ref_id`) has already been created.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "orchestration",
+                "orchestrations"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "conversion:read_conversion_stablecoin conversion:write_conversion_stablecoin exchange:historical_prices exchange:read_order exchange:read_quote exchange:read_quote_execution exchange:write_quote_execution exchange:write_order fee:write_crypto_withdrawal_fee funding:read_bank_balance funding:read_profile funding:write_profile identity:read_account identity:read_identity identity:write_account identity:write_identity settlement:read_transaction settlement:write_transaction tax:read_tax_form tax:read_tax_lot tax:write_tax_lot transfer:read_deposit_address transfer:read_fiat_account transfer:read_fiat_deposit_instructions transfer:read_transfer transfer:read_transfer_limit transfer:reject_crypto_deposit transfer:update_crypto_deposit transfer:write_crypto_withdrawal transfer:write_deposit_address transfer:write_fiat_account transfer:write_fiat_deposit_instructions transfer:write_internal_transfer transfer:write_sandbox_fiat_deposit transfer:write_fiat_withdrawal events:read_event"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://oauth.paxos.com/oauth2/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"ref_id\": \"<string>\",\n  \"source_asset\": \"<string>\",\n  \"destination_asset\": \"<string>\",\n  \"source_amount\": \"<decimal>\",\n  \"identity_id\": \"<string>\",\n  \"account_id\": \"<string>\",\n  \"source\": {\n    \"profile\": {\n      \"profile_id\": \"<string>\"\n    }\n  },\n  \"destination\": {\n    \"crypto\": {\n      \"address\": \"<string>\",\n      \"network\": \"<string>\",\n      \"address_id\": \"<string>\"\n    },\n    \"fiat\": {\n      \"bank_account_id\": \"<string>\",\n      \"memo\": \"<string>\"\n    },\n    \"profile\": {\n      \"profile_id\": \"<string>\"\n    }\n  },\n  \"metadata\": {\n    \"key_0\": \"<string>\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "bcc7c5b8-1c04-4ba4-beac-de528ba47f47",
+              "name": "A successful response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orchestration",
+                    "orchestrations"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"ref_id\": \"orch-usdc-usdg-a3b1c2d4\",\n  \"identity_id\": \"b2c3d4e5-6f7a-8b9c-0d1e-f2a3b4c5d6e7\",\n  \"account_id\": \"c3d4e5f6-7a8b-9c0d-1e2f-a3b4c5d6e7f8\",\n  \"source_asset\": \"USDC\",\n  \"source_amount\": \"100\",\n  \"destination_asset\": \"USDG\",\n  \"source\": {\n    \"profile\": {\n      \"profile_id\": \"7c4e8f2a-1d3b-4a5e-9f6c-8b2d7e0a4f1c\"\n    }\n  },\n  \"destination\": {\n    \"crypto\": {\n      \"address_id\": \"d4e5f6a7-8b9c-0d1e-2f3a-b4c5d6e7f8a9\"\n    }\n  },\n  \"metadata\": {\n    \"my_id\": \"4f8a2b6c-9d1e-4c3a-b5f7-0e2d8a7c1b9f\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"profile_id\": \"7c4e8f2a-1d3b-4a5e-9f6c-8b2d7e0a4f1c\",\n  \"customer_id\": \"a1b2c3d4-5e6f-7a8b-9c0d-e1f2a3b4c5d6\",\n  \"ref_id\": \"orch-usdc-usdg-a3b1c2d4\",\n  \"source_asset\": \"USDC\",\n  \"destination_asset\": \"USDG\",\n  \"source_amount\": \"100\",\n  \"status\": \"PROCESSING\",\n  \"source\": {\n    \"profile\": {\n      \"profile_id\": \"7c4e8f2a-1d3b-4a5e-9f6c-8b2d7e0a4f1c\"\n    }\n  },\n  \"destination\": {\n    \"crypto\": {\n      \"address_id\": \"d4e5f6a7-8b9c-0d1e-2f3a-b4c5d6e7f8a9\"\n    }\n  },\n  \"created_at\": \"2026-04-20T12:30:01.397730Z\",\n  \"updated_at\": \"2026-04-20T12:30:01.397730Z\",\n  \"metadata\": {\n    \"my_id\": \"4f8a2b6c-9d1e-4c3a-b5f7-0e2d8a7c1b9f\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "996c1352-a53e-45cb-a024-40470f056ca4",
+          "name": "Get Orchestration",
+          "request": {
+            "name": "Get Orchestration",
+            "description": {
+              "content": "Retreives a specific orchestration using its orchestration ID.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "orchestration",
+                "orchestrations",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "conversion:read_conversion_stablecoin conversion:write_conversion_stablecoin exchange:historical_prices exchange:read_order exchange:read_quote exchange:read_quote_execution exchange:write_quote_execution exchange:write_order fee:write_crypto_withdrawal_fee funding:read_bank_balance funding:read_profile funding:write_profile identity:read_account identity:read_identity identity:write_account identity:write_identity settlement:read_transaction settlement:write_transaction tax:read_tax_form tax:read_tax_lot tax:write_tax_lot transfer:read_deposit_address transfer:read_fiat_account transfer:read_fiat_deposit_instructions transfer:read_transfer transfer:read_transfer_limit transfer:reject_crypto_deposit transfer:update_crypto_deposit transfer:write_crypto_withdrawal transfer:write_deposit_address transfer:write_fiat_account transfer:write_fiat_deposit_instructions transfer:write_internal_transfer transfer:write_sandbox_fiat_deposit transfer:write_fiat_withdrawal events:read_event"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://oauth.paxos.com/oauth2/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "9c8936b0-a390-4e47-98c8-4d576ed5ffe6",
+              "name": "A successful response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orchestration",
+                    "orchestrations",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"profile_id\": \"7c4e8f2a-1d3b-4a5e-9f6c-8b2d7e0a4f1c\",\n  \"customer_id\": \"a1b2c3d4-5e6f-7a8b-9c0d-e1f2a3b4c5d6\",\n  \"ref_id\": \"orch-usdc-usdg-a3b1c2d4\",\n  \"source_asset\": \"USDC\",\n  \"destination_asset\": \"USDG\",\n  \"source_amount\": \"100\",\n  \"status\": \"PROCESSING\",\n  \"source\": {\n    \"profile\": {\n      \"profile_id\": \"7c4e8f2a-1d3b-4a5e-9f6c-8b2d7e0a4f1c\"\n    }\n  },\n  \"destination\": {\n    \"crypto\": {\n      \"address_id\": \"d4e5f6a7-8b9c-0d1e-2f3a-b4c5d6e7f8a9\"\n    }\n  },\n  \"created_at\": \"2026-04-20T12:30:01.397730Z\",\n  \"updated_at\": \"2026-04-20T12:30:01.397730Z\",\n  \"metadata\": {\n    \"my_id\": \"4f8a2b6c-9d1e-4c3a-b5f7-0e2d8a7c1b9f\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.paxos.com/v2",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "440ce148-e7c1-40f0-bf74-2a24b9c0b216",
+    "name": "Paxos Account Members Orchestrations API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "<p>Welcome to Paxos APIs. At Paxos, our mission is to enable the movement of any asset, any time, in a trustworthy way. These APIs serve that mission by making it easier than ever for you to directly integrate our product capabilities into your application, leveraging the speed, stability, and security of the Paxos platform.</p> <p>The documentation that follows gives you access to our Crypto Brokerage, Trading, and Exchange products. It includes APIs for market data, orders, and the held rate quote flow.</p> <p>To test in our sandbox environment, <a href=\"https://account.sandbox.paxos.com\" target=\"_blank\">sign up</a> for an account. For more information about Paxos and our APIs, visit <a href=\"https://www.paxos.com/\" target=\"_blank\">Paxos.com</a>.</p>\n",
+      "type": "text/plain"
+    }
+  }
+}

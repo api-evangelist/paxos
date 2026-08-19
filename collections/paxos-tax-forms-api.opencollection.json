@@ -1,0 +1,104 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Paxos Account Members Tax Forms API",
+    "version": "2.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Tax Forms",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Tax Form Revisions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.paxos.com/v2/tax/tax-form-revisions",
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "query",
+                "description": "Required. Account ID"
+              },
+              {
+                "name": "tax_year",
+                "value": "",
+                "type": "query",
+                "description": "Required. Tax Year"
+              },
+              {
+                "name": "form_types",
+                "value": "",
+                "type": "query",
+                "description": "Optional. Tax form types (1099-B, 1099-MISC, 1099-DA). If not provided, defaults to 1099-B for tax years prior to 2025, and 1099-DA from 2025 onwards."
+              },
+              {
+                "name": "revision",
+                "value": "",
+                "type": "query",
+                "description": "Revision"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://oauth.paxos.com/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Used for more granular file retrieval for specific accounts that require updated tax forms.\nLists all versions of a tax form for single account and tax year. Revisions will increment up as new tax forms are issued for the same account, tax year, and form type pairing. The highest value revision is the most recent.\nTax Form URL links will expire after 60 seconds.\nSupported form types: 1099-B, 1099-MISC, and 1099-DA. If form_types is not provided, defaults to 1099-B for tax years prior to 2025, an"
+        },
+        {
+          "info": {
+            "name": "List Tax Forms",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.paxos.com/v2/tax/tax-forms",
+            "params": [
+              {
+                "name": "account_ids",
+                "value": "",
+                "type": "query",
+                "description": "Required. A list of Account IDs. Maximum 50."
+              },
+              {
+                "name": "tax_year",
+                "value": "",
+                "type": "query",
+                "description": "Required. Tax year"
+              },
+              {
+                "name": "form_types",
+                "value": "",
+                "type": "query",
+                "description": "Optional. Tax form types (1099-B, 1099-MISC, 1099-DA). If not provided, defaults to 1099-B for tax years prior to 2025, and 1099-DA from 2025 onwards."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://oauth.paxos.com/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Used for bulk file transfer use cases.\nList tax forms for given account ids and tax year. The most recent revision number will be returned (revisions increment up; highest value revision for a specific account, tax year, and form type pairing is the most recent).\nTax Form URL links will expire after 60 seconds.\nPlease call ListTaxFormRevisions endpoint for all versions of a single accounts tax forms.\nSupported form types: 1099-B, 1099-MISC, and 1099-DA. If form_types is not provided, defaults to"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

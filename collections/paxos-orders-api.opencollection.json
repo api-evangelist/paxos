@@ -1,0 +1,264 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Paxos Account Members Orders API",
+    "version": "2.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Orders",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Executions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.paxos.com/v2/executions",
+            "params": [
+              {
+                "name": "profile_id",
+                "value": "",
+                "type": "query",
+                "description": "Filter executions by the Profile ID associated with the orders."
+              },
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "query",
+                "description": "Filter executions by the Account ID associated with the orders."
+              },
+              {
+                "name": "order_id",
+                "value": "",
+                "type": "query",
+                "description": "Filter executions for a single order ID."
+              },
+              {
+                "name": "since_execution_id",
+                "value": "",
+                "type": "query",
+                "description": "Excludes executions after the given ID."
+              },
+              {
+                "name": "range.begin",
+                "value": "",
+                "type": "query",
+                "description": "Only return records after this timestamp, inclusive. RFC3339 format, like `2006-01-02T15:04:05Z`."
+              },
+              {
+                "name": "range.end",
+                "value": "",
+                "type": "query",
+                "description": "Only return records before this timestamp, inclusive. RFC3339 format, like `2006-01-02T15:04:05Z`."
+              },
+              {
+                "name": "page_cursor",
+                "value": "",
+                "type": "query",
+                "description": "Cursor token for fetching the next page."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of results to return."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://oauth.paxos.com/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Retrieves full details of underlying executions with optional filters.\nNotes:\n- This endpoint returns a maximum of 1000 items per page.\n- Filtering options are `account_id`, `profile_id` or neither (all executions)."
+        },
+        {
+          "info": {
+            "name": "List Orders",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.paxos.com/v2/orders",
+            "params": [
+              {
+                "name": "profile_id",
+                "value": "",
+                "type": "query",
+                "description": "The profile associated with the orders."
+              },
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "query",
+                "description": "The account under which these orders are placed."
+              },
+              {
+                "name": "market",
+                "value": "",
+                "type": "query",
+                "description": "Filter by the trading pair."
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Filter by the status of the order."
+              },
+              {
+                "name": "order_time.begin",
+                "value": "",
+                "type": "query",
+                "description": "Only return records after this timestamp, inclusive. RFC3339 format, like `2006-01-02T15:04:05Z`."
+              },
+              {
+                "name": "order_time.end",
+                "value": "",
+                "type": "query",
+                "description": "Only return records before this timestamp, inclusive. RFC3339 format, like `2006-01-02T15:04:05Z`."
+              },
+              {
+                "name": "ref_ids",
+                "value": "",
+                "type": "query",
+                "description": "The idempotence IDs provided during order creation."
+              },
+              {
+                "name": "page_cursor",
+                "value": "",
+                "type": "query",
+                "description": "Cursor token for fetching the next page. If using this then do not use paginationLimit and paginationOffset fields."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of results to return. If using this then do not use paginationLimit and paginationOffset fields."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://oauth.paxos.com/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Retrieves full details of orders associated with a Profile ID, with optional filters.\n\n- Historical data prior to May 16, 2022 is unavailable.\n- Pagination Limit has a max of 1000. Pagination Offset is now deprecated and nonfunctional.\n- Filtering options are `account_id`, `profile_id` or neither (all orders)."
+        },
+        {
+          "info": {
+            "name": "Create Order",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.paxos.com/v2/profiles/:profile_id/orders",
+            "params": [
+              {
+                "name": "profile_id",
+                "value": "",
+                "type": "path",
+                "description": "The profileId the order will be associated with."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://oauth.paxos.com/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "For limit orders, create an order for buying or selling an asset:\n\n- To buy, set `side = BUY` and set `base_amount` to the crypto amount you want to buy.\n- To sell, set `side = SELL` and set `base_amount` to the crypto amount you want to sell.\n\nFor market orders, create an order for buying or selling an asset:\n\n- To buy, set `side = BUY` and set `quote_amount` to the dollar amount you want to spend.\n- To sell, set `side = SELL` and set `base_amount` to the crypto amount you want to sell.\n\nThere "
+        },
+        {
+          "info": {
+            "name": "Get Order",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.paxos.com/v2/profiles/:profile_id/orders/:id",
+            "params": [
+              {
+                "name": "profile_id",
+                "value": "",
+                "type": "path",
+                "description": "The profile ID associated with the order."
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The UUID of the Order."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://oauth.paxos.com/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Retrieves the current state of an order.\n- Historical data prior to May 16, 2022 is unavailable."
+        },
+        {
+          "info": {
+            "name": "Cancel Order",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.paxos.com/v2/profiles/:profile_id/orders/:id",
+            "params": [
+              {
+                "name": "profile_id",
+                "value": "",
+                "type": "path",
+                "description": "The profile ID associated with the order."
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The UUID of the Order."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://oauth.paxos.com/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Submits a cancellation request. A response indicates that the request has been acknowledged and provides no\nguarantee the order has been cancelled."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

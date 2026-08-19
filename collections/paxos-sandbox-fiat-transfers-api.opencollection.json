@@ -1,0 +1,42 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Paxos Account Members Sandbox Fiat Transfers API",
+    "version": "2.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Sandbox Fiat Transfers",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Initiate Sandbox Fiat Deposit",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.paxos.com/v2/sandbox/fiat-deposits",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://oauth.paxos.com/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Initiate a test fiat deposit in the sandbox environment.\n\nThe deposit will be processed based on `memo_id` from a previous Fiat Deposit Instructions response.\n\n*This functionality is only available in the sandbox environment.*"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

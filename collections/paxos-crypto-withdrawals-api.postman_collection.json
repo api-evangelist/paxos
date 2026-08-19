@@ -1,0 +1,720 @@
+{
+  "item": [
+    {
+      "id": "86f8accb-ccdd-4ab4-a2f4-e62f60b4b2a4",
+      "name": "Crypto Withdrawals",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "ab6be3a1-f69e-4151-925c-868f1aca7f9f",
+          "name": "Put Crypto Destination Addresses",
+          "request": {
+            "name": "Put Crypto Destination Addresses",
+            "description": {
+              "content": "Updates a specified crypto destination address. If the address does not exist, it will be created",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "transfer",
+                "crypto-destination-address"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "conversion:read_conversion_stablecoin conversion:write_conversion_stablecoin exchange:historical_prices exchange:read_order exchange:read_quote exchange:read_quote_execution exchange:write_quote_execution exchange:write_order fee:write_crypto_withdrawal_fee funding:read_bank_balance funding:read_profile funding:write_profile identity:read_account identity:read_identity identity:write_account identity:write_identity settlement:read_transaction settlement:write_transaction tax:read_tax_form tax:read_tax_lot tax:write_tax_lot transfer:read_deposit_address transfer:read_fiat_account transfer:read_fiat_deposit_instructions transfer:read_transfer transfer:read_transfer_limit transfer:reject_crypto_deposit transfer:update_crypto_deposit transfer:write_crypto_withdrawal transfer:write_deposit_address transfer:write_fiat_account transfer:write_fiat_deposit_instructions transfer:write_internal_transfer transfer:write_sandbox_fiat_deposit transfer:write_fiat_withdrawal events:read_event"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://oauth.paxos.com/oauth2/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": \"<string>\",\n  \"identity_id\": \"<string>\",\n  \"crypto_network\": \"<string>\",\n  \"address\": \"<string>\",\n  \"nickname\": \"<string>\",\n  \"bookmarked_status\": \"<boolean>\",\n  \"travelrule_metadata\": {\n    \"beneficiary\": {\n      \"person_details\": {\n        \"first_name\": \"<string>\",\n        \"last_name\": \"<string>\",\n        \"physical_address\": {\n          \"country\": \"<string>\",\n          \"address1\": \"<string>\",\n          \"address2\": \"<string>\",\n          \"city\": \"<string>\",\n          \"province\": \"<string>\",\n          \"zip_code\": \"<string>\"\n        }\n      },\n      \"institution_details\": {\n        \"name\": \"<string>\",\n        \"physical_address\": {\n          \"country\": \"<string>\",\n          \"address1\": \"<string>\",\n          \"address2\": \"<string>\",\n          \"city\": \"<string>\",\n          \"province\": \"<string>\",\n          \"zip_code\": \"<string>\"\n        }\n      },\n      \"self\": \"<boolean>\"\n    },\n    \"vasp\": {\n      \"id\": \"<string>\",\n      \"custom_vasp_name\": \"<string>\",\n      \"custom_vasp_website\": \"<string>\"\n    },\n    \"custodian_type\": \"<string>\",\n    \"transfer_purpose\": \"<string>\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "ee855864-d098-44ef-9ff8-c798e5d48af1",
+              "name": "A successful response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "transfer",
+                    "crypto-destination-address"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"id\": \"<string>\",\n  \"identity_id\": \"<string>\",\n  \"crypto_network\": \"<string>\",\n  \"address\": \"<string>\",\n  \"nickname\": \"<string>\",\n  \"bookmarked_status\": \"<boolean>\",\n  \"travelrule_metadata\": {\n    \"beneficiary\": {\n      \"person_details\": {\n        \"first_name\": \"<string>\",\n        \"last_name\": \"<string>\",\n        \"physical_address\": {\n          \"country\": \"<string>\",\n          \"address1\": \"<string>\",\n          \"address2\": \"<string>\",\n          \"city\": \"<string>\",\n          \"province\": \"<string>\",\n          \"zip_code\": \"<string>\"\n        }\n      },\n      \"institution_details\": {\n        \"name\": \"<string>\",\n        \"physical_address\": {\n          \"country\": \"<string>\",\n          \"address1\": \"<string>\",\n          \"address2\": \"<string>\",\n          \"city\": \"<string>\",\n          \"province\": \"<string>\",\n          \"zip_code\": \"<string>\"\n        }\n      },\n      \"self\": \"<boolean>\"\n    },\n    \"vasp\": {\n      \"id\": \"<string>\",\n      \"custom_vasp_name\": \"<string>\",\n      \"custom_vasp_website\": \"<string>\"\n    },\n    \"custodian_type\": \"<string>\",\n    \"transfer_purpose\": \"<string>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"address\": {\n    \"id\": \"string\",\n    \"crypto_network\": \"<string>\",\n    \"address\": \"string\",\n    \"identity_id\": \"string\",\n    \"nickname\": \"string\",\n    \"status\": \"PENDING\",\n    \"created_at\": \"1960-07-16T01:28:31.060Z\",\n    \"bookmarked\": true,\n    \"policy_execution_id\": \"string\",\n    \"travelrule_metadata\": {\n      \"beneficiary\": {\n        \"person_details\": {\n          \"first_name\": \"<string>\",\n          \"last_name\": \"<string>\",\n          \"physical_address\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"institution_details\": {\n          \"name\": \"<string>\",\n          \"physical_address\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"self\": \"<boolean>\"\n      },\n      \"vasp\": {\n        \"id\": \"string\",\n        \"name\": \"string\",\n        \"custom_vasp_name\": \"string\",\n        \"custom_vasp_website\": \"string\"\n      },\n      \"custodian_type\": \"<string>\",\n      \"transfer_purpose\": \"string\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "67c05946-8bde-47a7-9076-efbd6d4de4f2",
+          "name": "List Crypto Destination Addresses",
+          "request": {
+            "name": "List Crypto Destination Addresses",
+            "description": {
+              "content": "List all crypto destination addresses, optionally filtering and paging the results",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "transfer",
+                "crypto-destination-addresses"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "ids",
+                  "value": "<string>",
+                  "description": "Optionally filter by the UUIDs of the crypto destination addresses. Limit 100."
+                },
+                {
+                  "disabled": false,
+                  "key": "ids",
+                  "value": "<string>",
+                  "description": "Optionally filter by the UUIDs of the crypto destination addresses. Limit 100."
+                },
+                {
+                  "disabled": false,
+                  "key": "identity_ids",
+                  "value": "<string>",
+                  "description": "Optionally filter by the Identities the destination addresses are scoped to. Limit 100."
+                },
+                {
+                  "disabled": false,
+                  "key": "identity_ids",
+                  "value": "<string>",
+                  "description": "Optionally filter by the Identities the destination addresses are scoped to. Limit 100."
+                },
+                {
+                  "disabled": false,
+                  "key": "crypto_networks",
+                  "value": "<string>",
+                  "description": "Optionally filter by the `crypto_network` of the destination addresses. Limit 100."
+                },
+                {
+                  "disabled": false,
+                  "key": "crypto_networks",
+                  "value": "<string>",
+                  "description": "Optionally filter by the `crypto_network` of the destination addresses. Limit 100."
+                },
+                {
+                  "disabled": false,
+                  "key": "addresses",
+                  "value": "<string>",
+                  "description": "Optionally filter by specific addresses. Limit 100."
+                },
+                {
+                  "disabled": false,
+                  "key": "addresses",
+                  "value": "<string>",
+                  "description": "Optionally filter by specific addresses. Limit 100."
+                },
+                {
+                  "disabled": false,
+                  "key": "nicknames",
+                  "value": "<string>",
+                  "description": "Optionally filter by specific nicknames. Limit 100."
+                },
+                {
+                  "disabled": false,
+                  "key": "nicknames",
+                  "value": "<string>",
+                  "description": "Optionally filter by specific nicknames. Limit 100."
+                },
+                {
+                  "disabled": false,
+                  "key": "bookmarked_status",
+                  "value": "<boolean>",
+                  "description": "Optionally filter by bookmarked status. If omitted, addresses regardless of bookmarked status will be returned."
+                },
+                {
+                  "disabled": false,
+                  "key": "created_at.lt",
+                  "value": "<dateTime>",
+                  "description": "Include timestamps strictly less than lt. RFC3339 format, like `2006-01-02T15:04:05Z`."
+                },
+                {
+                  "disabled": false,
+                  "key": "created_at.lte",
+                  "value": "<dateTime>",
+                  "description": "Include timestamps less than or equal to lte. RFC3339 format, like `2006-01-02T15:04:05Z`."
+                },
+                {
+                  "disabled": false,
+                  "key": "created_at.eq",
+                  "value": "<dateTime>",
+                  "description": "Include timestamps exactly equal to eq. RFC3339 format, like `2006-01-02T15:04:05Z`."
+                },
+                {
+                  "disabled": false,
+                  "key": "created_at.gte",
+                  "value": "<dateTime>",
+                  "description": "Include timestamps greater than or equal to gte. RFC3339 format, like `2006-01-02T15:04:05Z`."
+                },
+                {
+                  "disabled": false,
+                  "key": "created_at.gt",
+                  "value": "<dateTime>",
+                  "description": "Include timestamps strictly greater than gt. RFC3339 format, like `2006-01-02T15:04:05Z`."
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "<integer>",
+                  "description": "Number of results to return. Defaults to 100 if no limit is provided. Maximum 1000."
+                },
+                {
+                  "disabled": false,
+                  "key": "order",
+                  "value": "<string>",
+                  "description": "Return items in ascending (ASC) or descending (DESC) order. Defaults to DESC."
+                },
+                {
+                  "disabled": false,
+                  "key": "order_by",
+                  "value": "<string>",
+                  "description": "The specific method by which the returned results will be ordered."
+                },
+                {
+                  "disabled": false,
+                  "key": "page_cursor",
+                  "value": "<string>",
+                  "description": "Optional cursor for getting the next page of results."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "conversion:read_conversion_stablecoin conversion:write_conversion_stablecoin exchange:historical_prices exchange:read_order exchange:read_quote exchange:read_quote_execution exchange:write_quote_execution exchange:write_order fee:write_crypto_withdrawal_fee funding:read_bank_balance funding:read_profile funding:write_profile identity:read_account identity:read_identity identity:write_account identity:write_identity settlement:read_transaction settlement:write_transaction tax:read_tax_form tax:read_tax_lot tax:write_tax_lot transfer:read_deposit_address transfer:read_fiat_account transfer:read_fiat_deposit_instructions transfer:read_transfer transfer:read_transfer_limit transfer:reject_crypto_deposit transfer:update_crypto_deposit transfer:write_crypto_withdrawal transfer:write_deposit_address transfer:write_fiat_account transfer:write_fiat_deposit_instructions transfer:write_internal_transfer transfer:write_sandbox_fiat_deposit transfer:write_fiat_withdrawal events:read_event"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://oauth.paxos.com/oauth2/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "0c580b62-a7c9-4bc4-bcfa-080211d2f16f",
+              "name": "A successful response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "transfer",
+                    "crypto-destination-addresses"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "identity_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "identity_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "crypto_networks",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "crypto_networks",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "addresses",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "addresses",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "nicknames",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "nicknames",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "bookmarked_status",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "created_at.lt",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "created_at.lte",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "created_at.eq",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "created_at.gte",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "created_at.gt",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "order",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "order_by",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "page_cursor",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"addresses\": [\n    {\n      \"id\": \"string\",\n      \"crypto_network\": \"<string>\",\n      \"address\": \"string\",\n      \"identity_id\": \"string\",\n      \"nickname\": \"string\",\n      \"status\": \"PENDING\",\n      \"created_at\": \"1997-05-11T07:48:01.424Z\",\n      \"bookmarked\": true,\n      \"policy_execution_id\": \"string\",\n      \"travelrule_metadata\": {\n        \"beneficiary\": {\n          \"person_details\": {\n            \"first_name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"last_name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"physical_address\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"institution_details\": {\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"physical_address\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"self\": \"<boolean>\"\n        },\n        \"vasp\": {\n          \"id\": \"string\",\n          \"name\": \"string\",\n          \"custom_vasp_name\": \"string\",\n          \"custom_vasp_website\": \"string\"\n        },\n        \"custodian_type\": \"<string>\",\n        \"transfer_purpose\": \"string\"\n      }\n    },\n    {\n      \"id\": \"string\",\n      \"crypto_network\": \"<string>\",\n      \"address\": \"string\",\n      \"identity_id\": \"string\",\n      \"nickname\": \"string\",\n      \"status\": \"REJECTED\",\n      \"created_at\": \"1955-10-17T02:21:59.571Z\",\n      \"bookmarked\": false,\n      \"policy_execution_id\": \"string\",\n      \"travelrule_metadata\": {\n        \"beneficiary\": {\n          \"person_details\": {\n            \"first_name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"last_name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"physical_address\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"institution_details\": {\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"physical_address\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"self\": \"<boolean>\"\n        },\n        \"vasp\": {\n          \"id\": \"string\",\n          \"name\": \"string\",\n          \"custom_vasp_name\": \"string\",\n          \"custom_vasp_website\": \"string\"\n        },\n        \"custodian_type\": \"<string>\",\n        \"transfer_purpose\": \"string\"\n      }\n    }\n  ],\n  \"next_page_cursor\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "0166bbbf-519d-4505-9973-038004bfc108",
+          "name": "Create Crypto Withdrawal",
+          "request": {
+            "name": "Create Crypto Withdrawal",
+            "description": {
+              "content": "Withdraw a cryptocurrency asset to a specified destination address.\n\n**Important for Stellar Network (PYUSD):**\n\nWhen withdrawing PYUSD on the Stellar network, the destination address must have an established trustline with the PYUSD issuer:\n\n- **PYUSD Issuer**: `GDQE7IXJ4HUHV6RQHIUPRJSEZE4DRS5WY577O2FY6YQ5LVWZ7JZTU2V5` (mainnet)\n- **Asset Code**: `PYUSD`\n\n**How to Establish a Trustline:**\n\nThe recipient must use a Stellar wallet or the Stellar SDK to:\n1. Ensure their account has minimum XLM balance (at least 1 XLM recommended)\n2. Create a trustline to the PYUSD issuer for the PYUSD asset\n3. Confirm the trustline is active before requesting withdrawal\n\n**Verifying Trustline Status:**\n\nYou can verify if an address has the required trustline by:\n- Using Stellar blockchain explorers (e.g., stellar.expert)\n- Querying the Stellar Horizon API\n- Using the Stellar SDK to check account balances\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "transfer",
+                "crypto-withdrawals"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "conversion:read_conversion_stablecoin conversion:write_conversion_stablecoin exchange:historical_prices exchange:read_order exchange:read_quote exchange:read_quote_execution exchange:write_quote_execution exchange:write_order fee:write_crypto_withdrawal_fee funding:read_bank_balance funding:read_profile funding:write_profile identity:read_account identity:read_identity identity:write_account identity:write_identity settlement:read_transaction settlement:write_transaction tax:read_tax_form tax:read_tax_lot tax:write_tax_lot transfer:read_deposit_address transfer:read_fiat_account transfer:read_fiat_deposit_instructions transfer:read_transfer transfer:read_transfer_limit transfer:reject_crypto_deposit transfer:update_crypto_deposit transfer:write_crypto_withdrawal transfer:write_deposit_address transfer:write_fiat_account transfer:write_fiat_deposit_instructions transfer:write_internal_transfer transfer:write_sandbox_fiat_deposit transfer:write_fiat_withdrawal events:read_event"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://oauth.paxos.com/oauth2/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"profile_id\": \"<string>\",\n  \"asset\": \"<string>\",\n  \"destination_address\": \"<string>\",\n  \"crypto_network\": \"<string>\",\n  \"ref_id\": \"<string>\",\n  \"identity_id\": \"<string>\",\n  \"balance_asset\": \"<string>\",\n  \"metadata\": {\n    \"key_0\": \"<string>\"\n  },\n  \"account_id\": \"<string>\",\n  \"fee_id\": \"<string>\",\n  \"amount\": \"<string>\",\n  \"total\": \"<string>\",\n  \"beneficiary\": {\n    \"person_details\": {\n      \"first_name\": \"<string>\",\n      \"last_name\": \"<string>\"\n    },\n    \"institution_details\": {\n      \"name\": \"<string>\"\n    }\n  },\n  \"memo\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "79cee2a6-4915-455d-ac15-3b8b0a82e153",
+              "name": "A successful response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "transfer",
+                    "crypto-withdrawals"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"ref_id\": \"idempotence_id\",\n  \"profile_id\": \"b7b77d82-e6a7-4ae9-9904-36231aedf985\",\n  \"asset\": \"BTC\",\n  \"amount\": \"0.05\",\n  \"destination_address\": \"1BvBMSEYstWetqTFn5Au4m4GFg7xJaNVN2\",\n  \"metadata\": {\n    \"my_id\": \"4024ee50-eefb-4f2e-85c7-e7899c0b7da5\"\n  },\n  \"crypto_network\": \"BITCOIN\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"373b7966-4290-4be3-a604-51929173437b\",\n  \"customer_id\": \"72b2b4e6-d395-43d2-9b09-690fa6c1a664\",\n  \"profile_id\": \"1db50793-0a22-4d2a-8696-66fc4fd8e360\",\n  \"ref_id\": \"ABCZYX123\",\n  \"amount\": \"0.001\",\n  \"total\": \"0.00100223\",\n  \"fee\": \"0.00000223\",\n  \"asset\": \"BTC\",\n  \"balance_asset\": \"BTC\",\n  \"direction\": \"DEBIT\",\n  \"type\": \"CRYPTO_WITHDRAWAL\",\n  \"status\": \"PENDING\",\n  \"created_at\": \"2022-06-14T15:19:20.034294Z\",\n  \"updated_at\": \"2022-06-14T15:19:20.034294Z\",\n  \"destination_address\": \"1BvBMSEYstWetqTFn5Au4m4GFg7xJaNVN2\",\n  \"crypto_network\": \"BITCOIN\",\n  \"auto_conversion\": {}\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1f7571a4-a176-424c-85bc-e3db426e5554",
+              "name": "Could not create transfer",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "transfer",
+                    "crypto-withdrawals"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/problem+json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"ref_id\": \"idempotence_id\",\n  \"profile_id\": \"b7b77d82-e6a7-4ae9-9904-36231aedf985\",\n  \"asset\": \"BTC\",\n  \"amount\": \"0.05\",\n  \"destination_address\": \"1BvBMSEYstWetqTFn5Au4m4GFg7xJaNVN2\",\n  \"metadata\": {\n    \"my_id\": \"4024ee50-eefb-4f2e-85c7-e7899c0b7da5\"\n  },\n  \"crypto_network\": \"BITCOIN\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/problem+json"
+                }
+              ],
+              "body": "{\n  \"type\": \"https://developer.paxos.com/docs/v2/problems/insufficient-funds\",\n  \"title\": \"Insufficient Funds\",\n  \"status\": 403,\n  \"detail\": \"insufficient USD funds in profile b7b77d82-e6a7-4ae9-9904-36231aedf985: 100 needed, 50 available\",\n  \"meta\": {\n    \"profile_id\": \"b7b77d82-e6a7-4ae9-9904-36231aedf985\",\n    \"asset\": \"USD\",\n    \"available\": \"50\",\n    \"needed\": \"100\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d7dd517f-b388-4f39-b76e-85d54dc7587e",
+              "name": "Could not find fee quote",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "transfer",
+                    "crypto-withdrawals"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/problem+json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"ref_id\": \"idempotence_id\",\n  \"profile_id\": \"b7b77d82-e6a7-4ae9-9904-36231aedf985\",\n  \"asset\": \"BTC\",\n  \"amount\": \"0.05\",\n  \"destination_address\": \"1BvBMSEYstWetqTFn5Au4m4GFg7xJaNVN2\",\n  \"metadata\": {\n    \"my_id\": \"4024ee50-eefb-4f2e-85c7-e7899c0b7da5\"\n  },\n  \"crypto_network\": \"BITCOIN\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/problem+json"
+                }
+              ],
+              "body": "{\n  \"type\": \"about:blank\",\n  \"title\": \"Not Found\",\n  \"status\": 404,\n  \"detail\": \"fee not found with id 9e5828e2-0a10-4273-aa9c-f50bd0eaf344\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "506ef05f-8287-4c2d-924a-3c28c2ee1e02",
+              "name": "Transfer already exists",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "transfer",
+                    "crypto-withdrawals"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/problem+json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"ref_id\": \"idempotence_id\",\n  \"profile_id\": \"b7b77d82-e6a7-4ae9-9904-36231aedf985\",\n  \"asset\": \"BTC\",\n  \"amount\": \"0.05\",\n  \"destination_address\": \"1BvBMSEYstWetqTFn5Au4m4GFg7xJaNVN2\",\n  \"metadata\": {\n    \"my_id\": \"4024ee50-eefb-4f2e-85c7-e7899c0b7da5\"\n  },\n  \"crypto_network\": \"BITCOIN\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/problem+json"
+                }
+              ],
+              "body": "{\n  \"type\": \"https://developer.paxos.com/docs/v2/problems/already-exists\",\n  \"title\": \"Already Exists\",\n  \"status\": 409,\n  \"detail\": \"transfer already exists with ref_id 'already_used_ref_id'\",\n  \"meta\": {\n    \"existing\": {\n      \"id\": \"f190b163-208f-4d73-8deb-4fb8b24add00\",\n      \"customer_id\": \"9b8c9cba-801e-4418-adc0-ede709df6339\",\n      \"profile_id\": \"b7b77d82-e6a7-4ae9-9904-36231aedf985\",\n      \"ref_id\": \"already_used_ref_id\",\n      \"amount\": \"0.10000000\",\n      \"total\": \"0.10000023\",\n      \"fee\": \"0.00000023\",\n      \"asset\": \"BTC\",\n      \"balance_asset\": \"BTC\",\n      \"direction\": \"DEBIT\",\n      \"type\": \"CRYPTO_WITHDRAWAL\",\n      \"status\": \"COMPLETED\",\n      \"created_at\": \"2020-01-17T18:36:08.737Z\",\n      \"updated_at\": \"2020-01-17T18:37:08.737Z\",\n      \"metadata\": {\n        \"my_id\": \"4024ee50-eefb-4f2e-85c7-e7899c0b7da5\"\n      },\n      \"destination_address\": \"1BvBMSEYstWetqTFn5Au4m4GFg7xJaNVN2\",\n      \"crypto_network\": \"BITCOIN\",\n      \"crypto_tx_hash\": \"f4184fc596403b9d638783cf57adfe4c75c605f6356fbc91338530e9831e9e16\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.paxos.com/v2",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "f1ad12b7-445f-49c6-9314-228a66657b73",
+    "name": "Paxos Account Members Crypto Withdrawals API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "<p>Welcome to Paxos APIs. At Paxos, our mission is to enable the movement of any asset, any time, in a trustworthy way. These APIs serve that mission by making it easier than ever for you to directly integrate our product capabilities into your application, leveraging the speed, stability, and security of the Paxos platform.</p> <p>The documentation that follows gives you access to our Crypto Brokerage, Trading, and Exchange products. It includes APIs for market data, orders, and the held rate quote flow.</p> <p>To test in our sandbox environment, <a href=\"https://account.sandbox.paxos.com\" target=\"_blank\">sign up</a> for an account. For more information about Paxos and our APIs, visit <a href=\"https://www.paxos.com/\" target=\"_blank\">Paxos.com</a>.</p>\n",
+      "type": "text/plain"
+    }
+  }
+}

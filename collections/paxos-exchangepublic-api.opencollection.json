@@ -1,0 +1,152 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Paxos Account Members ExchangePublic API",
+    "version": "2.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "ExchangePublic",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Executions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.paxos.com/v2/profiles/:profile_id/executions",
+            "params": [
+              {
+                "name": "profile_id",
+                "value": "",
+                "type": "path",
+                "description": "The ProfileId associated with the orders."
+              },
+              {
+                "name": "order_id",
+                "value": "",
+                "type": "query",
+                "description": "Filter executions for a single order id."
+              },
+              {
+                "name": "since_execution_id",
+                "value": "",
+                "type": "query",
+                "description": "Excludes executions after this id."
+              },
+              {
+                "name": "range.begin",
+                "value": "",
+                "type": "query",
+                "description": "Only return records after this timestamp, inclusive. RFC3339 format, like `2006-01-02T15:04:05Z`."
+              },
+              {
+                "name": "range.end",
+                "value": "",
+                "type": "query",
+                "description": "Only return records before this timestamp, inclusive. RFC3339 format, like `2006-01-02T15:04:05Z`."
+              },
+              {
+                "name": "page_cursor",
+                "value": "",
+                "type": "query",
+                "description": "Cursor token for fetching the next page."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of results to return."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://oauth.paxos.com/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Retrieves full details of underlying executions for a profile id with optional filters.\nIf pagination details are not set the response will default to 20 items. Additionally, this endpoint will return a maximum of 500 items per page."
+        },
+        {
+          "info": {
+            "name": "List Orders",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.paxos.com/v2/profiles/:profile_id/orders",
+            "params": [
+              {
+                "name": "profile_id",
+                "value": "",
+                "type": "path",
+                "description": "The ProfileId associated with the orders."
+              },
+              {
+                "name": "market",
+                "value": "",
+                "type": "query",
+                "description": "Filter by the trading pair."
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Filter by the status of the order."
+              },
+              {
+                "name": "order_time.begin",
+                "value": "",
+                "type": "query",
+                "description": "Only return records after this timestamp, inclusive. RFC3339 format, like `2006-01-02T15:04:05Z`."
+              },
+              {
+                "name": "order_time.end",
+                "value": "",
+                "type": "query",
+                "description": "Only return records before this timestamp, inclusive. RFC3339 format, like `2006-01-02T15:04:05Z`."
+              },
+              {
+                "name": "ref_ids",
+                "value": "",
+                "type": "query",
+                "description": "The idempotence ids provided during order creation."
+              },
+              {
+                "name": "page_cursor",
+                "value": "",
+                "type": "query",
+                "description": "Cursor token for fetching the next page. If using this then do not use paginationLimit and paginationOffset fields."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of results to return. If using this then do not use paginationLimit and paginationOffset fields."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://oauth.paxos.com/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Retrieves full details of orders associated with a profile id with optional filters.\n\nNotes:\n- Pagination Limit has a max of 1000 and Pagination Offset a max of 10000. If a larger Offset is needed, please contact support."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

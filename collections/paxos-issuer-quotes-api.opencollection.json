@@ -1,0 +1,166 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Paxos Account Members Issuer Quotes API",
+    "version": "2.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Issuer Quotes",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create Issuer Quote",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.paxos.com/v2/issuer-quote",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://oauth.paxos.com/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Creates a request for a quote where Paxos is the issuer. Note that PAXG quotes will be unavailable when the London gold market is closed."
+        },
+        {
+          "info": {
+            "name": "Get Issuer Quote Settlement Availability",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.paxos.com/v2/issuer-quote/settlement-availability",
+            "params": [
+              {
+                "name": "market",
+                "value": "",
+                "type": "query",
+                "description": "Trading pair for the quote. Only \"PAXGUSD\" is currently supported."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://oauth.paxos.com/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Returns the maximum PAXG quantity available for immediate (T+0) purchase.\nNote that availability will be zero when the London gold market is closed or unavailable.\nSell settlement is always T+1, so sell_quantity is always \"0.000\"."
+        },
+        {
+          "info": {
+            "name": "Create Issuer Quote Execution",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.paxos.com/v2/issuer-quote/:quote_id",
+            "params": [
+              {
+                "name": "quote_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the associated issuer quote to execute."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://oauth.paxos.com/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Executes on a quote where Paxos is the issuer."
+        },
+        {
+          "info": {
+            "name": "List Issuer Quote Executions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.paxos.com/v2/issuer-quotes",
+            "params": [
+              {
+                "name": "profile_id",
+                "value": "",
+                "type": "query",
+                "description": "Optionally filter by the target profile of the issuer quote execution."
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Optionally filter by status."
+              },
+              {
+                "name": "created_range.begin",
+                "value": "",
+                "type": "query",
+                "description": "Only return records after this timestamp, inclusive. RFC3339 format, like `2006-01-02T15:04:05Z`."
+              },
+              {
+                "name": "created_range.end",
+                "value": "",
+                "type": "query",
+                "description": "Only return records before this timestamp, inclusive. RFC3339 format, like `2006-01-02T15:04:05Z`."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of results to return. Defaults to 100 if no limit provided. Maximum 1000."
+              },
+              {
+                "name": "page_cursor",
+                "value": "",
+                "type": "query",
+                "description": "Cursor for getting the next page of results. When the number of items returned is fewer\nthan the limit, there is currently no next page."
+              },
+              {
+                "name": "order",
+                "value": "",
+                "type": "query",
+                "description": "Determines whether the items are returned in ascending (ASC), or descending (DESC) order.\nSorted by created at timestamp. Defaults to DESC."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://oauth.paxos.com/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Retrieves full details of quote executions where Paxos is the issuer."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

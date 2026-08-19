@@ -1,0 +1,770 @@
+{
+  "item": [
+    {
+      "id": "ade7185f-f546-457d-a842-d338f947ff62",
+      "name": "Identity",
+      "description": {
+        "content": "An Identity represents a person or institution who is able to take actions on the Paxos Platform. Depending on \nyour integration type you might not need to create Identities for your end users. \n\nIdentities must pass a set of verifications and checks before they're able to transact on the Platform. Learn more\nabout getting started with Identity and managing their onboarding lifecycle in the [Identity Developer Guide](https://docs.paxos.com/identity).\n",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "a82ec5de-83dc-4c3c-b99e-0ca79f1034a8",
+          "name": "List Identities",
+          "request": {
+            "name": "List Identities",
+            "description": {
+              "content": "This endpoint enables you to fetch a list of Identities.\nYou can use query parameters to filter the results returned by `created_at`, `updated_at`, `summary_status` and `identity_type`\n\nNote that this endpoint supports pagination and returns a cursor token for fetching next pages.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "identity",
+                "identities"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "summary_status",
+                  "value": "<string>",
+                  "description": "Summary Status of the Identity."
+                },
+                {
+                  "disabled": false,
+                  "key": "created_at.lt",
+                  "value": "<dateTime>",
+                  "description": "Include timestamps strictly less than lt. RFC3339 format, like `2006-01-02T15:04:05Z`."
+                },
+                {
+                  "disabled": false,
+                  "key": "created_at.lte",
+                  "value": "<dateTime>",
+                  "description": "Include timestamps less than or equal to lte. RFC3339 format, like `2006-01-02T15:04:05Z`."
+                },
+                {
+                  "disabled": false,
+                  "key": "created_at.eq",
+                  "value": "<dateTime>",
+                  "description": "Include timestamps exactly equal to eq. RFC3339 format, like `2006-01-02T15:04:05Z`."
+                },
+                {
+                  "disabled": false,
+                  "key": "created_at.gte",
+                  "value": "<dateTime>",
+                  "description": "Include timestamps greater than or equal to gte. RFC3339 format, like `2006-01-02T15:04:05Z`."
+                },
+                {
+                  "disabled": false,
+                  "key": "created_at.gt",
+                  "value": "<dateTime>",
+                  "description": "Include timestamps strictly greater than gt. RFC3339 format, like `2006-01-02T15:04:05Z`."
+                },
+                {
+                  "disabled": false,
+                  "key": "updated_at.lt",
+                  "value": "<dateTime>",
+                  "description": "Include timestamps strictly less than lt. RFC3339 format, like `2006-01-02T15:04:05Z`."
+                },
+                {
+                  "disabled": false,
+                  "key": "updated_at.lte",
+                  "value": "<dateTime>",
+                  "description": "Include timestamps less than or equal to lte. RFC3339 format, like `2006-01-02T15:04:05Z`."
+                },
+                {
+                  "disabled": false,
+                  "key": "updated_at.eq",
+                  "value": "<dateTime>",
+                  "description": "Include timestamps exactly equal to eq. RFC3339 format, like `2006-01-02T15:04:05Z`."
+                },
+                {
+                  "disabled": false,
+                  "key": "updated_at.gte",
+                  "value": "<dateTime>",
+                  "description": "Include timestamps greater than or equal to gte. RFC3339 format, like `2006-01-02T15:04:05Z`."
+                },
+                {
+                  "disabled": false,
+                  "key": "updated_at.gt",
+                  "value": "<dateTime>",
+                  "description": "Include timestamps strictly greater than gt. RFC3339 format, like `2006-01-02T15:04:05Z`."
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "<integer>",
+                  "description": "Number of results to return."
+                },
+                {
+                  "disabled": false,
+                  "key": "order",
+                  "value": "<string>",
+                  "description": "Return items in ascending (ASC) or descending (DESC) order. Defaults to DESC."
+                },
+                {
+                  "disabled": false,
+                  "key": "order_by",
+                  "value": "<string>",
+                  "description": "The specific method by which the returned results will be ordered."
+                },
+                {
+                  "disabled": false,
+                  "key": "page_cursor",
+                  "value": "<string>",
+                  "description": "Cursor token for fetching the next page."
+                },
+                {
+                  "disabled": false,
+                  "key": "identity_type",
+                  "value": "<string>",
+                  "description": "Optionally filter by Identity type"
+                },
+                {
+                  "disabled": false,
+                  "key": "control_types",
+                  "value": "<string>",
+                  "description": "Optionally filter by active identity control types. Only returns identities with active controls matching any of these types."
+                },
+                {
+                  "disabled": false,
+                  "key": "control_types",
+                  "value": "<string>",
+                  "description": "Optionally filter by active identity control types. Only returns identities with active controls matching any of these types."
+                },
+                {
+                  "disabled": false,
+                  "key": "control_reason_codes",
+                  "value": "<string>",
+                  "description": "Optionally filter by active identity control reason codes. Only returns identities with active controls matching any of these reason codes.\n\n - OTHER: Miscellaneous reason not captured by existing categories.\n - END_USER_REQUEST: Control applied at the end user's request.\n - INACTIVITY: Control applied due to prolonged inactivity in accordance with dormancy or lifecycle management policies.\n - COMPLIANCE_KYC: Control applied due to unmet KYC requirements, including missing, expired, failed, or unresponsiveness to refresh obligations.\n - COMPLIANCE_EDD: Control applied due to Enhanced Due Diligence (EDD) requirements, including failure to complete EDD reviews, provide requested information, or satisfy heightened risk assessment criteria.\n - COMPLIANCE_SCREENING: Control applied as a result of sanctions, politically exposed person (PEP), or adverse media screening hits.\n - COMPLIANCE_INVESTIGATION: Control applied while an identity is under active compliance, risk, or regulatory investigation, including reviews triggered by monitoring alerts or external inquiries.\n - COMPLIANCE_INCOMPLETE: Control applied because the onboarding process was not successfully completed, including failure to respond to requests for information or provide required documentation.\n - RISK_FRAUD: Control applied due to suspected or confirmed fraud, abuse, or security risk, including account compromise, transaction fraud, or policy violations.\n - LEGAL_ORDER: Control applied to comply with a legal, regulatory, or law-enforcement directive, including court orders, asset preservation requests, or regulatory instructions.\n - ADMINISTRATIVE: Control applied for operational or platform-initiated reasons not attributable to the end user or compliance failure, such as system remediation or account restructuring."
+                },
+                {
+                  "disabled": false,
+                  "key": "control_reason_codes",
+                  "value": "<string>",
+                  "description": "Optionally filter by active identity control reason codes. Only returns identities with active controls matching any of these reason codes.\n\n - OTHER: Miscellaneous reason not captured by existing categories.\n - END_USER_REQUEST: Control applied at the end user's request.\n - INACTIVITY: Control applied due to prolonged inactivity in accordance with dormancy or lifecycle management policies.\n - COMPLIANCE_KYC: Control applied due to unmet KYC requirements, including missing, expired, failed, or unresponsiveness to refresh obligations.\n - COMPLIANCE_EDD: Control applied due to Enhanced Due Diligence (EDD) requirements, including failure to complete EDD reviews, provide requested information, or satisfy heightened risk assessment criteria.\n - COMPLIANCE_SCREENING: Control applied as a result of sanctions, politically exposed person (PEP), or adverse media screening hits.\n - COMPLIANCE_INVESTIGATION: Control applied while an identity is under active compliance, risk, or regulatory investigation, including reviews triggered by monitoring alerts or external inquiries.\n - COMPLIANCE_INCOMPLETE: Control applied because the onboarding process was not successfully completed, including failure to respond to requests for information or provide required documentation.\n - RISK_FRAUD: Control applied due to suspected or confirmed fraud, abuse, or security risk, including account compromise, transaction fraud, or policy violations.\n - LEGAL_ORDER: Control applied to comply with a legal, regulatory, or law-enforcement directive, including court orders, asset preservation requests, or regulatory instructions.\n - ADMINISTRATIVE: Control applied for operational or platform-initiated reasons not attributable to the end user or compliance failure, such as system remediation or account restructuring."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "conversion:read_conversion_stablecoin conversion:write_conversion_stablecoin exchange:historical_prices exchange:read_order exchange:read_quote exchange:read_quote_execution exchange:write_quote_execution exchange:write_order fee:write_crypto_withdrawal_fee funding:read_bank_balance funding:read_profile funding:write_profile identity:read_account identity:read_identity identity:write_account identity:write_identity settlement:read_transaction settlement:write_transaction tax:read_tax_form tax:read_tax_lot tax:write_tax_lot transfer:read_deposit_address transfer:read_fiat_account transfer:read_fiat_deposit_instructions transfer:read_transfer transfer:read_transfer_limit transfer:reject_crypto_deposit transfer:update_crypto_deposit transfer:write_crypto_withdrawal transfer:write_deposit_address transfer:write_fiat_account transfer:write_fiat_deposit_instructions transfer:write_internal_transfer transfer:write_sandbox_fiat_deposit transfer:write_fiat_withdrawal events:read_event"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://oauth.paxos.com/oauth2/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "a66cd70b-b107-49f8-932b-53bb57e02b5d",
+              "name": "A successful response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "identity",
+                    "identities"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "summary_status",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "created_at.lt",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "created_at.lte",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "created_at.eq",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "created_at.gte",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "created_at.gt",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "updated_at.lt",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "updated_at.lte",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "updated_at.eq",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "updated_at.gte",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "updated_at.gt",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "order",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "order_by",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "page_cursor",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "identity_type",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "control_types",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "control_types",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "control_reason_codes",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "control_reason_codes",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"next_page_cursor\": \"string\",\n  \"items\": [\n    {\n      \"id\": \"string\",\n      \"metadata\": {\n        \"key_0\": \"string\",\n        \"key_1\": \"string\",\n        \"key_2\": \"string\"\n      },\n      \"status\": \"ERROR\",\n      \"status_details\": {\n        \"active_controls\": [\n          {\n            \"id\": \"string\",\n            \"type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"set_by\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"created_at\": \"2003-01-28T03:19:55.191Z\",\n            \"is_overridable\": true,\n            \"reason_code\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"reason\": \"string\",\n            \"deleted_at\": \"2013-03-09T22:00:19.386Z\"\n          },\n          {\n            \"id\": \"string\",\n            \"type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"set_by\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"created_at\": \"1984-09-07T10:23:37.247Z\",\n            \"is_overridable\": true,\n            \"reason_code\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"reason\": \"string\",\n            \"deleted_at\": \"1965-01-01T23:02:25.576Z\"\n          }\n        ],\n        \"requirements\": [\n          {\n            \"type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"errors\": [\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            ],\n            \"status\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"awaiting_action_from\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"errors\": [\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            ],\n            \"status\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"awaiting_action_from\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ]\n      },\n      \"summary_status\": \"APPROVED\",\n      \"user_disabled\": false,\n      \"admin_disabled\": true,\n      \"person_details\": {\n        \"id_verification_status\": \"PENDING\",\n        \"sanctions_verification_status\": \"DENIED\",\n        \"first_name\": \"jL0Q385 \",\n        \"last_name\": \"':F\",\n        \"date_of_birth\": \"7841-58-81\",\n        \"govt_id\": \"a1xtbLUgHgS\",\n        \"address\": {\n          \"country\": \".5x6\",\n          \"address1\": \"cnx6wa&Mji\",\n          \"city\": \"1PPMqj\",\n          \"province\": \"Sh?A'fF.?)e\",\n          \"address2\": \"T.Ws3\",\n          \"zip_code\": \"Y6Q-\"\n        },\n        \"phone_number\": \"string\",\n        \"email\": \"string\",\n        \"nationality\": \"HDB\",\n        \"verifier_id\": \"string\",\n        \"verifier_type\": \"PASSTHROUGH\",\n        \"id_verification_url\": \"string\",\n        \"passthrough_verifier_type\": \"CUSTOMER\",\n        \"passthrough_verified_at\": \"1970-04-12T20:46:05.330Z\",\n        \"govt_id_type\": \"SSN\",\n        \"cip_id\": \"cnorYcE\",\n        \"cip_id_type\": \"DRIVING_LICENSE\",\n        \"cip_id_country\": \"string\",\n        \"additional_screening_status\": \"DENIED\",\n        \"profession\": \"string\",\n        \"middle_name\": \"string\",\n        \"country_of_birth\": \"string\",\n        \"passthrough_verification_id\": \"string\",\n        \"passthrough_verification_status\": \"PENDING\",\n        \"passthrough_verification_fields\": [\n          \"FULL_LEGAL_NAME\",\n          \"CIP_ID\"\n        ]\n      },\n      \"type\": \"PERSON\",\n      \"ref_id\": \"string\",\n      \"institution_details\": {\n        \"sanctions_verification_status\": \"DISABLED\",\n        \"name\": \":&'\",\n        \"business_address\": {\n          \"country\": \"D,mvokm\",\n          \"address1\": \"KLX:aHo+u\",\n          \"city\": \"/IB8BFK0\",\n          \"province\": \"Hy\",\n          \"address2\": \"nyuxg-Kj\",\n          \"zip_code\": \"fmT\"\n        },\n        \"phone_number\": \"string\",\n        \"email\": \"string\",\n        \"institution_type\": \"LLC\",\n        \"institution_sub_type\": \"PRECIOUS_METALS\",\n        \"cip_id\": \"sfNdT6VtA\",\n        \"cip_id_type\": \"REGISTRATION_NUMBER\",\n        \"cip_id_country\": \"string\",\n        \"govt_registration_date\": \"1976-03-14T08:22:11.800Z\",\n        \"incorporation_address\": {\n          \"country\": \"GW\",\n          \"address1\": \"4\",\n          \"city\": \"T8-Jj,E9\",\n          \"province\": \"aaGlGj7t0ZJ\",\n          \"address2\": \"'jw0EjZJAN\",\n          \"zip_code\": \"k\"\n        },\n        \"regulation_status\": \"INTL_REGULATED\",\n        \"trading_type\": \"PUBLICLY_TRADED_SUBSIDIARY\",\n        \"listed_exchange\": \"string\",\n        \"ticker_symbol\": \"string\",\n        \"parent_institution_name\": \"string\",\n        \"regulator_name\": \"string\",\n        \"regulator_jurisdiction\": \"string\",\n        \"regulator_register_number\": \"string\",\n        \"document_verification_status\": \"APPROVED\",\n        \"additional_screening_status\": \"PENDING\",\n        \"doing_business_as\": \"string\",\n        \"business_description\": \"string\"\n      },\n      \"institution_members\": [\n        {\n          \"identity_id\": \"string\",\n          \"roles\": [\n            \"TRUSTEE\",\n            \"BENEFICIARY\"\n          ],\n          \"ownership\": \"string\",\n          \"position\": \"string\",\n          \"name\": \"string\",\n          \"summary_status\": \"DISABLED\",\n          \"id\": \"string\"\n        },\n        {\n          \"identity_id\": \"string\",\n          \"roles\": [\n            \"MANAGEMENT_CONTROL_PERSON\",\n            \"TRUSTEE\"\n          ],\n          \"ownership\": \"string\",\n          \"position\": \"string\",\n          \"name\": \"string\",\n          \"summary_status\": \"PENDING\",\n          \"id\": \"string\"\n        }\n      ],\n      \"created_at\": \"1964-12-10T17:41:34.238Z\",\n      \"updated_at\": \"1983-11-18T12:46:49.370Z\",\n      \"tax_details\": [\n        {\n          \"tax_payer_id\": \"JOuiPlq00Jz\",\n          \"tax_payer_country\": \"string\",\n          \"tin_verification_status\": \"TIN_VERIFICATION_ERROR\"\n        },\n        {\n          \"tax_payer_id\": \"0-J\",\n          \"tax_payer_country\": \"string\",\n          \"tin_verification_status\": \"TIN_VERIFICATION_PENDING\"\n        }\n      ],\n      \"tax_details_not_required\": true,\n      \"summary_tin_verification_status\": \"TIN_VERIFICATION_PENDING\",\n      \"customer_due_diligence\": {\n        \"aliases\": [\n          \"string\",\n          \"string\"\n        ],\n        \"estimated_net_worth\": \"NET_WORTH_1M_TO_2_5M\",\n        \"estimated_yearly_income\": \"INCOME_500K_TO_750K\",\n        \"expected_transfer_value\": \"TRANSFER_VALUE_25K_TO_50K\",\n        \"source_of_wealth\": \"OTHER_SOURCE_OF_WEALTH\",\n        \"source_of_funds\": \"SALARY_DISBURSEMENT\",\n        \"purpose_of_account\": \"SAVINGS\",\n        \"employment_status\": \"UNEMPLOYED\",\n        \"employment_industry_sector\": \"STO_ISSUER\",\n        \"industry_sector\": \"CRYPTO\",\n        \"has_underlying_trust_structure\": false,\n        \"has_nominee_shareholders\": true,\n        \"created_at\": \"2012-04-12T19:17:11.553Z\",\n        \"is_publicly_traded\": false,\n        \"merchant_funding_source\": \"NON_PROFIT_SOURCES\",\n        \"customer_regions\": [\n          \"EUROPE\",\n          \"ASIA\"\n        ]\n      },\n      \"is_merchant\": false,\n      \"last_kyc_refresh_date\": \"1968-01-17T14:21:54.474Z\"\n    },\n    {\n      \"id\": \"string\",\n      \"metadata\": {\n        \"key_0\": \"string\",\n        \"key_1\": \"string\",\n        \"key_2\": \"string\",\n        \"key_3\": \"string\"\n      },\n      \"status\": \"DENIED\",\n      \"status_details\": {\n        \"active_controls\": [\n          {\n            \"id\": \"string\",\n            \"type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"set_by\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"created_at\": \"1974-10-10T07:54:39.861Z\",\n            \"is_overridable\": true,\n            \"reason_code\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"reason\": \"string\",\n            \"deleted_at\": \"2000-03-13T19:38:57.861Z\"\n          },\n          {\n            \"id\": \"string\",\n            \"type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"set_by\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"created_at\": \"2012-02-22T09:08:51.672Z\",\n            \"is_overridable\": false,\n            \"reason_code\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"reason\": \"string\",\n            \"deleted_at\": \"1951-05-20T12:50:00.760Z\"\n          }\n        ],\n        \"requirements\": [\n          {\n            \"type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"errors\": [\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            ],\n            \"status\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"awaiting_action_from\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"errors\": [\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            ],\n            \"status\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"awaiting_action_from\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ]\n      },\n      \"summary_status\": \"PENDING\",\n      \"user_disabled\": false,\n      \"admin_disabled\": true,\n      \"person_details\": {\n        \"id_verification_status\": \"DISABLED\",\n        \"sanctions_verification_status\": \"ERROR\",\n        \"first_name\": \".?VO9\",\n        \"last_name\": \"+Kg,x\",\n        \"date_of_birth\": \"0085-01-43\",\n        \"govt_id\": \"VVHhc\",\n        \"address\": {\n          \"country\": \"VMX\",\n          \"address1\": \" P4Q1'M \",\n          \"city\": \"gO\",\n          \"province\": \"Dgu  \",\n          \"address2\": \"d9AT8cL5\",\n          \"zip_code\": \")KCjd\"\n        },\n        \"phone_number\": \"string\",\n        \"email\": \"string\",\n        \"nationality\": \"DSW\",\n        \"verifier_id\": \"string\",\n        \"verifier_type\": \"PASSTHROUGH\",\n        \"id_verification_url\": \"string\",\n        \"passthrough_verifier_type\": \"CUSTOMER\",\n        \"passthrough_verified_at\": \"2019-02-03T06:50:18.901Z\",\n        \"govt_id_type\": \"DRIVING_LICENSE\",\n        \"cip_id\": \"1RW\",\n        \"cip_id_type\": \"PASSPORT\",\n        \"cip_id_country\": \"string\",\n        \"additional_screening_status\": \"PENDING\",\n        \"profession\": \"string\",\n        \"middle_name\": \"string\",\n        \"country_of_birth\": \"string\",\n        \"passthrough_verification_id\": \"string\",\n        \"passthrough_verification_status\": \"DENIED\",\n        \"passthrough_verification_fields\": [\n          \"CIP_ID\",\n          \"FULL_LEGAL_NAME\"\n        ]\n      },\n      \"type\": \"PERSON\",\n      \"ref_id\": \"string\",\n      \"institution_details\": {\n        \"sanctions_verification_status\": \"PENDING\",\n        \"name\": \"1.7OT9.SR\",\n        \"business_address\": {\n          \"country\": \",Oueq\",\n          \"address1\": \"sl&&\",\n          \"city\": \"E7'Q)(VG\",\n          \"province\": \"4OKRRX+xF\",\n          \"address2\": \"Aroj+ee\",\n          \"zip_code\": \"AKFn?e4f/LF\"\n        },\n        \"phone_number\": \"string\",\n        \"email\": \"string\",\n        \"institution_type\": \"LLC\",\n        \"institution_sub_type\": \"CONSTRUCTION\",\n        \"cip_id\": \"Lpxtn,x/7T\",\n        \"cip_id_type\": \"EIN\",\n        \"cip_id_country\": \"string\",\n        \"govt_registration_date\": \"2013-06-22T15:43:26.995Z\",\n        \"incorporation_address\": {\n          \"country\": \"G\",\n          \"address1\": \" \",\n          \"city\": \"(eKq3ux\",\n          \"province\": \"cHsR Q\",\n          \"address2\": \"qLNdZl/M.\",\n          \"zip_code\": \"y+9KE6\"\n        },\n        \"regulation_status\": \"INTL_REGULATED\",\n        \"trading_type\": \"PRIVATE\",\n        \"listed_exchange\": \"string\",\n        \"ticker_symbol\": \"string\",\n        \"parent_institution_name\": \"string\",\n        \"regulator_name\": \"string\",\n        \"regulator_jurisdiction\": \"string\",\n        \"regulator_register_number\": \"string\",\n        \"document_verification_status\": \"APPROVED\",\n        \"additional_screening_status\": \"DENIED\",\n        \"doing_business_as\": \"string\",\n        \"business_description\": \"string\"\n      },\n      \"institution_members\": [\n        {\n          \"identity_id\": \"string\",\n          \"roles\": [\n            \"BENEFICIARY\",\n            \"ACCOUNT_OPENER\"\n          ],\n          \"ownership\": \"string\",\n          \"position\": \"string\",\n          \"name\": \"string\",\n          \"summary_status\": \"PENDING\",\n          \"id\": \"string\"\n        },\n        {\n          \"identity_id\": \"string\",\n          \"roles\": [\n            \"GRANTOR\",\n            \"BENEFICIAL_OWNER\"\n          ],\n          \"ownership\": \"string\",\n          \"position\": \"string\",\n          \"name\": \"string\",\n          \"summary_status\": \"DENIED\",\n          \"id\": \"string\"\n        }\n      ],\n      \"created_at\": \"1965-06-07T17:55:09.097Z\",\n      \"updated_at\": \"1977-10-13T13:27:36.253Z\",\n      \"tax_details\": [\n        {\n          \"tax_payer_id\": \"'qmu-xB+'\",\n          \"tax_payer_country\": \"string\",\n          \"tin_verification_status\": \"TIN_VERIFICATION_VALID\"\n        },\n        {\n          \"tax_payer_id\": \"9frwu\",\n          \"tax_payer_country\": \"string\",\n          \"tin_verification_status\": \"TIN_VERIFICATION_ERROR\"\n        }\n      ],\n      \"tax_details_not_required\": true,\n      \"summary_tin_verification_status\": \"TIN_VERIFICATION_PENDING\",\n      \"customer_due_diligence\": {\n        \"aliases\": [\n          \"string\",\n          \"string\"\n        ],\n        \"estimated_net_worth\": \"NET_WORTH_500K_TO_1M\",\n        \"estimated_yearly_income\": \"INCOME_0_TO_50K\",\n        \"expected_transfer_value\": \"TRANSFER_VALUE_ABOVE_5M\",\n        \"source_of_wealth\": \"INVESTMENT_GAINS\",\n        \"source_of_funds\": \"GOVERNMENT_BENEFITS\",\n        \"purpose_of_account\": \"STABLECOIN_PURCHASE_REDEMPTION\",\n        \"employment_status\": \"SELF_EMPLOYED\",\n        \"employment_industry_sector\": \"INVESTMENT\",\n        \"industry_sector\": \"AUCTIONS\",\n        \"has_underlying_trust_structure\": false,\n        \"has_nominee_shareholders\": false,\n        \"created_at\": \"1979-05-08T00:27:11.745Z\",\n        \"is_publicly_traded\": true,\n        \"merchant_funding_source\": \"INVESTMENT_GAINS\",\n        \"customer_regions\": [\n          \"EUROPE\",\n          \"MEXICO_CENTRAL_AMERICA\"\n        ]\n      },\n      \"is_merchant\": false,\n      \"last_kyc_refresh_date\": \"1964-01-14T18:56:46.075Z\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "bda8f8d6-d609-47c7-af48-0e62074ccbe8",
+          "name": "Create Identity",
+          "request": {
+            "name": "Create Identity",
+            "description": {
+              "content": "Creates a new Person or Institution Identity on the Paxos Platform.\n\nA successful response indicates that the identity has been created and is `PENDING` approval. The identity is only\navailable to use on the Platform once it is `APPROVED`. For a full description of statuses read the [status guide here](https://docs.paxos.com/identity/statuses).\n\nFor detailed guidance on which [fields are required](https://docs.paxos.com/identity/required-details) for your integration\nor the [lifecycle of an Identity](https://docs.paxos.com/identity/statuses) on the platform, please read the [Identity Developer Guide](https://docs.paxos.com/identity).",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "identity",
+                "identities"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "conversion:read_conversion_stablecoin conversion:write_conversion_stablecoin exchange:historical_prices exchange:read_order exchange:read_quote exchange:read_quote_execution exchange:write_quote_execution exchange:write_order fee:write_crypto_withdrawal_fee funding:read_bank_balance funding:read_profile funding:write_profile identity:read_account identity:read_identity identity:write_account identity:write_identity settlement:read_transaction settlement:write_transaction tax:read_tax_form tax:read_tax_lot tax:write_tax_lot transfer:read_deposit_address transfer:read_fiat_account transfer:read_fiat_deposit_instructions transfer:read_transfer transfer:read_transfer_limit transfer:reject_crypto_deposit transfer:update_crypto_deposit transfer:write_crypto_withdrawal transfer:write_deposit_address transfer:write_fiat_account transfer:write_fiat_deposit_instructions transfer:write_internal_transfer transfer:write_sandbox_fiat_deposit transfer:write_fiat_withdrawal events:read_event"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://oauth.paxos.com/oauth2/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"person_details\": {\n    \"id_verification_status\": \"<string>\",\n    \"sanctions_verification_status\": \"<string>\",\n    \"first_name\": \"<string>\",\n    \"last_name\": \"<string>\",\n    \"date_of_birth\": \"<string>\",\n    \"govt_id\": \"<string>\",\n    \"address\": {\n      \"country\": \"<string>\",\n      \"address1\": \"<string>\",\n      \"city\": \"<string>\",\n      \"province\": \"<string>\",\n      \"address2\": \"<string>\",\n      \"zip_code\": \"<string>\"\n    },\n    \"phone_number\": \"<string>\",\n    \"email\": \"<string>\",\n    \"nationality\": \"<string>\",\n    \"verifier_id\": \"<string>\",\n    \"verifier_type\": \"<string>\",\n    \"id_verification_url\": \"<string>\",\n    \"passthrough_verifier_type\": \"<string>\",\n    \"passthrough_verified_at\": \"<dateTime>\",\n    \"govt_id_type\": \"<string>\",\n    \"cip_id\": \"<string>\",\n    \"cip_id_type\": \"<string>\",\n    \"cip_id_country\": \"<string>\",\n    \"additional_screening_status\": \"<string>\",\n    \"profession\": \"<string>\",\n    \"middle_name\": \"<string>\",\n    \"country_of_birth\": \"<string>\",\n    \"passthrough_verification_id\": \"<string>\",\n    \"passthrough_verification_status\": \"<string>\",\n    \"passthrough_verification_fields\": [\n      \"<string>\",\n      \"<string>\"\n    ]\n  },\n  \"metadata\": {\n    \"key_0\": \"<string>\",\n    \"key_1\": \"<string>\",\n    \"key_2\": \"<string>\"\n  },\n  \"ref_id\": \"<string>\",\n  \"institution_details\": {\n    \"sanctions_verification_status\": \"<string>\",\n    \"name\": \"<string>\",\n    \"business_address\": {\n      \"country\": \"<string>\",\n      \"address1\": \"<string>\",\n      \"city\": \"<string>\",\n      \"province\": \"<string>\",\n      \"address2\": \"<string>\",\n      \"zip_code\": \"<string>\"\n    },\n    \"phone_number\": \"<string>\",\n    \"email\": \"<string>\",\n    \"institution_type\": \"<string>\",\n    \"institution_sub_type\": \"<string>\",\n    \"cip_id\": \"<string>\",\n    \"cip_id_type\": \"<string>\",\n    \"cip_id_country\": \"<string>\",\n    \"govt_registration_date\": \"<dateTime>\",\n    \"incorporation_address\": {\n      \"country\": \"<string>\",\n      \"address1\": \"<string>\",\n      \"city\": \"<string>\",\n      \"province\": \"<string>\",\n      \"address2\": \"<string>\",\n      \"zip_code\": \"<string>\"\n    },\n    \"regulation_status\": \"<string>\",\n    \"trading_type\": \"<string>\",\n    \"listed_exchange\": \"<string>\",\n    \"ticker_symbol\": \"<string>\",\n    \"parent_institution_name\": \"<string>\",\n    \"regulator_name\": \"<string>\",\n    \"regulator_jurisdiction\": \"<string>\",\n    \"regulator_register_number\": \"<string>\",\n    \"document_verification_status\": \"<string>\",\n    \"additional_screening_status\": \"<string>\",\n    \"doing_business_as\": \"<string>\",\n    \"business_description\": \"<string>\"\n  },\n  \"institution_members\": [\n    {\n      \"identity_id\": \"<string>\",\n      \"roles\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"ownership\": \"<decimal>\",\n      \"position\": \"<string>\",\n      \"name\": \"<string>\",\n      \"summary_status\": \"<string>\",\n      \"id\": \"<string>\"\n    },\n    {\n      \"identity_id\": \"<string>\",\n      \"roles\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"ownership\": \"<decimal>\",\n      \"position\": \"<string>\",\n      \"name\": \"<string>\",\n      \"summary_status\": \"<string>\",\n      \"id\": \"<string>\"\n    }\n  ],\n  \"tax_details\": [\n    {\n      \"tax_payer_id\": \"<string>\",\n      \"tax_payer_country\": \"<string>\",\n      \"tin_verification_status\": \"<string>\"\n    },\n    {\n      \"tax_payer_id\": \"<string>\",\n      \"tax_payer_country\": \"<string>\",\n      \"tin_verification_status\": \"<string>\"\n    }\n  ],\n  \"tax_details_not_required\": \"<boolean>\",\n  \"customer_due_diligence\": {\n    \"aliases\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"estimated_net_worth\": \"<string>\",\n    \"estimated_yearly_income\": \"<string>\",\n    \"expected_transfer_value\": \"<string>\",\n    \"source_of_wealth\": \"<string>\",\n    \"source_of_funds\": \"<string>\",\n    \"purpose_of_account\": \"<string>\",\n    \"employment_status\": \"<string>\",\n    \"employment_industry_sector\": \"<string>\",\n    \"industry_sector\": \"<string>\",\n    \"has_underlying_trust_structure\": \"<boolean>\",\n    \"has_nominee_shareholders\": \"<boolean>\",\n    \"created_at\": \"<dateTime>\",\n    \"is_publicly_traded\": \"<boolean>\",\n    \"merchant_funding_source\": \"<string>\",\n    \"customer_regions\": [\n      \"<string>\",\n      \"<string>\"\n    ]\n  },\n  \"is_merchant\": \"<boolean>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "3b078852-1527-4d29-b8a6-0a64a9b6a568",
+              "name": "A successful response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "identity",
+                    "identities"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"person_details\": {\n    \"verifier_type\": \"PASSTHROUGH\",\n    \"passthrough_verifier_type\": \"JUMIO\",\n    \"passthrough_verified_at\": \"2021-06-16T09:28:14Z\",\n    \"first_name\": \"John\",\n    \"last_name\": \"Doe\",\n    \"date_of_birth\": \"1980-01-01\",\n    \"phone_number\": \"+1 555 678 1234\",\n    \"email\": \"example@somemail.org\",\n    \"cip_id\": \"111-11-1234\",\n    \"cip_id_type\": \"SSN\",\n    \"cip_id_country\": \"USA\",\n    \"nationality\": \"USA\",\n    \"address\": {\n      \"country\": \"USA\",\n      \"address1\": \"1 Example St\",\n      \"city\": \"New York\",\n      \"province\": \"NY\",\n      \"zip_code\": \"10001\"\n    },\n    \"metadata\": {\n      \"custom_property1\": \"custom value 1\",\n      \"custom_property2\": \"custom value 2\"\n    }\n  },\n  \"ref_id\": \"33ece656-eef1-43b5-a851-b6b9099089a5\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"created_at\": \"2022-02-15T05:46:50.957068Z\",\n  \"id\": \"36ae1728-c54a-4046-86df-8a413e0ab9b3\",\n  \"person_details\": {\n    \"additional_screening_status\": \"PENDING\",\n    \"address\": {\n      \"address1\": \"1 Example St\",\n      \"city\": \"New York\",\n      \"country\": \"USA\",\n      \"province\": \"NY\",\n      \"zip_code\": \"10001\"\n    },\n    \"cip_id\": \"111-11-1234\",\n    \"cip_id_country\": \"USA\",\n    \"cip_id_type\": \"SSN\",\n    \"date_of_birth\": \"1980-01-01\",\n    \"first_name\": \"John\",\n    \"govt_id\": \"111-11-1234\",\n    \"govt_id_type\": \"SSN\",\n    \"id_verification_status\": \"APPROVED\",\n    \"last_name\": \"Doe\",\n    \"nationality\": \"USA\",\n    \"passthrough_verified_at\": \"2021-06-16T09:28:14Z\",\n    \"passthrough_verifier_type'\": \"JUMIO\",\n    \"sanctions_verification_status\": \"PENDING\",\n    \"verifier_type\": \"PASSTHROUGH\"\n  },\n  \"ref_id\": \"33ece656-eef1-43b5-a851-b6b9099089a5\",\n  \"summary_status\": \"PENDING\",\n  \"tax_details\": [\n    {\n      \"tax_payer_country\": \"USA\",\n      \"tax_payer_id\": \"111-11-1234\"\n    }\n  ],\n  \"type\": \"PERSON\",\n  \"updated_at\": \"2022-02-15T05:46:50.957068Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "84d9e910-bcf6-4ee1-8bd1-028b1cdd5ef5",
+              "name": "Duplicate identity record",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "identity",
+                    "identities"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"person_details\": {\n    \"verifier_type\": \"PASSTHROUGH\",\n    \"passthrough_verifier_type\": \"JUMIO\",\n    \"passthrough_verified_at\": \"2021-06-16T09:28:14Z\",\n    \"first_name\": \"John\",\n    \"last_name\": \"Doe\",\n    \"date_of_birth\": \"1980-01-01\",\n    \"phone_number\": \"+1 555 678 1234\",\n    \"email\": \"example@somemail.org\",\n    \"cip_id\": \"111-11-1234\",\n    \"cip_id_type\": \"SSN\",\n    \"cip_id_country\": \"USA\",\n    \"nationality\": \"USA\",\n    \"address\": {\n      \"country\": \"USA\",\n      \"address1\": \"1 Example St\",\n      \"city\": \"New York\",\n      \"province\": \"NY\",\n      \"zip_code\": \"10001\"\n    },\n    \"metadata\": {\n      \"custom_property1\": \"custom value 1\",\n      \"custom_property2\": \"custom value 2\"\n    }\n  },\n  \"ref_id\": \"33ece656-eef1-43b5-a851-b6b9099089a5\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"https://developer.paxos.com/docs/v2/problems/already-exists\",\n  \"title\": \"Already Exists\",\n  \"status\": 409,\n  \"detail\": \"duplicate (cip_id, cip_id_type, cip_id_country) provided\",\n  \"meta\": {\n    \"existing\": {\n      \"id\": \"36ae1728-c54a-4046-86df-8a403e0ab9b3\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "b23b69f1-4b07-41e8-9042-6e97f7972dd7",
+          "name": "Get Identity",
+          "request": {
+            "name": "Get Identity",
+            "description": {
+              "content": "Get an Identity by its (identity) id. You can only see identities created by you.\n\nYou can use the query parameter `include_details` to include identity details (`person_details` or `institution_details`) in\nthe response and the query parameter `include_institution_members` to include institution members in the response.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "identity",
+                "identities",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "include_details",
+                  "value": "<boolean>",
+                  "description": "query param; details are encrypted, so we do not want to include them by default"
+                },
+                {
+                  "disabled": false,
+                  "key": "include_institution_members",
+                  "value": "<boolean>",
+                  "description": "query param; to include institution members for institution identity"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) id associated with the identity"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "conversion:read_conversion_stablecoin conversion:write_conversion_stablecoin exchange:historical_prices exchange:read_order exchange:read_quote exchange:read_quote_execution exchange:write_quote_execution exchange:write_order fee:write_crypto_withdrawal_fee funding:read_bank_balance funding:read_profile funding:write_profile identity:read_account identity:read_identity identity:write_account identity:write_identity settlement:read_transaction settlement:write_transaction tax:read_tax_form tax:read_tax_lot tax:write_tax_lot transfer:read_deposit_address transfer:read_fiat_account transfer:read_fiat_deposit_instructions transfer:read_transfer transfer:read_transfer_limit transfer:reject_crypto_deposit transfer:update_crypto_deposit transfer:write_crypto_withdrawal transfer:write_deposit_address transfer:write_fiat_account transfer:write_fiat_deposit_instructions transfer:write_internal_transfer transfer:write_sandbox_fiat_deposit transfer:write_fiat_withdrawal events:read_event"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://oauth.paxos.com/oauth2/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "f3291959-5792-4346-834d-6988b5ac0f12",
+              "name": "A successful response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "identity",
+                    "identities",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "include_details",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "include_institution_members",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) id associated with the identity"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"string\",\n  \"metadata\": {\n    \"key_0\": \"string\",\n    \"key_1\": \"string\",\n    \"key_2\": \"string\",\n    \"key_3\": \"string\"\n  },\n  \"status\": \"<string>\",\n  \"status_details\": {\n    \"active_controls\": [\n      {\n        \"id\": \"string\",\n        \"type\": \"DORMANT\",\n        \"set_by\": \"SET_BY_PAXOS\",\n        \"created_at\": \"1954-12-14T14:28:33.376Z\",\n        \"is_overridable\": false,\n        \"reason_code\": \"END_USER_REQUEST\",\n        \"reason\": \"string\",\n        \"deleted_at\": \"2014-10-05T02:49:50.234Z\"\n      },\n      {\n        \"id\": \"string\",\n        \"type\": \"SELL_ONLY\",\n        \"set_by\": \"SET_BY_CLIENT\",\n        \"created_at\": \"1964-07-09T19:13:33.256Z\",\n        \"is_overridable\": false,\n        \"reason_code\": \"LEGAL_ORDER\",\n        \"reason\": \"string\",\n        \"deleted_at\": \"1972-06-18T07:42:03.086Z\"\n      }\n    ],\n    \"requirements\": [\n      {\n        \"type\": \"TAX_DETAILS_VERIFICATION\",\n        \"errors\": [\n          {\n            \"code\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"description\": \"string\"\n          },\n          {\n            \"code\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"description\": \"string\"\n          }\n        ],\n        \"status\": \"PENDING\",\n        \"awaiting_action_from\": \"CLIENT\"\n      },\n      {\n        \"type\": \"MEMBERS\",\n        \"errors\": [\n          {\n            \"code\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"description\": \"string\"\n          },\n          {\n            \"code\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"description\": \"string\"\n          }\n        ],\n        \"status\": \"FAILED\",\n        \"awaiting_action_from\": \"PAXOS\"\n      }\n    ]\n  },\n  \"summary_status\": \"<string>\",\n  \"user_disabled\": true,\n  \"admin_disabled\": true,\n  \"person_details\": {\n    \"id_verification_status\": \"<string>\",\n    \"sanctions_verification_status\": \"<string>\",\n    \"first_name\": \"<string>\",\n    \"last_name\": \"<string>\",\n    \"date_of_birth\": \"<string>\",\n    \"govt_id\": \"<string>\",\n    \"address\": {\n      \"country\": \"<string>\",\n      \"address1\": \"<string>\",\n      \"city\": \"<string>\",\n      \"province\": \"<string>\",\n      \"address2\": \"<string>\",\n      \"zip_code\": \"<string>\"\n    },\n    \"phone_number\": \"<string>\",\n    \"email\": \"<string>\",\n    \"nationality\": \"<string>\",\n    \"verifier_id\": \"<string>\",\n    \"verifier_type\": \"<string>\",\n    \"id_verification_url\": \"<string>\",\n    \"passthrough_verifier_type\": \"<string>\",\n    \"passthrough_verified_at\": \"<dateTime>\",\n    \"govt_id_type\": \"<string>\",\n    \"cip_id\": \"<string>\",\n    \"cip_id_type\": \"<string>\",\n    \"cip_id_country\": \"<string>\",\n    \"additional_screening_status\": \"<string>\",\n    \"profession\": \"<string>\",\n    \"middle_name\": \"<string>\",\n    \"country_of_birth\": \"<string>\",\n    \"passthrough_verification_id\": \"<string>\",\n    \"passthrough_verification_status\": \"<string>\",\n    \"passthrough_verification_fields\": [\n      \"<string>\",\n      \"<string>\"\n    ]\n  },\n  \"type\": \"INSTITUTION\",\n  \"ref_id\": \"string\",\n  \"institution_details\": {\n    \"sanctions_verification_status\": \"<string>\",\n    \"name\": \"<string>\",\n    \"business_address\": {\n      \"country\": \"<string>\",\n      \"address1\": \"<string>\",\n      \"city\": \"<string>\",\n      \"province\": \"<string>\",\n      \"address2\": \"<string>\",\n      \"zip_code\": \"<string>\"\n    },\n    \"phone_number\": \"<string>\",\n    \"email\": \"<string>\",\n    \"institution_type\": \"<string>\",\n    \"institution_sub_type\": \"<string>\",\n    \"cip_id\": \"<string>\",\n    \"cip_id_type\": \"<string>\",\n    \"cip_id_country\": \"<string>\",\n    \"govt_registration_date\": \"<dateTime>\",\n    \"incorporation_address\": {\n      \"country\": \"<string>\",\n      \"address1\": \"<string>\",\n      \"city\": \"<string>\",\n      \"province\": \"<string>\",\n      \"address2\": \"<string>\",\n      \"zip_code\": \"<string>\"\n    },\n    \"regulation_status\": \"<string>\",\n    \"trading_type\": \"<string>\",\n    \"listed_exchange\": \"<string>\",\n    \"ticker_symbol\": \"<string>\",\n    \"parent_institution_name\": \"<string>\",\n    \"regulator_name\": \"<string>\",\n    \"regulator_jurisdiction\": \"<string>\",\n    \"regulator_register_number\": \"<string>\",\n    \"document_verification_status\": \"<string>\",\n    \"additional_screening_status\": \"<string>\",\n    \"doing_business_as\": \"<string>\",\n    \"business_description\": \"<string>\"\n  },\n  \"institution_members\": [\n    {\n      \"identity_id\": \"<string>\",\n      \"roles\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"ownership\": \"<decimal>\",\n      \"position\": \"<string>\",\n      \"name\": \"<string>\",\n      \"summary_status\": \"<string>\",\n      \"id\": \"<string>\"\n    },\n    {\n      \"identity_id\": \"<string>\",\n      \"roles\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"ownership\": \"<decimal>\",\n      \"position\": \"<string>\",\n      \"name\": \"<string>\",\n      \"summary_status\": \"<string>\",\n      \"id\": \"<string>\"\n    }\n  ],\n  \"created_at\": \"1990-03-09T11:17:02.244Z\",\n  \"updated_at\": \"1963-04-19T03:10:49.202Z\",\n  \"tax_details\": [\n    {\n      \"tax_payer_id\": \"<string>\",\n      \"tax_payer_country\": \"<string>\",\n      \"tin_verification_status\": \"<string>\"\n    },\n    {\n      \"tax_payer_id\": \"<string>\",\n      \"tax_payer_country\": \"<string>\",\n      \"tin_verification_status\": \"<string>\"\n    }\n  ],\n  \"tax_details_not_required\": false,\n  \"summary_tin_verification_status\": \"<string>\",\n  \"customer_due_diligence\": {\n    \"aliases\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"estimated_net_worth\": \"<string>\",\n    \"estimated_yearly_income\": \"<string>\",\n    \"expected_transfer_value\": \"<string>\",\n    \"source_of_wealth\": \"<string>\",\n    \"source_of_funds\": \"<string>\",\n    \"purpose_of_account\": \"<string>\",\n    \"employment_status\": \"<string>\",\n    \"employment_industry_sector\": \"<string>\",\n    \"industry_sector\": \"<string>\",\n    \"has_underlying_trust_structure\": \"<boolean>\",\n    \"has_nominee_shareholders\": \"<boolean>\",\n    \"created_at\": \"<dateTime>\",\n    \"is_publicly_traded\": \"<boolean>\",\n    \"merchant_funding_source\": \"<string>\",\n    \"customer_regions\": [\n      \"<string>\",\n      \"<string>\"\n    ]\n  },\n  \"is_merchant\": false,\n  \"last_kyc_refresh_date\": \"2024-07-22T22:31:17.806Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "aa88c8ea-8300-4ed6-8043-bc4ba1678952",
+          "name": "Update Identity",
+          "request": {
+            "name": "Update Identity",
+            "description": {
+              "content": "Updates an Identity, this action performs a delta of what is submitted in the update and the existing identity.\n- Updating details (`person_details` or `institution_details`) might lead to the identity being re-verified (e.g. re-screening name changes), which\ncould impact the identity's ability to transact on the Platform.\n- Setting `set_user_disabled` to `true` will make the Identity `DISABLED` (read [more here](https://docs.paxos.com/identity/statuses) on what this means)\n- Setting `tax_details` will update all the tax details for the identity\n- Setting `last_kyc_refresh_date` indicates this is not an adhoc-update, and instead an update for a [periodic kyc refresh](https://docs.paxos.com/identity/kyc-refresh)\n\nChanging an Institution Identity to a Person and vice-versa is not supported.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "identity",
+                "identities",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "conversion:read_conversion_stablecoin conversion:write_conversion_stablecoin exchange:historical_prices exchange:read_order exchange:read_quote exchange:read_quote_execution exchange:write_quote_execution exchange:write_order fee:write_crypto_withdrawal_fee funding:read_bank_balance funding:read_profile funding:write_profile identity:read_account identity:read_identity identity:write_account identity:write_identity settlement:read_transaction settlement:write_transaction tax:read_tax_form tax:read_tax_lot tax:write_tax_lot transfer:read_deposit_address transfer:read_fiat_account transfer:read_fiat_deposit_instructions transfer:read_transfer transfer:read_transfer_limit transfer:reject_crypto_deposit transfer:update_crypto_deposit transfer:write_crypto_withdrawal transfer:write_deposit_address transfer:write_fiat_account transfer:write_fiat_deposit_instructions transfer:write_internal_transfer transfer:write_sandbox_fiat_deposit transfer:write_fiat_withdrawal events:read_event"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://oauth.paxos.com/oauth2/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"person_details\": {\n    \"id_verification_status\": \"<string>\",\n    \"sanctions_verification_status\": \"<string>\",\n    \"first_name\": \"<string>\",\n    \"last_name\": \"<string>\",\n    \"date_of_birth\": \"<string>\",\n    \"govt_id\": \"<string>\",\n    \"address\": {\n      \"country\": \"<string>\",\n      \"address1\": \"<string>\",\n      \"city\": \"<string>\",\n      \"province\": \"<string>\",\n      \"address2\": \"<string>\",\n      \"zip_code\": \"<string>\"\n    },\n    \"phone_number\": \"<string>\",\n    \"email\": \"<string>\",\n    \"nationality\": \"<string>\",\n    \"verifier_id\": \"<string>\",\n    \"verifier_type\": \"<string>\",\n    \"id_verification_url\": \"<string>\",\n    \"passthrough_verifier_type\": \"<string>\",\n    \"passthrough_verified_at\": \"<dateTime>\",\n    \"govt_id_type\": \"<string>\",\n    \"cip_id\": \"<string>\",\n    \"cip_id_type\": \"<string>\",\n    \"cip_id_country\": \"<string>\",\n    \"additional_screening_status\": \"<string>\",\n    \"profession\": \"<string>\",\n    \"middle_name\": \"<string>\",\n    \"country_of_birth\": \"<string>\",\n    \"passthrough_verification_id\": \"<string>\",\n    \"passthrough_verification_status\": \"<string>\",\n    \"passthrough_verification_fields\": [\n      \"<string>\",\n      \"<string>\"\n    ]\n  },\n  \"metadata\": {\n    \"key_0\": \"<string>\",\n    \"key_1\": \"<string>\"\n  },\n  \"set_user_disabled\": \"<boolean>\",\n  \"institution_details\": {\n    \"sanctions_verification_status\": \"<string>\",\n    \"name\": \"<string>\",\n    \"business_address\": {\n      \"country\": \"<string>\",\n      \"address1\": \"<string>\",\n      \"city\": \"<string>\",\n      \"province\": \"<string>\",\n      \"address2\": \"<string>\",\n      \"zip_code\": \"<string>\"\n    },\n    \"phone_number\": \"<string>\",\n    \"email\": \"<string>\",\n    \"institution_type\": \"<string>\",\n    \"institution_sub_type\": \"<string>\",\n    \"cip_id\": \"<string>\",\n    \"cip_id_type\": \"<string>\",\n    \"cip_id_country\": \"<string>\",\n    \"govt_registration_date\": \"<dateTime>\",\n    \"incorporation_address\": {\n      \"country\": \"<string>\",\n      \"address1\": \"<string>\",\n      \"city\": \"<string>\",\n      \"province\": \"<string>\",\n      \"address2\": \"<string>\",\n      \"zip_code\": \"<string>\"\n    },\n    \"regulation_status\": \"<string>\",\n    \"trading_type\": \"<string>\",\n    \"listed_exchange\": \"<string>\",\n    \"ticker_symbol\": \"<string>\",\n    \"parent_institution_name\": \"<string>\",\n    \"regulator_name\": \"<string>\",\n    \"regulator_jurisdiction\": \"<string>\",\n    \"regulator_register_number\": \"<string>\",\n    \"document_verification_status\": \"<string>\",\n    \"additional_screening_status\": \"<string>\",\n    \"doing_business_as\": \"<string>\",\n    \"business_description\": \"<string>\"\n  },\n  \"ref_id\": \"<string>\",\n  \"tax_details\": [\n    {\n      \"tax_payer_id\": \"<string>\",\n      \"tax_payer_country\": \"<string>\",\n      \"tin_verification_status\": \"<string>\"\n    },\n    {\n      \"tax_payer_id\": \"<string>\",\n      \"tax_payer_country\": \"<string>\",\n      \"tin_verification_status\": \"<string>\"\n    }\n  ],\n  \"set_tax_details_not_required\": \"<boolean>\",\n  \"customer_due_diligence\": {\n    \"aliases\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"estimated_net_worth\": \"<string>\",\n    \"estimated_yearly_income\": \"<string>\",\n    \"expected_transfer_value\": \"<string>\",\n    \"source_of_wealth\": \"<string>\",\n    \"source_of_funds\": \"<string>\",\n    \"purpose_of_account\": \"<string>\",\n    \"employment_status\": \"<string>\",\n    \"employment_industry_sector\": \"<string>\",\n    \"industry_sector\": \"<string>\",\n    \"has_underlying_trust_structure\": \"<boolean>\",\n    \"has_nominee_shareholders\": \"<boolean>\",\n    \"created_at\": \"<dateTime>\",\n    \"is_publicly_traded\": \"<boolean>\",\n    \"merchant_funding_source\": \"<string>\",\n    \"customer_regions\": [\n      \"<string>\",\n      \"<string>\"\n    ]\n  },\n  \"is_merchant\": \"<boolean>\",\n  \"last_kyc_refresh_date\": \"<dateTime>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "7f94fc53-8522-426e-8599-e988edada0f7",
+              "name": "A successful response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "identity",
+                    "identities",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"person_details\": {\n    \"first_name\": \"John\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"string\",\n  \"metadata\": {\n    \"key_0\": \"string\",\n    \"key_1\": \"string\",\n    \"key_2\": \"string\",\n    \"key_3\": \"string\"\n  },\n  \"status\": \"<string>\",\n  \"status_details\": {\n    \"active_controls\": [\n      {\n        \"id\": \"string\",\n        \"type\": \"DORMANT\",\n        \"set_by\": \"SET_BY_PAXOS\",\n        \"created_at\": \"1954-12-14T14:28:33.376Z\",\n        \"is_overridable\": false,\n        \"reason_code\": \"END_USER_REQUEST\",\n        \"reason\": \"string\",\n        \"deleted_at\": \"2014-10-05T02:49:50.234Z\"\n      },\n      {\n        \"id\": \"string\",\n        \"type\": \"SELL_ONLY\",\n        \"set_by\": \"SET_BY_CLIENT\",\n        \"created_at\": \"1964-07-09T19:13:33.256Z\",\n        \"is_overridable\": false,\n        \"reason_code\": \"LEGAL_ORDER\",\n        \"reason\": \"string\",\n        \"deleted_at\": \"1972-06-18T07:42:03.086Z\"\n      }\n    ],\n    \"requirements\": [\n      {\n        \"type\": \"TAX_DETAILS_VERIFICATION\",\n        \"errors\": [\n          {\n            \"code\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"description\": \"string\"\n          },\n          {\n            \"code\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"description\": \"string\"\n          }\n        ],\n        \"status\": \"PENDING\",\n        \"awaiting_action_from\": \"CLIENT\"\n      },\n      {\n        \"type\": \"MEMBERS\",\n        \"errors\": [\n          {\n            \"code\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"description\": \"string\"\n          },\n          {\n            \"code\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"description\": \"string\"\n          }\n        ],\n        \"status\": \"FAILED\",\n        \"awaiting_action_from\": \"PAXOS\"\n      }\n    ]\n  },\n  \"summary_status\": \"<string>\",\n  \"user_disabled\": true,\n  \"admin_disabled\": true,\n  \"person_details\": {\n    \"id_verification_status\": \"<string>\",\n    \"sanctions_verification_status\": \"<string>\",\n    \"first_name\": \"<string>\",\n    \"last_name\": \"<string>\",\n    \"date_of_birth\": \"<string>\",\n    \"govt_id\": \"<string>\",\n    \"address\": {\n      \"country\": \"<string>\",\n      \"address1\": \"<string>\",\n      \"city\": \"<string>\",\n      \"province\": \"<string>\",\n      \"address2\": \"<string>\",\n      \"zip_code\": \"<string>\"\n    },\n    \"phone_number\": \"<string>\",\n    \"email\": \"<string>\",\n    \"nationality\": \"<string>\",\n    \"verifier_id\": \"<string>\",\n    \"verifier_type\": \"<string>\",\n    \"id_verification_url\": \"<string>\",\n    \"passthrough_verifier_type\": \"<string>\",\n    \"passthrough_verified_at\": \"<dateTime>\",\n    \"govt_id_type\": \"<string>\",\n    \"cip_id\": \"<string>\",\n    \"cip_id_type\": \"<string>\",\n    \"cip_id_country\": \"<string>\",\n    \"additional_screening_status\": \"<string>\",\n    \"profession\": \"<string>\",\n    \"middle_name\": \"<string>\",\n    \"country_of_birth\": \"<string>\",\n    \"passthrough_verification_id\": \"<string>\",\n    \"passthrough_verification_status\": \"<string>\",\n    \"passthrough_verification_fields\": [\n      \"<string>\",\n      \"<string>\"\n    ]\n  },\n  \"type\": \"INSTITUTION\",\n  \"ref_id\": \"string\",\n  \"institution_details\": {\n    \"sanctions_verification_status\": \"<string>\",\n    \"name\": \"<string>\",\n    \"business_address\": {\n      \"country\": \"<string>\",\n      \"address1\": \"<string>\",\n      \"city\": \"<string>\",\n      \"province\": \"<string>\",\n      \"address2\": \"<string>\",\n      \"zip_code\": \"<string>\"\n    },\n    \"phone_number\": \"<string>\",\n    \"email\": \"<string>\",\n    \"institution_type\": \"<string>\",\n    \"institution_sub_type\": \"<string>\",\n    \"cip_id\": \"<string>\",\n    \"cip_id_type\": \"<string>\",\n    \"cip_id_country\": \"<string>\",\n    \"govt_registration_date\": \"<dateTime>\",\n    \"incorporation_address\": {\n      \"country\": \"<string>\",\n      \"address1\": \"<string>\",\n      \"city\": \"<string>\",\n      \"province\": \"<string>\",\n      \"address2\": \"<string>\",\n      \"zip_code\": \"<string>\"\n    },\n    \"regulation_status\": \"<string>\",\n    \"trading_type\": \"<string>\",\n    \"listed_exchange\": \"<string>\",\n    \"ticker_symbol\": \"<string>\",\n    \"parent_institution_name\": \"<string>\",\n    \"regulator_name\": \"<string>\",\n    \"regulator_jurisdiction\": \"<string>\",\n    \"regulator_register_number\": \"<string>\",\n    \"document_verification_status\": \"<string>\",\n    \"additional_screening_status\": \"<string>\",\n    \"doing_business_as\": \"<string>\",\n    \"business_description\": \"<string>\"\n  },\n  \"institution_members\": [\n    {\n      \"identity_id\": \"<string>\",\n      \"roles\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"ownership\": \"<decimal>\",\n      \"position\": \"<string>\",\n      \"name\": \"<string>\",\n      \"summary_status\": \"<string>\",\n      \"id\": \"<string>\"\n    },\n    {\n      \"identity_id\": \"<string>\",\n      \"roles\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"ownership\": \"<decimal>\",\n      \"position\": \"<string>\",\n      \"name\": \"<string>\",\n      \"summary_status\": \"<string>\",\n      \"id\": \"<string>\"\n    }\n  ],\n  \"created_at\": \"1990-03-09T11:17:02.244Z\",\n  \"updated_at\": \"1963-04-19T03:10:49.202Z\",\n  \"tax_details\": [\n    {\n      \"tax_payer_id\": \"<string>\",\n      \"tax_payer_country\": \"<string>\",\n      \"tin_verification_status\": \"<string>\"\n    },\n    {\n      \"tax_payer_id\": \"<string>\",\n      \"tax_payer_country\": \"<string>\",\n      \"tin_verification_status\": \"<string>\"\n    }\n  ],\n  \"tax_details_not_required\": false,\n  \"summary_tin_verification_status\": \"<string>\",\n  \"customer_due_diligence\": {\n    \"aliases\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"estimated_net_worth\": \"<string>\",\n    \"estimated_yearly_income\": \"<string>\",\n    \"expected_transfer_value\": \"<string>\",\n    \"source_of_wealth\": \"<string>\",\n    \"source_of_funds\": \"<string>\",\n    \"purpose_of_account\": \"<string>\",\n    \"employment_status\": \"<string>\",\n    \"employment_industry_sector\": \"<string>\",\n    \"industry_sector\": \"<string>\",\n    \"has_underlying_trust_structure\": \"<boolean>\",\n    \"has_nominee_shareholders\": \"<boolean>\",\n    \"created_at\": \"<dateTime>\",\n    \"is_publicly_traded\": \"<boolean>\",\n    \"merchant_funding_source\": \"<string>\",\n    \"customer_regions\": [\n      \"<string>\",\n      \"<string>\"\n    ]\n  },\n  \"is_merchant\": false,\n  \"last_kyc_refresh_date\": \"2024-07-22T22:31:17.806Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.paxos.com/v2",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "cbdfc6ed-9a1a-4361-b20e-7c94fa45f0e8",
+    "name": "Paxos Account Members Identity API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "<p>Welcome to Paxos APIs. At Paxos, our mission is to enable the movement of any asset, any time, in a trustworthy way. These APIs serve that mission by making it easier than ever for you to directly integrate our product capabilities into your application, leveraging the speed, stability, and security of the Paxos platform.</p> <p>The documentation that follows gives you access to our Crypto Brokerage, Trading, and Exchange products. It includes APIs for market data, orders, and the held rate quote flow.</p> <p>To test in our sandbox environment, <a href=\"https://account.sandbox.paxos.com\" target=\"_blank\">sign up</a> for an account. For more information about Paxos and our APIs, visit <a href=\"https://www.paxos.com/\" target=\"_blank\">Paxos.com</a>.</p>\n",
+      "type": "text/plain"
+    }
+  }
+}

@@ -1,0 +1,92 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Paxos Account Members Rewards Statements API",
+    "version": "2.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Rewards Statements",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Rewards Statements",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.paxos.com/v2/rewards/statements",
+            "params": [
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of statements to return. Defaults to 12 if not set."
+              },
+              {
+                "name": "page_cursor",
+                "value": "",
+                "type": "query",
+                "description": "Opaque pagination cursor from a previous response."
+              },
+              {
+                "name": "asset_type",
+                "value": "",
+                "type": "query",
+                "description": "When set, only statements for this asset type are returned."
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "When set, only statements of this content type are returned.\n\n - STATEMENT_TYPE_MONTHLY_REWARDS: Monthly statement: PDF rewards summary with daily balance totals, rates, and\nper-payout-group breakdown, plus a CSV per-wallet daily balance export."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://oauth.paxos.com/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Returns monthly rewards statements for the authenticated partner, ordered by\nperiod newest first. Summary fields (total_accrued, avg_daily_balance) are\nincluded in list responses. Presigned download URLs are populated on files\nfor completed statements only."
+        },
+        {
+          "info": {
+            "name": "Get Rewards Statement",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.paxos.com/v2/rewards/statements/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "UUID of the statement to retrieve."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://oauth.paxos.com/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Returns a single rewards statement with presigned download URLs for each\ngenerated file (PDF, CSV)."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

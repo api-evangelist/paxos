@@ -1,0 +1,84 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Paxos Account Members Identity Documents API",
+    "version": "2.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Identity Documents",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Identity Documents",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.paxos.com/v2/identity/identities/:identity_id/documents",
+            "params": [
+              {
+                "name": "identity_id",
+                "value": "",
+                "type": "path",
+                "description": "id associated with the identity"
+              },
+              {
+                "name": "include_pending_docs",
+                "value": "",
+                "type": "query",
+                "description": "Add a list of pending document types for the identity"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://oauth.paxos.com/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "This endpoint enables you to get a list of all documents associated with an identity."
+        },
+        {
+          "info": {
+            "name": "Document Upload",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.paxos.com/v2/identity/identities/:identity_id/documents",
+            "params": [
+              {
+                "name": "identity_id",
+                "value": "",
+                "type": "path",
+                "description": "The id of the identity the document is associated with."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://oauth.paxos.com/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "This endpoint enables you to receive a URL to upload a document to Paxos for identity verification or enhanced due diligence purposes.\nWhen uploading a document you must specify the document type. You will receive a\nURL where you can upload the document using a POST request.\n\nRequirements:\n- Uploaded documents must be less than 100 MB in size\n- Supported formats include PDF, JPG, and PNG\n\nFor more information on document requirements for enhanced due diligence, see [here](https://docs.paxos.com/"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

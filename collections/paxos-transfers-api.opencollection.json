@@ -1,0 +1,212 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Paxos Account Members Transfers API",
+    "version": "2.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Transfers",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Transfers",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.paxos.com/v2/transfer/transfers",
+            "params": [
+              {
+                "name": "profile_ids",
+                "value": "",
+                "type": "query",
+                "description": "Optionally filter by the target profiles of the transfers. Limit 100.\nCan be combined with created_at.* or updated_at.* filtering options only."
+              },
+              {
+                "name": "identity_ids",
+                "value": "",
+                "type": "query",
+                "description": "Optionally filter by the Identities associated with the transfers. Limit 100.\nCan be combined with created_at.* or updated_at.* filtering options only."
+              },
+              {
+                "name": "ref_ids",
+                "value": "",
+                "type": "query",
+                "description": "The client-specified IDs provided during transfer creation. Limit 100.\nCan be combined with created_at.* or updated_at.* filtering options only."
+              },
+              {
+                "name": "created_at.lt",
+                "value": "",
+                "type": "query",
+                "description": "Include timestamps strictly less than lt. RFC3339 format, like `2006-01-02T15:04:05Z`."
+              },
+              {
+                "name": "created_at.lte",
+                "value": "",
+                "type": "query",
+                "description": "Include timestamps less than or equal to lte. RFC3339 format, like `2006-01-02T15:04:05Z`."
+              },
+              {
+                "name": "created_at.eq",
+                "value": "",
+                "type": "query",
+                "description": "Include timestamps exactly equal to eq. RFC3339 format, like `2006-01-02T15:04:05Z`."
+              },
+              {
+                "name": "created_at.gte",
+                "value": "",
+                "type": "query",
+                "description": "Include timestamps greater than or equal to gte. RFC3339 format, like `2006-01-02T15:04:05Z`."
+              },
+              {
+                "name": "created_at.gt",
+                "value": "",
+                "type": "query",
+                "description": "Include timestamps strictly greater than gt. RFC3339 format, like `2006-01-02T15:04:05Z`."
+              },
+              {
+                "name": "updated_at.lt",
+                "value": "",
+                "type": "query",
+                "description": "Include timestamps strictly less than lt. RFC3339 format, like `2006-01-02T15:04:05Z`."
+              },
+              {
+                "name": "updated_at.lte",
+                "value": "",
+                "type": "query",
+                "description": "Include timestamps less than or equal to lte. RFC3339 format, like `2006-01-02T15:04:05Z`."
+              },
+              {
+                "name": "updated_at.eq",
+                "value": "",
+                "type": "query",
+                "description": "Include timestamps exactly equal to eq. RFC3339 format, like `2006-01-02T15:04:05Z`."
+              },
+              {
+                "name": "updated_at.gte",
+                "value": "",
+                "type": "query",
+                "description": "Include timestamps greater than or equal to gte. RFC3339 format, like `2006-01-02T15:04:05Z`."
+              },
+              {
+                "name": "updated_at.gt",
+                "value": "",
+                "type": "query",
+                "description": "Include timestamps strictly greater than gt. RFC3339 format, like `2006-01-02T15:04:05Z`."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of results to return. Defaults to 100 if no limit is provided. Maximum 1000."
+              },
+              {
+                "name": "order",
+                "value": "",
+                "type": "query",
+                "description": "Determines whether the items are returned in ascending (ASC), or descending (DESC) order.\nDefaults to ASC if `order_by` is UPDATED_AT. Otherwise defaults to DESC."
+              },
+              {
+                "name": "order_by",
+                "value": "",
+                "type": "query",
+                "description": "The specific method by which the returned results will be ordered.\nWhen specifying both `order_by` and a timestamp filter, `order_by` must equal the timestamp filter type.\nFor example:\n\n`updated_at.gte = 2022-07-01T03:02:01Z`, `order_by = UPDATED_AT`\n\nUsing `updated_at.gte = 2022-07-01T03:02:01Z`, `order_by = CREATED_AT` is an invalid pairing."
+              },
+              {
+                "name": "page_cursor",
+                "value": "",
+                "type": "query",
+                "description": "Optional: Cursor for getting the next page of results. When the number of items returned is fewer\nthan the limit, there is currently no next page."
+              },
+              {
+                "name": "account_ids",
+                "value": "",
+                "type": "query",
+                "description": "Optionally filter by the Accounts associated with the transfers. Limit 100.\nCan be combined with created_at.* or updated_at.* filtering options only."
+              },
+              {
+                "name": "ids",
+                "value": "",
+                "type": "query",
+                "description": "Optionally filter by the transfer ids. Limit 100.\nCan be combined with created_at.* or updated_at.* filtering options only."
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "Retrieve all (default) or the specified transfers.\nOptionally filter by transfer `type`.\nTo retrieve multiple transfer types, use query parameters: e.g., `type=CRYPTO_DEPOSIT&type=CRYPTO_WITHDRAWAL`.\nCan be combined with `created_at.*` or `updated_at.*` filtering options only."
+              },
+              {
+                "name": "group_ids",
+                "value": "",
+                "type": "query",
+                "description": "Optionally filter by transfer `group_ids`. Limit 100."
+              },
+              {
+                "name": "crypto_tx_hashes",
+                "value": "",
+                "type": "query",
+                "description": "Optionally filter by the on-chain transaction hash for crypto transactions. Limit 100."
+              },
+              {
+                "name": "secondary_statuses",
+                "value": "",
+                "type": "query",
+                "description": "Optionally filter by secondary status.\n\n - TRAVEL_RULE_INFO_REQUESTED: Travel rule information is required to continue processing the transfer.\n - TRAVEL_RULE_REJECTED: Transfer has been terminally rejected due to failing travel rule checks.\n - CUSTOMER_REJECTED: Transfer was rejected by a customer.\n - PENDING_CUSTOMER_APPROVAL: Transfer is pending customer approval."
+              },
+              {
+                "name": "statuses",
+                "value": "",
+                "type": "query",
+                "description": "Optionally filter by status."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://oauth.paxos.com/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "List all transfers, optionally filtering and paging the results.\n\nBy default, transfers are returned in reverse chronological (descending)\norder by creation time.\n\nThe recommended polling workflow is to query the results in ascending\norder (by setting `order_by` to `CREATED_AT`), keeping track of the\n`created_at` timestamp of the most recent transfer in the paged results.\nOnce transfers are discovered, the caller should store the returned `ID`\nand query GetTransfer to retrieve status updates."
+        },
+        {
+          "info": {
+            "name": "Get Transfer",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.paxos.com/v2/transfer/transfers/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The Paxos transfer UUID."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://oauth.paxos.com/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Get a single transfer by ID.\n\nIn the polling workflow, this endpoint can be called to monitor transfer\nstatus changes."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

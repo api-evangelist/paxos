@@ -1,0 +1,164 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Paxos Account Members Quote Executions API",
+    "version": "2.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Quote Executions",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Quote Executions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.paxos.com/v2/profiles/:profile_id/quote-executions",
+            "params": [
+              {
+                "name": "profile_id",
+                "value": "",
+                "type": "path",
+                "description": "The profile ID associated with the orders."
+              },
+              {
+                "name": "side",
+                "value": "",
+                "type": "query",
+                "description": "Filter by buy or sell side."
+              },
+              {
+                "name": "market",
+                "value": "",
+                "type": "query",
+                "description": "Filter by the trading pair."
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Filter by the status of the order."
+              },
+              {
+                "name": "created_at.begin",
+                "value": "",
+                "type": "query",
+                "description": "Only return records after this timestamp, inclusive. RFC3339 format, like `2006-01-02T15:04:05Z`."
+              },
+              {
+                "name": "created_at.end",
+                "value": "",
+                "type": "query",
+                "description": "Only return records before this timestamp, inclusive. RFC3339 format, like `2006-01-02T15:04:05Z`."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of results to return."
+              },
+              {
+                "name": "order",
+                "value": "",
+                "type": "query",
+                "description": "Return items in ascending (ASC) or descending (DESC) order.\nDefault order is descending (DESC)."
+              },
+              {
+                "name": "order_by",
+                "value": "",
+                "type": "query",
+                "description": "The specific method by which the returned results will be ordered."
+              },
+              {
+                "name": "page_cursor",
+                "value": "",
+                "type": "query",
+                "description": "Cursor token for fetching the next page. If using this then do not use `pagination.limit` and `pagination.offset` fields."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://oauth.paxos.com/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "List quote executions within a particular profile."
+        },
+        {
+          "info": {
+            "name": "Create Quote Execution",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.paxos.com/v2/profiles/:profile_id/quote-executions",
+            "params": [
+              {
+                "name": "profile_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the profile under which to execute this order."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://oauth.paxos.com/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Execute on a quote for buying or selling an asset.\n\nThe side, market, and guaranteed price of the execution are specified by the quote\nwith ID `quote_id`.\n\nThe amount to buy or sell must be specified in either fiat or crypto by setting\nexactly one of:\n - `base_amount` to specify the amount of crypto to buy or sell.\n - `quote_amount` to specify the amount of fiat to spend or acquire.\n\nAn otherwise-valid request to create a quote execution may fail with the following\ntypes of errors:\n - [Expired]("
+        },
+        {
+          "info": {
+            "name": "Get Quote Execution",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.paxos.com/v2/profiles/:profile_id/quote-executions/:id",
+            "params": [
+              {
+                "name": "profile_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://oauth.paxos.com/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Get an existing quote execution for buying or selling an asset."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,181 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Paxos Account Members Orchestrations API",
+    "version": "2.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Orchestrations",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Orchestrations",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.paxos.com/v2/orchestration/orchestrations",
+            "params": [
+              {
+                "name": "orchestration_rule_id",
+                "value": "",
+                "type": "query",
+                "description": "Optionally filter by the initiating orchestration rule ids. There is a limit of 100 orchestration rule ids that can be specified in a single request."
+              },
+              {
+                "name": "source_asset",
+                "value": "",
+                "type": "query",
+                "description": "Optionally filter by source assets. There is a limit of 100 source assets that can be specified in a single request."
+              },
+              {
+                "name": "destination_asset",
+                "value": "",
+                "type": "query",
+                "description": "Optionally filter by destination assets. There is a limit of 100 destination assets ids that can be specified in a single request."
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Optionally filter by statuses. There is a limit of 100 statuses that can be specified in a single request."
+              },
+              {
+                "name": "created_at.lt",
+                "value": "",
+                "type": "query",
+                "description": "Include timestamps strictly less than lt. RFC3339 format, like `2006-01-02T15:04:05Z`."
+              },
+              {
+                "name": "created_at.lte",
+                "value": "",
+                "type": "query",
+                "description": "Include timestamps less than or equal to lte. RFC3339 format, like `2006-01-02T15:04:05Z`."
+              },
+              {
+                "name": "created_at.eq",
+                "value": "",
+                "type": "query",
+                "description": "Include timestamps exactly equal to eq. RFC3339 format, like `2006-01-02T15:04:05Z`."
+              },
+              {
+                "name": "created_at.gte",
+                "value": "",
+                "type": "query",
+                "description": "Include timestamps greater than or equal to gte. RFC3339 format, like `2006-01-02T15:04:05Z`."
+              },
+              {
+                "name": "created_at.gt",
+                "value": "",
+                "type": "query",
+                "description": "Include timestamps strictly greater than gt. RFC3339 format, like `2006-01-02T15:04:05Z`."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of results to return. Defaults to 100 if no limit is provided. Maximum 1000."
+              },
+              {
+                "name": "order",
+                "value": "",
+                "type": "query",
+                "description": "Sort order for the results. Defaults to DESC by created_at time."
+              },
+              {
+                "name": "page_cursor",
+                "value": "",
+                "type": "query",
+                "description": "Optional Cursor for getting the next page of results."
+              },
+              {
+                "name": "orchestration_id",
+                "value": "",
+                "type": "query",
+                "description": "Optionally filter by a list of orchestration IDs. There is a limit of 100 orchestration ids that can be specified in a single request."
+              },
+              {
+                "name": "profile_id",
+                "value": "",
+                "type": "query",
+                "description": "Optionally filter by the target profiles. There is a limit of 100 profiles that can be specified in a single request."
+              },
+              {
+                "name": "ref_id",
+                "value": "",
+                "type": "query",
+                "description": "Optionally filter by client-provided reference IDs. There is a limit of 100 ref_ids that can be specified in a single request."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://oauth.paxos.com/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "List all orchestrations, optionally filtering and paging the results.\n\nBy default, orchestrations are returned in reverse chronological (descending)\norder by creation time. If no query parameters are supplied,\nthe response will include up to the last 100 orchestrations which\nwere created.\n\nThe paginated results default to display up to 100 orchestrations, unless\notherwise specified with the `limit` parameter. The maximum `limit` value is 1000.\nEvery paginated response contains a `next_page_curso"
+        },
+        {
+          "info": {
+            "name": "Create Orchestration",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.paxos.com/v2/orchestration/orchestrations",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://oauth.paxos.com/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Creates a one-time orchestration that moves assets from a source profile to a destination.\nUse this endpoint when funds already reside on the Paxos platform and need to be transferred or converted as part of a single workflow.\n\nA request to create an orchestration can fail with one of the following\ntypes of errors:\n - [Insufficient Funds](https://developer.paxos.com/docs/v2/problems/insufficient-funds)\n   if the Profile (`profile_id`) has insufficient available balance to\n   fund the execution.\n"
+        },
+        {
+          "info": {
+            "name": "Get Orchestration",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.paxos.com/v2/orchestration/orchestrations/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://oauth.paxos.com/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Retreives a specific orchestration using its orchestration ID."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

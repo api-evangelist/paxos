@@ -1,0 +1,2377 @@
+{
+  "item": [
+    {
+      "id": "660264bb-4f0f-45d4-9338-5b09695630a8",
+      "name": "Fiat Transfers",
+      "description": {
+        "content": "The Fiat Transfers API allows clients to deposit and withdraw fiat via the following Fiat Networks: Wire (Fedwire and SWIFT) and CUBIX. The supported asset is USD.\n\nThe full set of Fiat Transfers API endpoints is:\n- For Deposits:\n  - [Create Fiat Deposit Instructions](#operation/CreateFiatDepositInstructions)\n  - [List Fiat Deposit Instructions](#operation/ListFiatDepositInstructions)\n  - [Get Fiat Deposit Instructions](#operation/GetFiatDepositInstructions)\n- For Withdrawals:\n  - [Create Fiat Account](#operation/CreateFiatAccount)\n  - [List Fiat Accounts](#operation/ListFiatAccounts)\n  - [Get Fiat Account](#operation/GetFiatAccount)\n  - [Delete Fiat Account](#operation/DeleteFiatAccount)\n  - [Update Fiat Account](#operation/UpdateFiatAccount)\n  - [Create Fiat Withdrawal](#operation/CreateFiatWithdrawal)\n",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "9b3229c0-17b3-4eff-b381-3608353ad616",
+          "name": "List Fiat Accounts",
+          "request": {
+            "name": "List Fiat Accounts",
+            "description": {
+              "content": "List all Fiat Accounts, optionally filtering and paging the results.\nThe response includes an abbreviated `FiatAccount` object:\n\n- Beneficiary name and address details are excluded.\n- Only the last four (**4**) digits of the account number are included.\n\nUse [Get Fiat Account](#operation/GetFiatAccount) to retrieve the complete `FiatAccount` object.\n\nThe paginated results default to the maximum limit of 1,000 Fiat Accounts, unless otherwise specified with the `limit` parameter.\nEvery paginated response contains a `next_page` field until the last page is reached.\nPass the `next_page` value into the `page_cursor` field of the next request to retrieve the next page of results.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "transfer",
+                "fiat-accounts"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "ids",
+                  "value": "<string>",
+                  "description": "Optionally filter by the UUIDs of the accounts. Limit 100."
+                },
+                {
+                  "disabled": false,
+                  "key": "ids",
+                  "value": "<string>",
+                  "description": "Optionally filter by the UUIDs of the accounts. Limit 100."
+                },
+                {
+                  "disabled": false,
+                  "key": "ref_ids",
+                  "value": "<string>",
+                  "description": "Optionally filter by the client-specified IDs provided during account creation. Limit 100."
+                },
+                {
+                  "disabled": false,
+                  "key": "ref_ids",
+                  "value": "<string>",
+                  "description": "Optionally filter by the client-specified IDs provided during account creation. Limit 100."
+                },
+                {
+                  "disabled": false,
+                  "key": "created_at.lt",
+                  "value": "<dateTime>",
+                  "description": "Include timestamps strictly less than lt. RFC3339 format, like `2006-01-02T15:04:05Z`."
+                },
+                {
+                  "disabled": false,
+                  "key": "created_at.lte",
+                  "value": "<dateTime>",
+                  "description": "Include timestamps less than or equal to lte. RFC3339 format, like `2006-01-02T15:04:05Z`."
+                },
+                {
+                  "disabled": false,
+                  "key": "created_at.eq",
+                  "value": "<dateTime>",
+                  "description": "Include timestamps exactly equal to eq. RFC3339 format, like `2006-01-02T15:04:05Z`."
+                },
+                {
+                  "disabled": false,
+                  "key": "created_at.gte",
+                  "value": "<dateTime>",
+                  "description": "Include timestamps greater than or equal to gte. RFC3339 format, like `2006-01-02T15:04:05Z`."
+                },
+                {
+                  "disabled": false,
+                  "key": "created_at.gt",
+                  "value": "<dateTime>",
+                  "description": "Include timestamps strictly greater than gt. RFC3339 format, like `2006-01-02T15:04:05Z`."
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "<integer>",
+                  "description": "Number of results to return. Defaults to 100 if no limit is provided. Maximum 1000."
+                },
+                {
+                  "disabled": false,
+                  "key": "order",
+                  "value": "<string>",
+                  "description": "Return items in ascending (ASC) or descending (DESC) order. Defaults to DESC."
+                },
+                {
+                  "disabled": false,
+                  "key": "order_by",
+                  "value": "<string>",
+                  "description": "The specific method by which the returned results will be ordered. Defaults to CREATED_AT."
+                },
+                {
+                  "disabled": false,
+                  "key": "page_cursor",
+                  "value": "<string>",
+                  "description": "Optional: Cursor for getting the next page of results."
+                },
+                {
+                  "disabled": false,
+                  "key": "include_deleted",
+                  "value": "<boolean>",
+                  "description": "Used to include deleted accounts in the response."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "conversion:read_conversion_stablecoin conversion:write_conversion_stablecoin exchange:historical_prices exchange:read_order exchange:read_quote exchange:read_quote_execution exchange:write_quote_execution exchange:write_order fee:write_crypto_withdrawal_fee funding:read_bank_balance funding:read_profile funding:write_profile identity:read_account identity:read_identity identity:write_account identity:write_identity settlement:read_transaction settlement:write_transaction tax:read_tax_form tax:read_tax_lot tax:write_tax_lot transfer:read_deposit_address transfer:read_fiat_account transfer:read_fiat_deposit_instructions transfer:read_transfer transfer:read_transfer_limit transfer:reject_crypto_deposit transfer:update_crypto_deposit transfer:write_crypto_withdrawal transfer:write_deposit_address transfer:write_fiat_account transfer:write_fiat_deposit_instructions transfer:write_internal_transfer transfer:write_sandbox_fiat_deposit transfer:write_fiat_withdrawal events:read_event"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://oauth.paxos.com/oauth2/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "3dad4116-4e80-49e4-9550-9f0b20cae544",
+              "name": "A successful response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "transfer",
+                    "fiat-accounts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "ref_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "ref_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "created_at.lt",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "created_at.lte",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "created_at.eq",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "created_at.gte",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "created_at.gt",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "order",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "order_by",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "page_cursor",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "include_deleted",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"items\": [\n    {\n      \"id\": \"dde1b3c5-d02a-48f6-8d11-16b4f532ea49\",\n      \"ref_id\": \"test_ref_id_1\",\n      \"identity_id\": \"c6ea91da-8f33-4545-9bdf-3cf29b4041d7\",\n      \"account_id\": \"91f91384-30d4-46c2-9118-7f3cec676a2c\",\n      \"fiat_account_owner\": {\n        \"person_details\": null\n      },\n      \"fiat_network_instructions\": {\n        \"wire\": {\n          \"account_number\": \"XXXX5678\",\n          \"fiat_account_owner_address\": null,\n          \"routing_details\": {\n            \"routing_number_type\": \"ABA\",\n            \"routing_number\": \"123456789\",\n            \"bank_name\": \"Customers Bank\",\n            \"bank_address\": null\n          },\n          \"status\": \"PENDING\",\n          \"metadata\": {\n            \"test_ref_id\": \"47aa7538-e2d2-47b3-8600-44a7965dd357\",\n            \"transaction_attempt\": 1\n          }\n        }\n      },\n      \"created_at\": \"2023-09-24T14:15:22Z\",\n      \"updated_at\": \"2023-09-24T14:15:22Z\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "9f9906e9-cf5d-436c-9082-8040c890290c",
+          "name": "Create Fiat Account",
+          "request": {
+            "name": "Create Fiat Account",
+            "description": {
+              "content": "Create an account to initiate a fiat withdrawal.\n\nFor U.S. wires, set `fiat_network_instructions` > `wire` > `routing_details` > `routing_number_type` to `ABA`. For international (SWIFT) wires, set `fiat_network_instructions` > `wire` > `routing_details` > `routing_number_type` to `SWIFT`.\nFor CUBIX, set `fiat_network_instructions` > `cubix` > `account_id`, and do not specify `routing_number_type`. For CUBIX, the `account_id` is the CUBIX account ID.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "transfer",
+                "fiat-accounts"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "conversion:read_conversion_stablecoin conversion:write_conversion_stablecoin exchange:historical_prices exchange:read_order exchange:read_quote exchange:read_quote_execution exchange:write_quote_execution exchange:write_order fee:write_crypto_withdrawal_fee funding:read_bank_balance funding:read_profile funding:write_profile identity:read_account identity:read_identity identity:write_account identity:write_identity settlement:read_transaction settlement:write_transaction tax:read_tax_form tax:read_tax_lot tax:write_tax_lot transfer:read_deposit_address transfer:read_fiat_account transfer:read_fiat_deposit_instructions transfer:read_transfer transfer:read_transfer_limit transfer:reject_crypto_deposit transfer:update_crypto_deposit transfer:write_crypto_withdrawal transfer:write_deposit_address transfer:write_fiat_account transfer:write_fiat_deposit_instructions transfer:write_internal_transfer transfer:write_sandbox_fiat_deposit transfer:write_fiat_withdrawal events:read_event"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://oauth.paxos.com/oauth2/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fiat_network_instructions\": {\n    \"wire\": {\n      \"account_number\": \"<string>\",\n      \"fiat_account_owner_address\": {\n        \"country\": \"<string>\",\n        \"address1\": \"<string>\",\n        \"address2\": \"<string>\",\n        \"city\": \"<string>\",\n        \"province\": \"<string>\",\n        \"zip_code\": \"<string>\"\n      },\n      \"routing_details\": {\n        \"routing_number_type\": \"<string>\",\n        \"routing_number\": \"<string>\",\n        \"bank_name\": \"<string>\",\n        \"bank_address\": {\n          \"country\": \"<string>\",\n          \"address1\": \"<string>\",\n          \"address2\": \"<string>\",\n          \"city\": \"<string>\",\n          \"province\": \"<string>\",\n          \"zip_code\": \"<string>\"\n        }\n      },\n      \"intermediary_routing_details\": {\n        \"routing_number_type\": \"<string>\",\n        \"routing_number\": \"<string>\",\n        \"bank_name\": \"<string>\",\n        \"bank_address\": {\n          \"country\": \"<string>\",\n          \"address1\": \"<string>\",\n          \"address2\": \"<string>\",\n          \"city\": \"<string>\",\n          \"province\": \"<string>\",\n          \"zip_code\": \"<string>\"\n        }\n      }\n    },\n    \"cbit\": {\n      \"wallet_address\": \"<string>\"\n    },\n    \"dbs_act\": {\n      \"account_number\": \"<string>\"\n    },\n    \"cubix\": {\n      \"account_id\": \"<string>\"\n    },\n    \"scb\": {\n      \"account_number\": \"<string>\"\n    },\n    \"rtp\": {\n      \"account_number\": \"<string>\",\n      \"routing_details\": {\n        \"routing_number\": \"<string>\",\n        \"bank_name\": \"<string>\",\n        \"bank_address\": {\n          \"country\": \"<string>\",\n          \"address1\": \"<string>\",\n          \"address2\": \"<string>\",\n          \"city\": \"<string>\",\n          \"province\": \"<string>\",\n          \"zip_code\": \"<string>\"\n        }\n      },\n      \"fiat_account_owner_address\": {\n        \"country\": \"<string>\",\n        \"address1\": \"<string>\",\n        \"address2\": \"<string>\",\n        \"city\": \"<string>\",\n        \"province\": \"<string>\",\n        \"zip_code\": \"<string>\"\n      }\n    }\n  },\n  \"fiat_account_owner\": {\n    \"person_details\": {\n      \"first_name\": \"<string>\",\n      \"last_name\": \"<string>\"\n    },\n    \"institution_details\": {\n      \"name\": \"<string>\"\n    }\n  },\n  \"ref_id\": \"<string>\",\n  \"identity_id\": \"<string>\",\n  \"account_id\": \"<string>\",\n  \"metadata\": {\n    \"key_0\": \"<string>\",\n    \"key_1\": \"<string>\",\n    \"key_2\": \"<string>\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "c2e1ffc2-0990-4d0b-b17c-6dae6d68f695",
+              "name": "A successful response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "transfer",
+                    "fiat-accounts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"fiat_network_instructions\": {\n    \"wire\": {\n      \"account_number\": \"<string>\",\n      \"fiat_account_owner_address\": {\n        \"country\": \"<string>\",\n        \"address1\": \"<string>\",\n        \"address2\": \"<string>\",\n        \"city\": \"<string>\",\n        \"province\": \"<string>\",\n        \"zip_code\": \"<string>\"\n      },\n      \"routing_details\": {\n        \"routing_number_type\": \"<string>\",\n        \"routing_number\": \"<string>\",\n        \"bank_name\": \"<string>\",\n        \"bank_address\": {\n          \"country\": \"<string>\",\n          \"address1\": \"<string>\",\n          \"address2\": \"<string>\",\n          \"city\": \"<string>\",\n          \"province\": \"<string>\",\n          \"zip_code\": \"<string>\"\n        }\n      },\n      \"intermediary_routing_details\": {\n        \"routing_number_type\": \"<string>\",\n        \"routing_number\": \"<string>\",\n        \"bank_name\": \"<string>\",\n        \"bank_address\": {\n          \"country\": \"<string>\",\n          \"address1\": \"<string>\",\n          \"address2\": \"<string>\",\n          \"city\": \"<string>\",\n          \"province\": \"<string>\",\n          \"zip_code\": \"<string>\"\n        }\n      }\n    },\n    \"cbit\": {\n      \"wallet_address\": \"<string>\"\n    },\n    \"dbs_act\": {\n      \"account_number\": \"<string>\"\n    },\n    \"cubix\": {\n      \"account_id\": \"<string>\"\n    },\n    \"scb\": {\n      \"account_number\": \"<string>\"\n    },\n    \"rtp\": {\n      \"account_number\": \"<string>\",\n      \"routing_details\": {\n        \"routing_number\": \"<string>\",\n        \"bank_name\": \"<string>\",\n        \"bank_address\": {\n          \"country\": \"<string>\",\n          \"address1\": \"<string>\",\n          \"address2\": \"<string>\",\n          \"city\": \"<string>\",\n          \"province\": \"<string>\",\n          \"zip_code\": \"<string>\"\n        }\n      },\n      \"fiat_account_owner_address\": {\n        \"country\": \"<string>\",\n        \"address1\": \"<string>\",\n        \"address2\": \"<string>\",\n        \"city\": \"<string>\",\n        \"province\": \"<string>\",\n        \"zip_code\": \"<string>\"\n      }\n    }\n  },\n  \"fiat_account_owner\": {\n    \"person_details\": {\n      \"first_name\": \"<string>\",\n      \"last_name\": \"<string>\"\n    },\n    \"institution_details\": {\n      \"name\": \"<string>\"\n    }\n  },\n  \"ref_id\": \"<string>\",\n  \"identity_id\": \"<string>\",\n  \"account_id\": \"<string>\",\n  \"metadata\": {\n    \"key_0\": \"<string>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"dde1b3c5-d02a-48f6-8d11-16b4f532ea49\",\n  \"ref_id\": \"test_ref_id_1\",\n  \"identity_id\": \"c6ea91da-8f33-4545-9bdf-3cf29b4041d7\",\n  \"account_id\": \"91f91384-30d4-46c2-9118-7f3cec676a2c\",\n  \"fiat_account_owner\": {\n    \"person_details\": {\n      \"first_name\": \"Jane\",\n      \"last_name\": \"Doe\"\n    },\n    \"fiat_network_instructions\": {\n      \"wire\": {\n        \"account_number\": \"12345678\",\n        \"fiat_account_owner_address\": {\n          \"country\": \"USA\",\n          \"address1\": \"456 Main Street, NY\",\n          \"city\": \"New York\",\n          \"province\": \"NY\",\n          \"address2\": \"\",\n          \"zip_code\": \"10101\"\n        },\n        \"routing_details\": {\n          \"routing_number_type\": \"ABA\",\n          \"routing_number\": \"123456789\",\n          \"bank_name\": \"Customers Bank\",\n          \"bank_address\": {\n            \"country\": \"USA\",\n            \"address1\": \"123 Bank Street\",\n            \"city\": \"New York\",\n            \"province\": \"NY\",\n            \"address2\": \"\",\n            \"zip_code\": \"10101\"\n          }\n        }\n      },\n      \"status\": \"PENDING\",\n      \"metadata\": {\n        \"test_ref_id\": \"47aa7538-e2d2-47b3-8600-44a7965dd357\",\n        \"transaction_attempt\": 1\n      }\n    }\n  },\n  \"created_at\": \"2023-09-24T14:15:22Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "fa5420ad-d54e-4b34-a82f-8a25b8f3dc8e",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "transfer",
+                    "fiat-accounts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"fiat_network_instructions\": {\n    \"wire\": {\n      \"account_number\": \"<string>\",\n      \"fiat_account_owner_address\": {\n        \"country\": \"<string>\",\n        \"address1\": \"<string>\",\n        \"address2\": \"<string>\",\n        \"city\": \"<string>\",\n        \"province\": \"<string>\",\n        \"zip_code\": \"<string>\"\n      },\n      \"routing_details\": {\n        \"routing_number_type\": \"<string>\",\n        \"routing_number\": \"<string>\",\n        \"bank_name\": \"<string>\",\n        \"bank_address\": {\n          \"country\": \"<string>\",\n          \"address1\": \"<string>\",\n          \"address2\": \"<string>\",\n          \"city\": \"<string>\",\n          \"province\": \"<string>\",\n          \"zip_code\": \"<string>\"\n        }\n      },\n      \"intermediary_routing_details\": {\n        \"routing_number_type\": \"<string>\",\n        \"routing_number\": \"<string>\",\n        \"bank_name\": \"<string>\",\n        \"bank_address\": {\n          \"country\": \"<string>\",\n          \"address1\": \"<string>\",\n          \"address2\": \"<string>\",\n          \"city\": \"<string>\",\n          \"province\": \"<string>\",\n          \"zip_code\": \"<string>\"\n        }\n      }\n    },\n    \"cbit\": {\n      \"wallet_address\": \"<string>\"\n    },\n    \"dbs_act\": {\n      \"account_number\": \"<string>\"\n    },\n    \"cubix\": {\n      \"account_id\": \"<string>\"\n    },\n    \"scb\": {\n      \"account_number\": \"<string>\"\n    },\n    \"rtp\": {\n      \"account_number\": \"<string>\",\n      \"routing_details\": {\n        \"routing_number\": \"<string>\",\n        \"bank_name\": \"<string>\",\n        \"bank_address\": {\n          \"country\": \"<string>\",\n          \"address1\": \"<string>\",\n          \"address2\": \"<string>\",\n          \"city\": \"<string>\",\n          \"province\": \"<string>\",\n          \"zip_code\": \"<string>\"\n        }\n      },\n      \"fiat_account_owner_address\": {\n        \"country\": \"<string>\",\n        \"address1\": \"<string>\",\n        \"address2\": \"<string>\",\n        \"city\": \"<string>\",\n        \"province\": \"<string>\",\n        \"zip_code\": \"<string>\"\n      }\n    }\n  },\n  \"fiat_account_owner\": {\n    \"person_details\": {\n      \"first_name\": \"<string>\",\n      \"last_name\": \"<string>\"\n    },\n    \"institution_details\": {\n      \"name\": \"<string>\"\n    }\n  },\n  \"ref_id\": \"<string>\",\n  \"identity_id\": \"<string>\",\n  \"account_id\": \"<string>\",\n  \"metadata\": {\n    \"key_0\": \"<string>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"about:blank\",\n  \"title\": \"Bad Request\",\n  \"status\": 400,\n  \"detail\": \"account_number must be set\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f8f0dcf1-0738-43f9-aa91-5315c8ec6232",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "transfer",
+                    "fiat-accounts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"fiat_network_instructions\": {\n    \"wire\": {\n      \"account_number\": \"<string>\",\n      \"fiat_account_owner_address\": {\n        \"country\": \"<string>\",\n        \"address1\": \"<string>\",\n        \"address2\": \"<string>\",\n        \"city\": \"<string>\",\n        \"province\": \"<string>\",\n        \"zip_code\": \"<string>\"\n      },\n      \"routing_details\": {\n        \"routing_number_type\": \"<string>\",\n        \"routing_number\": \"<string>\",\n        \"bank_name\": \"<string>\",\n        \"bank_address\": {\n          \"country\": \"<string>\",\n          \"address1\": \"<string>\",\n          \"address2\": \"<string>\",\n          \"city\": \"<string>\",\n          \"province\": \"<string>\",\n          \"zip_code\": \"<string>\"\n        }\n      },\n      \"intermediary_routing_details\": {\n        \"routing_number_type\": \"<string>\",\n        \"routing_number\": \"<string>\",\n        \"bank_name\": \"<string>\",\n        \"bank_address\": {\n          \"country\": \"<string>\",\n          \"address1\": \"<string>\",\n          \"address2\": \"<string>\",\n          \"city\": \"<string>\",\n          \"province\": \"<string>\",\n          \"zip_code\": \"<string>\"\n        }\n      }\n    },\n    \"cbit\": {\n      \"wallet_address\": \"<string>\"\n    },\n    \"dbs_act\": {\n      \"account_number\": \"<string>\"\n    },\n    \"cubix\": {\n      \"account_id\": \"<string>\"\n    },\n    \"scb\": {\n      \"account_number\": \"<string>\"\n    },\n    \"rtp\": {\n      \"account_number\": \"<string>\",\n      \"routing_details\": {\n        \"routing_number\": \"<string>\",\n        \"bank_name\": \"<string>\",\n        \"bank_address\": {\n          \"country\": \"<string>\",\n          \"address1\": \"<string>\",\n          \"address2\": \"<string>\",\n          \"city\": \"<string>\",\n          \"province\": \"<string>\",\n          \"zip_code\": \"<string>\"\n        }\n      },\n      \"fiat_account_owner_address\": {\n        \"country\": \"<string>\",\n        \"address1\": \"<string>\",\n        \"address2\": \"<string>\",\n        \"city\": \"<string>\",\n        \"province\": \"<string>\",\n        \"zip_code\": \"<string>\"\n      }\n    }\n  },\n  \"fiat_account_owner\": {\n    \"person_details\": {\n      \"first_name\": \"<string>\",\n      \"last_name\": \"<string>\"\n    },\n    \"institution_details\": {\n      \"name\": \"<string>\"\n    }\n  },\n  \"ref_id\": \"<string>\",\n  \"identity_id\": \"<string>\",\n  \"account_id\": \"<string>\",\n  \"metadata\": {\n    \"key_0\": \"<string>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"about:blank\",\n  \"title\": \"Forbidden\",\n  \"status\": 403,\n  \"detail\": \"identity_id forbidden for first-party customers\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "fa025a5f-987b-4b2e-b656-928854a3b16d",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "transfer",
+                    "fiat-accounts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"fiat_network_instructions\": {\n    \"wire\": {\n      \"account_number\": \"<string>\",\n      \"fiat_account_owner_address\": {\n        \"country\": \"<string>\",\n        \"address1\": \"<string>\",\n        \"address2\": \"<string>\",\n        \"city\": \"<string>\",\n        \"province\": \"<string>\",\n        \"zip_code\": \"<string>\"\n      },\n      \"routing_details\": {\n        \"routing_number_type\": \"<string>\",\n        \"routing_number\": \"<string>\",\n        \"bank_name\": \"<string>\",\n        \"bank_address\": {\n          \"country\": \"<string>\",\n          \"address1\": \"<string>\",\n          \"address2\": \"<string>\",\n          \"city\": \"<string>\",\n          \"province\": \"<string>\",\n          \"zip_code\": \"<string>\"\n        }\n      },\n      \"intermediary_routing_details\": {\n        \"routing_number_type\": \"<string>\",\n        \"routing_number\": \"<string>\",\n        \"bank_name\": \"<string>\",\n        \"bank_address\": {\n          \"country\": \"<string>\",\n          \"address1\": \"<string>\",\n          \"address2\": \"<string>\",\n          \"city\": \"<string>\",\n          \"province\": \"<string>\",\n          \"zip_code\": \"<string>\"\n        }\n      }\n    },\n    \"cbit\": {\n      \"wallet_address\": \"<string>\"\n    },\n    \"dbs_act\": {\n      \"account_number\": \"<string>\"\n    },\n    \"cubix\": {\n      \"account_id\": \"<string>\"\n    },\n    \"scb\": {\n      \"account_number\": \"<string>\"\n    },\n    \"rtp\": {\n      \"account_number\": \"<string>\",\n      \"routing_details\": {\n        \"routing_number\": \"<string>\",\n        \"bank_name\": \"<string>\",\n        \"bank_address\": {\n          \"country\": \"<string>\",\n          \"address1\": \"<string>\",\n          \"address2\": \"<string>\",\n          \"city\": \"<string>\",\n          \"province\": \"<string>\",\n          \"zip_code\": \"<string>\"\n        }\n      },\n      \"fiat_account_owner_address\": {\n        \"country\": \"<string>\",\n        \"address1\": \"<string>\",\n        \"address2\": \"<string>\",\n        \"city\": \"<string>\",\n        \"province\": \"<string>\",\n        \"zip_code\": \"<string>\"\n      }\n    }\n  },\n  \"fiat_account_owner\": {\n    \"person_details\": {\n      \"first_name\": \"<string>\",\n      \"last_name\": \"<string>\"\n    },\n    \"institution_details\": {\n      \"name\": \"<string>\"\n    }\n  },\n  \"ref_id\": \"<string>\",\n  \"identity_id\": \"<string>\",\n  \"account_id\": \"<string>\",\n  \"metadata\": {\n    \"key_0\": \"<string>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"about:blank\",\n  \"title\": \"Not Found\",\n  \"status\": 404,\n  \"detail\": \"no fiat account found for id: '2d929a0d-e1e3-4781-b7f8-7b34e66f7832'\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "95b902b3-c41c-4314-a13a-6feace5ca065",
+          "name": "Get Fiat Account",
+          "request": {
+            "name": "Get Fiat Account",
+            "description": {
+              "content": "Get a single Fiat Account by ID.\n\nIn the polling workflow, this endpoint can be called to monitor a FiatAccount's status.\nThe Fiat Account response includes the full account number, beneficiary name and address details.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "transfer",
+                "fiat-accounts",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "include_deleted",
+                  "value": "<boolean>",
+                  "description": "Used to include deleted accounts in the response."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) The Paxos fiat account ID (UUID).\nThe Fiat Account ID (`id`) is provided in the response of the [Create Fiat Account](#operation/CreateFiatAccount).\nUse this ID to retrieve the instructions using [Get Fiat Account](#operation/GetFiatAccount) & [List Fiat Accounts](#operation/ListFiatAccounts)."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "conversion:read_conversion_stablecoin conversion:write_conversion_stablecoin exchange:historical_prices exchange:read_order exchange:read_quote exchange:read_quote_execution exchange:write_quote_execution exchange:write_order fee:write_crypto_withdrawal_fee funding:read_bank_balance funding:read_profile funding:write_profile identity:read_account identity:read_identity identity:write_account identity:write_identity settlement:read_transaction settlement:write_transaction tax:read_tax_form tax:read_tax_lot tax:write_tax_lot transfer:read_deposit_address transfer:read_fiat_account transfer:read_fiat_deposit_instructions transfer:read_transfer transfer:read_transfer_limit transfer:reject_crypto_deposit transfer:update_crypto_deposit transfer:write_crypto_withdrawal transfer:write_deposit_address transfer:write_fiat_account transfer:write_fiat_deposit_instructions transfer:write_internal_transfer transfer:write_sandbox_fiat_deposit transfer:write_fiat_withdrawal events:read_event"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://oauth.paxos.com/oauth2/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "d0f68c5d-70e0-47c2-8ead-e8e75562864e",
+              "name": "A successful response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "transfer",
+                    "fiat-accounts",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "include_deleted",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The Paxos fiat account ID (UUID).\nThe Fiat Account ID (`id`) is provided in the response of the [Create Fiat Account](#operation/CreateFiatAccount).\nUse this ID to retrieve the instructions using [Get Fiat Account](#operation/GetFiatAccount) & [List Fiat Accounts](#operation/ListFiatAccounts)."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"string\",\n  \"status\": \"APPROVED\",\n  \"fiat_network_instructions\": {\n    \"wire\": {\n      \"account_number\": \"<string>\",\n      \"fiat_account_owner_address\": {\n        \"country\": \"<string>\",\n        \"address1\": \"<string>\",\n        \"address2\": \"<string>\",\n        \"city\": \"<string>\",\n        \"province\": \"<string>\",\n        \"zip_code\": \"<string>\"\n      },\n      \"routing_details\": {\n        \"routing_number_type\": \"<string>\",\n        \"routing_number\": \"<string>\",\n        \"bank_name\": \"<string>\",\n        \"bank_address\": {\n          \"country\": \"<string>\",\n          \"address1\": \"<string>\",\n          \"address2\": \"<string>\",\n          \"city\": \"<string>\",\n          \"province\": \"<string>\",\n          \"zip_code\": \"<string>\"\n        }\n      },\n      \"intermediary_routing_details\": {\n        \"routing_number_type\": \"<string>\",\n        \"routing_number\": \"<string>\",\n        \"bank_name\": \"<string>\",\n        \"bank_address\": {\n          \"country\": \"<string>\",\n          \"address1\": \"<string>\",\n          \"address2\": \"<string>\",\n          \"city\": \"<string>\",\n          \"province\": \"<string>\",\n          \"zip_code\": \"<string>\"\n        }\n      }\n    },\n    \"cbit\": {\n      \"wallet_address\": \"<string>\"\n    },\n    \"dbs_act\": {\n      \"account_number\": \"<string>\"\n    },\n    \"cubix\": {\n      \"account_id\": \"<string>\"\n    },\n    \"scb\": {\n      \"account_number\": \"<string>\"\n    },\n    \"rtp\": {\n      \"account_number\": \"<string>\",\n      \"routing_details\": {\n        \"routing_number\": \"<string>\",\n        \"bank_name\": \"<string>\",\n        \"bank_address\": {\n          \"country\": \"<string>\",\n          \"address1\": \"<string>\",\n          \"address2\": \"<string>\",\n          \"city\": \"<string>\",\n          \"province\": \"<string>\",\n          \"zip_code\": \"<string>\"\n        }\n      },\n      \"fiat_account_owner_address\": {\n        \"country\": \"<string>\",\n        \"address1\": \"<string>\",\n        \"address2\": \"<string>\",\n        \"city\": \"<string>\",\n        \"province\": \"<string>\",\n        \"zip_code\": \"<string>\"\n      }\n    }\n  },\n  \"created_at\": \"1971-11-17T19:17:28.696Z\",\n  \"ref_id\": \"string\",\n  \"identity_id\": \"string\",\n  \"account_id\": \"string\",\n  \"fiat_account_owner\": {\n    \"person_details\": {\n      \"first_name\": \"<string>\",\n      \"last_name\": \"<string>\"\n    },\n    \"institution_details\": {\n      \"name\": \"<string>\"\n    }\n  },\n  \"metadata\": {\n    \"key_0\": \"string\",\n    \"key_1\": \"string\"\n  },\n  \"updated_at\": \"2023-01-30T14:00:17.696Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "cb829c6e-e7f0-4487-9835-d4f7615a6767",
+          "name": "Delete Fiat Account",
+          "request": {
+            "name": "Delete Fiat Account",
+            "description": {
+              "content": "Delete a Fiat Account.\nOnce a Fiat Account is deleted, transfers cannot be initiated to it.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "transfer",
+                "fiat-accounts",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) The Paxos fiat account ID (UUID)."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "conversion:read_conversion_stablecoin conversion:write_conversion_stablecoin exchange:historical_prices exchange:read_order exchange:read_quote exchange:read_quote_execution exchange:write_quote_execution exchange:write_order fee:write_crypto_withdrawal_fee funding:read_bank_balance funding:read_profile funding:write_profile identity:read_account identity:read_identity identity:write_account identity:write_identity settlement:read_transaction settlement:write_transaction tax:read_tax_form tax:read_tax_lot tax:write_tax_lot transfer:read_deposit_address transfer:read_fiat_account transfer:read_fiat_deposit_instructions transfer:read_transfer transfer:read_transfer_limit transfer:reject_crypto_deposit transfer:update_crypto_deposit transfer:write_crypto_withdrawal transfer:write_deposit_address transfer:write_fiat_account transfer:write_fiat_deposit_instructions transfer:write_internal_transfer transfer:write_sandbox_fiat_deposit transfer:write_fiat_withdrawal events:read_event"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://oauth.paxos.com/oauth2/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "940e053e-bef5-4524-a70f-12a669b502ff",
+              "name": "A successful response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "transfer",
+                    "fiat-accounts",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The Paxos fiat account ID (UUID)."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "03cacd89-a6e8-4dc4-8d28-e7d830f973b7",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "transfer",
+                    "fiat-accounts",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The Paxos fiat account ID (UUID)."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"about:blank\",\n  \"title\": \"Bad Request\",\n  \"status\": 400,\n  \"detail\": \"id must be uuid, given '123456'\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7d935d90-77f7-4a41-ab3e-8c0bc273a023",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "transfer",
+                    "fiat-accounts",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The Paxos fiat account ID (UUID)."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"about:blank\",\n  \"title\": \"Not Found\",\n  \"status\": 404,\n  \"detail\": \"no fiat account found for id: '2d929a0d-e1e3-4781-b7f8-7b34e66f7832'\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "e9a0192d-38e0-46ad-bddf-9cee1251cd26",
+          "name": "Update Fiat Account",
+          "request": {
+            "name": "Update Fiat Account",
+            "description": {
+              "content": "Change an existing value or add a new value on one or more fields for the given Fiat Account and return the modified Fiat Account in `PENDING` status.\nUpdate fields in **either** `fiat_account_owner.person_details` or `fiat_account_owner.institution_details`.\nAttempts to convert the `fiat_account_owner` type results in an error.\nEmpty strings or null values are ignored.\n\nUpon successful response, Paxos initiates an automated review of the requested changes and then either sets the status to `APPROVED` or `REJECTED`.\nOccasionally, a manual review may be required.\nUse [Get Fiat Account](#operation/GetFiatAccount) to check for status changes.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "transfer",
+                "fiat-accounts",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) The Paxos fiat account ID (UUID).\nThe Fiat Account ID (`id`) is provided in the response of the [Create Fiat Account](#operation/CreateFiatAccount).\nUse this ID to retrieve the instructions using [Get Fiat Account](#operation/GetFiatAccount) & [List Fiat Accounts](#operation/ListFiatAccounts)."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "conversion:read_conversion_stablecoin conversion:write_conversion_stablecoin exchange:historical_prices exchange:read_order exchange:read_quote exchange:read_quote_execution exchange:write_quote_execution exchange:write_order fee:write_crypto_withdrawal_fee funding:read_bank_balance funding:read_profile funding:write_profile identity:read_account identity:read_identity identity:write_account identity:write_identity settlement:read_transaction settlement:write_transaction tax:read_tax_form tax:read_tax_lot tax:write_tax_lot transfer:read_deposit_address transfer:read_fiat_account transfer:read_fiat_deposit_instructions transfer:read_transfer transfer:read_transfer_limit transfer:reject_crypto_deposit transfer:update_crypto_deposit transfer:write_crypto_withdrawal transfer:write_deposit_address transfer:write_fiat_account transfer:write_fiat_deposit_instructions transfer:write_internal_transfer transfer:write_sandbox_fiat_deposit transfer:write_fiat_withdrawal events:read_event"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://oauth.paxos.com/oauth2/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fiat_account_owner\": {\n    \"person_details\": {\n      \"first_name\": \"<string>\",\n      \"last_name\": \"<string>\"\n    },\n    \"institution_details\": {\n      \"name\": \"<string>\"\n    }\n  },\n  \"fiat_network_instructions\": {\n    \"wire\": {\n      \"fiat_account_owner_address\": {\n        \"country\": \"<string>\",\n        \"address1\": \"<string>\",\n        \"address2\": \"<string>\",\n        \"city\": \"<string>\",\n        \"province\": \"<string>\",\n        \"zip_code\": \"<string>\"\n      },\n      \"routing_details\": {\n        \"bank_name\": \"<string>\",\n        \"bank_address\": {\n          \"country\": \"<string>\",\n          \"address1\": \"<string>\",\n          \"address2\": \"<string>\",\n          \"city\": \"<string>\",\n          \"province\": \"<string>\",\n          \"zip_code\": \"<string>\"\n        }\n      },\n      \"intermediary_routing_details\": {\n        \"bank_name\": \"<string>\",\n        \"bank_address\": {\n          \"country\": \"<string>\",\n          \"address1\": \"<string>\",\n          \"address2\": \"<string>\",\n          \"city\": \"<string>\",\n          \"province\": \"<string>\",\n          \"zip_code\": \"<string>\"\n        }\n      }\n    }\n  },\n  \"metadata\": {\n    \"key_0\": \"<string>\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "569e99a8-d5ae-4322-987b-1e8082e53655",
+              "name": "A successful response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "transfer",
+                    "fiat-accounts",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The Paxos fiat account ID (UUID).\nThe Fiat Account ID (`id`) is provided in the response of the [Create Fiat Account](#operation/CreateFiatAccount).\nUse this ID to retrieve the instructions using [Get Fiat Account](#operation/GetFiatAccount) & [List Fiat Accounts](#operation/ListFiatAccounts)."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"fiat_account_owner\": {\n    \"person_details\": {\n      \"first_name\": \"John\",\n      \"last_name\": \"Smith\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"dde1b3c5-d02a-48f6-8d11-16b4f532ea49\",\n  \"ref_id\": \"test_ref_id_1\",\n  \"identity_id\": \"c6ea91da-8f33-4545-9bdf-3cf29b4041d7\",\n  \"account_id\": \"91f91384-30d4-46c2-9118-7f3cec676a2c\",\n  \"fiat_account_owner\": {\n    \"person_details\": {\n      \"first_name\": \"John\",\n      \"last_name\": \"Smith\"\n    },\n    \"fiat_network_instructions\": {\n      \"wire\": {\n        \"account_number\": \"12345678\",\n        \"fiat_account_owner_address\": {\n          \"country\": \"USA\",\n          \"address1\": \"456 Main Street, NY\",\n          \"city\": \"New York\",\n          \"province\": \"NY\",\n          \"address2\": \"\",\n          \"zip_code\": \"10101\"\n        },\n        \"routing_details\": {\n          \"routing_number_type\": \"ABA\",\n          \"routing_number\": \"123456789\",\n          \"bank_name\": \"Customers Bank\",\n          \"bank_address\": {\n            \"country\": \"USA\",\n            \"address1\": \"123 Bank Street\",\n            \"city\": \"New York\",\n            \"province\": \"NY\",\n            \"address2\": \"\",\n            \"zip_code\": \"10101\"\n          }\n        }\n      },\n      \"status\": \"PENDING\",\n      \"metadata\": {\n        \"test_ref_id\": \"47aa7538-e2d2-47b3-8600-44a7965dd357\",\n        \"transaction_attempt\": 1\n      }\n    }\n  },\n  \"created_at\": \"2023-09-24T14:15:22Z\",\n  \"updated_at\": \"2023-09-24T14:15:22Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "16593952-38c8-4497-b30b-952583018692",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "transfer",
+                    "fiat-accounts",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The Paxos fiat account ID (UUID).\nThe Fiat Account ID (`id`) is provided in the response of the [Create Fiat Account](#operation/CreateFiatAccount).\nUse this ID to retrieve the instructions using [Get Fiat Account](#operation/GetFiatAccount) & [List Fiat Accounts](#operation/ListFiatAccounts)."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"fiat_account_owner\": {\n    \"person_details\": {\n      \"first_name\": \"John\",\n      \"last_name\": \"Smith\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"about:blank\",\n  \"title\": \"Bad Request\",\n  \"status\": 400,\n  \"detail\": \"fiat_account_owner cannot be changed from person to institution\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "05f4b252-1566-4548-a4c9-fcbcddc88d8f",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "transfer",
+                    "fiat-accounts",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The Paxos fiat account ID (UUID).\nThe Fiat Account ID (`id`) is provided in the response of the [Create Fiat Account](#operation/CreateFiatAccount).\nUse this ID to retrieve the instructions using [Get Fiat Account](#operation/GetFiatAccount) & [List Fiat Accounts](#operation/ListFiatAccounts)."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"fiat_account_owner\": {\n    \"person_details\": {\n      \"first_name\": \"John\",\n      \"last_name\": \"Smith\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"about:blank\",\n  \"title\": \"Forbidden\",\n  \"status\": 403,\n  \"detail\": \"identity_id forbidden for 1st-Party ledgering. See: https://docs.paxos.com/crypto-brokerage/ledger-type\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2e88b2a3-ea09-4ba3-b4f1-8786539b0ef1",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "transfer",
+                    "fiat-accounts",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The Paxos fiat account ID (UUID).\nThe Fiat Account ID (`id`) is provided in the response of the [Create Fiat Account](#operation/CreateFiatAccount).\nUse this ID to retrieve the instructions using [Get Fiat Account](#operation/GetFiatAccount) & [List Fiat Accounts](#operation/ListFiatAccounts)."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"fiat_account_owner\": {\n    \"person_details\": {\n      \"first_name\": \"John\",\n      \"last_name\": \"Smith\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"about:blank\",\n  \"title\": \"Not Found\",\n  \"status\": 404,\n  \"detail\": \"fiat_account with id 2d929a0d-e1e3-4781-b7f8-7b34e66j783 not found\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "fdd470a8-49a7-4a1d-9262-2ac8f246ac67",
+          "name": "List Fiat Deposit Instructions",
+          "request": {
+            "name": "List Fiat Deposit Instructions",
+            "description": {
+              "content": "Return the associated Fiat Deposit Instructions matching the search criteria for the current Account.\nThe paginated results default to the maximum limit of 1,000 Fiat Deposit instructions, unless otherwise specified with the `limit` parameter.\nEvery paginated response contains a `next_page` field until the last page is reached.\nPass the `next_page` value into the `page_cursor` field of the next request to retrieve the next page of results.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "transfer",
+                "fiat-deposit-instructions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "ids",
+                  "value": "<string>",
+                  "description": "Optionally filter by the UUIDs of the instructions. Limit 100."
+                },
+                {
+                  "disabled": false,
+                  "key": "ids",
+                  "value": "<string>",
+                  "description": "Optionally filter by the UUIDs of the instructions. Limit 100."
+                },
+                {
+                  "disabled": false,
+                  "key": "ref_ids",
+                  "value": "<string>",
+                  "description": "Optionally filter by the client-specified IDs provided during instructions creation. Limit 100."
+                },
+                {
+                  "disabled": false,
+                  "key": "ref_ids",
+                  "value": "<string>",
+                  "description": "Optionally filter by the client-specified IDs provided during instructions creation. Limit 100."
+                },
+                {
+                  "disabled": false,
+                  "key": "created_at.lt",
+                  "value": "<dateTime>",
+                  "description": "Include timestamps strictly less than lt. RFC3339 format, like `2006-01-02T15:04:05Z`."
+                },
+                {
+                  "disabled": false,
+                  "key": "created_at.lte",
+                  "value": "<dateTime>",
+                  "description": "Include timestamps less than or equal to lte. RFC3339 format, like `2006-01-02T15:04:05Z`."
+                },
+                {
+                  "disabled": false,
+                  "key": "created_at.eq",
+                  "value": "<dateTime>",
+                  "description": "Include timestamps exactly equal to eq. RFC3339 format, like `2006-01-02T15:04:05Z`."
+                },
+                {
+                  "disabled": false,
+                  "key": "created_at.gte",
+                  "value": "<dateTime>",
+                  "description": "Include timestamps greater than or equal to gte. RFC3339 format, like `2006-01-02T15:04:05Z`."
+                },
+                {
+                  "disabled": false,
+                  "key": "created_at.gt",
+                  "value": "<dateTime>",
+                  "description": "Include timestamps strictly greater than gt. RFC3339 format, like `2006-01-02T15:04:05Z`."
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "<integer>",
+                  "description": "Number of results to return. Defaults to 100 if no limit is provided. Maximum 1000."
+                },
+                {
+                  "disabled": false,
+                  "key": "order",
+                  "value": "<string>",
+                  "description": "Return items in ascending (ASC) or descending (DESC) order. Defaults to DESC."
+                },
+                {
+                  "disabled": false,
+                  "key": "page_cursor",
+                  "value": "<string>",
+                  "description": "Optional: Cursor for getting the next page of results."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "conversion:read_conversion_stablecoin conversion:write_conversion_stablecoin exchange:historical_prices exchange:read_order exchange:read_quote exchange:read_quote_execution exchange:write_quote_execution exchange:write_order fee:write_crypto_withdrawal_fee funding:read_bank_balance funding:read_profile funding:write_profile identity:read_account identity:read_identity identity:write_account identity:write_identity settlement:read_transaction settlement:write_transaction tax:read_tax_form tax:read_tax_lot tax:write_tax_lot transfer:read_deposit_address transfer:read_fiat_account transfer:read_fiat_deposit_instructions transfer:read_transfer transfer:read_transfer_limit transfer:reject_crypto_deposit transfer:update_crypto_deposit transfer:write_crypto_withdrawal transfer:write_deposit_address transfer:write_fiat_account transfer:write_fiat_deposit_instructions transfer:write_internal_transfer transfer:write_sandbox_fiat_deposit transfer:write_fiat_withdrawal events:read_event"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://oauth.paxos.com/oauth2/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "ced8995d-121a-42a8-b47e-d4fbcb501d7d",
+              "name": "A successful response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "transfer",
+                    "fiat-deposit-instructions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "ref_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "ref_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "created_at.lt",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "created_at.lte",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "created_at.eq",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "created_at.gte",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "created_at.gt",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "order",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "page_cursor",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"items\": [\n    {\n      \"id\": \"f190b163-208f-4d73-8deb-4fb8b24add00\",\n      \"profile_id\": \"5fc6d191-193c-4e28-94fa-656bbdbdfaad\",\n      \"customer_id\": \"9b8c9cba-801e-4418-adc0-ede709df6339\",\n      \"ref_id\": \"idempotence_id\",\n      \"status\": \"VALID\",\n      \"memo_id\": \"9CFXQSCMSPLFHXLZ\",\n      \"fiat_network_instructions\": {\n        \"wire\": {\n          \"account_number\": \"12345678\",\n          \"fiat_account_owner_address\": {\n            \"country\": \"USA\",\n            \"address1\": \"456 Main Street, NY\",\n            \"city\": \"New York\",\n            \"province\": \"NY\",\n            \"address2\": \"\",\n            \"zip_code\": \"10101\"\n          },\n          \"routing_details\": {\n            \"routing_number_type\": \"ABA\",\n            \"routing_number\": \"123456789\",\n            \"bank_name\": \"Customers Bank\",\n            \"bank_address\": {\n              \"country\": \"USA\",\n              \"address1\": \"123 Bank Street\",\n              \"city\": \"New York\",\n              \"province\": \"NY\",\n              \"address2\": \"\",\n              \"zip_code\": \"10101\"\n            }\n          }\n        },\n        \"fiat_account_owner\": {\n          \"person_details\": {\n            \"first_name\": \"Jane\",\n            \"last_name\": \"Doe\"\n          }\n        },\n        \"metadata\": {\n          \"my_id\": \"4024ee50-eefb-4f2e-85c7-e7899c0b7da5\"\n        }\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "782d3e20-545e-4c9e-9f34-fe2fead5e597",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "transfer",
+                    "fiat-deposit-instructions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "ref_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "ref_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "created_at.lt",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "created_at.lte",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "created_at.eq",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "created_at.gte",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "created_at.gt",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "order",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "page_cursor",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"about:blank\",\n  \"title\": \"Bad Request\",\n  \"status\": 400,\n  \"detail\": \"page_cursor token cannot be parsed\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ae024b1c-9e07-4aaa-8b15-8cdbfd14f47d",
+              "name": "Could not find Identity",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "transfer",
+                    "fiat-deposit-instructions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "ref_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "ref_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "created_at.lt",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "created_at.lte",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "created_at.eq",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "created_at.gte",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "created_at.gt",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "order",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "page_cursor",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"about:blank\",\n  \"title\": \"Not Found\",\n  \"status\": 404,\n  \"detail\": \"fiat deposit instructions with id f190b163-208f-4d73-8deb-4fb8b24add00 not found\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "705467df-d062-4f6e-8308-85f5794da72b",
+          "name": "Create Fiat Deposit Instructions",
+          "request": {
+            "name": "Create Fiat Deposit Instructions",
+            "description": {
+              "content": "Create instructions for depositing fiat.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "transfer",
+                "fiat-deposit-instructions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "conversion:read_conversion_stablecoin conversion:write_conversion_stablecoin exchange:historical_prices exchange:read_order exchange:read_quote exchange:read_quote_execution exchange:write_quote_execution exchange:write_order fee:write_crypto_withdrawal_fee funding:read_bank_balance funding:read_profile funding:write_profile identity:read_account identity:read_identity identity:write_account identity:write_identity settlement:read_transaction settlement:write_transaction tax:read_tax_form tax:read_tax_lot tax:write_tax_lot transfer:read_deposit_address transfer:read_fiat_account transfer:read_fiat_deposit_instructions transfer:read_transfer transfer:read_transfer_limit transfer:reject_crypto_deposit transfer:update_crypto_deposit transfer:write_crypto_withdrawal transfer:write_deposit_address transfer:write_fiat_account transfer:write_fiat_deposit_instructions transfer:write_internal_transfer transfer:write_sandbox_fiat_deposit transfer:write_fiat_withdrawal events:read_event"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://oauth.paxos.com/oauth2/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"profile_id\": \"<string>\",\n  \"fiat_network\": \"<string>\",\n  \"ref_id\": \"<string>\",\n  \"identity_id\": \"<string>\",\n  \"account_id\": \"<string>\",\n  \"routing_number_type\": \"<string>\",\n  \"metadata\": {\n    \"key_0\": \"<string>\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "7810cd5c-063b-4a8c-bb41-6ea3fb7805a6",
+              "name": "A successful response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "transfer",
+                    "fiat-deposit-instructions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"profile_id\": \"5fc6d191-193c-4e28-94fa-656bbdbdfaad\",\n  \"fiat_network\": \"WIRE\",\n  \"identity_id\": \"8a398cb6-4e3b-4868-9cea-a1c567856e68\",\n  \"account_ id\": \"91f91384-30d4-46c2-9118-7f3cec676a2c\",\n  \"ref_id\": \"idempotence_id\",\n  \"routing_number_type\": \"SWIFT\",\n  \"metadata\": {\n    \"my_id\": \"4024ee50-eefb-4f2e-85c7-e7899c0b7da5\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"f190b163-208f-4d73-8deb-4fb8b24add00\",\n  \"profile_id\": \"5fc6d191-193c-4e28-94fa-656bbdbdfaad\",\n  \"customer_id\": \"9b8c9cba-801e-4418-adc0-ede709df6339\",\n  \"ref_id\": \"idempotence_id\",\n  \"status\": \"VALID\",\n  \"memo_id\": \"9CFXQSCMSPLFHXLZ\",\n  \"fiat_network_instructions\": {\n    \"wire\": {\n      \"account_number\": \"12345678\",\n      \"fiat_account_owner_address\": {\n        \"country\": \"USA\",\n        \"address1\": \"456 Main Street, NY\",\n        \"city\": \"New York\",\n        \"province\": \"NY\",\n        \"address2\": \"\",\n        \"zip_code\": \"10101\"\n      },\n      \"routing_details\": {\n        \"routing_number_type\": \"ABA\",\n        \"routing_number\": \"123456789\",\n        \"bank_name\": \"Customers Bank\",\n        \"bank_address\": {\n          \"country\": \"USA\",\n          \"address1\": \"123 Bank Street\",\n          \"city\": \"New York\",\n          \"province\": \"NY\",\n          \"address2\": \"\",\n          \"zip_code\": \"10101\"\n        }\n      }\n    },\n    \"fiat_account_owner\": {\n      \"person_details\": {\n        \"first_name\": \"Jane\",\n        \"last_name\": \"Doe\"\n      }\n    },\n    \"metadata\": {\n      \"my_id\": \"4024ee50-eefb-4f2e-85c7-e7899c0b7da5\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "30005612-6b6e-4333-a828-c7612d884691",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "transfer",
+                    "fiat-deposit-instructions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"profile_id\": \"5fc6d191-193c-4e28-94fa-656bbdbdfaad\",\n  \"fiat_network\": \"WIRE\",\n  \"identity_id\": \"8a398cb6-4e3b-4868-9cea-a1c567856e68\",\n  \"account_ id\": \"91f91384-30d4-46c2-9118-7f3cec676a2c\",\n  \"ref_id\": \"idempotence_id\",\n  \"routing_number_type\": \"SWIFT\",\n  \"metadata\": {\n    \"my_id\": \"4024ee50-eefb-4f2e-85c7-e7899c0b7da5\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"about:blank\",\n  \"title\": \"Bad Request\",\n  \"status\": 400,\n  \"detail\": \"identity not enabled for customer 8a398cb6-4e3b-4868-9cea-a1c567856e68 \"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1ea07350-c61e-4255-a9b6-af83f2826e81",
+              "name": "Could not find Identity",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "transfer",
+                    "fiat-deposit-instructions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"profile_id\": \"5fc6d191-193c-4e28-94fa-656bbdbdfaad\",\n  \"fiat_network\": \"WIRE\",\n  \"identity_id\": \"8a398cb6-4e3b-4868-9cea-a1c567856e68\",\n  \"account_ id\": \"91f91384-30d4-46c2-9118-7f3cec676a2c\",\n  \"ref_id\": \"idempotence_id\",\n  \"routing_number_type\": \"SWIFT\",\n  \"metadata\": {\n    \"my_id\": \"4024ee50-eefb-4f2e-85c7-e7899c0b7da5\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"about:blank\",\n  \"title\": \"Not Found\",\n  \"status\": 404,\n  \"detail\": \"identity not found for customer 8a398cb6-4e3b-4868-9cea-a1c567856e68\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "bcdc091a-1779-4941-8caa-7a0ab28bb6e0",
+          "name": "Get Fiat Deposit Instructions",
+          "request": {
+            "name": "Get Fiat Deposit Instructions",
+            "description": {
+              "content": "Get instructions for depositing fiat using a Paxos Fiat Deposit Instructions ID.\nThe Fiat Deposit Instructions ID (`id`) is provided in the response of the [Create Fiat Deposit Instructions](#operation/CreateFiatDepositInstructions).",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "transfer",
+                "fiat-deposit-instructions",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) Retrieve the Paxos Fiat Deposit Instructions for the given `id`."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "conversion:read_conversion_stablecoin conversion:write_conversion_stablecoin exchange:historical_prices exchange:read_order exchange:read_quote exchange:read_quote_execution exchange:write_quote_execution exchange:write_order fee:write_crypto_withdrawal_fee funding:read_bank_balance funding:read_profile funding:write_profile identity:read_account identity:read_identity identity:write_account identity:write_identity settlement:read_transaction settlement:write_transaction tax:read_tax_form tax:read_tax_lot tax:write_tax_lot transfer:read_deposit_address transfer:read_fiat_account transfer:read_fiat_deposit_instructions transfer:read_transfer transfer:read_transfer_limit transfer:reject_crypto_deposit transfer:update_crypto_deposit transfer:write_crypto_withdrawal transfer:write_deposit_address transfer:write_fiat_account transfer:write_fiat_deposit_instructions transfer:write_internal_transfer transfer:write_sandbox_fiat_deposit transfer:write_fiat_withdrawal events:read_event"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://oauth.paxos.com/oauth2/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "fae1f34f-34d1-4708-ad5e-ca34fb085039",
+              "name": "A successful response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "transfer",
+                    "fiat-deposit-instructions",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Retrieve the Paxos Fiat Deposit Instructions for the given `id`."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"f190b163-208f-4d73-8deb-4fb8b24add00\",\n  \"profile_id\": \"5fc6d191-193c-4e28-94fa-656bbdbdfaad\",\n  \"customer_id\": \"9b8c9cba-801e-4418-adc0-ede709df6339\",\n  \"ref_id\": \"idempotence_id\",\n  \"status\": \"VALID\",\n  \"memo_id\": \"9CFXQSCMSPLFHXLZ\",\n  \"fiat_network_instructions\": {\n    \"wire\": {\n      \"account_number\": \"12345678\",\n      \"fiat_account_owner_address\": {\n        \"country\": \"USA\",\n        \"address1\": \"456 Main Street, NY\",\n        \"city\": \"New York\",\n        \"province\": \"NY\",\n        \"address2\": \"\",\n        \"zip_code\": \"10101\"\n      },\n      \"routing_details\": {\n        \"routing_number_type\": \"ABA\",\n        \"routing_number\": \"123456789\",\n        \"bank_name\": \"Customers Bank\",\n        \"bank_address\": {\n          \"country\": \"USA\",\n          \"address1\": \"123 Bank Street\",\n          \"city\": \"New York\",\n          \"province\": \"NY\",\n          \"address2\": \"\",\n          \"zip_code\": \"10101\"\n        }\n      }\n    },\n    \"fiat_account_owner\": {\n      \"person_details\": {\n        \"first_name\": \"Jane\",\n        \"last_name\": \"Doe\"\n      }\n    },\n    \"metadata\": {\n      \"my_id\": \"4024ee50-eefb-4f2e-85c7-e7899c0b7da5\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e0f2334d-c3d7-4078-b50c-4009a3f31baa",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "transfer",
+                    "fiat-deposit-instructions",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Retrieve the Paxos Fiat Deposit Instructions for the given `id`."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"about:blank\",\n  \"title\": \"Bad Request\",\n  \"status\": 400,\n  \"detail\": \"expected uuid, got invalid-uuid\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f98f6043-149a-4425-9b48-1d3f24cedd6c",
+              "name": "Could not find Identity",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "transfer",
+                    "fiat-deposit-instructions",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Retrieve the Paxos Fiat Deposit Instructions for the given `id`."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"about:blank\",\n  \"title\": \"Not Found\",\n  \"status\": 404,\n  \"detail\": \"fiat deposit instructions with id f190b163-208f-4d73-8deb-4fb8b24add00 not found\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "f6147520-5840-4fa6-887f-050cecdb5038",
+          "name": "Create Fiat Withdrawal",
+          "request": {
+            "name": "Create Fiat Withdrawal",
+            "description": {
+              "content": "Withdraw fiat to the given destination.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "transfer",
+                "fiat-withdrawals"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "conversion:read_conversion_stablecoin conversion:write_conversion_stablecoin exchange:historical_prices exchange:read_order exchange:read_quote exchange:read_quote_execution exchange:write_quote_execution exchange:write_order fee:write_crypto_withdrawal_fee funding:read_bank_balance funding:read_profile funding:write_profile identity:read_account identity:read_identity identity:write_account identity:write_identity settlement:read_transaction settlement:write_transaction tax:read_tax_form tax:read_tax_lot tax:write_tax_lot transfer:read_deposit_address transfer:read_fiat_account transfer:read_fiat_deposit_instructions transfer:read_transfer transfer:read_transfer_limit transfer:reject_crypto_deposit transfer:update_crypto_deposit transfer:write_crypto_withdrawal transfer:write_deposit_address transfer:write_fiat_account transfer:write_fiat_deposit_instructions transfer:write_internal_transfer transfer:write_sandbox_fiat_deposit transfer:write_fiat_withdrawal events:read_event"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://oauth.paxos.com/oauth2/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"asset\": \"<string>\",\n  \"fiat_account_id\": \"<string>\",\n  \"profile_id\": \"<string>\",\n  \"ref_id\": \"<string>\",\n  \"amount\": \"<string>\",\n  \"identity_id\": \"<string>\",\n  \"account_id\": \"<string>\",\n  \"metadata\": {\n    \"key_0\": \"<string>\"\n  },\n  \"memo\": \"<string>\",\n  \"total\": \"<decimal>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "ed3a3a8d-ff48-4b04-b6a6-abe4c14e114a",
+              "name": "A successful response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "transfer",
+                    "fiat-withdrawals"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"amount\": \"12.34\",\n  \"asset\": \"USD\",\n  \"fiat_account_id\": \"caa82b32-8abd-4899-afdc-f9d4bf9b4e98\",\n  \"profile_id\": \"5fc6d191-193c-4e28-94fa-656bbdbdfaad\",\n  \"identity_id\": \"54385e67-d7ef-40d1-b488-ceda6dd9b264\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"f190b163-208f-4d73-8deb-4fb8b24add00\",\n  \"customer_id\": \"9b8c9cba-801e-4418-adc0-ede709df6339\",\n  \"profile_id\": \"5fc6d191-193c-4e28-94fa-656bbdbdfaad\",\n  \"identity_id\": \"54385e67-d7ef-40d1-b488-ceda6dd9b264\",\n  \"amount\": \"10.00\",\n  \"total\": \"10.00\",\n  \"fee\": \"0.0000000\",\n  \"asset\": \"USD\",\n  \"balance_asset\": \"USD\",\n  \"direction\": \"DEBIT\",\n  \"type\": \"CUBIX_WITHDRAWAL\",\n  \"status\": \"PENDING\",\n  \"created_at\": \"2023-07-13T18:36:08.737Z\",\n  \"updated_at\": \"2023-07-13T18:36:08.737Z\",\n  \"fiat_account_id\": \"caa82b32-8abd-4899-afdc-f9d4bf9b4e98\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3498b879-5e41-457a-8249-4609e7ee7f10",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "transfer",
+                    "fiat-withdrawals"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"amount\": \"12.34\",\n  \"asset\": \"USD\",\n  \"fiat_account_id\": \"caa82b32-8abd-4899-afdc-f9d4bf9b4e98\",\n  \"profile_id\": \"5fc6d191-193c-4e28-94fa-656bbdbdfaad\",\n  \"identity_id\": \"54385e67-d7ef-40d1-b488-ceda6dd9b264\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"about:blank\",\n  \"title\": \"Bad Request\",\n  \"status\": 400,\n  \"detail\": \"fiat account has invalid status REJECTED, must be approved\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c270af45-6a89-4e35-8569-f4c08011d7c4",
+              "name": "Insufficient funds",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "transfer",
+                    "fiat-withdrawals"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/problem+json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"amount\": \"12.34\",\n  \"asset\": \"USD\",\n  \"fiat_account_id\": \"caa82b32-8abd-4899-afdc-f9d4bf9b4e98\",\n  \"profile_id\": \"5fc6d191-193c-4e28-94fa-656bbdbdfaad\",\n  \"identity_id\": \"54385e67-d7ef-40d1-b488-ceda6dd9b264\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/problem+json"
+                }
+              ],
+              "body": "{\n  \"type\": \"https://developer.paxos.com/docs/v2/problems/insufficient-funds\",\n  \"title\": \"Insufficient Funds\",\n  \"status\": 403,\n  \"detail\": \"insufficient USD funds in profile 5fc6d191-193c-4e28-94fa-656bbdbdfaad: 100 needed, 50 available\",\n  \"meta\": {\n    \"profile_id\": \"5fc6d191-193c-4e28-94fa-656bbdbdfaad\",\n    \"asset\": \"USD\",\n    \"available\": \"50\",\n    \"needed\": \"100\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d41f86e5-6bd4-45fe-9487-4ae74117b4ca",
+              "name": "Could not find Profile",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "transfer",
+                    "fiat-withdrawals"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"amount\": \"12.34\",\n  \"asset\": \"USD\",\n  \"fiat_account_id\": \"caa82b32-8abd-4899-afdc-f9d4bf9b4e98\",\n  \"profile_id\": \"5fc6d191-193c-4e28-94fa-656bbdbdfaad\",\n  \"identity_id\": \"54385e67-d7ef-40d1-b488-ceda6dd9b264\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"about:blank\",\n  \"title\": \"Not Found\",\n  \"status\": 404,\n  \"detail\": \"fiat account not found with requested ID\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "bf627877-5edc-4f3d-9d25-37c447e81373",
+              "name": "Transfer already exists",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "transfer",
+                    "fiat-withdrawals"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/problem+json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"amount\": \"12.34\",\n  \"asset\": \"USD\",\n  \"fiat_account_id\": \"caa82b32-8abd-4899-afdc-f9d4bf9b4e98\",\n  \"profile_id\": \"5fc6d191-193c-4e28-94fa-656bbdbdfaad\",\n  \"identity_id\": \"54385e67-d7ef-40d1-b488-ceda6dd9b264\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/problem+json"
+                }
+              ],
+              "body": "{\n  \"type\": \"https://developer.paxos.com/docs/v2/problems/already-exists\",\n  \"title\": \"Already Exists\",\n  \"status\": 409,\n  \"detail\": \"activity with external id already_used_ref_id already exists\",\n  \"meta\": {\n    \"existing\": {\n      \"id\": \"f190b163-208f-4d73-8deb-4fb8b24add00\",\n      \"customer_id\": \"9b8c9cba-801e-4418-adc0-ede709df6339\",\n      \"profile_id\": \"5fc6d191-193c-4e28-94fa-656bbdbdfaad\",\n      \"identity_id\": \"54385e67-d7ef-40d1-b488-ceda6dd9b264\",\n      \"amount\": \"10.00\",\n      \"total\": \"10.00\",\n      \"fee\": \"0.0000000\",\n      \"asset\": \"USD\",\n      \"balance_asset\": \"USD\",\n      \"direction\": \"DEBIT\",\n      \"type\": \"CUBIX_WITHDRAWAL\",\n      \"status\": \"PENDING\",\n      \"created_at\": \"2023-07-13T18:36:08.737Z\",\n      \"updated_at\": \"2023-07-13T18:36:08.737Z\",\n      \"fiat_account_id\": \"caa82b32-8abd-4899-afdc-f9d4bf9b4e98\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.paxos.com/v2",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "c50b4159-6ac3-4eac-99e6-5f7e416a9786",
+    "name": "Paxos Account Members Fiat Transfers API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "<p>Welcome to Paxos APIs. At Paxos, our mission is to enable the movement of any asset, any time, in a trustworthy way. These APIs serve that mission by making it easier than ever for you to directly integrate our product capabilities into your application, leveraging the speed, stability, and security of the Paxos platform.</p> <p>The documentation that follows gives you access to our Crypto Brokerage, Trading, and Exchange products. It includes APIs for market data, orders, and the held rate quote flow.</p> <p>To test in our sandbox environment, <a href=\"https://account.sandbox.paxos.com\" target=\"_blank\">sign up</a> for an account. For more information about Paxos and our APIs, visit <a href=\"https://www.paxos.com/\" target=\"_blank\">Paxos.com</a>.</p>\n",
+      "type": "text/plain"
+    }
+  }
+}

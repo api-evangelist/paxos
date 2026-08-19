@@ -1,0 +1,45 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Paxos Account Members Quotes API",
+    "version": "2.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Quotes",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Quotes",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.paxos.com/v2/quotes",
+            "params": [
+              {
+                "name": "markets",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://oauth.paxos.com/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "List quotes for buying or selling assets. By default, the list will\ninclude the latest available quotes for both buying and selling all supported\nassets.\n\nEach quote is valid until `expires_at`, and can be executed on by\ncalling [Create Quote Execution](#operation/CreateQuoteExecution).\n\nMultiple calls to list quotes in quick succession may return the same quote\nvalues. Paxos currently issues new quotes at most once per second."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

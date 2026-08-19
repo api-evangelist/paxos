@@ -1,0 +1,176 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Paxos Account Members Payout Groups API",
+    "version": "2.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Payout Groups",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Payout Groups",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.paxos.com/v2/rewards/payout-groups",
+            "params": [
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "page_cursor",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "asset_type",
+                "value": "",
+                "type": "query",
+                "description": "When set, only payout groups for this asset type (e.g. \"USDG\", \"PYUSD\") are returned."
+              },
+              {
+                "name": "name_prefix",
+                "value": "",
+                "type": "query",
+                "description": "When set, only payout groups whose name starts with this prefix are returned (case-insensitive)."
+              },
+              {
+                "name": "claimer_address",
+                "value": "",
+                "type": "query",
+                "description": "When set, only payout groups with this claimer address are returned."
+              },
+              {
+                "name": "ledger",
+                "value": "",
+                "type": "query",
+                "description": "When set, only payout groups for this ledger (network) are returned."
+              },
+              {
+                "name": "jurisdiction",
+                "value": "",
+                "type": "query",
+                "description": "When set, only payout groups for this jurisdiction are returned."
+              },
+              {
+                "name": "onchain_statuses",
+                "value": "",
+                "type": "query",
+                "description": "When set, only payout groups with one of these onchain statuses are returned."
+              },
+              {
+                "name": "min_balance",
+                "value": "",
+                "type": "query",
+                "description": "When set, only payout groups with a balance >= this value are returned (in business units, e.g. \"1000.50\")."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://oauth.paxos.com/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Retrieves a list of payout groups."
+        },
+        {
+          "info": {
+            "name": "Create Payout Group",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.paxos.com/v2/rewards/payout-groups",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://oauth.paxos.com/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Adds a payout group. A payout group encapsulates common rewards characteristics.\nAll monitored addresses which reference this payout group will accumulate rewards\nat the same rate and claim their rewards to the payout destination specified for this group."
+        },
+        {
+          "info": {
+            "name": "Update Payout Group",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.paxos.com/v2/rewards/payout-groups/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "UUID direct reference to the existing payout group"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://oauth.paxos.com/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Updates a payout group. Any changes to a payout group which has an on-chain component\nwill cause the unclaimed rewards for that group to be implicitly claimed. No details of\nthe implicit claiming are returned in this API response."
+        },
+        {
+          "info": {
+            "name": "Delete Payout Group",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.paxos.com/v2/rewards/payout-groups/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "UUID direct reference to the payout group to delete"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://oauth.paxos.com/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Deletes a payout group. A 200 response indicates the request was accepted; however,\nif the payout group is registered on a blockchain, it may continue to appear for up\nto a few minutes while the on-chain removal is confirmed. Once confirmed, the payout\ngroup will no longer appear.\n\nDeleting a payout group which has an on-chain component will cause the unclaimed\nrewards for that group to be implicitly claimed. No details of the implicit claiming\nare returned in this API response."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

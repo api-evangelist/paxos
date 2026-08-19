@@ -1,0 +1,228 @@
+{
+  "item": [
+    {
+      "id": "50768b5e-7ce5-4b9f-b608-677e57e348ff",
+      "name": "Statements",
+      "description": {
+        "content": "A Statement summarizes all eligible stablecoin rewards for a given organization over a fixed time period. It aggregates earned reward types (e.g., custody, mint, acceptance) and records whether the statement was paid.\n\nStatements are generated monthly and are immutable. Revised statements will be issued as a new statement with a unique ID. Statements can be used to reconcile balances or for accounting and accounts receivable purposes.\n\n*These endpoints are only relevant for Global Dollar Network (GDN) partners.*\n",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "18014867-b6e6-40d3-90a4-e63c433fad52",
+          "name": "List Statements",
+          "request": {
+            "name": "List Statements",
+            "description": {
+              "content": "List statements based on the provided filters",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "statements"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "customer_id",
+                  "value": "<string>",
+                  "description": "customer_id is a required field."
+                },
+                {
+                  "disabled": false,
+                  "key": "ref_ids",
+                  "value": "<string>",
+                  "description": "Optionally filter by the ref_ids of the statements."
+                },
+                {
+                  "disabled": false,
+                  "key": "ref_ids",
+                  "value": "<string>",
+                  "description": "Optionally filter by the ref_ids of the statements."
+                },
+                {
+                  "disabled": false,
+                  "key": "statement_ids",
+                  "value": "<string>",
+                  "description": "Optionally filter by the ids of the statements."
+                },
+                {
+                  "disabled": false,
+                  "key": "statement_ids",
+                  "value": "<string>",
+                  "description": "Optionally filter by the ids of the statements."
+                },
+                {
+                  "disabled": false,
+                  "key": "statuses",
+                  "value": "<string>",
+                  "description": "Optionally filter by the statuses of the statements to be returned. Defaults to all statuses."
+                },
+                {
+                  "disabled": false,
+                  "key": "statuses",
+                  "value": "<string>",
+                  "description": "Optionally filter by the statuses of the statements to be returned. Defaults to all statuses."
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "<integer>",
+                  "description": "Number of results to return. Defaults to 100."
+                },
+                {
+                  "disabled": false,
+                  "key": "order",
+                  "value": "<string>",
+                  "description": "Sort order for the results by period start, defaults to DESC if not provided."
+                },
+                {
+                  "disabled": false,
+                  "key": "page_cursor",
+                  "value": "<string>",
+                  "description": "Cursor for getting the next page of results."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "conversion:read_conversion_stablecoin conversion:write_conversion_stablecoin exchange:historical_prices exchange:read_order exchange:read_quote exchange:read_quote_execution exchange:write_quote_execution exchange:write_order fee:write_crypto_withdrawal_fee funding:read_bank_balance funding:read_profile funding:write_profile identity:read_account identity:read_identity identity:write_account identity:write_identity settlement:read_transaction settlement:write_transaction tax:read_tax_form tax:read_tax_lot tax:write_tax_lot transfer:read_deposit_address transfer:read_fiat_account transfer:read_fiat_deposit_instructions transfer:read_transfer transfer:read_transfer_limit transfer:reject_crypto_deposit transfer:update_crypto_deposit transfer:write_crypto_withdrawal transfer:write_deposit_address transfer:write_fiat_account transfer:write_fiat_deposit_instructions transfer:write_internal_transfer transfer:write_sandbox_fiat_deposit transfer:write_fiat_withdrawal events:read_event"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://oauth.paxos.com/oauth2/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "8bf44d33-f090-46e5-a98e-a837bc04c651",
+              "name": "Successfully retrieve statements",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "statements"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "customer_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "ref_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "ref_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "statement_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "statement_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "statuses",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "statuses",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "order",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "page_cursor",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statements\": [\n    {\n      \"id\": \"704b4e48-bbb1-4086-b6e4-6e9b2e3e5d7a\",\n      \"ref_id\": \"USDG_REWARDS-cdcbff8e-cf51-4536-ba6f-92ef6846e48a-2025-02\",\n      \"customer_id\": \"cdcbff8e-cf51-4536-ba6f-92ef6846e48a\",\n      \"type\": \"STATEMENT_TYPE_USDG_REWARD\",\n      \"product\": \"USDG_REWARDS\",\n      \"status\": \"STATEMENT_STATUS_PAID\",\n      \"metadata\": {\n        \"total_amount\": \"100.5\"\n      },\n      \"statement_balances\": [\n        {\n          \"asset\": \"USDG\",\n          \"amount_paid\": \"100.5\",\n          \"total_amount_owed\": \"100.5\"\n        }\n      ],\n      \"period_start\": \"2025-02-01T00:00:00Z\",\n      \"period_end\": \"2025-02-28T23:59:59.999999Z\",\n      \"generated_at\": \"2025-03-18T23:11:47.840321Z\",\n      \"paid_at\": \"2025-03-19T19:21:57.172302Z\",\n      \"created_at\": \"2025-03-18T23:11:47.627302Z\"\n    },\n    {\n      \"id\": \"30ed2047-6155-4b75-b235-6600aa7f65dd\",\n      \"ref_id\": \"USDG_REWARDS-cdcbff8e-cf51-4536-ba6f-92ef6846e48a-2025-03\",\n      \"customer_id\": \"cdcbff8e-cf51-4536-ba6f-92ef6846e48a\",\n      \"type\": \"STATEMENT_TYPE_USDG_REWARD\",\n      \"product\": \"USDG_REWARDS\",\n      \"status\": \"STATEMENT_STATUS_PAID\",\n      \"metadata\": {\n        \"total_amount\": \"100.5\"\n      },\n      \"statement_balances\": [\n        {\n          \"asset\": \"USDG\",\n          \"amount_paid\": \"100.5\",\n          \"total_amount_owed\": \"100.5\"\n        }\n      ],\n      \"period_start\": \"2025-02-18T00:00:00Z\",\n      \"period_end\": \"2025-03-18T00:00:00Z\",\n      \"generated_at\": \"2025-03-18T19:11:54.606991Z\",\n      \"paid_at\": \"2025-03-20T14:26:06.649645Z\",\n      \"created_at\": \"2025-03-18T19:11:54.372336Z\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.paxos.com/v2",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "c887454b-ef76-4588-b94a-bb39c8bfb185",
+    "name": "Paxos Account Members Statements API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "<p>Welcome to Paxos APIs. At Paxos, our mission is to enable the movement of any asset, any time, in a trustworthy way. These APIs serve that mission by making it easier than ever for you to directly integrate our product capabilities into your application, leveraging the speed, stability, and security of the Paxos platform.</p> <p>The documentation that follows gives you access to our Crypto Brokerage, Trading, and Exchange products. It includes APIs for market data, orders, and the held rate quote flow.</p> <p>To test in our sandbox environment, <a href=\"https://account.sandbox.paxos.com\" target=\"_blank\">sign up</a> for an account. For more information about Paxos and our APIs, visit <a href=\"https://www.paxos.com/\" target=\"_blank\">Paxos.com</a>.</p>\n",
+      "type": "text/plain"
+    }
+  }
+}

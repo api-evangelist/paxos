@@ -1,0 +1,42 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Paxos Account Members Fees API",
+    "version": "2.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Fees",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create Crypto Withdrawal Fee",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.paxos.com/v2/transfer/fees/crypto-withdrawal",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://oauth.paxos.com/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Get a guaranteed fee for the given currency, valid for a period of time.\nSpecify exactly one of `amount` or `total`, otherwise an error is returned.\n\nThe [Create Crypto Withdrawal](#operation/CreateCryptoWithdrawal) request that uses the guaranteed fee endpoint\nmust specify an `amount` less than or equal to the guaranteed fee `amount`, otherwise the withdrawal is rejected."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

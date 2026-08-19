@@ -1,0 +1,594 @@
+{
+  "item": [
+    {
+      "id": "2358fef0-f1c3-4b10-b7b7-04c39800a5bb",
+      "name": "Payout Groups",
+      "description": {
+        "content": "Payout groups encapsulate common rewards characteristics. All monitored addresses that reference a payout group accumulate rewards at the same rate and claim to the payout destination specified for that group.\n\n*These endpoints are only relevant for whitelisted Rewards partners.*\n",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "9750e0c6-2cf0-466a-8259-971645e824c9",
+          "name": "List Payout Groups",
+          "request": {
+            "name": "List Payout Groups",
+            "description": {
+              "content": "Retrieves a list of payout groups.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "rewards",
+                "payout-groups"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "<integer>"
+                },
+                {
+                  "disabled": false,
+                  "key": "page_cursor",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "asset_type",
+                  "value": "<string>",
+                  "description": "When set, only payout groups for this asset type (e.g. \"USDG\", \"PYUSD\") are returned."
+                },
+                {
+                  "disabled": false,
+                  "key": "name_prefix",
+                  "value": "<string>",
+                  "description": "When set, only payout groups whose name starts with this prefix are returned (case-insensitive)."
+                },
+                {
+                  "disabled": false,
+                  "key": "claimer_address",
+                  "value": "<string>",
+                  "description": "When set, only payout groups with this claimer address are returned."
+                },
+                {
+                  "disabled": false,
+                  "key": "ledger",
+                  "value": "<string>",
+                  "description": "When set, only payout groups for this ledger (network) are returned."
+                },
+                {
+                  "disabled": false,
+                  "key": "jurisdiction",
+                  "value": "<string>",
+                  "description": "When set, only payout groups for this jurisdiction are returned."
+                },
+                {
+                  "disabled": false,
+                  "key": "onchain_statuses",
+                  "value": "<string>",
+                  "description": "When set, only payout groups with one of these onchain statuses are returned."
+                },
+                {
+                  "disabled": false,
+                  "key": "onchain_statuses",
+                  "value": "<string>",
+                  "description": "When set, only payout groups with one of these onchain statuses are returned."
+                },
+                {
+                  "disabled": false,
+                  "key": "min_balance",
+                  "value": "<string>",
+                  "description": "When set, only payout groups with a balance >= this value are returned (in business units, e.g. \"1000.50\")."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "conversion:read_conversion_stablecoin conversion:write_conversion_stablecoin exchange:historical_prices exchange:read_order exchange:read_quote exchange:read_quote_execution exchange:write_quote_execution exchange:write_order fee:write_crypto_withdrawal_fee funding:read_bank_balance funding:read_profile funding:write_profile identity:read_account identity:read_identity identity:write_account identity:write_identity settlement:read_transaction settlement:write_transaction tax:read_tax_form tax:read_tax_lot tax:write_tax_lot transfer:read_deposit_address transfer:read_fiat_account transfer:read_fiat_deposit_instructions transfer:read_transfer transfer:read_transfer_limit transfer:reject_crypto_deposit transfer:update_crypto_deposit transfer:write_crypto_withdrawal transfer:write_deposit_address transfer:write_fiat_account transfer:write_fiat_deposit_instructions transfer:write_internal_transfer transfer:write_sandbox_fiat_deposit transfer:write_fiat_withdrawal events:read_event"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://oauth.paxos.com/oauth2/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "ce680ff3-2196-46f9-a6d3-180856f2ad6e",
+              "name": "A successful response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "rewards",
+                    "payout-groups"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "page_cursor",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "asset_type",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "name_prefix",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "claimer_address",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "ledger",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "jurisdiction",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "onchain_statuses",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "onchain_statuses",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "min_balance",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"items\": [\n    {\n      \"id\": \"string\",\n      \"ledger\": \"string\",\n      \"asset_type\": \"string\",\n      \"rate_id\": \"string\",\n      \"jurisdiction\": \"string\",\n      \"claimer_address\": \"string\",\n      \"onchain_status\": \"FAILED_REGISTRATION\",\n      \"balance\": \"string\",\n      \"created_at\": \"2011-05-23T23:48:19.058Z\",\n      \"updated_at\": \"2013-08-21T06:59:45.775Z\",\n      \"name\": \"string\",\n      \"manager_address\": \"string\",\n      \"destination_address\": \"string\",\n      \"onchain_group_id\": \"string\",\n      \"balance_at\": \"1995-03-14T23:22:33.576Z\",\n      \"last_claim_all_at\": \"1948-06-11T09:25:20.014Z\"\n    },\n    {\n      \"id\": \"string\",\n      \"ledger\": \"string\",\n      \"asset_type\": \"string\",\n      \"rate_id\": \"string\",\n      \"jurisdiction\": \"string\",\n      \"claimer_address\": \"string\",\n      \"onchain_status\": \"FAILED_REGISTRATION\",\n      \"balance\": \"string\",\n      \"created_at\": \"2025-04-09T12:16:13.610Z\",\n      \"updated_at\": \"2001-11-13T03:00:37.605Z\",\n      \"name\": \"string\",\n      \"manager_address\": \"string\",\n      \"destination_address\": \"string\",\n      \"onchain_group_id\": \"string\",\n      \"balance_at\": \"2008-11-17T05:31:34.365Z\",\n      \"last_claim_all_at\": \"2000-06-19T23:15:19.378Z\"\n    }\n  ],\n  \"next_page_cursor\": \"string\",\n  \"count\": 3462\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "4db7af71-8bee-4683-a6ef-dd24b8ad3e92",
+          "name": "Create Payout Group",
+          "request": {
+            "name": "Create Payout Group",
+            "description": {
+              "content": "Adds a payout group. A payout group encapsulates common rewards characteristics.\nAll monitored addresses which reference this payout group will accumulate rewards\nat the same rate and claim their rewards to the payout destination specified for this group.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "rewards",
+                "payout-groups"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "conversion:read_conversion_stablecoin conversion:write_conversion_stablecoin exchange:historical_prices exchange:read_order exchange:read_quote exchange:read_quote_execution exchange:write_quote_execution exchange:write_order fee:write_crypto_withdrawal_fee funding:read_bank_balance funding:read_profile funding:write_profile identity:read_account identity:read_identity identity:write_account identity:write_identity settlement:read_transaction settlement:write_transaction tax:read_tax_form tax:read_tax_lot tax:write_tax_lot transfer:read_deposit_address transfer:read_fiat_account transfer:read_fiat_deposit_instructions transfer:read_transfer transfer:read_transfer_limit transfer:reject_crypto_deposit transfer:update_crypto_deposit transfer:write_crypto_withdrawal transfer:write_deposit_address transfer:write_fiat_account transfer:write_fiat_deposit_instructions transfer:write_internal_transfer transfer:write_sandbox_fiat_deposit transfer:write_fiat_withdrawal events:read_event"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://oauth.paxos.com/oauth2/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"ledger\": \"<string>\",\n  \"asset_type\": \"<string>\",\n  \"jurisdiction\": \"<string>\",\n  \"name\": \"<string>\",\n  \"claimer_address\": \"<string>\",\n  \"schedule\": {\n    \"schedule_type\": \"<string>\",\n    \"days_of_week\": [\n      \"<integer>\",\n      \"<integer>\"\n    ],\n    \"days_of_month\": [\n      \"<integer>\",\n      \"<integer>\"\n    ],\n    \"hour\": \"<integer>\",\n    \"minute\": \"<integer>\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "541e4462-905f-4174-8b1f-acdc9da1fe54",
+              "name": "A successful response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "rewards",
+                    "payout-groups"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"ledger\": \"<string>\",\n  \"asset_type\": \"<string>\",\n  \"jurisdiction\": \"<string>\",\n  \"name\": \"<string>\",\n  \"claimer_address\": \"<string>\",\n  \"schedule\": {\n    \"schedule_type\": \"<string>\",\n    \"days_of_week\": [\n      \"<integer>\",\n      \"<integer>\"\n    ],\n    \"days_of_month\": [\n      \"<integer>\",\n      \"<integer>\"\n    ],\n    \"hour\": \"<integer>\",\n    \"minute\": \"<integer>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"group\": {\n    \"id\": \"string\",\n    \"ledger\": \"string\",\n    \"asset_type\": \"string\",\n    \"rate_id\": \"string\",\n    \"jurisdiction\": \"string\",\n    \"claimer_address\": \"string\",\n    \"onchain_status\": \"MULTIPLIER_UPDATE_FAILED\",\n    \"balance\": \"string\",\n    \"created_at\": \"2020-07-24T15:25:38.262Z\",\n    \"updated_at\": \"1975-03-19T04:23:58.927Z\",\n    \"name\": \"string\",\n    \"manager_address\": \"string\",\n    \"destination_address\": \"string\",\n    \"onchain_group_id\": \"string\",\n    \"balance_at\": \"2007-12-08T11:01:08.365Z\",\n    \"last_claim_all_at\": \"1953-07-01T06:52:43.529Z\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "0b515fec-b2ee-4619-9652-2d748d8be008",
+          "name": "Delete Payout Group",
+          "request": {
+            "name": "Delete Payout Group",
+            "description": {
+              "content": "Deletes a payout group. A 200 response indicates the request was accepted; however,\nif the payout group is registered on a blockchain, it may continue to appear for up\nto a few minutes while the on-chain removal is confirmed. Once confirmed, the payout\ngroup will no longer appear.\n\nDeleting a payout group which has an on-chain component will cause the unclaimed\nrewards for that group to be implicitly claimed. No details of the implicit claiming\nare returned in this API response.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "rewards",
+                "payout-groups",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) UUID direct reference to the payout group to delete"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "conversion:read_conversion_stablecoin conversion:write_conversion_stablecoin exchange:historical_prices exchange:read_order exchange:read_quote exchange:read_quote_execution exchange:write_quote_execution exchange:write_order fee:write_crypto_withdrawal_fee funding:read_bank_balance funding:read_profile funding:write_profile identity:read_account identity:read_identity identity:write_account identity:write_identity settlement:read_transaction settlement:write_transaction tax:read_tax_form tax:read_tax_lot tax:write_tax_lot transfer:read_deposit_address transfer:read_fiat_account transfer:read_fiat_deposit_instructions transfer:read_transfer transfer:read_transfer_limit transfer:reject_crypto_deposit transfer:update_crypto_deposit transfer:write_crypto_withdrawal transfer:write_deposit_address transfer:write_fiat_account transfer:write_fiat_deposit_instructions transfer:write_internal_transfer transfer:write_sandbox_fiat_deposit transfer:write_fiat_withdrawal events:read_event"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://oauth.paxos.com/oauth2/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "97016feb-2c7c-4237-8711-5cc45cca3e29",
+              "name": "A successful response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "rewards",
+                    "payout-groups",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) UUID direct reference to the payout group to delete"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "cc6736d3-7ee3-4256-9fb8-ca67e997e8bc",
+          "name": "Update Payout Group",
+          "request": {
+            "name": "Update Payout Group",
+            "description": {
+              "content": "Updates a payout group. Any changes to a payout group which has an on-chain component\nwill cause the unclaimed rewards for that group to be implicitly claimed. No details of\nthe implicit claiming are returned in this API response.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "rewards",
+                "payout-groups",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) UUID direct reference to the existing payout group"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "conversion:read_conversion_stablecoin conversion:write_conversion_stablecoin exchange:historical_prices exchange:read_order exchange:read_quote exchange:read_quote_execution exchange:write_quote_execution exchange:write_order fee:write_crypto_withdrawal_fee funding:read_bank_balance funding:read_profile funding:write_profile identity:read_account identity:read_identity identity:write_account identity:write_identity settlement:read_transaction settlement:write_transaction tax:read_tax_form tax:read_tax_lot tax:write_tax_lot transfer:read_deposit_address transfer:read_fiat_account transfer:read_fiat_deposit_instructions transfer:read_transfer transfer:read_transfer_limit transfer:reject_crypto_deposit transfer:update_crypto_deposit transfer:write_crypto_withdrawal transfer:write_deposit_address transfer:write_fiat_account transfer:write_fiat_deposit_instructions transfer:write_internal_transfer transfer:write_sandbox_fiat_deposit transfer:write_fiat_withdrawal events:read_event"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://oauth.paxos.com/oauth2/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"<string>\",\n  \"jurisdiction\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "34dd277d-50c4-4cf4-bdea-2bf72a1bc6f1",
+              "name": "A successful response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "rewards",
+                    "payout-groups",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) UUID direct reference to the existing payout group"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"jurisdiction\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"group\": {\n    \"id\": \"string\",\n    \"ledger\": \"string\",\n    \"asset_type\": \"string\",\n    \"rate_id\": \"string\",\n    \"jurisdiction\": \"string\",\n    \"claimer_address\": \"string\",\n    \"onchain_status\": \"MULTIPLIER_UPDATE_FAILED\",\n    \"balance\": \"string\",\n    \"created_at\": \"2020-07-24T15:25:38.262Z\",\n    \"updated_at\": \"1975-03-19T04:23:58.927Z\",\n    \"name\": \"string\",\n    \"manager_address\": \"string\",\n    \"destination_address\": \"string\",\n    \"onchain_group_id\": \"string\",\n    \"balance_at\": \"2007-12-08T11:01:08.365Z\",\n    \"last_claim_all_at\": \"1953-07-01T06:52:43.529Z\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.paxos.com/v2",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "0ef0074e-7e2a-4e30-81a8-4ad93041f916",
+    "name": "Paxos Account Members Payout Groups API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "<p>Welcome to Paxos APIs. At Paxos, our mission is to enable the movement of any asset, any time, in a trustworthy way. These APIs serve that mission by making it easier than ever for you to directly integrate our product capabilities into your application, leveraging the speed, stability, and security of the Paxos platform.</p> <p>The documentation that follows gives you access to our Crypto Brokerage, Trading, and Exchange products. It includes APIs for market data, orders, and the held rate quote flow.</p> <p>To test in our sandbox environment, <a href=\"https://account.sandbox.paxos.com\" target=\"_blank\">sign up</a> for an account. For more information about Paxos and our APIs, visit <a href=\"https://www.paxos.com/\" target=\"_blank\">Paxos.com</a>.</p>\n",
+      "type": "text/plain"
+    }
+  }
+}

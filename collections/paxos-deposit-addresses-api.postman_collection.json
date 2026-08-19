@@ -1,0 +1,509 @@
+{
+  "item": [
+    {
+      "id": "d15305ea-e2d9-4bc5-ac8b-ae3f4f86232c",
+      "name": "Deposit Addresses",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "af1b5846-d12f-4f3a-86ff-ac61d7d95c07",
+          "name": "List Deposit Addresses",
+          "request": {
+            "name": "List Deposit Addresses",
+            "description": {
+              "content": "List all deposit addresses, optionally filtering and paging the results.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "transfer",
+                "deposit-addresses"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "profile_ids",
+                  "value": "<string>",
+                  "description": "Optionally filter by the profile IDs associated with the deposit addresses. Limit 100."
+                },
+                {
+                  "disabled": false,
+                  "key": "profile_ids",
+                  "value": "<string>",
+                  "description": "Optionally filter by the profile IDs associated with the deposit addresses. Limit 100."
+                },
+                {
+                  "disabled": false,
+                  "key": "identity_ids",
+                  "value": "<string>",
+                  "description": "Optionally filter by the Identities associated with the deposit addresses. Limit 100."
+                },
+                {
+                  "disabled": false,
+                  "key": "identity_ids",
+                  "value": "<string>",
+                  "description": "Optionally filter by the Identities associated with the deposit addresses. Limit 100."
+                },
+                {
+                  "disabled": false,
+                  "key": "ids",
+                  "value": "<string>",
+                  "description": "Optionally filter by the UUIDs of the deposit addresses. Limit 100."
+                },
+                {
+                  "disabled": false,
+                  "key": "ids",
+                  "value": "<string>",
+                  "description": "Optionally filter by the UUIDs of the deposit addresses. Limit 100."
+                },
+                {
+                  "disabled": false,
+                  "key": "ref_ids",
+                  "value": "<string>",
+                  "description": "The client-specified IDs provided during transfer creation. Limit 100."
+                },
+                {
+                  "disabled": false,
+                  "key": "ref_ids",
+                  "value": "<string>",
+                  "description": "The client-specified IDs provided during transfer creation. Limit 100."
+                },
+                {
+                  "disabled": false,
+                  "key": "created_at.lt",
+                  "value": "<dateTime>",
+                  "description": "Include timestamps strictly less than lt. RFC3339 format, like `2006-01-02T15:04:05Z`."
+                },
+                {
+                  "disabled": false,
+                  "key": "created_at.lte",
+                  "value": "<dateTime>",
+                  "description": "Include timestamps less than or equal to lte. RFC3339 format, like `2006-01-02T15:04:05Z`."
+                },
+                {
+                  "disabled": false,
+                  "key": "created_at.eq",
+                  "value": "<dateTime>",
+                  "description": "Include timestamps exactly equal to eq. RFC3339 format, like `2006-01-02T15:04:05Z`."
+                },
+                {
+                  "disabled": false,
+                  "key": "created_at.gte",
+                  "value": "<dateTime>",
+                  "description": "Include timestamps greater than or equal to gte. RFC3339 format, like `2006-01-02T15:04:05Z`."
+                },
+                {
+                  "disabled": false,
+                  "key": "created_at.gt",
+                  "value": "<dateTime>",
+                  "description": "Include timestamps strictly greater than gt. RFC3339 format, like `2006-01-02T15:04:05Z`."
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "<integer>",
+                  "description": "Number of results to return. Defaults to 100 if no limit is provided. Maximum 1000."
+                },
+                {
+                  "disabled": false,
+                  "key": "order",
+                  "value": "<string>",
+                  "description": "Return items in ascending (ASC) or descending (DESC) order. Defaults to DESC."
+                },
+                {
+                  "disabled": false,
+                  "key": "order_by",
+                  "value": "<string>",
+                  "description": "The specific method by which the returned results will be ordered."
+                },
+                {
+                  "disabled": false,
+                  "key": "page_cursor",
+                  "value": "<string>",
+                  "description": "Optional: Cursor for getting the next page of results."
+                },
+                {
+                  "disabled": false,
+                  "key": "account_ids",
+                  "value": "<string>",
+                  "description": "Optionally filter by the Accounts associated with the deposit address. Limit 100."
+                },
+                {
+                  "disabled": false,
+                  "key": "account_ids",
+                  "value": "<string>",
+                  "description": "Optionally filter by the Accounts associated with the deposit address. Limit 100."
+                },
+                {
+                  "disabled": false,
+                  "key": "networks",
+                  "value": "<string>",
+                  "description": "Optionally filter by the networks of the deposit addresses. Limit 100."
+                },
+                {
+                  "disabled": false,
+                  "key": "networks",
+                  "value": "<string>",
+                  "description": "Optionally filter by the networks of the deposit addresses. Limit 100."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "conversion:read_conversion_stablecoin conversion:write_conversion_stablecoin exchange:historical_prices exchange:read_order exchange:read_quote exchange:read_quote_execution exchange:write_quote_execution exchange:write_order fee:write_crypto_withdrawal_fee funding:read_bank_balance funding:read_profile funding:write_profile identity:read_account identity:read_identity identity:write_account identity:write_identity settlement:read_transaction settlement:write_transaction tax:read_tax_form tax:read_tax_lot tax:write_tax_lot transfer:read_deposit_address transfer:read_fiat_account transfer:read_fiat_deposit_instructions transfer:read_transfer transfer:read_transfer_limit transfer:reject_crypto_deposit transfer:update_crypto_deposit transfer:write_crypto_withdrawal transfer:write_deposit_address transfer:write_fiat_account transfer:write_fiat_deposit_instructions transfer:write_internal_transfer transfer:write_sandbox_fiat_deposit transfer:write_fiat_withdrawal events:read_event"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://oauth.paxos.com/oauth2/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "d8e24040-a5aa-4f3d-b31c-ab7d3d0525a0",
+              "name": "A successful response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "transfer",
+                    "deposit-addresses"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "profile_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "profile_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "identity_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "identity_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "ref_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "ref_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "created_at.lt",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "created_at.lte",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "created_at.eq",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "created_at.gte",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "created_at.gt",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "order",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "order_by",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "page_cursor",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "account_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "account_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "networks",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "networks",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"items\": [\n    {\n      \"id\": \"string\",\n      \"profile_id\": \"string\",\n      \"customer_id\": \"string\",\n      \"crypto_network\": \"STELLAR\",\n      \"address\": \"string\",\n      \"conversion_target_asset\": \"USD\",\n      \"created_at\": \"1962-12-24T15:32:38.839Z\",\n      \"identity_id\": \"string\",\n      \"ref_id\": \"string\",\n      \"metadata\": {\n        \"key_0\": \"string\"\n      },\n      \"account_id\": \"string\",\n      \"compatible_crypto_networks\": [\n        \"BNB\",\n        \"ROBINHOOD\"\n      ]\n    },\n    {\n      \"id\": \"string\",\n      \"profile_id\": \"string\",\n      \"customer_id\": \"string\",\n      \"crypto_network\": \"POLYGON_POS\",\n      \"address\": \"string\",\n      \"conversion_target_asset\": \"NO_CONVERSION\",\n      \"created_at\": \"1961-04-10T21:26:01.701Z\",\n      \"identity_id\": \"string\",\n      \"ref_id\": \"string\",\n      \"metadata\": {\n        \"key_0\": \"string\",\n        \"key_1\": \"string\"\n      },\n      \"account_id\": \"string\",\n      \"compatible_crypto_networks\": [\n        \"LITECOIN\",\n        \"STELLAR\"\n      ]\n    }\n  ],\n  \"next_page_cursor\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "568e7250-367e-4889-bccf-87799c502b88",
+          "name": "Create Deposit Address",
+          "request": {
+            "name": "Create Deposit Address",
+            "description": {
+              "content": "Create a deposit address on a blockchain network for depositing to a profile.\n\n**Important for Stellar Network (PYUSD):**\n\nWhen creating a deposit address for PYUSD on the Stellar network:\n\n- Paxos automatically handles all necessary setup including trustline establishment\n- The deposit address is immediately ready to receive PYUSD tokens\n- No additional configuration is required by the user\n- The PYUSD issuer address on Stellar mainnet is: `GDQE7IXJ4HUHV6RQHIUPRJSEZE4DRS5WY577O2FY6YQ5LVWZ7JZTU2V5`\n- The PYUSD asset code is: `PYUSD`\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "transfer",
+                "deposit-addresses"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "conversion:read_conversion_stablecoin conversion:write_conversion_stablecoin exchange:historical_prices exchange:read_order exchange:read_quote exchange:read_quote_execution exchange:write_quote_execution exchange:write_order fee:write_crypto_withdrawal_fee funding:read_bank_balance funding:read_profile funding:write_profile identity:read_account identity:read_identity identity:write_account identity:write_identity settlement:read_transaction settlement:write_transaction tax:read_tax_form tax:read_tax_lot tax:write_tax_lot transfer:read_deposit_address transfer:read_fiat_account transfer:read_fiat_deposit_instructions transfer:read_transfer transfer:read_transfer_limit transfer:reject_crypto_deposit transfer:update_crypto_deposit transfer:write_crypto_withdrawal transfer:write_deposit_address transfer:write_fiat_account transfer:write_fiat_deposit_instructions transfer:write_internal_transfer transfer:write_sandbox_fiat_deposit transfer:write_fiat_withdrawal events:read_event"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://oauth.paxos.com/oauth2/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"profile_id\": \"<string>\",\n  \"crypto_network\": \"<string>\",\n  \"identity_id\": \"<string>\",\n  \"ref_id\": \"<string>\",\n  \"metadata\": {\n    \"key_0\": \"<string>\",\n    \"key_1\": \"<string>\"\n  },\n  \"account_id\": \"<string>\",\n  \"conversion_target_asset\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "50e95a71-9d34-4f1d-863c-b88778dfad1a",
+              "name": "A successful response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "transfer",
+                    "deposit-addresses"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"profile_id\": \"b7b77d82-e6a7-4ae9-9904-36231aedf985\",\n  \"crypto_network\": \"ETHEREUM\",\n  \"identity_id\": \"54385e67-d7ef-40d1-b488-ceda6dd9b264\",\n  \"ref_id\": \"deposit_address_0\",\n  \"metadata\": {\n    \"my_id\": \"4024ee50-eefb-4f2e-85c7-e7899c0b7da5\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"34bd61ed-cf0a-4012-8be4-d347667b6154\",\n  \"profile_id\": \"b7b77d82-e6a7-4ae9-9904-36231aedf985\",\n  \"customer_id\": \"9b8c9cba-801e-4418-adc0-ede709df6339\",\n  \"identity_id\": \"54385e67-d7ef-40d1-b488-ceda6dd9b264\",\n  \"ref_id\": \"deposit_address_0\",\n  \"crypto_network\": \"ETHEREUM\",\n  \"address\": \"0x89205A3A3b2A69De6Dbf7f01ED13B2108B2c43e7\",\n  \"conversion_target_asset\": \"USD\",\n  \"compatible_crypto_networks\": [\n    \"ETHEREUM\",\n    \"POLYGON_POS\",\n    \"BASE\",\n    \"ARBITRUM_ONE\",\n    \"INK\",\n    \"XLAYER\"\n  ],\n  \"metadata\": {\n    \"my_id\": \"4024ee50-eefb-4f2e-85c7-e7899c0b7da5\"\n  },\n  \"created_at\": \"2020-01-17T18:36:08.737Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f9b0427c-a453-4b7f-9942-2300b961de2e",
+              "name": "Deposit address already exists",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "transfer",
+                    "deposit-addresses"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/problem+json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"profile_id\": \"b7b77d82-e6a7-4ae9-9904-36231aedf985\",\n  \"crypto_network\": \"ETHEREUM\",\n  \"identity_id\": \"54385e67-d7ef-40d1-b488-ceda6dd9b264\",\n  \"ref_id\": \"deposit_address_0\",\n  \"metadata\": {\n    \"my_id\": \"4024ee50-eefb-4f2e-85c7-e7899c0b7da5\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/problem+json"
+                }
+              ],
+              "body": "{\n  \"type\": \"https://developer.paxos.com/docs/v2/problems/already-exists\",\n  \"title\": \"Already Exists\",\n  \"status\": 409,\n  \"detail\": \"deposit address already exists with ref_id 'already_used_ref_id'\",\n  \"meta\": {\n    \"existing\": {\n      \"id\": \"34bd61ed-cf0a-4012-8be4-d347667b6154\",\n      \"profile_id\": \"b7b77d82-e6a7-4ae9-9904-36231aedf985\",\n      \"customer_id\": \"9b8c9cba-801e-4418-adc0-ede709df6339\",\n      \"crypto_network\": \"ETHEREUM\",\n      \"identity_id\": \"54385e67-d7ef-40d1-b488-ceda6dd9b264\",\n      \"ref_id\": \"already_used_ref_id\",\n      \"metadata\": {\n        \"my_id\": \"4024ee50-eefb-4f2e-85c7-e7899c0b7da5\"\n      },\n      \"address\": \"0x89205A3A3b2A69De6Dbf7f01ED13B2108B2c43e7\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.paxos.com/v2",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "75171f12-ead1-48a1-a58f-ba50c54bea2c",
+    "name": "Paxos Account Members Deposit Addresses API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "<p>Welcome to Paxos APIs. At Paxos, our mission is to enable the movement of any asset, any time, in a trustworthy way. These APIs serve that mission by making it easier than ever for you to directly integrate our product capabilities into your application, leveraging the speed, stability, and security of the Paxos platform.</p> <p>The documentation that follows gives you access to our Crypto Brokerage, Trading, and Exchange products. It includes APIs for market data, orders, and the held rate quote flow.</p> <p>To test in our sandbox environment, <a href=\"https://account.sandbox.paxos.com\" target=\"_blank\">sign up</a> for an account. For more information about Paxos and our APIs, visit <a href=\"https://www.paxos.com/\" target=\"_blank\">Paxos.com</a>.</p>\n",
+      "type": "text/plain"
+    }
+  }
+}

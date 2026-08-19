@@ -1,0 +1,174 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Paxos Account Members Stablecoin Conversion API",
+    "version": "2.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Stablecoin Conversion",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Stablecoin Conversions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.paxos.com/v2/conversion/stablecoins",
+            "params": [
+              {
+                "name": "profile_id",
+                "value": "",
+                "type": "query",
+                "description": "The [Profile](#tag/Profiles) associated with a conversion. Required in the\n[Create Stablecoin Conversion](#operation/CreateStablecoinConversion) request."
+              },
+              {
+                "name": "ref_id",
+                "value": "",
+                "type": "query",
+                "description": "Client provided, unique Reference ID included the\n[Create Stablecoin Conversion](#operation/CreateStablecoinConversion) request."
+              },
+              {
+                "name": "created_at.begin",
+                "value": "",
+                "type": "query",
+                "description": "Only return records after this timestamp, inclusive. RFC3339 format, like `2006-01-02T15:04:05Z`."
+              },
+              {
+                "name": "created_at.end",
+                "value": "",
+                "type": "query",
+                "description": "Only return records before this timestamp, inclusive. RFC3339 format, like `2006-01-02T15:04:05Z`."
+              },
+              {
+                "name": "updated_at.begin",
+                "value": "",
+                "type": "query",
+                "description": "Only return records after this timestamp, inclusive. RFC3339 format, like `2006-01-02T15:04:05Z`."
+              },
+              {
+                "name": "updated_at.end",
+                "value": "",
+                "type": "query",
+                "description": "Only return records before this timestamp, inclusive. RFC3339 format, like `2006-01-02T15:04:05Z`."
+              },
+              {
+                "name": "order",
+                "value": "",
+                "type": "query",
+                "description": "Return items in ascending (ASC) or descending (DESC) order by `created_at` timestamp.\n\nDefault order is descending (DESC)."
+              },
+              {
+                "name": "page_cursor",
+                "value": "",
+                "type": "query",
+                "description": "Cursor token for fetching the next page."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of results to return.\n\nDefault is 100 items. Maximum is 1000 items."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://oauth.paxos.com/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "List all conversions, optionally filtering and paging the results.\n\nBy default, conversions are returned in reverse chronological (descending)\norder by creation time. If no query parameters are supplied,\nthe response will include up to the last 100 conversions which\nwere created.\n\nThe paginated results default to display up to 100 conversions, unless\notherwise specified with the `limit` parameter. The maximum `limit` value is 1000.\nEvery paginated response contains a `next_page_cursor` field unt"
+        },
+        {
+          "info": {
+            "name": "Create Stablecoin Conversion",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.paxos.com/v2/conversion/stablecoins",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://oauth.paxos.com/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Create a Conversion request to exchange assets 1:1.\n\nA request to create a conversion can fail with one of the following\ntypes of errors:\n - [Insufficient Funds](https://developer.paxos.com/docs/v2/problems/insufficient-funds)\n   if the Profile (`profile_id`) has insufficient available balance to\n   fund the execution.\n - [Already Exists](https://developer.paxos.com/docs/v2/problems/already-exists)\n   if a conversion with the same external ID (`ref_id`) has already been created."
+        },
+        {
+          "info": {
+            "name": "Get Stablecoin Conversion",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.paxos.com/v2/conversion/stablecoins/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "System provided UUID for the conversion is\nprovided in the [Create Stablecoin Conversion](#operation/CreateStablecoinConversion) response."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://oauth.paxos.com/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Retrieve a single conversion using the transaction `id` from the [Create Stablecoin Conversion](#operation/CreateStablecoinConversion) response."
+        },
+        {
+          "info": {
+            "name": "Cancel Stablecoin Conversion",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.paxos.com/v2/conversion/stablecoins/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "System provided UUID for the conversion is\nprovided in the [Create Stablecoin Conversion](#operation/CreateStablecoinConversion) response."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://oauth.paxos.com/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Cancel a single conversion using the `id` from the\n[Create Stablecoin Conversion](#operation/CreateStablecoinConversion) response."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

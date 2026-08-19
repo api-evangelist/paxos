@@ -1,0 +1,584 @@
+{
+  "item": [
+    {
+      "id": "dfce65eb-135f-4dd3-9752-7701739b6c1a",
+      "name": "Transfers",
+      "description": {
+        "content": "Each deposit to and withdrawal from a Paxos account is a Transfer.\nA Transfer is associated with a particular Profile, and increases or\ndecreases the available balance of a single asset in that Profile.\n",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "87c14bfc-f140-4d50-ac61-a99104c52643",
+          "name": "List Transfers",
+          "request": {
+            "name": "List Transfers",
+            "description": {
+              "content": "List all transfers, optionally filtering and paging the results.\n\nBy default, transfers are returned in reverse chronological (descending)\norder by creation time.\n\nThe recommended polling workflow is to query the results in ascending\norder (by setting `order_by` to `CREATED_AT`), keeping track of the\n`created_at` timestamp of the most recent transfer in the paged results.\nOnce transfers are discovered, the caller should store the returned `ID`\nand query GetTransfer to retrieve status updates.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "transfer",
+                "transfers"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "profile_ids",
+                  "value": "<string>",
+                  "description": "Optionally filter by the target profiles of the transfers. Limit 100.\nCan be combined with created_at.* or updated_at.* filtering options only."
+                },
+                {
+                  "disabled": false,
+                  "key": "profile_ids",
+                  "value": "<string>",
+                  "description": "Optionally filter by the target profiles of the transfers. Limit 100.\nCan be combined with created_at.* or updated_at.* filtering options only."
+                },
+                {
+                  "disabled": false,
+                  "key": "identity_ids",
+                  "value": "<string>",
+                  "description": "Optionally filter by the Identities associated with the transfers. Limit 100.\nCan be combined with created_at.* or updated_at.* filtering options only."
+                },
+                {
+                  "disabled": false,
+                  "key": "identity_ids",
+                  "value": "<string>",
+                  "description": "Optionally filter by the Identities associated with the transfers. Limit 100.\nCan be combined with created_at.* or updated_at.* filtering options only."
+                },
+                {
+                  "disabled": false,
+                  "key": "ref_ids",
+                  "value": "<string>",
+                  "description": "The client-specified IDs provided during transfer creation. Limit 100.\nCan be combined with created_at.* or updated_at.* filtering options only."
+                },
+                {
+                  "disabled": false,
+                  "key": "ref_ids",
+                  "value": "<string>",
+                  "description": "The client-specified IDs provided during transfer creation. Limit 100.\nCan be combined with created_at.* or updated_at.* filtering options only."
+                },
+                {
+                  "disabled": false,
+                  "key": "created_at.lt",
+                  "value": "<dateTime>",
+                  "description": "Include timestamps strictly less than lt. RFC3339 format, like `2006-01-02T15:04:05Z`."
+                },
+                {
+                  "disabled": false,
+                  "key": "created_at.lte",
+                  "value": "<dateTime>",
+                  "description": "Include timestamps less than or equal to lte. RFC3339 format, like `2006-01-02T15:04:05Z`."
+                },
+                {
+                  "disabled": false,
+                  "key": "created_at.eq",
+                  "value": "<dateTime>",
+                  "description": "Include timestamps exactly equal to eq. RFC3339 format, like `2006-01-02T15:04:05Z`."
+                },
+                {
+                  "disabled": false,
+                  "key": "created_at.gte",
+                  "value": "<dateTime>",
+                  "description": "Include timestamps greater than or equal to gte. RFC3339 format, like `2006-01-02T15:04:05Z`."
+                },
+                {
+                  "disabled": false,
+                  "key": "created_at.gt",
+                  "value": "<dateTime>",
+                  "description": "Include timestamps strictly greater than gt. RFC3339 format, like `2006-01-02T15:04:05Z`."
+                },
+                {
+                  "disabled": false,
+                  "key": "updated_at.lt",
+                  "value": "<dateTime>",
+                  "description": "Include timestamps strictly less than lt. RFC3339 format, like `2006-01-02T15:04:05Z`."
+                },
+                {
+                  "disabled": false,
+                  "key": "updated_at.lte",
+                  "value": "<dateTime>",
+                  "description": "Include timestamps less than or equal to lte. RFC3339 format, like `2006-01-02T15:04:05Z`."
+                },
+                {
+                  "disabled": false,
+                  "key": "updated_at.eq",
+                  "value": "<dateTime>",
+                  "description": "Include timestamps exactly equal to eq. RFC3339 format, like `2006-01-02T15:04:05Z`."
+                },
+                {
+                  "disabled": false,
+                  "key": "updated_at.gte",
+                  "value": "<dateTime>",
+                  "description": "Include timestamps greater than or equal to gte. RFC3339 format, like `2006-01-02T15:04:05Z`."
+                },
+                {
+                  "disabled": false,
+                  "key": "updated_at.gt",
+                  "value": "<dateTime>",
+                  "description": "Include timestamps strictly greater than gt. RFC3339 format, like `2006-01-02T15:04:05Z`."
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "<integer>",
+                  "description": "Number of results to return. Defaults to 100 if no limit is provided. Maximum 1000."
+                },
+                {
+                  "disabled": false,
+                  "key": "order",
+                  "value": "<string>",
+                  "description": "Determines whether the items are returned in ascending (ASC), or descending (DESC) order.\nDefaults to ASC if `order_by` is UPDATED_AT. Otherwise defaults to DESC."
+                },
+                {
+                  "disabled": false,
+                  "key": "order_by",
+                  "value": "<string>",
+                  "description": "The specific method by which the returned results will be ordered.\nWhen specifying both `order_by` and a timestamp filter, `order_by` must equal the timestamp filter type.\nFor example:\n\n`updated_at.gte = 2022-07-01T03:02:01Z`, `order_by = UPDATED_AT`\n\nUsing `updated_at.gte = 2022-07-01T03:02:01Z`, `order_by = CREATED_AT` is an invalid pairing."
+                },
+                {
+                  "disabled": false,
+                  "key": "page_cursor",
+                  "value": "<string>",
+                  "description": "Optional: Cursor for getting the next page of results. When the number of items returned is fewer\nthan the limit, there is currently no next page."
+                },
+                {
+                  "disabled": false,
+                  "key": "account_ids",
+                  "value": "<string>",
+                  "description": "Optionally filter by the Accounts associated with the transfers. Limit 100.\nCan be combined with created_at.* or updated_at.* filtering options only."
+                },
+                {
+                  "disabled": false,
+                  "key": "account_ids",
+                  "value": "<string>",
+                  "description": "Optionally filter by the Accounts associated with the transfers. Limit 100.\nCan be combined with created_at.* or updated_at.* filtering options only."
+                },
+                {
+                  "disabled": false,
+                  "key": "ids",
+                  "value": "<string>",
+                  "description": "Optionally filter by the transfer ids. Limit 100.\nCan be combined with created_at.* or updated_at.* filtering options only."
+                },
+                {
+                  "disabled": false,
+                  "key": "ids",
+                  "value": "<string>",
+                  "description": "Optionally filter by the transfer ids. Limit 100.\nCan be combined with created_at.* or updated_at.* filtering options only."
+                },
+                {
+                  "disabled": false,
+                  "key": "type",
+                  "value": "<string>",
+                  "description": "Retrieve all (default) or the specified transfers.\nOptionally filter by transfer `type`.\nTo retrieve multiple transfer types, use query parameters: e.g., `type=CRYPTO_DEPOSIT&type=CRYPTO_WITHDRAWAL`.\nCan be combined with `created_at.*` or `updated_at.*` filtering options only."
+                },
+                {
+                  "disabled": false,
+                  "key": "type",
+                  "value": "<string>",
+                  "description": "Retrieve all (default) or the specified transfers.\nOptionally filter by transfer `type`.\nTo retrieve multiple transfer types, use query parameters: e.g., `type=CRYPTO_DEPOSIT&type=CRYPTO_WITHDRAWAL`.\nCan be combined with `created_at.*` or `updated_at.*` filtering options only."
+                },
+                {
+                  "disabled": false,
+                  "key": "group_ids",
+                  "value": "<string>",
+                  "description": "Optionally filter by transfer `group_ids`. Limit 100."
+                },
+                {
+                  "disabled": false,
+                  "key": "group_ids",
+                  "value": "<string>",
+                  "description": "Optionally filter by transfer `group_ids`. Limit 100."
+                },
+                {
+                  "disabled": false,
+                  "key": "crypto_tx_hashes",
+                  "value": "<string>",
+                  "description": "Optionally filter by the on-chain transaction hash for crypto transactions. Limit 100."
+                },
+                {
+                  "disabled": false,
+                  "key": "crypto_tx_hashes",
+                  "value": "<string>",
+                  "description": "Optionally filter by the on-chain transaction hash for crypto transactions. Limit 100."
+                },
+                {
+                  "disabled": false,
+                  "key": "secondary_statuses",
+                  "value": "<string>",
+                  "description": "Optionally filter by secondary status.\n\n - TRAVEL_RULE_INFO_REQUESTED: Travel rule information is required to continue processing the transfer.\n - TRAVEL_RULE_REJECTED: Transfer has been terminally rejected due to failing travel rule checks.\n - CUSTOMER_REJECTED: Transfer was rejected by a customer.\n - PENDING_CUSTOMER_APPROVAL: Transfer is pending customer approval."
+                },
+                {
+                  "disabled": false,
+                  "key": "secondary_statuses",
+                  "value": "<string>",
+                  "description": "Optionally filter by secondary status.\n\n - TRAVEL_RULE_INFO_REQUESTED: Travel rule information is required to continue processing the transfer.\n - TRAVEL_RULE_REJECTED: Transfer has been terminally rejected due to failing travel rule checks.\n - CUSTOMER_REJECTED: Transfer was rejected by a customer.\n - PENDING_CUSTOMER_APPROVAL: Transfer is pending customer approval."
+                },
+                {
+                  "disabled": false,
+                  "key": "statuses",
+                  "value": "<string>",
+                  "description": "Optionally filter by status."
+                },
+                {
+                  "disabled": false,
+                  "key": "statuses",
+                  "value": "<string>",
+                  "description": "Optionally filter by status."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "conversion:read_conversion_stablecoin conversion:write_conversion_stablecoin exchange:historical_prices exchange:read_order exchange:read_quote exchange:read_quote_execution exchange:write_quote_execution exchange:write_order fee:write_crypto_withdrawal_fee funding:read_bank_balance funding:read_profile funding:write_profile identity:read_account identity:read_identity identity:write_account identity:write_identity settlement:read_transaction settlement:write_transaction tax:read_tax_form tax:read_tax_lot tax:write_tax_lot transfer:read_deposit_address transfer:read_fiat_account transfer:read_fiat_deposit_instructions transfer:read_transfer transfer:read_transfer_limit transfer:reject_crypto_deposit transfer:update_crypto_deposit transfer:write_crypto_withdrawal transfer:write_deposit_address transfer:write_fiat_account transfer:write_fiat_deposit_instructions transfer:write_internal_transfer transfer:write_sandbox_fiat_deposit transfer:write_fiat_withdrawal events:read_event"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://oauth.paxos.com/oauth2/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "72bd3a45-f0e7-487a-adab-ee13176a8d26",
+              "name": "A successful response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "transfer",
+                    "transfers"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "profile_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "profile_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "identity_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "identity_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "ref_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "ref_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "created_at.lt",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "created_at.lte",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "created_at.eq",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "created_at.gte",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "created_at.gt",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "updated_at.lt",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "updated_at.lte",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "updated_at.eq",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "updated_at.gte",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "updated_at.gt",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "order",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "order_by",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "page_cursor",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "account_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "account_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "type",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "type",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "group_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "group_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "crypto_tx_hashes",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "crypto_tx_hashes",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "secondary_statuses",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "secondary_statuses",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "statuses",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "statuses",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"items\": [\n    {\n      \"id\": \"string\",\n      \"customer_id\": \"string\",\n      \"profile_id\": \"string\",\n      \"amount\": \"4861218003.25415630\",\n      \"total\": \"1797071.49\",\n      \"fee\": \"471810204325\",\n      \"created_at\": \"2016-05-13T05:37:18.141Z\",\n      \"updated_at\": \"1973-10-10T09:30:52.473Z\",\n      \"asset\": \"string\",\n      \"status\": \"COMPLETED\",\n      \"direction\": \"CREDIT\",\n      \"type\": \"SEN_WITHDRAWAL\",\n      \"identity_id\": \"string\",\n      \"ref_id\": \"string\",\n      \"balance_asset\": \"string\",\n      \"secondary_status\": {\n        \"name\": \"TRAVEL_RULE_INFO_REQUESTED\",\n        \"detail\": \"string\"\n      },\n      \"status_details\": {\n        \"missing_trustline\": {\n          \"message\": \"string\",\n          \"destination_address\": \"string\",\n          \"asset\": \"string\"\n        },\n        \"max_rent_exceeded\": {\n          \"message\": \"string\",\n          \"destination_address\": \"string\"\n        },\n        \"pending_customer_approval\": {\n          \"message\": \"string\"\n        },\n        \"stale_fee_quote\": {\n          \"message\": \"string\"\n        },\n        \"invalid_destination_address\": {\n          \"message\": \"string\",\n          \"destination_address\": \"string\"\n        }\n      },\n      \"metadata\": {\n        \"key_0\": \"string\",\n        \"key_1\": \"string\",\n        \"key_2\": \"string\",\n        \"key_3\": \"string\"\n      },\n      \"destination_address\": \"string\",\n      \"crypto_network\": \"BNB\",\n      \"crypto_tx_hash\": \"string\",\n      \"crypto_tx_index\": \"string\",\n      \"account_id\": \"string\",\n      \"auto_conversion\": {\n        \"from_transfer_id\": \"string\",\n        \"to_transfer_id\": \"string\"\n      },\n      \"group_id\": \"string\",\n      \"fiat_account_id\": \"string\",\n      \"notional_value\": \"string\",\n      \"memo\": \"string\"\n    },\n    {\n      \"id\": \"string\",\n      \"customer_id\": \"string\",\n      \"profile_id\": \"string\",\n      \"amount\": \"98\",\n      \"total\": \"6976.6106986\",\n      \"fee\": \"61960352\",\n      \"created_at\": \"2013-01-09T18:18:47.014Z\",\n      \"updated_at\": \"1951-05-24T13:22:26.923Z\",\n      \"asset\": \"string\",\n      \"status\": \"FAILED\",\n      \"direction\": \"CREDIT\",\n      \"type\": \"CUBIX_WITHDRAWAL\",\n      \"identity_id\": \"string\",\n      \"ref_id\": \"string\",\n      \"balance_asset\": \"string\",\n      \"secondary_status\": {\n        \"name\": \"CUSTOMER_REJECTED\",\n        \"detail\": \"string\"\n      },\n      \"status_details\": {\n        \"missing_trustline\": {\n          \"message\": \"string\",\n          \"destination_address\": \"string\",\n          \"asset\": \"string\"\n        },\n        \"max_rent_exceeded\": {\n          \"message\": \"string\",\n          \"destination_address\": \"string\"\n        },\n        \"pending_customer_approval\": {\n          \"message\": \"string\"\n        },\n        \"stale_fee_quote\": {\n          \"message\": \"string\"\n        },\n        \"invalid_destination_address\": {\n          \"message\": \"string\",\n          \"destination_address\": \"string\"\n        }\n      },\n      \"metadata\": {\n        \"key_0\": \"string\"\n      },\n      \"destination_address\": \"string\",\n      \"crypto_network\": \"STELLAR\",\n      \"crypto_tx_hash\": \"string\",\n      \"crypto_tx_index\": \"string\",\n      \"account_id\": \"string\",\n      \"auto_conversion\": {\n        \"from_transfer_id\": \"string\",\n        \"to_transfer_id\": \"string\"\n      },\n      \"group_id\": \"string\",\n      \"fiat_account_id\": \"string\",\n      \"notional_value\": \"string\",\n      \"memo\": \"string\"\n    }\n  ],\n  \"next_page_cursor\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "33a9eb85-55b4-4ca9-bbbc-40d756542c6b",
+          "name": "Get Transfer",
+          "request": {
+            "name": "Get Transfer",
+            "description": {
+              "content": "Get a single transfer by ID.\n\nIn the polling workflow, this endpoint can be called to monitor transfer\nstatus changes.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "transfer",
+                "transfers",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) The Paxos transfer UUID."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "conversion:read_conversion_stablecoin conversion:write_conversion_stablecoin exchange:historical_prices exchange:read_order exchange:read_quote exchange:read_quote_execution exchange:write_quote_execution exchange:write_order fee:write_crypto_withdrawal_fee funding:read_bank_balance funding:read_profile funding:write_profile identity:read_account identity:read_identity identity:write_account identity:write_identity settlement:read_transaction settlement:write_transaction tax:read_tax_form tax:read_tax_lot tax:write_tax_lot transfer:read_deposit_address transfer:read_fiat_account transfer:read_fiat_deposit_instructions transfer:read_transfer transfer:read_transfer_limit transfer:reject_crypto_deposit transfer:update_crypto_deposit transfer:write_crypto_withdrawal transfer:write_deposit_address transfer:write_fiat_account transfer:write_fiat_deposit_instructions transfer:write_internal_transfer transfer:write_sandbox_fiat_deposit transfer:write_fiat_withdrawal events:read_event"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://oauth.paxos.com/oauth2/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "703420fc-fd15-4d4d-8c5f-436727c294d4",
+              "name": "A successful response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "transfer",
+                    "transfers",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The Paxos transfer UUID."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"string\",\n  \"customer_id\": \"string\",\n  \"profile_id\": \"string\",\n  \"amount\": \"63944017915820\",\n  \"total\": \"82394005910\",\n  \"fee\": \"704514238831046\",\n  \"created_at\": \"1975-02-21T07:03:43.397Z\",\n  \"updated_at\": \"1967-09-18T22:29:44.203Z\",\n  \"asset\": \"string\",\n  \"status\": \"COMPLETED\",\n  \"direction\": \"CREDIT\",\n  \"type\": \"BANK_WITHDRAWAL\",\n  \"identity_id\": \"string\",\n  \"ref_id\": \"string\",\n  \"balance_asset\": \"string\",\n  \"secondary_status\": {\n    \"name\": \"CUSTOMER_REJECTED\",\n    \"detail\": \"string\"\n  },\n  \"status_details\": {\n    \"missing_trustline\": {\n      \"message\": \"string\",\n      \"destination_address\": \"string\",\n      \"asset\": \"string\"\n    },\n    \"max_rent_exceeded\": {\n      \"message\": \"string\",\n      \"destination_address\": \"string\"\n    },\n    \"pending_customer_approval\": {\n      \"message\": \"string\"\n    },\n    \"stale_fee_quote\": {\n      \"message\": \"string\"\n    },\n    \"invalid_destination_address\": {\n      \"message\": \"string\",\n      \"destination_address\": \"string\"\n    }\n  },\n  \"metadata\": {\n    \"key_0\": \"string\"\n  },\n  \"destination_address\": \"string\",\n  \"crypto_network\": \"POLYGON_POS\",\n  \"crypto_tx_hash\": \"string\",\n  \"crypto_tx_index\": \"string\",\n  \"account_id\": \"string\",\n  \"auto_conversion\": {\n    \"from_transfer_id\": \"string\",\n    \"to_transfer_id\": \"string\"\n  },\n  \"group_id\": \"string\",\n  \"fiat_account_id\": \"string\",\n  \"notional_value\": \"string\",\n  \"memo\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.paxos.com/v2",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "4b4579c4-a55a-4d12-b2a9-a32fa4d562b7",
+    "name": "Paxos Account Members Transfers API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "<p>Welcome to Paxos APIs. At Paxos, our mission is to enable the movement of any asset, any time, in a trustworthy way. These APIs serve that mission by making it easier than ever for you to directly integrate our product capabilities into your application, leveraging the speed, stability, and security of the Paxos platform.</p> <p>The documentation that follows gives you access to our Crypto Brokerage, Trading, and Exchange products. It includes APIs for market data, orders, and the held rate quote flow.</p> <p>To test in our sandbox environment, <a href=\"https://account.sandbox.paxos.com\" target=\"_blank\">sign up</a> for an account. For more information about Paxos and our APIs, visit <a href=\"https://www.paxos.com/\" target=\"_blank\">Paxos.com</a>.</p>\n",
+      "type": "text/plain"
+    }
+  }
+}

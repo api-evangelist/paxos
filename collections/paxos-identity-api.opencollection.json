@@ -1,0 +1,243 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Paxos Account Members Identity API",
+    "version": "2.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Identity",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Identities",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.paxos.com/v2/identity/identities",
+            "params": [
+              {
+                "name": "summary_status",
+                "value": "",
+                "type": "query",
+                "description": "Summary Status of the Identity."
+              },
+              {
+                "name": "created_at.lt",
+                "value": "",
+                "type": "query",
+                "description": "Include timestamps strictly less than lt. RFC3339 format, like `2006-01-02T15:04:05Z`."
+              },
+              {
+                "name": "created_at.lte",
+                "value": "",
+                "type": "query",
+                "description": "Include timestamps less than or equal to lte. RFC3339 format, like `2006-01-02T15:04:05Z`."
+              },
+              {
+                "name": "created_at.eq",
+                "value": "",
+                "type": "query",
+                "description": "Include timestamps exactly equal to eq. RFC3339 format, like `2006-01-02T15:04:05Z`."
+              },
+              {
+                "name": "created_at.gte",
+                "value": "",
+                "type": "query",
+                "description": "Include timestamps greater than or equal to gte. RFC3339 format, like `2006-01-02T15:04:05Z`."
+              },
+              {
+                "name": "created_at.gt",
+                "value": "",
+                "type": "query",
+                "description": "Include timestamps strictly greater than gt. RFC3339 format, like `2006-01-02T15:04:05Z`."
+              },
+              {
+                "name": "updated_at.lt",
+                "value": "",
+                "type": "query",
+                "description": "Include timestamps strictly less than lt. RFC3339 format, like `2006-01-02T15:04:05Z`."
+              },
+              {
+                "name": "updated_at.lte",
+                "value": "",
+                "type": "query",
+                "description": "Include timestamps less than or equal to lte. RFC3339 format, like `2006-01-02T15:04:05Z`."
+              },
+              {
+                "name": "updated_at.eq",
+                "value": "",
+                "type": "query",
+                "description": "Include timestamps exactly equal to eq. RFC3339 format, like `2006-01-02T15:04:05Z`."
+              },
+              {
+                "name": "updated_at.gte",
+                "value": "",
+                "type": "query",
+                "description": "Include timestamps greater than or equal to gte. RFC3339 format, like `2006-01-02T15:04:05Z`."
+              },
+              {
+                "name": "updated_at.gt",
+                "value": "",
+                "type": "query",
+                "description": "Include timestamps strictly greater than gt. RFC3339 format, like `2006-01-02T15:04:05Z`."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of results to return."
+              },
+              {
+                "name": "order",
+                "value": "",
+                "type": "query",
+                "description": "Return items in ascending (ASC) or descending (DESC) order. Defaults to DESC."
+              },
+              {
+                "name": "order_by",
+                "value": "",
+                "type": "query",
+                "description": "The specific method by which the returned results will be ordered."
+              },
+              {
+                "name": "page_cursor",
+                "value": "",
+                "type": "query",
+                "description": "Cursor token for fetching the next page."
+              },
+              {
+                "name": "identity_type",
+                "value": "",
+                "type": "query",
+                "description": "Optionally filter by Identity type"
+              },
+              {
+                "name": "control_types",
+                "value": "",
+                "type": "query",
+                "description": "Optionally filter by active identity control types. Only returns identities with active controls matching any of these types."
+              },
+              {
+                "name": "control_reason_codes",
+                "value": "",
+                "type": "query",
+                "description": "Optionally filter by active identity control reason codes. Only returns identities with active controls matching any of these reason codes.\n\n - OTHER: Miscellaneous reason not captured by existing categories.\n - END_USER_REQUEST: Control applied at the end user's request.\n - INACTIVITY: Control applied due to prolonged inactivity in accordance with dormancy or lifecycle management policies.\n - COMPLIANCE_KYC: Control applied due to unmet KYC requirements, including missing, expired, failed, or unresponsiveness to refresh obligations.\n - COMPLIANCE_EDD: Control applied due to Enhanced Due Diligence (EDD) requirements, including failure to complete EDD reviews, provide requested information, or satisfy heightened risk assessment criteria.\n - COMPLIANCE_SCREENING: Control applied as a result of sanctions, politically exposed person (PEP), or adverse media screening hits.\n - COMPLIANCE_INVESTIGATION: Control applied while an identity is under active compliance, risk, or regulatory investigation, including reviews triggered by monitoring alerts or external inquiries.\n - COMPLIANCE_INCOMPLETE: Control applied because the onboarding process was not successfully completed, including failure to respond to requests for information or provide required documentation.\n - RISK_FRAUD: Control applied due to suspected or confirmed fraud, abuse, or security risk, including account compromise, transaction fraud, or policy violations.\n - LEGAL_ORDER: Control applied to comply with a legal, regulatory, or law-enforcement directive, including court orders, asset preservation requests, or regulatory instructions.\n - ADMINISTRATIVE: Control applied for operational or platform-initiated reasons not attributable to the end user or compliance failure, such as system remediation or account restructuring."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://oauth.paxos.com/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "This endpoint enables you to fetch a list of Identities.\nYou can use query parameters to filter the results returned by `created_at`, `updated_at`, `summary_status` and `identity_type`\n\nNote that this endpoint supports pagination and returns a cursor token for fetching next pages."
+        },
+        {
+          "info": {
+            "name": "Create Identity",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.paxos.com/v2/identity/identities",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://oauth.paxos.com/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Creates a new Person or Institution Identity on the Paxos Platform.\n\nA successful response indicates that the identity has been created and is `PENDING` approval. The identity is only\navailable to use on the Platform once it is `APPROVED`. For a full description of statuses read the [status guide here](https://docs.paxos.com/identity/statuses).\n\nFor detailed guidance on which [fields are required](https://docs.paxos.com/identity/required-details) for your integration\nor the [lifecycle of an Iden"
+        },
+        {
+          "info": {
+            "name": "Get Identity",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.paxos.com/v2/identity/identities/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "id associated with the identity"
+              },
+              {
+                "name": "include_details",
+                "value": "",
+                "type": "query",
+                "description": "query param; details are encrypted, so we do not want to include them by default"
+              },
+              {
+                "name": "include_institution_members",
+                "value": "",
+                "type": "query",
+                "description": "query param; to include institution members for institution identity"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://oauth.paxos.com/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Get an Identity by its (identity) id. You can only see identities created by you.\n\nYou can use the query parameter `include_details` to include identity details (`person_details` or `institution_details`) in\nthe response and the query parameter `include_institution_members` to include institution members in the response."
+        },
+        {
+          "info": {
+            "name": "Update Identity",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.paxos.com/v2/identity/identities/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://oauth.paxos.com/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Updates an Identity, this action performs a delta of what is submitted in the update and the existing identity.\n- Updating details (`person_details` or `institution_details`) might lead to the identity being re-verified (e.g. re-screening name changes), which\ncould impact the identity's ability to transact on the Platform.\n- Setting `set_user_disabled` to `true` will make the Identity `DISABLED` (read [more here](https://docs.paxos.com/identity/statuses) on what this means)\n- Setting `tax_detail"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

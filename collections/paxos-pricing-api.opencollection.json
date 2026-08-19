@@ -1,0 +1,170 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Paxos Account Members Pricing API",
+    "version": "2.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Pricing",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Prices",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.paxos.com/v2/all-markets/prices",
+            "params": [
+              {
+                "name": "markets",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Retrieve current prices, as well as 24 hour prior (yesterday) prices, for the specified markets.\nAny single market that failed to be retrieved is excluded from the response."
+        },
+        {
+          "info": {
+            "name": "List Historical Prices",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.paxos.com/v2/markets/:market/historical-prices",
+            "params": [
+              {
+                "name": "market",
+                "value": "",
+                "type": "path",
+                "description": "Market of Order Book."
+              },
+              {
+                "name": "max_data_points",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of data points to return.\n\nThe time frame of the increments will be inferred by finding the most granular increment without breaching the `max_data_points` value based on a set of recording data points."
+              },
+              {
+                "name": "range.begin",
+                "value": "",
+                "type": "query",
+                "description": "Only return records after this timestamp, inclusive. RFC3339 format, like `2006-01-02T15:04:05Z`."
+              },
+              {
+                "name": "range.end",
+                "value": "",
+                "type": "query",
+                "description": "Only return records before this timestamp, inclusive. RFC3339 format, like `2006-01-02T15:04:05Z`."
+              },
+              {
+                "name": "pagination.limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of results to return"
+              },
+              {
+                "name": "pagination.offset",
+                "value": "",
+                "type": "query",
+                "description": "Number of results to skip"
+              },
+              {
+                "name": "increment",
+                "value": "",
+                "type": "query",
+                "description": "Time increment between prices. Returns data exclusive from `range.begin` and `range.end`. Do not use with `max_data_points`, as this results in an error."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://oauth.paxos.com/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Retrieves a set of average prices at a certain increment of time for the requested market.\nThis endpoint is suitable for retrieving historical average price trends where price precision, execution, and\nother detailed information is not required.\nTo control the count, use either  `increment` or `max_data_points`.\nList Historical Prices returns an error when an unexpected value is given, or when `increment` and\n `max_data_points` are both given or omitted.\n\nWhen `range.begin` is omitted, the first"
+        },
+        {
+          "info": {
+            "name": "List Historical Candles",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.paxos.com/v2/markets/:market/historical-candles",
+            "params": [
+              {
+                "name": "market",
+                "value": "",
+                "type": "path",
+                "description": "Market of candle."
+              },
+              {
+                "name": "max_data_points",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of data points to return.\n\nThe time frame of the increments will be inferred by finding the most granular increment without breaching the `max_data_points` value based on a set of recorded data points."
+              },
+              {
+                "name": "range.begin",
+                "value": "",
+                "type": "query",
+                "description": "Only return records after this timestamp, inclusive. RFC3339 format, like `2006-01-02T15:04:05Z`."
+              },
+              {
+                "name": "range.end",
+                "value": "",
+                "type": "query",
+                "description": "Only return records before this timestamp, inclusive. RFC3339 format, like `2006-01-02T15:04:05Z`."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of results to return. Defaults to `100` if no limit is provided. Maximum `1000`."
+              },
+              {
+                "name": "order",
+                "value": "",
+                "type": "query",
+                "description": "Results are ordered by `timestamp`. Specify the ordering of the results. Defaults to `DESC`."
+              },
+              {
+                "name": "page_cursor",
+                "value": "",
+                "type": "query",
+                "description": "Cursor for pagination"
+              },
+              {
+                "name": "increment",
+                "value": "",
+                "type": "query",
+                "description": "Time increment between prices. Returns data inclusive from `range.begin` and `range.end`. Do not use with `max_data_points`, as this results in an error."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://oauth.paxos.com/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Returns OHLCV Candlesticks data for the given market.\nTo control the count, use either  `increment` or `max_data_points`.\nList Historical Candles returns an error when an unexpected value is given, or when `increment` and\n `max_data_points` are both given or omitted.\n\nWhen `range.end` is omitted, it will default to the current UTC timestamp.\nIt is possible to set `range.end` to a future date without error.\n\nOmitting `range.begin` defaults it to six months before `range.end`.\n\nWhen `limit` is omi"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

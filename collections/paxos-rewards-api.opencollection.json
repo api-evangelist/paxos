@@ -1,0 +1,74 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Paxos Account Members Rewards API",
+    "version": "2.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Rewards",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get reward details",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.paxos.com/v2/rewards/details",
+            "params": [
+              {
+                "name": "asset_type",
+                "value": "",
+                "type": "query",
+                "description": "When set, only data for this asset type (e.g. \"USDG\", \"PYUSD\") is returned."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://oauth.paxos.com/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Returns current reward rates, next accrual time, lifetime earned, and total available rewards"
+        },
+        {
+          "info": {
+            "name": "Get reward rates",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.paxos.com/v2/rewards/rates",
+            "params": [
+              {
+                "name": "asset_type",
+                "value": "",
+                "type": "query",
+                "description": "The asset type to fetch rates for (e.g. \"USDG\", \"PYUSD\").\nWhen not set, an empty rates array is returned."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://oauth.paxos.com/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Returns the reward rates for the given asset type"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

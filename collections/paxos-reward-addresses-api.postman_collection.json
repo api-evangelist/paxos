@@ -1,0 +1,774 @@
+{
+  "item": [
+    {
+      "id": "2c3cb8ed-973f-426a-bf6b-d05208168c0e",
+      "name": "Reward Addresses",
+      "description": {
+        "content": "Reward addresses are blockchain addresses registered for reward attribution.\n\nCustody Rewards: For EVM chains, Paxos registers these addresses on-chain for reward calculation and accrual in the token contract. For Solana, provide the **owner account** (not a token account) — Paxos will derive and register the associated token account on-chain for the given asset. Providing a token account will result in a derived address with no meaning. For other non-EVM chains, Paxos tracks on-chain activity for custody reward calculation.\n\nNon-Custody Rewards: Paxos tracks on-chain activity for these addresses to calculate and distribute non-custody rewards to your organization.\n\n*These endpoints are only relevant for whitelisted Rewards partners.*\n",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "f810fbdb-2d69-4cb7-98d4-03ad1cb6f135",
+          "name": "List reward addresses",
+          "request": {
+            "name": "List reward addresses",
+            "description": {
+              "content": "Returns a paginated list of reward addresses",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "rewards",
+                "addresses"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "<integer>"
+                },
+                {
+                  "disabled": false,
+                  "key": "customer_id",
+                  "value": "<string>",
+                  "description": "Optional for public API - extracted from auth context if not provided."
+                },
+                {
+                  "disabled": false,
+                  "key": "ledger",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "address",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "order",
+                  "value": "<string>",
+                  "description": "Optional, sort order for results based on created_at. The default sort order is DESC."
+                },
+                {
+                  "disabled": false,
+                  "key": "page_cursor",
+                  "value": "<string>",
+                  "description": "Optional, cursor token for fetching the next page."
+                },
+                {
+                  "disabled": false,
+                  "key": "id",
+                  "value": "<string>",
+                  "description": "Optional, address id."
+                },
+                {
+                  "disabled": false,
+                  "key": "payout_group_id",
+                  "value": "<string>",
+                  "description": "Optional, filter by payout group. Pass the zero UUID (00000000-0000-0000-0000-000000000000) to return only addresses with no payout group assigned."
+                },
+                {
+                  "disabled": false,
+                  "key": "include_balance",
+                  "value": "<boolean>",
+                  "description": "When true, fetch and include balance for each address"
+                },
+                {
+                  "disabled": false,
+                  "key": "balance_timestamp",
+                  "value": "<dateTime>",
+                  "description": "Point-in-time for balance query (optional, defaults to now)"
+                },
+                {
+                  "disabled": false,
+                  "key": "asset_type",
+                  "value": "<string>",
+                  "description": "When set, only addresses belonging to payout groups with this asset type are returned."
+                },
+                {
+                  "disabled": false,
+                  "key": "onchain_statuses",
+                  "value": "<string>",
+                  "description": "Optional, filter by one or more onchain registration statuses."
+                },
+                {
+                  "disabled": false,
+                  "key": "onchain_statuses",
+                  "value": "<string>",
+                  "description": "Optional, filter by one or more onchain registration statuses."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "conversion:read_conversion_stablecoin conversion:write_conversion_stablecoin exchange:historical_prices exchange:read_order exchange:read_quote exchange:read_quote_execution exchange:write_quote_execution exchange:write_order fee:write_crypto_withdrawal_fee funding:read_bank_balance funding:read_profile funding:write_profile identity:read_account identity:read_identity identity:write_account identity:write_identity settlement:read_transaction settlement:write_transaction tax:read_tax_form tax:read_tax_lot tax:write_tax_lot transfer:read_deposit_address transfer:read_fiat_account transfer:read_fiat_deposit_instructions transfer:read_transfer transfer:read_transfer_limit transfer:reject_crypto_deposit transfer:update_crypto_deposit transfer:write_crypto_withdrawal transfer:write_deposit_address transfer:write_fiat_account transfer:write_fiat_deposit_instructions transfer:write_internal_transfer transfer:write_sandbox_fiat_deposit transfer:write_fiat_withdrawal events:read_event"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://oauth.paxos.com/oauth2/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "a66efa83-dc43-45ad-92a8-a4ca667298ea",
+              "name": "A successful response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "rewards",
+                    "addresses"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "customer_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "ledger",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "address",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "order",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "page_cursor",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "payout_group_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "include_balance",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "balance_timestamp",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "asset_type",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "onchain_statuses",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "onchain_statuses",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"items\": [\n    {\n      \"customer_id\": \"string\",\n      \"ledger\": \"INK\",\n      \"address\": \"string\",\n      \"name\": \"string\",\n      \"created_at\": \"2018-06-09T22:26:14.952Z\",\n      \"effective_at\": \"2002-02-25T05:56:58.679Z\",\n      \"id\": \"string\",\n      \"payout_group_id\": \"string\",\n      \"balance\": \"string\",\n      \"status\": \"string\",\n      \"asset_type\": \"string\",\n      \"verification_proof_id\": \"string\",\n      \"verification_status\": \"string\",\n      \"verification_method\": \"string\",\n      \"verification_expires_at\": \"2007-04-27T01:24:33.803Z\"\n    },\n    {\n      \"customer_id\": \"string\",\n      \"ledger\": \"ROBINHOOD\",\n      \"address\": \"string\",\n      \"name\": \"string\",\n      \"created_at\": \"1973-11-16T12:45:55.515Z\",\n      \"effective_at\": \"2008-06-17T21:05:04.757Z\",\n      \"id\": \"string\",\n      \"payout_group_id\": \"string\",\n      \"balance\": \"string\",\n      \"status\": \"string\",\n      \"asset_type\": \"string\",\n      \"verification_proof_id\": \"string\",\n      \"verification_status\": \"string\",\n      \"verification_method\": \"string\",\n      \"verification_expires_at\": \"1950-09-10T22:21:51.392Z\"\n    }\n  ],\n  \"next_page_cursor\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "713469f2-3074-4058-b592-38eac62599fa",
+          "name": "Create a reward address",
+          "request": {
+            "name": "Create a reward address",
+            "description": {
+              "content": "Creates a new reward address for reward attribution",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "rewards",
+                "addresses"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "conversion:read_conversion_stablecoin conversion:write_conversion_stablecoin exchange:historical_prices exchange:read_order exchange:read_quote exchange:read_quote_execution exchange:write_quote_execution exchange:write_order fee:write_crypto_withdrawal_fee funding:read_bank_balance funding:read_profile funding:write_profile identity:read_account identity:read_identity identity:write_account identity:write_identity settlement:read_transaction settlement:write_transaction tax:read_tax_form tax:read_tax_lot tax:write_tax_lot transfer:read_deposit_address transfer:read_fiat_account transfer:read_fiat_deposit_instructions transfer:read_transfer transfer:read_transfer_limit transfer:reject_crypto_deposit transfer:update_crypto_deposit transfer:write_crypto_withdrawal transfer:write_deposit_address transfer:write_fiat_account transfer:write_fiat_deposit_instructions transfer:write_internal_transfer transfer:write_sandbox_fiat_deposit transfer:write_fiat_withdrawal events:read_event"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://oauth.paxos.com/oauth2/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"address\": {\n    \"customer_id\": \"<string>\",\n    \"ledger\": \"<string>\",\n    \"address\": \"<string>\",\n    \"name\": \"<string>\",\n    \"created_at\": \"<dateTime>\",\n    \"effective_at\": \"<dateTime>\",\n    \"id\": \"<string>\",\n    \"payout_group_id\": \"<string>\",\n    \"balance\": \"<string>\",\n    \"asset_type\": \"<string>\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "88d67b49-2312-4a03-a08e-c8de9dd666dc",
+              "name": "A successful response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "rewards",
+                    "addresses"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"address\": {\n    \"customer_id\": \"<string>\",\n    \"ledger\": \"<string>\",\n    \"address\": \"<string>\",\n    \"name\": \"<string>\",\n    \"created_at\": \"<dateTime>\",\n    \"effective_at\": \"<dateTime>\",\n    \"id\": \"<string>\",\n    \"payout_group_id\": \"<string>\",\n    \"balance\": \"<string>\",\n    \"asset_type\": \"<string>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"address\": {\n    \"customer_id\": \"<string>\",\n    \"ledger\": \"<string>\",\n    \"address\": \"<string>\",\n    \"name\": \"<string>\",\n    \"created_at\": \"<dateTime>\",\n    \"effective_at\": \"<dateTime>\",\n    \"id\": \"<string>\",\n    \"payout_group_id\": \"<string>\",\n    \"balance\": \"<string>\",\n    \"status\": \"string\",\n    \"asset_type\": \"<string>\",\n    \"verification_proof_id\": \"string\",\n    \"verification_status\": \"string\",\n    \"verification_method\": \"string\",\n    \"verification_expires_at\": \"1948-11-17T11:08:09.477Z\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "63a1e130-c88e-4ee5-b9ec-e5e945ac7f51",
+          "name": "Batch create reward addresses",
+          "request": {
+            "name": "Batch create reward addresses",
+            "description": {
+              "content": "Creates multiple reward addresses in a single request",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "rewards",
+                "addresses",
+                "batch"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "conversion:read_conversion_stablecoin conversion:write_conversion_stablecoin exchange:historical_prices exchange:read_order exchange:read_quote exchange:read_quote_execution exchange:write_quote_execution exchange:write_order fee:write_crypto_withdrawal_fee funding:read_bank_balance funding:read_profile funding:write_profile identity:read_account identity:read_identity identity:write_account identity:write_identity settlement:read_transaction settlement:write_transaction tax:read_tax_form tax:read_tax_lot tax:write_tax_lot transfer:read_deposit_address transfer:read_fiat_account transfer:read_fiat_deposit_instructions transfer:read_transfer transfer:read_transfer_limit transfer:reject_crypto_deposit transfer:update_crypto_deposit transfer:write_crypto_withdrawal transfer:write_deposit_address transfer:write_fiat_account transfer:write_fiat_deposit_instructions transfer:write_internal_transfer transfer:write_sandbox_fiat_deposit transfer:write_fiat_withdrawal events:read_event"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://oauth.paxos.com/oauth2/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"addresses\": [\n    {\n      \"customer_id\": \"<string>\",\n      \"ledger\": \"<string>\",\n      \"address\": \"<string>\",\n      \"name\": \"<string>\",\n      \"created_at\": \"<dateTime>\",\n      \"effective_at\": \"<dateTime>\",\n      \"id\": \"<string>\",\n      \"payout_group_id\": \"<string>\",\n      \"balance\": \"<string>\",\n      \"asset_type\": \"<string>\"\n    },\n    {\n      \"customer_id\": \"<string>\",\n      \"ledger\": \"<string>\",\n      \"address\": \"<string>\",\n      \"name\": \"<string>\",\n      \"created_at\": \"<dateTime>\",\n      \"effective_at\": \"<dateTime>\",\n      \"id\": \"<string>\",\n      \"payout_group_id\": \"<string>\",\n      \"balance\": \"<string>\",\n      \"asset_type\": \"<string>\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "9dbe009d-f090-400f-a1ca-2ac71dfdf452",
+              "name": "A successful response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "rewards",
+                    "addresses",
+                    "batch"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"addresses\": [\n    {\n      \"customer_id\": \"<string>\",\n      \"ledger\": \"<string>\",\n      \"address\": \"<string>\",\n      \"name\": \"<string>\",\n      \"created_at\": \"<dateTime>\",\n      \"effective_at\": \"<dateTime>\",\n      \"id\": \"<string>\",\n      \"payout_group_id\": \"<string>\",\n      \"balance\": \"<string>\",\n      \"asset_type\": \"<string>\"\n    },\n    {\n      \"customer_id\": \"<string>\",\n      \"ledger\": \"<string>\",\n      \"address\": \"<string>\",\n      \"name\": \"<string>\",\n      \"created_at\": \"<dateTime>\",\n      \"effective_at\": \"<dateTime>\",\n      \"id\": \"<string>\",\n      \"payout_group_id\": \"<string>\",\n      \"balance\": \"<string>\",\n      \"asset_type\": \"<string>\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"successful_addresses\": [\n    {\n      \"customer_id\": \"<string>\",\n      \"ledger\": \"<string>\",\n      \"address\": \"<string>\",\n      \"name\": \"<string>\",\n      \"created_at\": \"<dateTime>\",\n      \"effective_at\": \"<dateTime>\",\n      \"id\": \"<string>\",\n      \"payout_group_id\": \"<string>\",\n      \"balance\": \"<string>\",\n      \"status\": \"string\",\n      \"asset_type\": \"<string>\",\n      \"verification_proof_id\": \"string\",\n      \"verification_status\": \"string\",\n      \"verification_method\": \"string\",\n      \"verification_expires_at\": \"1988-07-15T02:24:57.849Z\"\n    },\n    {\n      \"customer_id\": \"<string>\",\n      \"ledger\": \"<string>\",\n      \"address\": \"<string>\",\n      \"name\": \"<string>\",\n      \"created_at\": \"<dateTime>\",\n      \"effective_at\": \"<dateTime>\",\n      \"id\": \"<string>\",\n      \"payout_group_id\": \"<string>\",\n      \"balance\": \"<string>\",\n      \"status\": \"string\",\n      \"asset_type\": \"<string>\",\n      \"verification_proof_id\": \"string\",\n      \"verification_status\": \"string\",\n      \"verification_method\": \"string\",\n      \"verification_expires_at\": \"1991-02-04T20:09:39.271Z\"\n    }\n  ],\n  \"failed_addresses\": [\n    {\n      \"address\": {\n        \"customer_id\": \"<string>\",\n        \"ledger\": \"<string>\",\n        \"address\": \"<string>\",\n        \"name\": \"<string>\",\n        \"created_at\": \"<dateTime>\",\n        \"effective_at\": \"<dateTime>\",\n        \"id\": \"<string>\",\n        \"payout_group_id\": \"<string>\",\n        \"balance\": \"<string>\",\n        \"status\": \"string\",\n        \"asset_type\": \"<string>\",\n        \"verification_proof_id\": \"string\",\n        \"verification_status\": \"string\",\n        \"verification_method\": \"string\",\n        \"verification_expires_at\": \"2012-04-30T19:41:37.617Z\"\n      },\n      \"error\": \"string\"\n    },\n    {\n      \"address\": {\n        \"customer_id\": \"<string>\",\n        \"ledger\": \"<string>\",\n        \"address\": \"<string>\",\n        \"name\": \"<string>\",\n        \"created_at\": \"<dateTime>\",\n        \"effective_at\": \"<dateTime>\",\n        \"id\": \"<string>\",\n        \"payout_group_id\": \"<string>\",\n        \"balance\": \"<string>\",\n        \"status\": \"string\",\n        \"asset_type\": \"<string>\",\n        \"verification_proof_id\": \"string\",\n        \"verification_status\": \"string\",\n        \"verification_method\": \"string\",\n        \"verification_expires_at\": \"1964-03-11T06:48:02.054Z\"\n      },\n      \"error\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "79e257c3-77b7-4df2-84b4-0526c11affe2",
+          "name": "Delete a reward address",
+          "request": {
+            "name": "Delete a reward address",
+            "description": {
+              "content": "Deletes a reward address. A 200 response indicates the request was accepted; however, if the address is registered on a blockchain, it may continue to appear for up to a few minutes while the on-chain removal is confirmed. Once confirmed, the address will no longer appear.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "rewards",
+                "addresses",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "customer_id",
+                  "value": "<string>",
+                  "description": "Partner ID (used for legacy deletion or when auth context unavailable)."
+                },
+                {
+                  "disabled": false,
+                  "key": "ledger",
+                  "value": "<string>",
+                  "description": "Ledger type (required for legacy deletion)."
+                },
+                {
+                  "disabled": false,
+                  "key": "address",
+                  "value": "<string>",
+                  "description": "Wallet address (required for legacy deletion)."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) Two deletion modes are supported:\n1. ID-based (REST API): Provide 'id', customer_id is extracted from auth context.\n2. Legacy (internal gRPC): Provide 'customer_id', 'ledger', and 'address'.\n\nAddress ID for deletion (preferred for REST API)."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "conversion:read_conversion_stablecoin conversion:write_conversion_stablecoin exchange:historical_prices exchange:read_order exchange:read_quote exchange:read_quote_execution exchange:write_quote_execution exchange:write_order fee:write_crypto_withdrawal_fee funding:read_bank_balance funding:read_profile funding:write_profile identity:read_account identity:read_identity identity:write_account identity:write_identity settlement:read_transaction settlement:write_transaction tax:read_tax_form tax:read_tax_lot tax:write_tax_lot transfer:read_deposit_address transfer:read_fiat_account transfer:read_fiat_deposit_instructions transfer:read_transfer transfer:read_transfer_limit transfer:reject_crypto_deposit transfer:update_crypto_deposit transfer:write_crypto_withdrawal transfer:write_deposit_address transfer:write_fiat_account transfer:write_fiat_deposit_instructions transfer:write_internal_transfer transfer:write_sandbox_fiat_deposit transfer:write_fiat_withdrawal events:read_event"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://oauth.paxos.com/oauth2/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "78d37a8c-c307-464d-8aac-ea05dbe3dfb3",
+              "name": "A successful response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "rewards",
+                    "addresses",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "customer_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "ledger",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "address",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Two deletion modes are supported:\n1. ID-based (REST API): Provide 'id', customer_id is extracted from auth context.\n2. Legacy (internal gRPC): Provide 'customer_id', 'ledger', and 'address'.\n\nAddress ID for deletion (preferred for REST API)."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "7f043072-1870-4327-9c22-65d1f075da15",
+          "name": "Update a reward address",
+          "request": {
+            "name": "Update a reward address",
+            "description": {
+              "content": "Updates an existing reward address",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "rewards",
+                "addresses",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) id is the address ID used as the URL path parameter.\nMust match address.id when both are provided."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "conversion:read_conversion_stablecoin conversion:write_conversion_stablecoin exchange:historical_prices exchange:read_order exchange:read_quote exchange:read_quote_execution exchange:write_quote_execution exchange:write_order fee:write_crypto_withdrawal_fee funding:read_bank_balance funding:read_profile funding:write_profile identity:read_account identity:read_identity identity:write_account identity:write_identity settlement:read_transaction settlement:write_transaction tax:read_tax_form tax:read_tax_lot tax:write_tax_lot transfer:read_deposit_address transfer:read_fiat_account transfer:read_fiat_deposit_instructions transfer:read_transfer transfer:read_transfer_limit transfer:reject_crypto_deposit transfer:update_crypto_deposit transfer:write_crypto_withdrawal transfer:write_deposit_address transfer:write_fiat_account transfer:write_fiat_deposit_instructions transfer:write_internal_transfer transfer:write_sandbox_fiat_deposit transfer:write_fiat_withdrawal events:read_event"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://oauth.paxos.com/oauth2/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customer_id\": \"<string>\",\n  \"ledger\": \"<string>\",\n  \"address\": \"<string>\",\n  \"name\": \"<string>\",\n  \"created_at\": \"<dateTime>\",\n  \"effective_at\": \"<dateTime>\",\n  \"id\": \"<string>\",\n  \"payout_group_id\": \"<string>\",\n  \"balance\": \"<string>\",\n  \"asset_type\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "c32b61cb-5709-4c23-ab72-0f838c287c8f",
+              "name": "A successful response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "rewards",
+                    "addresses",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) id is the address ID used as the URL path parameter.\nMust match address.id when both are provided."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"customer_id\": \"<string>\",\n  \"ledger\": \"<string>\",\n  \"address\": \"<string>\",\n  \"name\": \"<string>\",\n  \"created_at\": \"<dateTime>\",\n  \"effective_at\": \"<dateTime>\",\n  \"id\": \"<string>\",\n  \"payout_group_id\": \"<string>\",\n  \"balance\": \"<string>\",\n  \"asset_type\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"address\": {\n    \"customer_id\": \"<string>\",\n    \"ledger\": \"<string>\",\n    \"address\": \"<string>\",\n    \"name\": \"<string>\",\n    \"created_at\": \"<dateTime>\",\n    \"effective_at\": \"<dateTime>\",\n    \"id\": \"<string>\",\n    \"payout_group_id\": \"<string>\",\n    \"balance\": \"<string>\",\n    \"status\": \"string\",\n    \"asset_type\": \"<string>\",\n    \"verification_proof_id\": \"string\",\n    \"verification_status\": \"string\",\n    \"verification_method\": \"string\",\n    \"verification_expires_at\": \"1948-11-17T11:08:09.477Z\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.paxos.com/v2",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "a5d4af01-c51d-4ff8-8c0e-c19b7a5f6ffa",
+    "name": "Paxos Account Members Reward Addresses API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "<p>Welcome to Paxos APIs. At Paxos, our mission is to enable the movement of any asset, any time, in a trustworthy way. These APIs serve that mission by making it easier than ever for you to directly integrate our product capabilities into your application, leveraging the speed, stability, and security of the Paxos platform.</p> <p>The documentation that follows gives you access to our Crypto Brokerage, Trading, and Exchange products. It includes APIs for market data, orders, and the held rate quote flow.</p> <p>To test in our sandbox environment, <a href=\"https://account.sandbox.paxos.com\" target=\"_blank\">sign up</a> for an account. For more information about Paxos and our APIs, visit <a href=\"https://www.paxos.com/\" target=\"_blank\">Paxos.com</a>.</p>\n",
+      "type": "text/plain"
+    }
+  }
+}

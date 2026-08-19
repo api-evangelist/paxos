@@ -1,0 +1,570 @@
+{
+  "item": [
+    {
+      "id": "2324d29d-1ef8-4f19-85ef-f3d35d1a386c",
+      "name": "Pricing",
+      "description": {
+        "content": "Pricing provides historical data related to charting of asset prices.\n\nNote: Some Pricing API markets may be unavailable for trading.\n",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "df65fbcd-8d2d-471a-bc98-4c64ea55c409",
+          "name": "List Prices",
+          "request": {
+            "name": "List Prices",
+            "description": {
+              "content": "Retrieve current prices, as well as 24 hour prior (yesterday) prices, for the specified markets.\nAny single market that failed to be retrieved is excluded from the response.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "all-markets",
+                "prices"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "markets",
+                  "value": "<string>",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "markets",
+                  "value": "<string>",
+                  "description": "(Required) "
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "9b0f1ba9-da17-4022-a0d9-861a89549db4",
+              "name": "A successful response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "all-markets",
+                    "prices"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "markets",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "markets",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"prices\": [\n    {\n      \"market\": \"BTCUSD\",\n      \"current_price\": \"16627.62\",\n      \"yesterday_price\": \"16703.29\",\n      \"snapshot_at\": \"2023-01-03T18:27:40.294528Z\"\n    },\n    {\n      \"market\": \"ETHUSD\",\n      \"current_price\": \"1206.93\",\n      \"yesterday_price\": \"1216.55\",\n      \"snapshot_at\": \"2023-01-03T18:27:40.294528Z\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "0c8bfcfb-f7b0-4127-be07-795fb2d9796e",
+          "name": "List Historical Prices",
+          "request": {
+            "name": "List Historical Prices",
+            "description": {
+              "content": "Retrieves a set of average prices at a certain increment of time for the requested market.\nThis endpoint is suitable for retrieving historical average price trends where price precision, execution, and\nother detailed information is not required.\nTo control the count, use either  `increment` or `max_data_points`.\nList Historical Prices returns an error when an unexpected value is given, or when `increment` and\n `max_data_points` are both given or omitted.\n\nWhen `range.begin` is omitted, the first data point shows the mid price, the average of the order book best bid\n and ask price, or the earliest available date. It is possible to set `range.begin` to a future date without error.\n\nWhen `range.end` is omitted, the last data point will display current mid price (average of order book best bid\n and best ask) at the request timestamp. It is possible to set `range.end` to a future date without error.\n\nWhen `pagination.limit` is omitted, the pagination limit will default to return the first 100 items.\nIf the pagination limit is set, the API will return up to the limit in one response. The pagination limit max is 1,000.\n\nTime-series items are returned in chronological (ascending) order. All timestamps are in UTC.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "markets",
+                ":market",
+                "historical-prices"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "max_data_points",
+                  "value": "<long>",
+                  "description": "Maximum number of data points to return.\n\nThe time frame of the increments will be inferred by finding the most granular increment without breaching the `max_data_points` value based on a set of recording data points."
+                },
+                {
+                  "disabled": false,
+                  "key": "range.begin",
+                  "value": "<dateTime>",
+                  "description": "Only return records after this timestamp, inclusive. RFC3339 format, like `2006-01-02T15:04:05Z`."
+                },
+                {
+                  "disabled": false,
+                  "key": "range.end",
+                  "value": "<dateTime>",
+                  "description": "Only return records before this timestamp, inclusive. RFC3339 format, like `2006-01-02T15:04:05Z`."
+                },
+                {
+                  "disabled": false,
+                  "key": "pagination.limit",
+                  "value": "<integer>",
+                  "description": "Number of results to return"
+                },
+                {
+                  "disabled": false,
+                  "key": "pagination.offset",
+                  "value": "<integer>",
+                  "description": "Number of results to skip"
+                },
+                {
+                  "disabled": false,
+                  "key": "increment",
+                  "value": "<string>",
+                  "description": "Time increment between prices. Returns data exclusive from `range.begin` and `range.end`. Do not use with `max_data_points`, as this results in an error."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "market",
+                  "description": "(Required) Market of Order Book."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "conversion:read_conversion_stablecoin conversion:write_conversion_stablecoin exchange:historical_prices exchange:read_order exchange:read_quote exchange:read_quote_execution exchange:write_quote_execution exchange:write_order fee:write_crypto_withdrawal_fee funding:read_bank_balance funding:read_profile funding:write_profile identity:read_account identity:read_identity identity:write_account identity:write_identity settlement:read_transaction settlement:write_transaction tax:read_tax_form tax:read_tax_lot tax:write_tax_lot transfer:read_deposit_address transfer:read_fiat_account transfer:read_fiat_deposit_instructions transfer:read_transfer transfer:read_transfer_limit transfer:reject_crypto_deposit transfer:update_crypto_deposit transfer:write_crypto_withdrawal transfer:write_deposit_address transfer:write_fiat_account transfer:write_fiat_deposit_instructions transfer:write_internal_transfer transfer:write_sandbox_fiat_deposit transfer:write_fiat_withdrawal events:read_event"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://oauth.paxos.com/oauth2/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "491406e7-305e-49bf-a1c9-72577b557a47",
+              "name": "A successful response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "markets",
+                    ":market",
+                    "historical-prices"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "max_data_points",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "range.begin",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "range.end",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "pagination.limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "pagination.offset",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "increment",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "market",
+                      "description": "(Required) Market of Order Book."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"market\": \"BTCUSD\",\n  \"prices\": [\n    {\n      \"average_price\": \"9245.50\",\n      \"timestamp\": \"2020-01-17T18:36:00.000Z\"\n    },\n    {\n      \"average_price\": \"9265.50\",\n      \"timestamp\": \"2020-01-17T18:37:00.000Z\"\n    }\n  ],\n  \"total_count\": 50\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "610737a2-295f-480e-86df-affdc803d83c",
+          "name": "List Historical Candles",
+          "request": {
+            "name": "List Historical Candles",
+            "description": {
+              "content": "Returns OHLCV Candlesticks data for the given market.\nTo control the count, use either  `increment` or `max_data_points`.\nList Historical Candles returns an error when an unexpected value is given, or when `increment` and\n `max_data_points` are both given or omitted.\n\nWhen `range.end` is omitted, it will default to the current UTC timestamp.\nIt is possible to set `range.end` to a future date without error.\n\nOmitting `range.begin` defaults it to six months before `range.end`.\n\nWhen `limit` is omitted, it will default to return the first 100 items.\nIf `limit` is set, the API will return up to the limit in one response. The maximum limit is 1,000.\n\nTime-series items are in descending order. All timestamps are in UTC.\n\nMarkets that are not yet available will return a 400 error.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "markets",
+                ":market",
+                "historical-candles"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "max_data_points",
+                  "value": "<long>",
+                  "description": "Maximum number of data points to return.\n\nThe time frame of the increments will be inferred by finding the most granular increment without breaching the `max_data_points` value based on a set of recorded data points."
+                },
+                {
+                  "disabled": false,
+                  "key": "range.begin",
+                  "value": "<dateTime>",
+                  "description": "Only return records after this timestamp, inclusive. RFC3339 format, like `2006-01-02T15:04:05Z`."
+                },
+                {
+                  "disabled": false,
+                  "key": "range.end",
+                  "value": "<dateTime>",
+                  "description": "Only return records before this timestamp, inclusive. RFC3339 format, like `2006-01-02T15:04:05Z`."
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "<integer>",
+                  "description": "Number of results to return. Defaults to `100` if no limit is provided. Maximum `1000`."
+                },
+                {
+                  "disabled": false,
+                  "key": "order",
+                  "value": "<string>",
+                  "description": "Results are ordered by `timestamp`. Specify the ordering of the results. Defaults to `DESC`."
+                },
+                {
+                  "disabled": false,
+                  "key": "page_cursor",
+                  "value": "<string>",
+                  "description": "Cursor for pagination"
+                },
+                {
+                  "disabled": false,
+                  "key": "increment",
+                  "value": "<string>",
+                  "description": "Time increment between prices. Returns data inclusive from `range.begin` and `range.end`. Do not use with `max_data_points`, as this results in an error."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "market",
+                  "description": "(Required) Market of candle."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "conversion:read_conversion_stablecoin conversion:write_conversion_stablecoin exchange:historical_prices exchange:read_order exchange:read_quote exchange:read_quote_execution exchange:write_quote_execution exchange:write_order fee:write_crypto_withdrawal_fee funding:read_bank_balance funding:read_profile funding:write_profile identity:read_account identity:read_identity identity:write_account identity:write_identity settlement:read_transaction settlement:write_transaction tax:read_tax_form tax:read_tax_lot tax:write_tax_lot transfer:read_deposit_address transfer:read_fiat_account transfer:read_fiat_deposit_instructions transfer:read_transfer transfer:read_transfer_limit transfer:reject_crypto_deposit transfer:update_crypto_deposit transfer:write_crypto_withdrawal transfer:write_deposit_address transfer:write_fiat_account transfer:write_fiat_deposit_instructions transfer:write_internal_transfer transfer:write_sandbox_fiat_deposit transfer:write_fiat_withdrawal events:read_event"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://oauth.paxos.com/oauth2/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "3729e8aa-f995-4d90-bfc7-44fc6b7ea601",
+              "name": "A successful response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "markets",
+                    ":market",
+                    "historical-candles"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "max_data_points",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "range.begin",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "range.end",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "order",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "page_cursor",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "increment",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "market",
+                      "description": "(Required) Market of candle."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"market\": \"BTCUSD\",\n  \"increment\": \"ONE_MINUTE\",\n  \"items\": [\n    {\n      \"timestamp\": \"2020-01-17T18:37:00.000Z\",\n      \"open\": \"9245.50\",\n      \"high\": \"9355.50\",\n      \"low\": \"9155.50\",\n      \"close\": \"9345.50\",\n      \"volume\": \"103200.50\"\n    },\n    {\n      \"timestamp\": \"2020-01-17T18:36:00.000Z\",\n      \"open\": \"9245.50\",\n      \"high\": \"9355.50\",\n      \"low\": \"9155.50\",\n      \"close\": \"9345.50\",\n      \"volume\": \"103200.50\"\n    },\n    {\n      \"timestamp\": \"2020-01-17T18:35:00.000Z\",\n      \"open\": \"9245.50\",\n      \"high\": \"9355.50\",\n      \"low\": \"9155.50\",\n      \"close\": \"9345.50\",\n      \"volume\": \"103200.50\"\n    }\n  ],\n  \"next_page_cursor\": \"CgwI-Pr1vgYQyLLpswESJDM2NGU2MTgyLTRhZjctNDg4NC1iY2MxLTM0MThmNTA0MWYzYg\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "866b7dce-25e6-424c-b4b8-b6adf443a3f5",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "markets",
+                    ":market",
+                    "historical-candles"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "max_data_points",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "range.begin",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "range.end",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "order",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "page_cursor",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "increment",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "market",
+                      "description": "(Required) Market of candle."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"about:blank\",\n  \"title\": \"Bad Request\",\n  \"status\": 400,\n  \"detail\": \"range.begin and range.end are required if max_data_points is set\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.paxos.com/v2",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "bec13b60-2af2-4206-bcc1-b158d31d9d20",
+    "name": "Paxos Account Members Pricing API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "<p>Welcome to Paxos APIs. At Paxos, our mission is to enable the movement of any asset, any time, in a trustworthy way. These APIs serve that mission by making it easier than ever for you to directly integrate our product capabilities into your application, leveraging the speed, stability, and security of the Paxos platform.</p> <p>The documentation that follows gives you access to our Crypto Brokerage, Trading, and Exchange products. It includes APIs for market data, orders, and the held rate quote flow.</p> <p>To test in our sandbox environment, <a href=\"https://account.sandbox.paxos.com\" target=\"_blank\">sign up</a> for an account. For more information about Paxos and our APIs, visit <a href=\"https://www.paxos.com/\" target=\"_blank\">Paxos.com</a>.</p>\n",
+      "type": "text/plain"
+    }
+  }
+}

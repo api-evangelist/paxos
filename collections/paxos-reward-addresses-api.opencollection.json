@@ -1,0 +1,235 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Paxos Account Members Reward Addresses API",
+    "version": "2.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Reward Addresses",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List reward addresses",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.paxos.com/v2/rewards/addresses",
+            "params": [
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "customer_id",
+                "value": "",
+                "type": "query",
+                "description": "Optional for public API - extracted from auth context if not provided."
+              },
+              {
+                "name": "ledger",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "address",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "order",
+                "value": "",
+                "type": "query",
+                "description": "Optional, sort order for results based on created_at. The default sort order is DESC."
+              },
+              {
+                "name": "page_cursor",
+                "value": "",
+                "type": "query",
+                "description": "Optional, cursor token for fetching the next page."
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "query",
+                "description": "Optional, address id."
+              },
+              {
+                "name": "payout_group_id",
+                "value": "",
+                "type": "query",
+                "description": "Optional, filter by payout group. Pass the zero UUID (00000000-0000-0000-0000-000000000000) to return only addresses with no payout group assigned."
+              },
+              {
+                "name": "include_balance",
+                "value": "",
+                "type": "query",
+                "description": "When true, fetch and include balance for each address"
+              },
+              {
+                "name": "balance_timestamp",
+                "value": "",
+                "type": "query",
+                "description": "Point-in-time for balance query (optional, defaults to now)"
+              },
+              {
+                "name": "asset_type",
+                "value": "",
+                "type": "query",
+                "description": "When set, only addresses belonging to payout groups with this asset type are returned."
+              },
+              {
+                "name": "onchain_statuses",
+                "value": "",
+                "type": "query",
+                "description": "Optional, filter by one or more onchain registration statuses."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://oauth.paxos.com/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Returns a paginated list of reward addresses"
+        },
+        {
+          "info": {
+            "name": "Create a reward address",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.paxos.com/v2/rewards/addresses",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://oauth.paxos.com/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Creates a new reward address for reward attribution"
+        },
+        {
+          "info": {
+            "name": "Batch create reward addresses",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.paxos.com/v2/rewards/addresses/batch",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://oauth.paxos.com/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Creates multiple reward addresses in a single request"
+        },
+        {
+          "info": {
+            "name": "Update a reward address",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.paxos.com/v2/rewards/addresses/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "id is the address ID used as the URL path parameter.\nMust match address.id when both are provided."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://oauth.paxos.com/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Updates an existing reward address"
+        },
+        {
+          "info": {
+            "name": "Delete a reward address",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.paxos.com/v2/rewards/addresses/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Two deletion modes are supported:\n1. ID-based (REST API): Provide 'id', customer_id is extracted from auth context.\n2. Legacy (internal gRPC): Provide 'customer_id', 'ledger', and 'address'.\n\nAddress ID for deletion (preferred for REST API)."
+              },
+              {
+                "name": "customer_id",
+                "value": "",
+                "type": "query",
+                "description": "Partner ID (used for legacy deletion or when auth context unavailable)."
+              },
+              {
+                "name": "ledger",
+                "value": "",
+                "type": "query",
+                "description": "Ledger type (required for legacy deletion)."
+              },
+              {
+                "name": "address",
+                "value": "",
+                "type": "query",
+                "description": "Wallet address (required for legacy deletion)."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://oauth.paxos.com/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Deletes a reward address. A 200 response indicates the request was accepted; however, if the address is registered on a blockchain, it may continue to appear for up to a few minutes while the on-chain removal is confirmed. Once confirmed, the address will no longer appear."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,248 @@
+{
+  "item": [
+    {
+      "id": "954c3a60-5b5b-47be-8f1f-acc362041692",
+      "name": "Rewards",
+      "description": {
+        "content": "Rewards details including current reward rates, next accrual time, lifetime earned amounts, and estimated next accrual.\n\n*These endpoints are only relevant for whitelisted Rewards partners.*\n",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "38782a04-b746-4b06-b8dd-6f18aab288f4",
+          "name": "Get reward details",
+          "request": {
+            "name": "Get reward details",
+            "description": {
+              "content": "Returns current reward rates, next accrual time, lifetime earned, and total available rewards",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "rewards",
+                "details"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "asset_type",
+                  "value": "<string>",
+                  "description": "When set, only data for this asset type (e.g. \"USDG\", \"PYUSD\") is returned."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "conversion:read_conversion_stablecoin conversion:write_conversion_stablecoin exchange:historical_prices exchange:read_order exchange:read_quote exchange:read_quote_execution exchange:write_quote_execution exchange:write_order fee:write_crypto_withdrawal_fee funding:read_bank_balance funding:read_profile funding:write_profile identity:read_account identity:read_identity identity:write_account identity:write_identity settlement:read_transaction settlement:write_transaction tax:read_tax_form tax:read_tax_lot tax:write_tax_lot transfer:read_deposit_address transfer:read_fiat_account transfer:read_fiat_deposit_instructions transfer:read_transfer transfer:read_transfer_limit transfer:reject_crypto_deposit transfer:update_crypto_deposit transfer:write_crypto_withdrawal transfer:write_deposit_address transfer:write_fiat_account transfer:write_fiat_deposit_instructions transfer:write_internal_transfer transfer:write_sandbox_fiat_deposit transfer:write_fiat_withdrawal events:read_event"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://oauth.paxos.com/oauth2/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "4997616c-af93-4dfa-8e3a-54e9148a0739",
+              "name": "A successful response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "rewards",
+                    "details"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "asset_type",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"rates\": [\n    {\n      \"id\": \"string\",\n      \"multiplier_id\": \"string\",\n      \"rate\": \"string\",\n      \"networks\": [\n        \"string\",\n        \"string\"\n      ],\n      \"jurisdiction\": \"US\",\n      \"tier\": \"PARTNER_STANDARD_CUSTODY_TIER_2\",\n      \"effective_at\": \"1962-07-26T12:06:46.505Z\",\n      \"created_at\": \"2007-08-08T00:03:29.688Z\"\n    },\n    {\n      \"id\": \"string\",\n      \"multiplier_id\": \"string\",\n      \"rate\": \"string\",\n      \"networks\": [\n        \"string\",\n        \"string\"\n      ],\n      \"jurisdiction\": \"US\",\n      \"tier\": \"TIER_UNSPECIFIED\",\n      \"effective_at\": \"1950-03-04T17:42:17.166Z\",\n      \"created_at\": \"1960-11-19T08:24:06.835Z\"\n    }\n  ],\n  \"next_accrual\": \"1993-06-03T06:01:44.304Z\",\n  \"lifetime_earned\": \"string\",\n  \"total_available_rewards\": \"string\",\n  \"est_next_accrual_amount\": \"string\",\n  \"asset_details\": [\n    {\n      \"asset_type\": \"string\",\n      \"total_available_rewards\": \"string\",\n      \"lifetime_earned\": \"string\",\n      \"est_next_accrual_amount\": \"string\"\n    },\n    {\n      \"asset_type\": \"string\",\n      \"total_available_rewards\": \"string\",\n      \"lifetime_earned\": \"string\",\n      \"est_next_accrual_amount\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "01ef747c-0d80-4079-9059-cf41296677a2",
+          "name": "Get reward rates",
+          "request": {
+            "name": "Get reward rates",
+            "description": {
+              "content": "Returns the reward rates for the given asset type",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "rewards",
+                "rates"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "asset_type",
+                  "value": "<string>",
+                  "description": "The asset type to fetch rates for (e.g. \"USDG\", \"PYUSD\").\nWhen not set, an empty rates array is returned."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "conversion:read_conversion_stablecoin conversion:write_conversion_stablecoin exchange:historical_prices exchange:read_order exchange:read_quote exchange:read_quote_execution exchange:write_quote_execution exchange:write_order fee:write_crypto_withdrawal_fee funding:read_bank_balance funding:read_profile funding:write_profile identity:read_account identity:read_identity identity:write_account identity:write_identity settlement:read_transaction settlement:write_transaction tax:read_tax_form tax:read_tax_lot tax:write_tax_lot transfer:read_deposit_address transfer:read_fiat_account transfer:read_fiat_deposit_instructions transfer:read_transfer transfer:read_transfer_limit transfer:reject_crypto_deposit transfer:update_crypto_deposit transfer:write_crypto_withdrawal transfer:write_deposit_address transfer:write_fiat_account transfer:write_fiat_deposit_instructions transfer:write_internal_transfer transfer:write_sandbox_fiat_deposit transfer:write_fiat_withdrawal events:read_event"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://oauth.paxos.com/oauth2/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "d093d841-96fe-4c3b-84b4-33a26b30cbdc",
+              "name": "A successful response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "rewards",
+                    "rates"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "asset_type",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"rates\": [\n    {\n      \"id\": \"string\",\n      \"multiplier_id\": \"string\",\n      \"rate\": \"string\",\n      \"networks\": [\n        \"string\",\n        \"string\"\n      ],\n      \"jurisdiction\": \"EU\",\n      \"tier\": \"FOUNDER_TIER_2\",\n      \"effective_at\": \"2008-02-12T13:26:32.719Z\",\n      \"created_at\": \"2018-06-30T23:02:35.343Z\"\n    },\n    {\n      \"id\": \"string\",\n      \"multiplier_id\": \"string\",\n      \"rate\": \"string\",\n      \"networks\": [\n        \"string\",\n        \"string\"\n      ],\n      \"jurisdiction\": \"JURISDICTION_UNSPECIFIED\",\n      \"tier\": \"PARTNER_CUSTODY_REMOVAL_PROGRAM\",\n      \"effective_at\": \"2005-01-24T08:29:41.364Z\",\n      \"created_at\": \"1971-07-27T04:58:33.066Z\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.paxos.com/v2",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "2f3025c9-712a-45e5-afee-c9c1b5b7f50c",
+    "name": "Paxos Account Members Rewards API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "<p>Welcome to Paxos APIs. At Paxos, our mission is to enable the movement of any asset, any time, in a trustworthy way. These APIs serve that mission by making it easier than ever for you to directly integrate our product capabilities into your application, leveraging the speed, stability, and security of the Paxos platform.</p> <p>The documentation that follows gives you access to our Crypto Brokerage, Trading, and Exchange products. It includes APIs for market data, orders, and the held rate quote flow.</p> <p>To test in our sandbox environment, <a href=\"https://account.sandbox.paxos.com\" target=\"_blank\">sign up</a> for an account. For more information about Paxos and our APIs, visit <a href=\"https://www.paxos.com/\" target=\"_blank\">Paxos.com</a>.</p>\n",
+      "type": "text/plain"
+    }
+  }
+}

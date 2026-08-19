@@ -1,0 +1,1014 @@
+{
+  "item": [
+    {
+      "id": "c6e0e7c6-b496-4d1c-a531-f40ef3e11e5d",
+      "name": "Stablecoin Conversion",
+      "description": {
+        "content": "<p>Convert between fiat and stablecoin using <a href=\"#operation/CreateStablecoinConversion\">Create Stablecoin Conversion</a> and check the status of a <a href=\"#operation/GetStablecoinConversion\">single conversion</a> or retrieve a <a href=\"#operation/ListStablecoinConversions\">list of conversions</a>.</p>\n",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "98a092f5-ebfa-4912-b80e-888cfd47a16a",
+          "name": "List Stablecoin Conversions",
+          "request": {
+            "name": "List Stablecoin Conversions",
+            "description": {
+              "content": "List all conversions, optionally filtering and paging the results.\n\nBy default, conversions are returned in reverse chronological (descending)\norder by creation time. If no query parameters are supplied,\nthe response will include up to the last 100 conversions which\nwere created.\n\nThe paginated results default to display up to 100 conversions, unless\notherwise specified with the `limit` parameter. The maximum `limit` value is 1000.\nEvery paginated response contains a `next_page_cursor` field until the last page is reached.\n\nPass the `next_page_cursor` value into the `page_cursor` field of a new\nrequest to retrieve the next page of results.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "conversion",
+                "stablecoins"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "profile_id",
+                  "value": "<string>",
+                  "description": "The [Profile](#tag/Profiles) associated with a conversion. Required in the\n[Create Stablecoin Conversion](#operation/CreateStablecoinConversion) request."
+                },
+                {
+                  "disabled": false,
+                  "key": "ref_id",
+                  "value": "<string>",
+                  "description": "Client provided, unique Reference ID included the\n[Create Stablecoin Conversion](#operation/CreateStablecoinConversion) request."
+                },
+                {
+                  "disabled": false,
+                  "key": "created_at.begin",
+                  "value": "<dateTime>",
+                  "description": "Only return records after this timestamp, inclusive. RFC3339 format, like `2006-01-02T15:04:05Z`."
+                },
+                {
+                  "disabled": false,
+                  "key": "created_at.end",
+                  "value": "<dateTime>",
+                  "description": "Only return records before this timestamp, inclusive. RFC3339 format, like `2006-01-02T15:04:05Z`."
+                },
+                {
+                  "disabled": false,
+                  "key": "updated_at.begin",
+                  "value": "<dateTime>",
+                  "description": "Only return records after this timestamp, inclusive. RFC3339 format, like `2006-01-02T15:04:05Z`."
+                },
+                {
+                  "disabled": false,
+                  "key": "updated_at.end",
+                  "value": "<dateTime>",
+                  "description": "Only return records before this timestamp, inclusive. RFC3339 format, like `2006-01-02T15:04:05Z`."
+                },
+                {
+                  "disabled": false,
+                  "key": "order",
+                  "value": "<string>",
+                  "description": "Return items in ascending (ASC) or descending (DESC) order by `created_at` timestamp.\n\nDefault order is descending (DESC)."
+                },
+                {
+                  "disabled": false,
+                  "key": "page_cursor",
+                  "value": "<string>",
+                  "description": "Cursor token for fetching the next page."
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "<integer>",
+                  "description": "Number of results to return.\n\nDefault is 100 items. Maximum is 1000 items."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "conversion:read_conversion_stablecoin conversion:write_conversion_stablecoin exchange:historical_prices exchange:read_order exchange:read_quote exchange:read_quote_execution exchange:write_quote_execution exchange:write_order fee:write_crypto_withdrawal_fee funding:read_bank_balance funding:read_profile funding:write_profile identity:read_account identity:read_identity identity:write_account identity:write_identity settlement:read_transaction settlement:write_transaction tax:read_tax_form tax:read_tax_lot tax:write_tax_lot transfer:read_deposit_address transfer:read_fiat_account transfer:read_fiat_deposit_instructions transfer:read_transfer transfer:read_transfer_limit transfer:reject_crypto_deposit transfer:update_crypto_deposit transfer:write_crypto_withdrawal transfer:write_deposit_address transfer:write_fiat_account transfer:write_fiat_deposit_instructions transfer:write_internal_transfer transfer:write_sandbox_fiat_deposit transfer:write_fiat_withdrawal events:read_event"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://oauth.paxos.com/oauth2/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "3a1da329-8b52-4c3a-a8d7-becbef88e7ef",
+              "name": "A successful response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "conversion",
+                    "stablecoins"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "profile_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "ref_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "created_at.begin",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "created_at.end",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "updated_at.begin",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "updated_at.end",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "order",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "page_cursor",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"items\": [\n    {\n      \"account_id\": \"00000000-0000-0000-0000-000000000000\",\n      \"amount\": \"100.01\",\n      \"created_at\": \"2023-09-16T02:01:15.941902Z\",\n      \"id\": \"38a2c6b4-167c-4c98-a190-406efc4121aa\",\n      \"identity_id\": \"00000000-0000-0000-0000-000000000000\",\n      \"metadata\": {\n        \"skey\": \"svalue\"\n      },\n      \"profile_id\": \"b821ff88-fdb4-49ba-b30f-99c40f01fcfc\",\n      \"ref_id\": \"497266c5214043a29f9854096e9a9103\",\n      \"settled_at\": \"2023-09-16T02:01:16.613995Z\",\n      \"source_asset\": \"USD\",\n      \"status\": \"SETTLED\",\n      \"target_asset\": \"USDP\",\n      \"updated_at\": \"2023-09-16T02:01:16.018493Z\"\n    },\n    {\n      \"account_id\": \"00000000-0000-0000-0000-000000000000\",\n      \"amount\": \"100.01\",\n      \"created_at\": \"2023-09-16T03:34:50.555200Z\",\n      \"id\": \"a490536f-3842-4823-8c84-056728243064\",\n      \"identity_id\": \"00000000-0000-0000-0000-000000000000\",\n      \"metadata\": {\n        \"skey\": \"svalue\"\n      },\n      \"profile_id\": \"b821ff88-fdb4-49ba-b30f-99c40f01fcfc\",\n      \"ref_id\": \"4fecc881b73744e4a4e858017689da7d\",\n      \"settled_at\": \"2023-09-16T03:34:51.060002Z\",\n      \"source_asset\": \"USD\",\n      \"status\": \"SETTLED\",\n      \"target_asset\": \"USDP\",\n      \"updated_at\": \"2023-09-16T03:34:50.610541Z\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e6ef8023-a348-4795-9acf-f32a675344f8",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "conversion",
+                    "stablecoins"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "profile_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "ref_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "created_at.begin",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "created_at.end",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "updated_at.begin",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "updated_at.end",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "order",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "page_cursor",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"insufficient scopes: found \\\"conversion:write_conversion_stablecoin\\\" required one of \\\"[conversion:read_conversion_stablecoin]\\\"\",\n  \"status\": 403,\n  \"title\": \"Forbidden\",\n  \"type\": \"about:blank\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "375e5829-e01b-4972-849b-92f3d2e8e0fb",
+          "name": "Create Stablecoin Conversion",
+          "request": {
+            "name": "Create Stablecoin Conversion",
+            "description": {
+              "content": "Create a Conversion request to exchange assets 1:1.\n\nA request to create a conversion can fail with one of the following\ntypes of errors:\n - [Insufficient Funds](https://developer.paxos.com/docs/v2/problems/insufficient-funds)\n   if the Profile (`profile_id`) has insufficient available balance to\n   fund the execution.\n - [Already Exists](https://developer.paxos.com/docs/v2/problems/already-exists)\n   if a conversion with the same external ID (`ref_id`) has already been created.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "conversion",
+                "stablecoins"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "conversion:read_conversion_stablecoin conversion:write_conversion_stablecoin exchange:historical_prices exchange:read_order exchange:read_quote exchange:read_quote_execution exchange:write_quote_execution exchange:write_order fee:write_crypto_withdrawal_fee funding:read_bank_balance funding:read_profile funding:write_profile identity:read_account identity:read_identity identity:write_account identity:write_identity settlement:read_transaction settlement:write_transaction tax:read_tax_form tax:read_tax_lot tax:write_tax_lot transfer:read_deposit_address transfer:read_fiat_account transfer:read_fiat_deposit_instructions transfer:read_transfer transfer:read_transfer_limit transfer:reject_crypto_deposit transfer:update_crypto_deposit transfer:write_crypto_withdrawal transfer:write_deposit_address transfer:write_fiat_account transfer:write_fiat_deposit_instructions transfer:write_internal_transfer transfer:write_sandbox_fiat_deposit transfer:write_fiat_withdrawal events:read_event"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://oauth.paxos.com/oauth2/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"profile_id\": \"<string>\",\n  \"amount\": \"<string>\",\n  \"source_asset\": \"<string>\",\n  \"target_asset\": \"<string>\",\n  \"ref_id\": \"<string>\",\n  \"identity_id\": \"<string>\",\n  \"account_id\": \"<string>\",\n  \"metadata\": {\n    \"key_0\": \"<string>\",\n    \"key_1\": \"<string>\",\n    \"key_2\": \"<string>\"\n  },\n  \"recipient_profile_id\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "ed61e455-63cd-46d3-bc7f-20ea4686646f",
+              "name": "A successful response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "conversion",
+                    "stablecoins"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"amount'\": \"3\",\n  \"metadata\": {\n    \"skey\": \"svalue\",\n    \"custom_key\": \"custom_value\"\n  },\n  \"profile_id\": \"b821ff88-fdb4-49ba-b30f-99c40f01fcfc\",\n  \"ref_id\": \"refid-24d25de7f5bd47ab978cbbd428b74199\",\n  \"source_asset\": \"USD\",\n  \"target_asset\": \"USDP\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"account_id'\": \"00000000-0000-0000-0000-000000000000\",\n  \"amount'\": \"3\",\n  \"created_at\": \"2023-10-19T15:37:18.929305155Z\",\n  \"id\": \"8dbce0e0-510f-4edc-9249-15f8c6214569\",\n  \"identity_id\": \"00000000-0000-0000-0000-000000000000\",\n  \"metadata\": {\n    \"skey\": \"svalue\",\n    \"custom_key\": \"custom_value\"\n  },\n  \"profile_id\": \"b821ff88-fdb4-49ba-b30f-99c40f01fcfc\",\n  \"ref_id\": \"refid-24d25de7f5bd47ab978cbbd428b74199\",\n  \"source_asset\": \"USD\",\n  \"status\": \"CREATED\",\n  \"target_asset\": \"USDP\",\n  \"updated_at\": \"2023-10-19T15:37:18.990343Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6063e454-117a-4ce6-a093-284f8697eb98",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "conversion",
+                    "stablecoins"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"amount'\": \"3\",\n  \"metadata\": {\n    \"skey\": \"svalue\",\n    \"custom_key\": \"custom_value\"\n  },\n  \"profile_id\": \"b821ff88-fdb4-49ba-b30f-99c40f01fcfc\",\n  \"ref_id\": \"refid-24d25de7f5bd47ab978cbbd428b74199\",\n  \"source_asset\": \"USD\",\n  \"target_asset\": \"USDP\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"about:blank\",\n  \"title\": \"Bad Request\",\n  \"status\": 400,\n  \"detail\": \"11000 amount is above the maximum 10000 USD\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "64b78b17-1d64-4efa-b63a-292455b9fc43",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "conversion",
+                    "stablecoins"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"amount'\": \"3\",\n  \"metadata\": {\n    \"skey\": \"svalue\",\n    \"custom_key\": \"custom_value\"\n  },\n  \"profile_id\": \"b821ff88-fdb4-49ba-b30f-99c40f01fcfc\",\n  \"ref_id\": \"refid-24d25de7f5bd47ab978cbbd428b74199\",\n  \"source_asset\": \"USD\",\n  \"target_asset\": \"USDP\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"about:blank\",\n  \"title\": \"Forbidden\",\n  \"status\": 403,\n  \"detail\": \"insufficient scopes: found 'conversion:read_conversion_stablecoin', required one of '[conversion:write_conversion_stablecoin]'\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "14b51d08-4f2b-4cae-baff-153dad5395e2",
+              "name": "Already Exists",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "conversion",
+                    "stablecoins"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"amount'\": \"3\",\n  \"metadata\": {\n    \"skey\": \"svalue\",\n    \"custom_key\": \"custom_value\"\n  },\n  \"profile_id\": \"b821ff88-fdb4-49ba-b30f-99c40f01fcfc\",\n  \"ref_id\": \"refid-24d25de7f5bd47ab978cbbd428b74199\",\n  \"source_asset\": \"USD\",\n  \"target_asset\": \"USDP\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"conversion already exists with ref_id 'refid-1'\",\n  \"meta\": {\n    \"existing\": {\n      \"account_id\": \"00000000-0000-0000-0000-000000000000\",\n      \"amount\": \"3\",\n      \"created_at\": \"2023-10-19T19:53:21.297848Z\",\n      \"id\": \"9e7a1f81-2cfa-4499-97dc-150d2a98bbd8\",\n      \"identity_id\": \"00000000-0000-0000-0000-000000000000\",\n      \"metadata\": {\n        \"skey\": \"svalue\"\n      },\n      \"profile_id\": \"b821ff88-fdb4-49ba-b30f-99c40f01fcfc\",\n      \"ref_id\": \"refid-1\",\n      \"settled_at\": \"2023-10-19T19:53:21.987849Z\",\n      \"source_asset\": \"USD\",\n      \"status\": \"SETTLED\",\n      \"target_asset\": \"USDP\",\n      \"updated_at\": \"2023-10-19T19:53:21.334615Z\"\n    }\n  },\n  \"status\": 409,\n  \"title\": \"Already Exists\",\n  \"type\": \"https://developer.paxos.com/docs/v2/problems/already-exists\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "8c5702aa-a148-4f26-94a5-bccf7fb6dc98",
+          "name": "Get Stablecoin Conversion",
+          "request": {
+            "name": "Get Stablecoin Conversion",
+            "description": {
+              "content": "Retrieve a single conversion using the transaction `id` from the [Create Stablecoin Conversion](#operation/CreateStablecoinConversion) response.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "conversion",
+                "stablecoins",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) System provided UUID for the conversion is\nprovided in the [Create Stablecoin Conversion](#operation/CreateStablecoinConversion) response."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "conversion:read_conversion_stablecoin conversion:write_conversion_stablecoin exchange:historical_prices exchange:read_order exchange:read_quote exchange:read_quote_execution exchange:write_quote_execution exchange:write_order fee:write_crypto_withdrawal_fee funding:read_bank_balance funding:read_profile funding:write_profile identity:read_account identity:read_identity identity:write_account identity:write_identity settlement:read_transaction settlement:write_transaction tax:read_tax_form tax:read_tax_lot tax:write_tax_lot transfer:read_deposit_address transfer:read_fiat_account transfer:read_fiat_deposit_instructions transfer:read_transfer transfer:read_transfer_limit transfer:reject_crypto_deposit transfer:update_crypto_deposit transfer:write_crypto_withdrawal transfer:write_deposit_address transfer:write_fiat_account transfer:write_fiat_deposit_instructions transfer:write_internal_transfer transfer:write_sandbox_fiat_deposit transfer:write_fiat_withdrawal events:read_event"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://oauth.paxos.com/oauth2/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "1c6613f8-2366-4df9-8fbe-d340438661a5",
+              "name": "A successful response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "conversion",
+                    "stablecoins",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) System provided UUID for the conversion is\nprovided in the [Create Stablecoin Conversion](#operation/CreateStablecoinConversion) response."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"account_id\": \"00000000-0000-0000-0000-000000000000\",\n  \"amount\": \"3\",\n  \"created_at'\": \"2023-10-19T15:37:18.929305Z\",\n  \"id\": \"8dbce0e0-510f-4edc-9249-15f8c6214569\",\n  \"identity_id\": \"00000000-0000-0000-0000-000000000000\",\n  \"metadata\": {\n    \"skey\": \"svalue\",\n    \"custom_key\": \"custom_value\"\n  },\n  \"profile_id\": \"b821ff88-fdb4-49ba-b30f-99c40f01fcfc\",\n  \"ref_id\": \"refid-24d25de7f5bd47ab978cbbd428b74199\",\n  \"source_asset\": \"USD\",\n  \"status\": \"CREATED\",\n  \"target_asset\": \"USDP\",\n  \"updated_at\": \"2023-10-19T15:37:18.990343Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "bbb646a0-7c67-4f2c-8575-3909b3e72bfe",
+              "name": "Insufficient scopes",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "conversion",
+                    "stablecoins",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) System provided UUID for the conversion is\nprovided in the [Create Stablecoin Conversion](#operation/CreateStablecoinConversion) response."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"about:blank\",\n  \"title\": \"Forbidden\",\n  \"status\": 403,\n  \"detail\": \"insufficient scopes: found 'conversion:write_conversion_stablecoin', required one of '[conversion:read_conversion_stablecoin]'\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d30b666d-0830-4828-b6d2-b9c403e1a233",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "conversion",
+                    "stablecoins",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) System provided UUID for the conversion is\nprovided in the [Create Stablecoin Conversion](#operation/CreateStablecoinConversion) response."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"conversion with id 0def57e8-c6bb-40dc-b2b8-69bb80440cc1 not found for customer with id 4eaffe58-df0e-4559-8dec-fdae231684e1\",\n  \"status\": 404,\n  \"title\": \"Not Found\",\n  \"type\": \"about:blank\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "dfc06e17-3dd8-4e44-8af8-110b080d94be",
+          "name": "Cancel Stablecoin Conversion",
+          "request": {
+            "name": "Cancel Stablecoin Conversion",
+            "description": {
+              "content": "Cancel a single conversion using the `id` from the\n[Create Stablecoin Conversion](#operation/CreateStablecoinConversion) response.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "conversion",
+                "stablecoins",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) System provided UUID for the conversion is\nprovided in the [Create Stablecoin Conversion](#operation/CreateStablecoinConversion) response."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "conversion:read_conversion_stablecoin conversion:write_conversion_stablecoin exchange:historical_prices exchange:read_order exchange:read_quote exchange:read_quote_execution exchange:write_quote_execution exchange:write_order fee:write_crypto_withdrawal_fee funding:read_bank_balance funding:read_profile funding:write_profile identity:read_account identity:read_identity identity:write_account identity:write_identity settlement:read_transaction settlement:write_transaction tax:read_tax_form tax:read_tax_lot tax:write_tax_lot transfer:read_deposit_address transfer:read_fiat_account transfer:read_fiat_deposit_instructions transfer:read_transfer transfer:read_transfer_limit transfer:reject_crypto_deposit transfer:update_crypto_deposit transfer:write_crypto_withdrawal transfer:write_deposit_address transfer:write_fiat_account transfer:write_fiat_deposit_instructions transfer:write_internal_transfer transfer:write_sandbox_fiat_deposit transfer:write_fiat_withdrawal events:read_event"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://oauth.paxos.com/oauth2/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "5fe3ed1c-e123-4ea8-a641-2a76f49528c0",
+              "name": "A successful response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "conversion",
+                    "stablecoins",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) System provided UUID for the conversion is\nprovided in the [Create Stablecoin Conversion](#operation/CreateStablecoinConversion) response."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"e5ca4d90-dff1-488a-ac04-04540f776ae1\",\n  \"profile_id\": \"c3680989-c04e-4000-9d96-8aca09eedee1\",\n  \"amount\": \"11.1\",\n  \"source_asset\": \"USD\",\n  \"target_asset\": \"USDP\",\n  \"status\": \"CANCELLED\",\n  \"identity_id\": \"d6aee44c-c169-405d-b14e-d78818577531\",\n  \"account_id\": \"47bb49d7-4e6c-43bf-9fd6-6ccd7d7f15d1\",\n  \"created_at\": \"2023-10-19T21:21:46.497863Z\",\n  \"updated_at\": \"2023-10-19T21:21:53.297594Z\",\n  \"cancelled_at\": \"2023-10-19T21:21:53.297594Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8ad2f0ed-3a34-4928-b0a2-ed1f71b9c110",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "conversion",
+                    "stablecoins",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) System provided UUID for the conversion is\nprovided in the [Create Stablecoin Conversion](#operation/CreateStablecoinConversion) response."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"insufficient scopes: found \\\"conversion:read_conversion_stablecoin\\\" required one of \\\"[conversion:write_conversion_stablecoin]\\\"\",\n  \"status\": 403,\n  \"title\": \"Forbidden\",\n  \"type\": \"about:blank\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1482ca60-750d-48e7-9039-ff0b6e753461",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "conversion",
+                    "stablecoins",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) System provided UUID for the conversion is\nprovided in the [Create Stablecoin Conversion](#operation/CreateStablecoinConversion) response."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"conversion with id 0def57e8-c6bb-40dc-b2b8-69bb80440cc1 not found for customer with id 4eaffe58-df0e-4559-8dec-fdae231684e1\",\n  \"status\": 404,\n  \"title\": \"Not Found\",\n  \"type\": \"about:blank\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.paxos.com/v2",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "0423ca65-aef4-4756-9b7f-02cbdd59df5f",
+    "name": "Paxos Account Members Stablecoin Conversion API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "<p>Welcome to Paxos APIs. At Paxos, our mission is to enable the movement of any asset, any time, in a trustworthy way. These APIs serve that mission by making it easier than ever for you to directly integrate our product capabilities into your application, leveraging the speed, stability, and security of the Paxos platform.</p> <p>The documentation that follows gives you access to our Crypto Brokerage, Trading, and Exchange products. It includes APIs for market data, orders, and the held rate quote flow.</p> <p>To test in our sandbox environment, <a href=\"https://account.sandbox.paxos.com\" target=\"_blank\">sign up</a> for an account. For more information about Paxos and our APIs, visit <a href=\"https://www.paxos.com/\" target=\"_blank\">Paxos.com</a>.</p>\n",
+      "type": "text/plain"
+    }
+  }
+}

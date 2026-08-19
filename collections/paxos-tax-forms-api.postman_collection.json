@@ -1,0 +1,328 @@
+{
+  "item": [
+    {
+      "id": "19f72e16-f5d9-45da-9e7e-04b7e84da3e0",
+      "name": "Tax Forms",
+      "description": {
+        "content": "All tax forms are associated to a single account_id.\nAn account_id can have multiple tax forms associated with it.\nUS 1099-B and 1099-Misc tax forms for the previous fiscal year will be available in February of the current calendar year.\nPrevious years tax forms are also available by request.\n",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "67043f46-87aa-446f-9c5a-281ed05efb10",
+          "name": "List Tax Form Revisions",
+          "request": {
+            "name": "List Tax Form Revisions",
+            "description": {
+              "content": "Used for more granular file retrieval for specific accounts that require updated tax forms.\nLists all versions of a tax form for single account and tax year. Revisions will increment up as new tax forms are issued for the same account, tax year, and form type pairing. The highest value revision is the most recent.\nTax Form URL links will expire after 60 seconds.\nSupported form types: 1099-B, 1099-MISC, and 1099-DA. If form_types is not provided, defaults to 1099-B for tax years prior to 2025, and 1099-DA from 2025 onwards.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "tax",
+                "tax-form-revisions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "account_id",
+                  "value": "<string>",
+                  "description": "(Required) Required. Account ID"
+                },
+                {
+                  "disabled": false,
+                  "key": "tax_year",
+                  "value": "<string>",
+                  "description": "(Required) Required. Tax Year"
+                },
+                {
+                  "disabled": false,
+                  "key": "form_types",
+                  "value": "<string>",
+                  "description": "Optional. Tax form types (1099-B, 1099-MISC, 1099-DA). If not provided, defaults to 1099-B for tax years prior to 2025, and 1099-DA from 2025 onwards."
+                },
+                {
+                  "disabled": false,
+                  "key": "form_types",
+                  "value": "<string>",
+                  "description": "Optional. Tax form types (1099-B, 1099-MISC, 1099-DA). If not provided, defaults to 1099-B for tax years prior to 2025, and 1099-DA from 2025 onwards."
+                },
+                {
+                  "disabled": false,
+                  "key": "revision",
+                  "value": "<string>",
+                  "description": "Revision"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "conversion:read_conversion_stablecoin conversion:write_conversion_stablecoin exchange:historical_prices exchange:read_order exchange:read_quote exchange:read_quote_execution exchange:write_quote_execution exchange:write_order fee:write_crypto_withdrawal_fee funding:read_bank_balance funding:read_profile funding:write_profile identity:read_account identity:read_identity identity:write_account identity:write_identity settlement:read_transaction settlement:write_transaction tax:read_tax_form tax:read_tax_lot tax:write_tax_lot transfer:read_deposit_address transfer:read_fiat_account transfer:read_fiat_deposit_instructions transfer:read_transfer transfer:read_transfer_limit transfer:reject_crypto_deposit transfer:update_crypto_deposit transfer:write_crypto_withdrawal transfer:write_deposit_address transfer:write_fiat_account transfer:write_fiat_deposit_instructions transfer:write_internal_transfer transfer:write_sandbox_fiat_deposit transfer:write_fiat_withdrawal events:read_event"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://oauth.paxos.com/oauth2/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "739fcd17-07b5-4b02-9dc5-8c5f5199dfcc",
+              "name": "A successful response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "tax",
+                    "tax-form-revisions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "account_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "tax_year",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "form_types",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "form_types",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "revision",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"tax_form_urls\": [\n    {\n      \"account_id\": \"string\",\n      \"type\": \"FORM_1099_B\",\n      \"tax_year\": \"string\",\n      \"revision\": \"string\",\n      \"url\": \"string\"\n    },\n    {\n      \"account_id\": \"string\",\n      \"type\": \"FORM_1099_MISC\",\n      \"tax_year\": \"string\",\n      \"revision\": \"string\",\n      \"url\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "5cb1389a-4ec3-4716-95dc-46f557d18134",
+          "name": "List Tax Forms",
+          "request": {
+            "name": "List Tax Forms",
+            "description": {
+              "content": "Used for bulk file transfer use cases.\nList tax forms for given account ids and tax year. The most recent revision number will be returned (revisions increment up; highest value revision for a specific account, tax year, and form type pairing is the most recent).\nTax Form URL links will expire after 60 seconds.\nPlease call ListTaxFormRevisions endpoint for all versions of a single accounts tax forms.\nSupported form types: 1099-B, 1099-MISC, and 1099-DA. If form_types is not provided, defaults to 1099-B for tax years prior to 2025, and 1099-DA from 2025 onwards.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "tax",
+                "tax-forms"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "account_ids",
+                  "value": "<string>",
+                  "description": "(Required) Required. A list of Account IDs. Maximum 50."
+                },
+                {
+                  "disabled": false,
+                  "key": "account_ids",
+                  "value": "<string>",
+                  "description": "(Required) Required. A list of Account IDs. Maximum 50."
+                },
+                {
+                  "disabled": false,
+                  "key": "tax_year",
+                  "value": "<string>",
+                  "description": "(Required) Required. Tax year"
+                },
+                {
+                  "disabled": false,
+                  "key": "form_types",
+                  "value": "<string>",
+                  "description": "Optional. Tax form types (1099-B, 1099-MISC, 1099-DA). If not provided, defaults to 1099-B for tax years prior to 2025, and 1099-DA from 2025 onwards."
+                },
+                {
+                  "disabled": false,
+                  "key": "form_types",
+                  "value": "<string>",
+                  "description": "Optional. Tax form types (1099-B, 1099-MISC, 1099-DA). If not provided, defaults to 1099-B for tax years prior to 2025, and 1099-DA from 2025 onwards."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "conversion:read_conversion_stablecoin conversion:write_conversion_stablecoin exchange:historical_prices exchange:read_order exchange:read_quote exchange:read_quote_execution exchange:write_quote_execution exchange:write_order fee:write_crypto_withdrawal_fee funding:read_bank_balance funding:read_profile funding:write_profile identity:read_account identity:read_identity identity:write_account identity:write_identity settlement:read_transaction settlement:write_transaction tax:read_tax_form tax:read_tax_lot tax:write_tax_lot transfer:read_deposit_address transfer:read_fiat_account transfer:read_fiat_deposit_instructions transfer:read_transfer transfer:read_transfer_limit transfer:reject_crypto_deposit transfer:update_crypto_deposit transfer:write_crypto_withdrawal transfer:write_deposit_address transfer:write_fiat_account transfer:write_fiat_deposit_instructions transfer:write_internal_transfer transfer:write_sandbox_fiat_deposit transfer:write_fiat_withdrawal events:read_event"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://oauth.paxos.com/oauth2/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "fe5dc960-3407-48cb-bcf3-db63b35dd8ec",
+              "name": "A successful response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "tax",
+                    "tax-forms"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "account_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "account_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "tax_year",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "form_types",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "form_types",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"tax_form_urls\": [\n    {\n      \"account_id\": \"string\",\n      \"type\": \"FORM_1099_B\",\n      \"tax_year\": \"string\",\n      \"revision\": \"string\",\n      \"url\": \"string\"\n    },\n    {\n      \"account_id\": \"string\",\n      \"type\": \"FORM_1099_DA\",\n      \"tax_year\": \"string\",\n      \"revision\": \"string\",\n      \"url\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.paxos.com/v2",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "fde07588-001d-4bc9-83d7-2c1fb3b72979",
+    "name": "Paxos Account Members Tax Forms API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "<p>Welcome to Paxos APIs. At Paxos, our mission is to enable the movement of any asset, any time, in a trustworthy way. These APIs serve that mission by making it easier than ever for you to directly integrate our product capabilities into your application, leveraging the speed, stability, and security of the Paxos platform.</p> <p>The documentation that follows gives you access to our Crypto Brokerage, Trading, and Exchange products. It includes APIs for market data, orders, and the held rate quote flow.</p> <p>To test in our sandbox environment, <a href=\"https://account.sandbox.paxos.com\" target=\"_blank\">sign up</a> for an account. For more information about Paxos and our APIs, visit <a href=\"https://www.paxos.com/\" target=\"_blank\">Paxos.com</a>.</p>\n",
+      "type": "text/plain"
+    }
+  }
+}

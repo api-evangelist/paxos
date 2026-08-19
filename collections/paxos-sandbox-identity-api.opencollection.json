@@ -1,0 +1,124 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Paxos Account Members Sandbox Identity API",
+    "version": "2.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Sandbox Identity",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Sandbox Start KYC Refresh",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.paxos.com/v2/identity/identities/:identity_id/kyc-refresh",
+            "params": [
+              {
+                "name": "identity_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://oauth.paxos.com/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Starts a KYC refresh workflow for the given Identity. The Identity must belong to the\nauthenticated customer and be eligible for a refresh. Sandbox only."
+        },
+        {
+          "info": {
+            "name": "Sandbox Set Identity Status",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.paxos.com/v2/identity/identities/:id/sandbox-status",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://oauth.paxos.com/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Set the various statuses for the given Identity. To enable the Person Identity to transact,\nset both `id_verification_status` and `sanctions_verification_status` to `\"APPROVED\"`.\nTo enable the Institution to transact, set both `sanctions_verification_status` to `\"APPROVED\"`.\nThis endpoint also allows you to set the statuses for `document_verification_status` and\n`additional_screening_status`"
+        },
+        {
+          "info": {
+            "name": "Sandbox Force Start KYC Refresh",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.paxos.com/v2/identity/kycrefresh/force-start",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://oauth.paxos.com/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Force-starts a KYC refresh workflow (bypassing eligibility checks) for the given\nIdentity, which must belong to the authenticated customer. Sandbox only."
+        },
+        {
+          "info": {
+            "name": "Sandbox Reset KYC Refresh",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.paxos.com/v2/identity/kycrefresh/reset",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://oauth.paxos.com/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Resets the KYC refresh state for the given Identity, which must belong to the\nauthenticated customer. Sandbox only."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

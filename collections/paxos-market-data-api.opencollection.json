@@ -1,0 +1,86 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Paxos Account Members Market Data API",
+    "version": "2.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Market Data",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Markets",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.paxos.com/v2/markets"
+          },
+          "docs": "Retrieves the set of current available markets for trading with details."
+        },
+        {
+          "info": {
+            "name": "Get Order Book",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.paxos.com/v2/markets/:market/order-book",
+            "params": [
+              {
+                "name": "market",
+                "value": "",
+                "type": "path",
+                "description": "Market of Order Book."
+              }
+            ]
+          },
+          "docs": "Retrieves the full list of bids and asks of the order book at individual price levels with resting quantities per level."
+        },
+        {
+          "info": {
+            "name": "List Recent Executions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.paxos.com/v2/markets/:market/recent-executions",
+            "params": [
+              {
+                "name": "market",
+                "value": "",
+                "type": "path",
+                "description": "Market of the executions."
+              }
+            ]
+          },
+          "docs": "Retrieves the list of 2000 most recent executions by all users to occur in the order book."
+        },
+        {
+          "info": {
+            "name": "Get Ticker",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.paxos.com/v2/markets/:market/ticker",
+            "params": [
+              {
+                "name": "market",
+                "value": "",
+                "type": "path",
+                "description": "Market of the Ticker."
+              }
+            ]
+          },
+          "docs": "Retrieves order book statistics of the exchange over the last 24 hours and from midnight UTC until current time."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

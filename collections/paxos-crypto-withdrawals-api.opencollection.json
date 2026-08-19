@@ -1,0 +1,178 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Paxos Account Members Crypto Withdrawals API",
+    "version": "2.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Crypto Withdrawals",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Put Crypto Destination Addresses",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.paxos.com/v2/transfer/crypto-destination-address",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://oauth.paxos.com/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Updates a specified crypto destination address. If the address does not exist, it will be created"
+        },
+        {
+          "info": {
+            "name": "List Crypto Destination Addresses",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.paxos.com/v2/transfer/crypto-destination-addresses",
+            "params": [
+              {
+                "name": "ids",
+                "value": "",
+                "type": "query",
+                "description": "Optionally filter by the UUIDs of the crypto destination addresses. Limit 100."
+              },
+              {
+                "name": "identity_ids",
+                "value": "",
+                "type": "query",
+                "description": "Optionally filter by the Identities the destination addresses are scoped to. Limit 100."
+              },
+              {
+                "name": "crypto_networks",
+                "value": "",
+                "type": "query",
+                "description": "Optionally filter by the `crypto_network` of the destination addresses. Limit 100."
+              },
+              {
+                "name": "addresses",
+                "value": "",
+                "type": "query",
+                "description": "Optionally filter by specific addresses. Limit 100."
+              },
+              {
+                "name": "nicknames",
+                "value": "",
+                "type": "query",
+                "description": "Optionally filter by specific nicknames. Limit 100."
+              },
+              {
+                "name": "bookmarked_status",
+                "value": "",
+                "type": "query",
+                "description": "Optionally filter by bookmarked status. If omitted, addresses regardless of bookmarked status will be returned."
+              },
+              {
+                "name": "created_at.lt",
+                "value": "",
+                "type": "query",
+                "description": "Include timestamps strictly less than lt. RFC3339 format, like `2006-01-02T15:04:05Z`."
+              },
+              {
+                "name": "created_at.lte",
+                "value": "",
+                "type": "query",
+                "description": "Include timestamps less than or equal to lte. RFC3339 format, like `2006-01-02T15:04:05Z`."
+              },
+              {
+                "name": "created_at.eq",
+                "value": "",
+                "type": "query",
+                "description": "Include timestamps exactly equal to eq. RFC3339 format, like `2006-01-02T15:04:05Z`."
+              },
+              {
+                "name": "created_at.gte",
+                "value": "",
+                "type": "query",
+                "description": "Include timestamps greater than or equal to gte. RFC3339 format, like `2006-01-02T15:04:05Z`."
+              },
+              {
+                "name": "created_at.gt",
+                "value": "",
+                "type": "query",
+                "description": "Include timestamps strictly greater than gt. RFC3339 format, like `2006-01-02T15:04:05Z`."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of results to return. Defaults to 100 if no limit is provided. Maximum 1000."
+              },
+              {
+                "name": "order",
+                "value": "",
+                "type": "query",
+                "description": "Return items in ascending (ASC) or descending (DESC) order. Defaults to DESC."
+              },
+              {
+                "name": "order_by",
+                "value": "",
+                "type": "query",
+                "description": "The specific method by which the returned results will be ordered."
+              },
+              {
+                "name": "page_cursor",
+                "value": "",
+                "type": "query",
+                "description": "Optional cursor for getting the next page of results."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://oauth.paxos.com/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "List all crypto destination addresses, optionally filtering and paging the results"
+        },
+        {
+          "info": {
+            "name": "Create Crypto Withdrawal",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.paxos.com/v2/transfer/crypto-withdrawals",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://oauth.paxos.com/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Withdraw a cryptocurrency asset to a specified destination address.\n\n**Important for Stellar Network (PYUSD):**\n\nWhen withdrawing PYUSD on the Stellar network, the destination address must have an established trustline with the PYUSD issuer:\n\n- **PYUSD Issuer**: `GDQE7IXJ4HUHV6RQHIUPRJSEZE4DRS5WY577O2FY6YQ5LVWZ7JZTU2V5` (mainnet)\n- **Asset Code**: `PYUSD`\n\n**How to Establish a Trustline:**\n\nThe recipient must use a Stellar wallet or the Stellar SDK to:\n1. Ensure their account has minimum XLM bal"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

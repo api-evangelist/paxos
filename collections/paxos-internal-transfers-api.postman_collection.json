@@ -1,0 +1,305 @@
+{
+  "item": [
+    {
+      "id": "37df06bb-4bb6-40ef-84d0-f835d2f0ac54",
+      "name": "Internal Transfers",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "b26fa4c8-7754-456c-af11-9c0816e21b01",
+          "name": "Create Internal Transfer",
+          "request": {
+            "name": "Create Internal Transfer",
+            "description": {
+              "content": "Transfer assets between two profiles belonging to the same customer.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "transfer",
+                "internal"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "conversion:read_conversion_stablecoin conversion:write_conversion_stablecoin exchange:historical_prices exchange:read_order exchange:read_quote exchange:read_quote_execution exchange:write_quote_execution exchange:write_order fee:write_crypto_withdrawal_fee funding:read_bank_balance funding:read_profile funding:write_profile identity:read_account identity:read_identity identity:write_account identity:write_identity settlement:read_transaction settlement:write_transaction tax:read_tax_form tax:read_tax_lot tax:write_tax_lot transfer:read_deposit_address transfer:read_fiat_account transfer:read_fiat_deposit_instructions transfer:read_transfer transfer:read_transfer_limit transfer:reject_crypto_deposit transfer:update_crypto_deposit transfer:write_crypto_withdrawal transfer:write_deposit_address transfer:write_fiat_account transfer:write_fiat_deposit_instructions transfer:write_internal_transfer transfer:write_sandbox_fiat_deposit transfer:write_fiat_withdrawal events:read_event"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://oauth.paxos.com/oauth2/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"from_profile_id\": \"<string>\",\n  \"to_profile_id\": \"<string>\",\n  \"amount\": \"<string>\",\n  \"asset\": \"<string>\",\n  \"ref_id\": \"<string>\",\n  \"metadata\": {\n    \"key_0\": \"<string>\"\n  },\n  \"from_identity_id\": \"<string>\",\n  \"from_account_id\": \"<string>\",\n  \"to_identity_id\": \"<string>\",\n  \"to_account_id\": \"<string>\",\n  \"recipient_metadata\": {\n    \"key_0\": \"<string>\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "f0ef1065-c29c-4648-8004-0abd8ca32478",
+              "name": "A successful response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "transfer",
+                    "internal"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"ref_id\": \"idempotence_id\",\n  \"from_profile_id\": \"b7b77d82-e6a7-4ae9-9904-36231aedf985\",\n  \"to_profile_id\": \"37867177-f88c-45cc-b9b5-d786e7079609\",\n  \"asset\": \"BTC\",\n  \"amount\": \"0.05\",\n  \"metadata\": {\n    \"my_id\": \"4024ee50-eefb-4f2e-85c7-e7899c0b7da5\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"amount\": \"10\",\n  \"asset\": \"BTC\",\n  \"auto_conversion\": {},\n  \"balance_asset\": \"BTC\",\n  \"created_at\": \"2022-04-28T22:07:56.436854Z\",\n  \"customer_id\": \"66325f47-455d-4e0c-9d38-70c047b41dbe\",\n  \"direction\": \"DEBIT\",\n  \"fee\": \"0\",\n  \"id\": \"5ab7e995-5589-4b3f-a333-c14b42ac6eaf\",\n  \"metadata\": {\n    \"my_id\": \"TEST-v2-Profile-transfer-428169\"\n  },\n  \"profile_id\": \"0acfa5a6-6f2e-41af-a833-48e301197ffd\",\n  \"ref_id\": \"TEST-v2-profile-transfer-ref_id-428169\",\n  \"status\": \"PENDING\",\n  \"total\": \"10\",\n  \"type\": \"INTERNAL_TRANSFER_DEBIT\",\n  \"group_id\": \"55e98066-d9ad-483b-9f10-d3aa252ebbe3\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "660d7e04-565e-4773-9db6-839b66ed4269",
+              "name": "Insufficient funds",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "transfer",
+                    "internal"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/problem+json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"ref_id\": \"idempotence_id\",\n  \"from_profile_id\": \"b7b77d82-e6a7-4ae9-9904-36231aedf985\",\n  \"to_profile_id\": \"37867177-f88c-45cc-b9b5-d786e7079609\",\n  \"asset\": \"BTC\",\n  \"amount\": \"0.05\",\n  \"metadata\": {\n    \"my_id\": \"4024ee50-eefb-4f2e-85c7-e7899c0b7da5\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/problem+json"
+                }
+              ],
+              "body": "{\n  \"type\": \"https://developer.paxos.com/docs/v2/problems/insufficient-funds\",\n  \"title\": \"Insufficient Funds\",\n  \"status\": 403,\n  \"detail\": \"insufficient USD funds in profile b7b77d82-e6a7-4ae9-9904-36231aedf985: 100 needed, 50 available\",\n  \"meta\": {\n    \"profile_id\": \"b7b77d82-e6a7-4ae9-9904-36231aedf985\",\n    \"asset\": \"USD\",\n    \"available\": \"50\",\n    \"needed\": \"100\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9e4273ac-2dc6-4f6e-9d19-a269390af994",
+              "name": "Could not find profile",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "transfer",
+                    "internal"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/problem+json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"ref_id\": \"idempotence_id\",\n  \"from_profile_id\": \"b7b77d82-e6a7-4ae9-9904-36231aedf985\",\n  \"to_profile_id\": \"37867177-f88c-45cc-b9b5-d786e7079609\",\n  \"asset\": \"BTC\",\n  \"amount\": \"0.05\",\n  \"metadata\": {\n    \"my_id\": \"4024ee50-eefb-4f2e-85c7-e7899c0b7da5\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/problem+json"
+                }
+              ],
+              "body": "{\n  \"type\": \"about:blank\",\n  \"title\": \"Not Found\",\n  \"status\": 404,\n  \"detail\": \"profile not found: b7b77d82-e6a7-4ae9-9904-36231aedf985\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7a21fa32-31fe-47e1-9b65-b9819b5be585",
+              "name": "Transfer already exists",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "transfer",
+                    "internal"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/problem+json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"ref_id\": \"idempotence_id\",\n  \"from_profile_id\": \"b7b77d82-e6a7-4ae9-9904-36231aedf985\",\n  \"to_profile_id\": \"37867177-f88c-45cc-b9b5-d786e7079609\",\n  \"asset\": \"BTC\",\n  \"amount\": \"0.05\",\n  \"metadata\": {\n    \"my_id\": \"4024ee50-eefb-4f2e-85c7-e7899c0b7da5\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/problem+json"
+                }
+              ],
+              "body": "{\n  \"type\": \"https://api.paxos.com/v2/problems/already-exists\",\n  \"detail\": \"Transfer with ref_id already exists\",\n  \"status\": 409,\n  \"title\": \"Already exists\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.paxos.com/v2",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "f7c193d8-47b5-4b75-a586-10cc729ed4c1",
+    "name": "Paxos Account Members Internal Transfers API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "<p>Welcome to Paxos APIs. At Paxos, our mission is to enable the movement of any asset, any time, in a trustworthy way. These APIs serve that mission by making it easier than ever for you to directly integrate our product capabilities into your application, leveraging the speed, stability, and security of the Paxos platform.</p> <p>The documentation that follows gives you access to our Crypto Brokerage, Trading, and Exchange products. It includes APIs for market data, orders, and the held rate quote flow.</p> <p>To test in our sandbox environment, <a href=\"https://account.sandbox.paxos.com\" target=\"_blank\">sign up</a> for an account. For more information about Paxos and our APIs, visit <a href=\"https://www.paxos.com/\" target=\"_blank\">Paxos.com</a>.</p>\n",
+      "type": "text/plain"
+    }
+  }
+}

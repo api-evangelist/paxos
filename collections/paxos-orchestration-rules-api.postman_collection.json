@@ -1,0 +1,461 @@
+{
+  "item": [
+    {
+      "id": "41f458ac-9deb-4e51-b39d-d3259526627c",
+      "name": "Orchestration Rules",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "53494093-7e51-459d-8e58-bc14d6ce78cd",
+          "name": "List Orchestration Rules",
+          "request": {
+            "name": "List Orchestration Rules",
+            "description": {
+              "content": "List all orchestration rules, optionally filtering and paging the results.\n\nBy default, orchestration rules are returned in reverse chronological (descending)\norder by creation time. If no query parameters are supplied,\nthe response will include up to the last 100 rules which were created.\n\nThe paginated results default to display up to 100 rules, unless\notherwise specified with the `limit` parameter. The maximum `limit` value is 1000.\nEvery paginated response contains a `next_page_cursor` field until the last page is reached.\n\nPass the `next_page_cursor` value into the `page_cursor` field of a new\nrequest to retrieve the next page of results.\n\nRules can be filtered by:\n- Profile ID (`profile_id`)\n- Status (`status`)\n- Source asset (`source_asset`)\n- Destination asset (`destination_asset`)",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "orchestration",
+                "rules"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "profile_id",
+                  "value": "<string>",
+                  "description": "Optional filter by profile ID"
+                },
+                {
+                  "disabled": false,
+                  "key": "status",
+                  "value": "<string>",
+                  "description": "Optional filter by statuses\n\n - ACTIVE: The rule is active, deposits matching the `source_asset` and `source` of this rule start a conversion and\nsubsequent delivery of the `destination_asset` to the specified `destination`.\n - DELETED: The rule has been deleted, newly deposited `source_assets` to the `source` of this rule will not be converted.\nThe deposited `source_asset` is still going to be credited to the Profile specified by `profile_id`.\n - PENDING: The rule creation is pending approval(s) before the rule becomes ACTIVE.\n - REJECTED: The rule creation has been rejected during the approval process."
+                },
+                {
+                  "disabled": false,
+                  "key": "status",
+                  "value": "<string>",
+                  "description": "Optional filter by statuses\n\n - ACTIVE: The rule is active, deposits matching the `source_asset` and `source` of this rule start a conversion and\nsubsequent delivery of the `destination_asset` to the specified `destination`.\n - DELETED: The rule has been deleted, newly deposited `source_assets` to the `source` of this rule will not be converted.\nThe deposited `source_asset` is still going to be credited to the Profile specified by `profile_id`.\n - PENDING: The rule creation is pending approval(s) before the rule becomes ACTIVE.\n - REJECTED: The rule creation has been rejected during the approval process."
+                },
+                {
+                  "disabled": false,
+                  "key": "source_asset",
+                  "value": "<string>",
+                  "description": "Optional filter by source asset"
+                },
+                {
+                  "disabled": false,
+                  "key": "destination_asset",
+                  "value": "<string>",
+                  "description": "Optional filter by destination asset"
+                },
+                {
+                  "disabled": false,
+                  "key": "ids",
+                  "value": "<string>",
+                  "description": "Optionally filter by the UUIDs of the orchestration rules. Limit 100."
+                },
+                {
+                  "disabled": false,
+                  "key": "ids",
+                  "value": "<string>",
+                  "description": "Optionally filter by the UUIDs of the orchestration rules. Limit 100."
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "<integer>",
+                  "description": "Number of results to return. Defaults to 100 if no limit is provided. Maximum 1000."
+                },
+                {
+                  "disabled": false,
+                  "key": "order",
+                  "value": "<string>",
+                  "description": "Sort order for the results. Defaults to DESC by created_at time."
+                },
+                {
+                  "disabled": false,
+                  "key": "page_cursor",
+                  "value": "<string>",
+                  "description": "Optional Cursor for getting the next page of results."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "conversion:read_conversion_stablecoin conversion:write_conversion_stablecoin exchange:historical_prices exchange:read_order exchange:read_quote exchange:read_quote_execution exchange:write_quote_execution exchange:write_order fee:write_crypto_withdrawal_fee funding:read_bank_balance funding:read_profile funding:write_profile identity:read_account identity:read_identity identity:write_account identity:write_identity settlement:read_transaction settlement:write_transaction tax:read_tax_form tax:read_tax_lot tax:write_tax_lot transfer:read_deposit_address transfer:read_fiat_account transfer:read_fiat_deposit_instructions transfer:read_transfer transfer:read_transfer_limit transfer:reject_crypto_deposit transfer:update_crypto_deposit transfer:write_crypto_withdrawal transfer:write_deposit_address transfer:write_fiat_account transfer:write_fiat_deposit_instructions transfer:write_internal_transfer transfer:write_sandbox_fiat_deposit transfer:write_fiat_withdrawal events:read_event"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://oauth.paxos.com/oauth2/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "8f5bf3f9-7c0d-4970-a9b8-79059321be5e",
+              "name": "A successful response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orchestration",
+                    "rules"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "profile_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "status",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "status",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "source_asset",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "destination_asset",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "order",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "page_cursor",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"rules\": [\n    {\n      \"id\": \"string\",\n      \"ref_id\": \"string\",\n      \"nickname\": \"string\",\n      \"profile_id\": \"string\",\n      \"identity_id\": \"string\",\n      \"account_id\": \"string\",\n      \"status\": \"DELETED\",\n      \"source_asset\": \"string\",\n      \"destination_asset\": \"string\",\n      \"source\": {\n        \"crypto\": {\n          \"address_id\": \"string\",\n          \"address\": \"string\",\n          \"network\": \"string\"\n        },\n        \"fiat\": {\n          \"deposit_instructions_id\": \"string\",\n          \"network\": \"string\",\n          \"account_type\": \"string\",\n          \"memo_id\": \"string\"\n        },\n        \"profile\": {\n          \"profile_id\": \"string\"\n        }\n      },\n      \"destination\": {\n        \"crypto\": {\n          \"address\": \"string\",\n          \"network\": \"string\"\n        },\n        \"fiat\": {\n          \"fiat_account_id\": \"string\",\n          \"memo\": \"string\"\n        },\n        \"profile\": {\n          \"profile_id\": \"string\"\n        }\n      },\n      \"created_at\": \"1973-01-12T01:19:47.510Z\"\n    },\n    {\n      \"id\": \"string\",\n      \"ref_id\": \"string\",\n      \"nickname\": \"string\",\n      \"profile_id\": \"string\",\n      \"identity_id\": \"string\",\n      \"account_id\": \"string\",\n      \"status\": \"DELETED\",\n      \"source_asset\": \"string\",\n      \"destination_asset\": \"string\",\n      \"source\": {\n        \"crypto\": {\n          \"address_id\": \"string\",\n          \"address\": \"string\",\n          \"network\": \"string\"\n        },\n        \"fiat\": {\n          \"deposit_instructions_id\": \"string\",\n          \"network\": \"string\",\n          \"account_type\": \"string\",\n          \"memo_id\": \"string\"\n        },\n        \"profile\": {\n          \"profile_id\": \"string\"\n        }\n      },\n      \"destination\": {\n        \"crypto\": {\n          \"address\": \"string\",\n          \"network\": \"string\"\n        },\n        \"fiat\": {\n          \"fiat_account_id\": \"string\",\n          \"memo\": \"string\"\n        },\n        \"profile\": {\n          \"profile_id\": \"string\"\n        }\n      },\n      \"created_at\": \"1964-09-14T11:32:23.465Z\"\n    }\n  ],\n  \"next_page_cursor\": \"string\",\n  \"items\": [\n    {\n      \"id\": \"string\",\n      \"ref_id\": \"string\",\n      \"nickname\": \"string\",\n      \"profile_id\": \"string\",\n      \"identity_id\": \"string\",\n      \"account_id\": \"string\",\n      \"status\": \"REJECTED\",\n      \"source_asset\": \"string\",\n      \"destination_asset\": \"string\",\n      \"source\": {\n        \"crypto\": {\n          \"address_id\": \"string\",\n          \"address\": \"string\",\n          \"network\": \"string\"\n        },\n        \"fiat\": {\n          \"deposit_instructions_id\": \"string\",\n          \"network\": \"string\",\n          \"account_type\": \"string\",\n          \"memo_id\": \"string\"\n        },\n        \"profile\": {\n          \"profile_id\": \"string\"\n        }\n      },\n      \"destination\": {\n        \"crypto\": {\n          \"address\": \"string\",\n          \"network\": \"string\"\n        },\n        \"fiat\": {\n          \"fiat_account_id\": \"string\",\n          \"memo\": \"string\"\n        },\n        \"profile\": {\n          \"profile_id\": \"string\"\n        }\n      },\n      \"created_at\": \"1963-10-12T00:14:35.186Z\"\n    },\n    {\n      \"id\": \"string\",\n      \"ref_id\": \"string\",\n      \"nickname\": \"string\",\n      \"profile_id\": \"string\",\n      \"identity_id\": \"string\",\n      \"account_id\": \"string\",\n      \"status\": \"DELETED\",\n      \"source_asset\": \"string\",\n      \"destination_asset\": \"string\",\n      \"source\": {\n        \"crypto\": {\n          \"address_id\": \"string\",\n          \"address\": \"string\",\n          \"network\": \"string\"\n        },\n        \"fiat\": {\n          \"deposit_instructions_id\": \"string\",\n          \"network\": \"string\",\n          \"account_type\": \"string\",\n          \"memo_id\": \"string\"\n        },\n        \"profile\": {\n          \"profile_id\": \"string\"\n        }\n      },\n      \"destination\": {\n        \"crypto\": {\n          \"address\": \"string\",\n          \"network\": \"string\"\n        },\n        \"fiat\": {\n          \"fiat_account_id\": \"string\",\n          \"memo\": \"string\"\n        },\n        \"profile\": {\n          \"profile_id\": \"string\"\n        }\n      },\n      \"created_at\": \"2017-02-05T22:27:06.426Z\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "facb4362-79ff-4fcd-8091-16d250b34bc0",
+          "name": "Create Orchestration Rule",
+          "request": {
+            "name": "Create Orchestration Rule",
+            "description": {
+              "content": "Creates a persistent orchestration rule that automatically triggers orchestrations\nwhen matching deposits are received.\n\nThe rule will:\n1. Generate deposit instructions associated with the rule.\n2. Continuously monitor incoming deposits to those instructions.\n3. Automatically execute orchestrations to the specified destination.\n\nSupported Sources:\n\n- Crypto deposit\n- Fiat deposit\n\nSupported Destinations:\n\n- Crypto address on a supported network\n- Bank account\n- Profile ID\n\nError conditions:\n- [Already Exists](https://developer.paxos.com/docs/v2/problems/already-exists): Returned if a rule with the same ref_id already exists.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "orchestration",
+                "rules"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "conversion:read_conversion_stablecoin conversion:write_conversion_stablecoin exchange:historical_prices exchange:read_order exchange:read_quote exchange:read_quote_execution exchange:write_quote_execution exchange:write_order fee:write_crypto_withdrawal_fee funding:read_bank_balance funding:read_profile funding:write_profile identity:read_account identity:read_identity identity:write_account identity:write_identity settlement:read_transaction settlement:write_transaction tax:read_tax_form tax:read_tax_lot tax:write_tax_lot transfer:read_deposit_address transfer:read_fiat_account transfer:read_fiat_deposit_instructions transfer:read_transfer transfer:read_transfer_limit transfer:reject_crypto_deposit transfer:update_crypto_deposit transfer:write_crypto_withdrawal transfer:write_deposit_address transfer:write_fiat_account transfer:write_fiat_deposit_instructions transfer:write_internal_transfer transfer:write_sandbox_fiat_deposit transfer:write_fiat_withdrawal events:read_event"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://oauth.paxos.com/oauth2/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"ref_id\": \"<string>\",\n  \"profile_id\": \"<string>\",\n  \"source_asset\": \"<string>\",\n  \"destination_asset\": \"<string>\",\n  \"source\": {\n    \"crypto\": {\n      \"network\": \"<string>\"\n    },\n    \"fiat\": {\n      \"network\": \"<string>\",\n      \"account_type\": \"<string>\"\n    }\n  },\n  \"nickname\": \"<string>\",\n  \"identity_id\": \"<string>\",\n  \"account_id\": \"<string>\",\n  \"destination\": {\n    \"crypto\": {\n      \"address\": \"<string>\",\n      \"network\": \"<string>\",\n      \"crypto_address_id\": \"<string>\"\n    },\n    \"fiat\": {\n      \"fiat_account_id\": \"<string>\",\n      \"memo\": \"<string>\"\n    },\n    \"profile\": {\n      \"profile_id\": \"<string>\"\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "e4180dff-7715-437e-9b09-41700817c3c0",
+              "name": "A successful response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orchestration",
+                    "rules"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"ref_id\": \"my-rule-001\",\n  \"nickname\": \"USDC to USDG conversion\",\n  \"profile_id\": \"e8ea8b1c-4e8d-4c59-9e7a-c985194ba2e8\",\n  \"source_asset\": \"USDC\",\n  \"destination_asset\": \"USDG\",\n  \"source\": {\n    \"crypto\": {\n      \"network\": \"ETHEREUM\"\n    }\n  },\n  \"destination\": {\n    \"profile\": {\n      \"profile_id\": \"e8ea8b1c-4e8d-4c59-9e7a-c985194ba2e8\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"rule\": {\n    \"id\": \"string\",\n    \"ref_id\": \"string\",\n    \"nickname\": \"string\",\n    \"profile_id\": \"string\",\n    \"identity_id\": \"string\",\n    \"account_id\": \"string\",\n    \"status\": \"ACTIVE\",\n    \"source_asset\": \"string\",\n    \"destination_asset\": \"string\",\n    \"source\": {\n      \"crypto\": {\n        \"address_id\": \"string\",\n        \"address\": \"string\",\n        \"network\": \"string\"\n      },\n      \"fiat\": {\n        \"deposit_instructions_id\": \"string\",\n        \"network\": \"string\",\n        \"account_type\": \"string\",\n        \"memo_id\": \"string\"\n      },\n      \"profile\": {\n        \"profile_id\": \"string\"\n      }\n    },\n    \"destination\": {\n      \"crypto\": {\n        \"address\": \"string\",\n        \"network\": \"string\"\n      },\n      \"fiat\": {\n        \"fiat_account_id\": \"string\",\n        \"memo\": \"string\"\n      },\n      \"profile\": {\n        \"profile_id\": \"string\"\n      }\n    },\n    \"created_at\": \"1980-06-19T06:12:39.410Z\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "6db67533-2773-481c-9542-6dc9ad250042",
+          "name": "Delete Orchestration Rule",
+          "request": {
+            "name": "Delete Orchestration Rule",
+            "description": {
+              "content": "Deactivates an orchestration rule by updating its status to DELETED.\nOnce deleted, the rule will no longer trigger new orchestrations.\nAny orchestrations previously created by the rule will continue to be processed.\n\nThe request accepts a single rule ID and returns the updated rule resource\nwith its status set to DELETED upon success.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "orchestration",
+                "rules",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) The ID of the orchestration rule to delete"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "conversion:read_conversion_stablecoin conversion:write_conversion_stablecoin exchange:historical_prices exchange:read_order exchange:read_quote exchange:read_quote_execution exchange:write_quote_execution exchange:write_order fee:write_crypto_withdrawal_fee funding:read_bank_balance funding:read_profile funding:write_profile identity:read_account identity:read_identity identity:write_account identity:write_identity settlement:read_transaction settlement:write_transaction tax:read_tax_form tax:read_tax_lot tax:write_tax_lot transfer:read_deposit_address transfer:read_fiat_account transfer:read_fiat_deposit_instructions transfer:read_transfer transfer:read_transfer_limit transfer:reject_crypto_deposit transfer:update_crypto_deposit transfer:write_crypto_withdrawal transfer:write_deposit_address transfer:write_fiat_account transfer:write_fiat_deposit_instructions transfer:write_internal_transfer transfer:write_sandbox_fiat_deposit transfer:write_fiat_withdrawal events:read_event"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://oauth.paxos.com/oauth2/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "f68b2782-3989-4443-a031-548e7ee8b48b",
+              "name": "A successful response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orchestration",
+                    "rules",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The ID of the orchestration rule to delete"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"rule\": {\n    \"id\": \"string\",\n    \"ref_id\": \"string\",\n    \"nickname\": \"string\",\n    \"profile_id\": \"string\",\n    \"identity_id\": \"string\",\n    \"account_id\": \"string\",\n    \"status\": \"ACTIVE\",\n    \"source_asset\": \"string\",\n    \"destination_asset\": \"string\",\n    \"source\": {\n      \"crypto\": {\n        \"address_id\": \"string\",\n        \"address\": \"string\",\n        \"network\": \"string\"\n      },\n      \"fiat\": {\n        \"deposit_instructions_id\": \"string\",\n        \"network\": \"string\",\n        \"account_type\": \"string\",\n        \"memo_id\": \"string\"\n      },\n      \"profile\": {\n        \"profile_id\": \"string\"\n      }\n    },\n    \"destination\": {\n      \"crypto\": {\n        \"address\": \"string\",\n        \"network\": \"string\"\n      },\n      \"fiat\": {\n        \"fiat_account_id\": \"string\",\n        \"memo\": \"string\"\n      },\n      \"profile\": {\n        \"profile_id\": \"string\"\n      }\n    },\n    \"created_at\": \"1980-06-19T06:12:39.410Z\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.paxos.com/v2",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "72f655b6-0bbb-4595-b99b-4820e44a8db9",
+    "name": "Paxos Account Members Orchestration Rules API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "<p>Welcome to Paxos APIs. At Paxos, our mission is to enable the movement of any asset, any time, in a trustworthy way. These APIs serve that mission by making it easier than ever for you to directly integrate our product capabilities into your application, leveraging the speed, stability, and security of the Paxos platform.</p> <p>The documentation that follows gives you access to our Crypto Brokerage, Trading, and Exchange products. It includes APIs for market data, orders, and the held rate quote flow.</p> <p>To test in our sandbox environment, <a href=\"https://account.sandbox.paxos.com\" target=\"_blank\">sign up</a> for an account. For more information about Paxos and our APIs, visit <a href=\"https://www.paxos.com/\" target=\"_blank\">Paxos.com</a>.</p>\n",
+      "type": "text/plain"
+    }
+  }
+}

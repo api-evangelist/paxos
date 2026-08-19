@@ -1,0 +1,70 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Paxos Account Members Institution Members API",
+    "version": "2.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Institution Members",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Add Institution Members",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.paxos.com/v2/identity/institution-members",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://oauth.paxos.com/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Add one or more institution members to a given institution.\n\nAdding new members doesn't affect existing members. For example, if an institution has three\nmembers, and adds two members using this API, then the institution would end up with five total members.\n\nFor details on the properties that can be specified when creating institution members,\nsee [Specifying Institution Members and Their Roles](#specifying-institution-members-and-their-roles)."
+        },
+        {
+          "info": {
+            "name": "Remove Institution Member",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.paxos.com/v2/identity/institution-members/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The institution member ID that should be removed from the institution."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://oauth.paxos.com/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Removes an institution member from an institution."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

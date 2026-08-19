@@ -1,0 +1,178 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Paxos Account Members Settlement API",
+    "version": "2.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Settlement",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Transactions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.paxos.com/v2/settlement/transactions",
+            "params": [
+              {
+                "name": "statuses",
+                "value": "",
+                "type": "query",
+                "description": "Transaction statuses to filter on\n\n - PENDING: Initial state of a settlement transaction upon creation.\n - SETTLED: Indicates all obligations belong to the settlement transaction have been enacted.\n - EXPIRED: Indicates the settlement transaction is no longer eligible for settlement.\n - CANCELLED: Indicates the settlement transaction was cancelled by the source profile.\n - AFFIRMED: Indicates the settlement transaction will be eligible for settlement once within the window."
+              },
+              {
+                "name": "source_profile_id",
+                "value": "",
+                "type": "query",
+                "description": "The `profile_id` of the entity on the submitting side of the transaction."
+              },
+              {
+                "name": "target_profile_id",
+                "value": "",
+                "type": "query",
+                "description": "The `profile_id` of the entity on the receiving side of the transaction."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of results to return. Defaults to 100 if no limit is provided."
+              },
+              {
+                "name": "page_cursor",
+                "value": "",
+                "type": "query",
+                "description": "Cursor for getting the next page of results."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://oauth.paxos.com/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "This endpoint enables you to fetch a list of Settlement Transactions that you have created (own the `source_profile_id`) or have been alleged against you (own the `target_profile_id`).\nYou can use query parameters to filter the results returned by `statuses`, `source_profile_id` and `target_profile_id`.\n\nNote that this endpoint supports pagination and returns a cursor token for fetching next pages."
+        },
+        {
+          "info": {
+            "name": "Create Transaction",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.paxos.com/v2/settlement/transactions",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://oauth.paxos.com/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Creates a new bilateral Settlement Transaction with one or more legs. The customer must own the\n`source_profile_id` specified in the transaction.\n\nA successful response indicates the transaction has been accepted and will be in an initial `status` of `\"PENDING\"`\nfor settlement, the transaction is only eligible for settlement once the `status` is `\"AFFIRMED\"` by the\n`target_profile_id` and the current time is between the provided `settlement_window_start` and `settlement_window_end`.\n\nSettlement "
+        },
+        {
+          "info": {
+            "name": "Get Transaction",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.paxos.com/v2/settlement/transactions/:transaction_id",
+            "params": [
+              {
+                "name": "transaction_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique `id` in the `Transaction` object."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://oauth.paxos.com/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Get a Settlement Transaction by its (transaction) id, you must have created the transaction (own the `source_profile_id`) or\nhave had the transaction alleged against you (own the `target_profile_id`)."
+        },
+        {
+          "info": {
+            "name": "Cancel Transaction",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.paxos.com/v2/settlement/transactions/:transaction_id",
+            "params": [
+              {
+                "name": "transaction_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique `id` in the `Transaction` object."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://oauth.paxos.com/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Cancels the Settlement Transaction, this action can only be done by the customer owning the source profile (`source_profile_id`).\nThe transaction must be in a `\"PENDING\"` status for this to take effect, you cannot cancel a transaction which\nis `\"AFFIRMED\"`."
+        },
+        {
+          "info": {
+            "name": "Affirm Transaction",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.paxos.com/v2/settlement/transactions/:transaction_id/affirm",
+            "params": [
+              {
+                "name": "transaction_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique `id` in the `Transaction` object."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://oauth.paxos.com/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Affirms the Settlement Transaction for settlement, the transaction is now eligible for settlement once the current time is\nbetween the provided `settlement_window_start` and `settlement_window_end`. This action can only be done by the\ncustomer owning the target profile (`target_profile_id`).\nThe transaction must be in a `\"PENDING\"` status for this to take effect."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,390 @@
+{
+  "item": [
+    {
+      "id": "32f6857f-8f96-4b7a-ac40-bd225ae1ad9b",
+      "name": "Rewards Statements",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "65495cf5-f239-48a3-b5fa-54c0d03ea82d",
+          "name": "List Rewards Statements",
+          "request": {
+            "name": "List Rewards Statements",
+            "description": {
+              "content": "Returns monthly rewards statements for the authenticated partner, ordered by\nperiod newest first. Summary fields (total_accrued, avg_daily_balance) are\nincluded in list responses. Presigned download URLs are populated on files\nfor completed statements only.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "rewards",
+                "statements"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "<integer>",
+                  "description": "Maximum number of statements to return. Defaults to 12 if not set."
+                },
+                {
+                  "disabled": false,
+                  "key": "page_cursor",
+                  "value": "<string>",
+                  "description": "Opaque pagination cursor from a previous response."
+                },
+                {
+                  "disabled": false,
+                  "key": "asset_type",
+                  "value": "<string>",
+                  "description": "When set, only statements for this asset type are returned."
+                },
+                {
+                  "disabled": false,
+                  "key": "type",
+                  "value": "<string>",
+                  "description": "When set, only statements of this content type are returned.\n\n - STATEMENT_TYPE_MONTHLY_REWARDS: Monthly statement: PDF rewards summary with daily balance totals, rates, and\nper-payout-group breakdown, plus a CSV per-wallet daily balance export."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "conversion:read_conversion_stablecoin conversion:write_conversion_stablecoin exchange:historical_prices exchange:read_order exchange:read_quote exchange:read_quote_execution exchange:write_quote_execution exchange:write_order fee:write_crypto_withdrawal_fee funding:read_bank_balance funding:read_profile funding:write_profile identity:read_account identity:read_identity identity:write_account identity:write_identity settlement:read_transaction settlement:write_transaction tax:read_tax_form tax:read_tax_lot tax:write_tax_lot transfer:read_deposit_address transfer:read_fiat_account transfer:read_fiat_deposit_instructions transfer:read_transfer transfer:read_transfer_limit transfer:reject_crypto_deposit transfer:update_crypto_deposit transfer:write_crypto_withdrawal transfer:write_deposit_address transfer:write_fiat_account transfer:write_fiat_deposit_instructions transfer:write_internal_transfer transfer:write_sandbox_fiat_deposit transfer:write_fiat_withdrawal events:read_event"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://oauth.paxos.com/oauth2/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "6154eb4e-11cc-491f-9426-26be7f8486b1",
+              "name": "A successful response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "rewards",
+                    "statements"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "page_cursor",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "asset_type",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "type",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"items\": [\n    {\n      \"id\": \"a1b2c3d4-e5f6-7890-abcd-ef1234567890\",\n      \"asset_type\": \"USDG\",\n      \"period_start\": \"2025-03-01T00:00:00Z\",\n      \"period_end\": \"2025-03-31T23:59:59Z\",\n      \"status\": \"STATEMENT_STATUS_COMPLETED\",\n      \"type\": \"STATEMENT_TYPE_MONTHLY_REWARDS\",\n      \"total_accrued\": \"1523.841209\",\n      \"avg_daily_balance\": \"600000.000000\",\n      \"files\": [\n        {\n          \"format\": \"STATEMENT_FORMAT_PDF\",\n          \"download_url\": \"https://s3.amazonaws.com/rewards-statements/partners/11111111/2025-03/summary.pdf?X-Amz-Signature=abc123\",\n          \"generated_at\": \"2025-04-02T01:00:00Z\"\n        },\n        {\n          \"format\": \"STATEMENT_FORMAT_CSV\",\n          \"download_url\": \"https://s3.amazonaws.com/rewards-statements/partners/11111111/2025-03/balances.csv?X-Amz-Signature=def456\",\n          \"generated_at\": \"2025-04-02T01:00:00Z\"\n        }\n      ],\n      \"created_at\": \"2025-04-02T01:00:00Z\"\n    },\n    {\n      \"id\": \"b2c3d4e5-f6a7-8901-bcde-f12345678901\",\n      \"asset_type\": \"USDG\",\n      \"period_start\": \"2025-02-01T00:00:00Z\",\n      \"period_end\": \"2025-02-28T23:59:59Z\",\n      \"status\": \"STATEMENT_STATUS_COMPLETED\",\n      \"type\": \"STATEMENT_TYPE_MONTHLY_REWARDS\",\n      \"total_accrued\": \"1387.502341\",\n      \"avg_daily_balance\": \"545000.000000\",\n      \"files\": [\n        {\n          \"format\": \"STATEMENT_FORMAT_PDF\",\n          \"download_url\": \"https://s3.amazonaws.com/rewards-statements/partners/11111111/2025-02/summary.pdf?X-Amz-Signature=ghi789\",\n          \"generated_at\": \"2025-03-02T01:00:00Z\"\n        },\n        {\n          \"format\": \"STATEMENT_FORMAT_CSV\",\n          \"download_url\": \"https://s3.amazonaws.com/rewards-statements/partners/11111111/2025-02/balances.csv?X-Amz-Signature=jkl012\",\n          \"generated_at\": \"2025-03-02T01:00:00Z\"\n        }\n      ],\n      \"created_at\": \"2025-03-02T01:00:00Z\"\n    }\n  ],\n  \"next_page_cursor\": \"\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "e6b8d615-41af-4591-97b4-f93320e3931a",
+          "name": "Get Rewards Statement",
+          "request": {
+            "name": "Get Rewards Statement",
+            "description": {
+              "content": "Returns a single rewards statement with presigned download URLs for each\ngenerated file (PDF, CSV).",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "rewards",
+                "statements",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) UUID of the statement to retrieve."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "conversion:read_conversion_stablecoin conversion:write_conversion_stablecoin exchange:historical_prices exchange:read_order exchange:read_quote exchange:read_quote_execution exchange:write_quote_execution exchange:write_order fee:write_crypto_withdrawal_fee funding:read_bank_balance funding:read_profile funding:write_profile identity:read_account identity:read_identity identity:write_account identity:write_identity settlement:read_transaction settlement:write_transaction tax:read_tax_form tax:read_tax_lot tax:write_tax_lot transfer:read_deposit_address transfer:read_fiat_account transfer:read_fiat_deposit_instructions transfer:read_transfer transfer:read_transfer_limit transfer:reject_crypto_deposit transfer:update_crypto_deposit transfer:write_crypto_withdrawal transfer:write_deposit_address transfer:write_fiat_account transfer:write_fiat_deposit_instructions transfer:write_internal_transfer transfer:write_sandbox_fiat_deposit transfer:write_fiat_withdrawal events:read_event"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://oauth.paxos.com/oauth2/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "a60180ff-555f-44f4-bf5f-8c507c517afb",
+              "name": "A successful response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "rewards",
+                    "statements",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) UUID of the statement to retrieve."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statement\": {\n    \"id\": \"a1b2c3d4-e5f6-7890-abcd-ef1234567890\",\n    \"asset_type\": \"USDG\",\n    \"period_start\": \"2025-03-01T00:00:00Z\",\n    \"period_end\": \"2025-03-31T23:59:59Z\",\n    \"status\": \"STATEMENT_STATUS_COMPLETED\",\n    \"type\": \"STATEMENT_TYPE_MONTHLY_REWARDS\",\n    \"total_accrued\": \"1523.841209\",\n    \"avg_daily_balance\": \"600000.000000\",\n    \"files\": [\n      {\n        \"format\": \"STATEMENT_FORMAT_PDF\",\n        \"download_url\": \"https://s3.amazonaws.com/rewards-statements/partners/11111111/2025-03/summary.pdf?X-Amz-Signature=abc123\",\n        \"generated_at\": \"2025-04-02T01:00:00Z\"\n      },\n      {\n        \"format\": \"STATEMENT_FORMAT_CSV\",\n        \"download_url\": \"https://s3.amazonaws.com/rewards-statements/partners/11111111/2025-03/balances.csv?X-Amz-Signature=def456\",\n        \"generated_at\": \"2025-04-02T01:00:00Z\"\n      }\n    ],\n    \"created_at\": \"2025-04-02T01:00:00Z\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e03a4014-ee55-4329-b3ae-f70115bcb665",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "rewards",
+                    "statements",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) UUID of the statement to retrieve."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"about:blank\",\n  \"title\": \"Bad Request\",\n  \"status\": 400,\n  \"detail\": \"invalid statement id\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a613030b-d530-49e7-917b-5347e897fe38",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "rewards",
+                    "statements",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) UUID of the statement to retrieve."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"about:blank\",\n  \"title\": \"Not Found\",\n  \"status\": 404,\n  \"detail\": \"statement not found\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.paxos.com/v2",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "618560b9-fbe4-4bcd-add3-2fc274f73087",
+    "name": "Paxos Account Members Rewards Statements API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "<p>Welcome to Paxos APIs. At Paxos, our mission is to enable the movement of any asset, any time, in a trustworthy way. These APIs serve that mission by making it easier than ever for you to directly integrate our product capabilities into your application, leveraging the speed, stability, and security of the Paxos platform.</p> <p>The documentation that follows gives you access to our Crypto Brokerage, Trading, and Exchange products. It includes APIs for market data, orders, and the held rate quote flow.</p> <p>To test in our sandbox environment, <a href=\"https://account.sandbox.paxos.com\" target=\"_blank\">sign up</a> for an account. For more information about Paxos and our APIs, visit <a href=\"https://www.paxos.com/\" target=\"_blank\">Paxos.com</a>.</p>\n",
+      "type": "text/plain"
+    }
+  }
+}

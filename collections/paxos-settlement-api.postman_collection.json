@@ -1,0 +1,1196 @@
+{
+  "item": [
+    {
+      "id": "a8999084-1c30-47c4-a4c1-a00cb732caef",
+      "name": "Settlement",
+      "description": {
+        "content": "Use the Settlements API to facilitate simultaneous exchange of pre-funded assets. Automate a variety of use cases that require two-party approval, including net settlement of over-the-counter trades, withdrawal requests for tri-party collateral, payment requests, and bilateral settlement for marketplace end users.\n\nThe simple request-and-approval workflow supports both one-directional and bidirectional transactions to allow a user to receive an asset (for example, send USDP) or simultaneously send and receive assets (for example, send USD and receive BTC and ETH). Only when all parties are in agreement and assets are fully funded does the Settlements API allow for change of custody. Upon completion, all settled assets are immediately available for trading, transferring, withdrawal or other supported activities.\n\nThe Source Profile initiates the transaction for the Target Profile to approve. The `DIRECTION` of each asset is always relative to the Source Profile and only the owner of the Source Profile can cancel a transaction if it hasn't been approved by the Target Profile.\n",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "fcadddbe-a5ce-443b-96d0-331cd0bcc958",
+          "name": "List Transactions",
+          "request": {
+            "name": "List Transactions",
+            "description": {
+              "content": "This endpoint enables you to fetch a list of Settlement Transactions that you have created (own the `source_profile_id`) or have been alleged against you (own the `target_profile_id`).\nYou can use query parameters to filter the results returned by `statuses`, `source_profile_id` and `target_profile_id`.\n\nNote that this endpoint supports pagination and returns a cursor token for fetching next pages.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "settlement",
+                "transactions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "statuses",
+                  "value": "<string>",
+                  "description": "Transaction statuses to filter on\n\n - PENDING: Initial state of a settlement transaction upon creation.\n - SETTLED: Indicates all obligations belong to the settlement transaction have been enacted.\n - EXPIRED: Indicates the settlement transaction is no longer eligible for settlement.\n - CANCELLED: Indicates the settlement transaction was cancelled by the source profile.\n - AFFIRMED: Indicates the settlement transaction will be eligible for settlement once within the window."
+                },
+                {
+                  "disabled": false,
+                  "key": "statuses",
+                  "value": "<string>",
+                  "description": "Transaction statuses to filter on\n\n - PENDING: Initial state of a settlement transaction upon creation.\n - SETTLED: Indicates all obligations belong to the settlement transaction have been enacted.\n - EXPIRED: Indicates the settlement transaction is no longer eligible for settlement.\n - CANCELLED: Indicates the settlement transaction was cancelled by the source profile.\n - AFFIRMED: Indicates the settlement transaction will be eligible for settlement once within the window."
+                },
+                {
+                  "disabled": false,
+                  "key": "source_profile_id",
+                  "value": "<string>",
+                  "description": "The `profile_id` of the entity on the submitting side of the transaction."
+                },
+                {
+                  "disabled": false,
+                  "key": "target_profile_id",
+                  "value": "<string>",
+                  "description": "The `profile_id` of the entity on the receiving side of the transaction."
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "<long>",
+                  "description": "Number of results to return. Defaults to 100 if no limit is provided."
+                },
+                {
+                  "disabled": false,
+                  "key": "page_cursor",
+                  "value": "<string>",
+                  "description": "Cursor for getting the next page of results."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "conversion:read_conversion_stablecoin conversion:write_conversion_stablecoin exchange:historical_prices exchange:read_order exchange:read_quote exchange:read_quote_execution exchange:write_quote_execution exchange:write_order fee:write_crypto_withdrawal_fee funding:read_bank_balance funding:read_profile funding:write_profile identity:read_account identity:read_identity identity:write_account identity:write_identity settlement:read_transaction settlement:write_transaction tax:read_tax_form tax:read_tax_lot tax:write_tax_lot transfer:read_deposit_address transfer:read_fiat_account transfer:read_fiat_deposit_instructions transfer:read_transfer transfer:read_transfer_limit transfer:reject_crypto_deposit transfer:update_crypto_deposit transfer:write_crypto_withdrawal transfer:write_deposit_address transfer:write_fiat_account transfer:write_fiat_deposit_instructions transfer:write_internal_transfer transfer:write_sandbox_fiat_deposit transfer:write_fiat_withdrawal events:read_event"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://oauth.paxos.com/oauth2/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "847fb71e-a774-46af-a876-82e46da2c906",
+              "name": "A successful response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "settlement",
+                    "transactions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "statuses",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "statuses",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "source_profile_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "target_profile_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "page_cursor",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"id\": \"d99a03ee-6b88-4362-89da-087c2c8cd4a7\",\n    \"ref_id\": \"d840cf31-352f-4190-a476-7522bf3eafda\",\n    \"settlement_window_start\": \"2023-08-25T14:25:41.648486573Z\",\n    \"settlement_window_end\": \"2023-08-25T14:25:41.648486953Z\",\n    \"source_profile_id\": \"4fd025ab-f29f-47e6-a02e-df90a61c7ec9\",\n    \"target_profile_id\": \"47db6271-50d6-4934-8c81-c42d87bfb390\",\n    \"legs\": [\n      {\n        \"id\": \"ace21517-447e-4764-8733-765cb12a7fab\",\n        \"direction\": \"DELIVER\",\n        \"asset\": \"BTC\",\n        \"amount\": \"100\"\n      }\n    ],\n    \"status\": \"PENDING\",\n    \"created_at\": \"2023-08-25T14:25:41.648489333Z\",\n    \"updated_at\": \"2023-08-25T14:25:41.648489493Z\"\n  },\n  {\n    \"id\": \"738b465a-7bea-42cf-be8d-63572f5745e7\",\n    \"ref_id\": \"8f1dcf84-56e7-4e84-80aa-f01ef2eb1ab0\",\n    \"settlement_window_start\": \"2023-08-26T00:25:41.648486573Z\",\n    \"settlement_window_end\": \"2023-08-29T19:25:41.648486953Z\",\n    \"source_profile_id\": \"4fd025ab-f29f-47e6-a02e-df90a61c7ec9\",\n    \"target_profile_id\": \"47db6271-50d6-4934-8c81-c42d87bfb390\",\n    \"legs\": [\n      {\n        \"id\": \"ace21517-447e-4764-8733-765cb12a7fab\",\n        \"direction\": \"RECEIVE\",\n        \"asset\": \"ETH\",\n        \"amount\": \"39.231\"\n      }\n    ],\n    \"status\": \"PENDING\",\n    \"created_at\": \"2023-08-24T18:29:41.648489333Z\",\n    \"updated_at\": \"2023-08-24T18:29:41.648489493Z\"\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8981a4bb-a231-41da-856d-159def9fe836",
+              "name": "Insufficient scopes",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "settlement",
+                    "transactions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "statuses",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "statuses",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "source_profile_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "target_profile_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "page_cursor",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"about:blank\",\n  \"title\": \"Forbidden\",\n  \"status\": 403,\n  \"detail\": \"insufficient scopes: found 'settlement:write_transaction', required one of '[settlement:read_transaction]'\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "57966c24-804a-4522-bdfe-f7daf988f63d",
+          "name": "Create Transaction",
+          "request": {
+            "name": "Create Transaction",
+            "description": {
+              "content": "Creates a new bilateral Settlement Transaction with one or more legs. The customer must own the\n`source_profile_id` specified in the transaction.\n\nA successful response indicates the transaction has been accepted and will be in an initial `status` of `\"PENDING\"`\nfor settlement, the transaction is only eligible for settlement once the `status` is `\"AFFIRMED\"` by the\n`target_profile_id` and the current time is between the provided `settlement_window_start` and `settlement_window_end`.\n\nSettlement will only be enacted once both `source_profile_id` and `target_profile_id` have sufficient balances to\nfulfill all legs specified as settlement is **atomic**.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "settlement",
+                "transactions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "conversion:read_conversion_stablecoin conversion:write_conversion_stablecoin exchange:historical_prices exchange:read_order exchange:read_quote exchange:read_quote_execution exchange:write_quote_execution exchange:write_order fee:write_crypto_withdrawal_fee funding:read_bank_balance funding:read_profile funding:write_profile identity:read_account identity:read_identity identity:write_account identity:write_identity settlement:read_transaction settlement:write_transaction tax:read_tax_form tax:read_tax_lot tax:write_tax_lot transfer:read_deposit_address transfer:read_fiat_account transfer:read_fiat_deposit_instructions transfer:read_transfer transfer:read_transfer_limit transfer:reject_crypto_deposit transfer:update_crypto_deposit transfer:write_crypto_withdrawal transfer:write_deposit_address transfer:write_fiat_account transfer:write_fiat_deposit_instructions transfer:write_internal_transfer transfer:write_sandbox_fiat_deposit transfer:write_fiat_withdrawal events:read_event"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://oauth.paxos.com/oauth2/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"ref_id\": \"<string>\",\n  \"settlement_window_start\": \"<dateTime>\",\n  \"settlement_window_end\": \"<dateTime>\",\n  \"source_profile_id\": \"<string>\",\n  \"target_profile_id\": \"<string>\",\n  \"legs\": [\n    {\n      \"direction\": \"<string>\",\n      \"asset\": \"<string>\",\n      \"amount\": \"<decimal>\"\n    },\n    {\n      \"direction\": \"<string>\",\n      \"asset\": \"<string>\",\n      \"amount\": \"<decimal>\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "f8e444a1-d2f7-49af-a5cd-7338659f83c8",
+              "name": "A successful response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "settlement",
+                    "transactions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"ref_id\": \"d840cf31-352f-4190-a476-7522bf3eafda\",\n  \"settlement_window_start\": \"2023-08-25T14:25:41Z\",\n  \"settlement_window_end\": \"2023-08-25T16:25:41Z\",\n  \"source_profile_id\": \"4fd025ab-f29f-47e6-a02e-df90a61c7ec9\",\n  \"target_profile_id\": \"47db6271-50d6-4934-8c81-c42d87bfb390\",\n  \"legs\": [\n    {\n      \"direction\": \"DELIVER\",\n      \"asset\": \"BTC\",\n      \"amount\": \"100\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"d99a03ee-6b88-4362-89da-087c2c8cd4a7\",\n  \"ref_id\": \"d840cf31-352f-4190-a476-7522bf3eafda\",\n  \"settlement_window_start\": \"2023-08-25T14:25:41.648486573Z\",\n  \"settlement_window_end\": \"2023-08-25T14:25:41.648486953Z\",\n  \"source_profile_id\": \"4fd025ab-f29f-47e6-a02e-df90a61c7ec9\",\n  \"target_profile_id\": \"47db6271-50d6-4934-8c81-c42d87bfb390\",\n  \"legs\": [\n    {\n      \"id\": \"ace21517-447e-4764-8733-765cb12a7fab\",\n      \"direction\": \"DELIVER\",\n      \"asset\": \"BTC\",\n      \"amount\": \"100\"\n    }\n  ],\n  \"status\": \"PENDING\",\n  \"created_at\": \"2023-08-25T14:25:41.648489333Z\",\n  \"updated_at\": \"2023-08-25T14:25:41.648489493Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "01255972-2540-48db-950e-a46555a70826",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "settlement",
+                    "transactions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"ref_id\": \"d840cf31-352f-4190-a476-7522bf3eafda\",\n  \"settlement_window_start\": \"2023-08-25T14:25:41Z\",\n  \"settlement_window_end\": \"2023-08-25T16:25:41Z\",\n  \"source_profile_id\": \"4fd025ab-f29f-47e6-a02e-df90a61c7ec9\",\n  \"target_profile_id\": \"47db6271-50d6-4934-8c81-c42d87bfb390\",\n  \"legs\": [\n    {\n      \"direction\": \"DELIVER\",\n      \"asset\": \"BTC\",\n      \"amount\": \"100\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"about:blank\",\n  \"title\": \"Bad Request\",\n  \"status\": 400\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5d64b6c1-8dbc-4cf9-9069-5d8ccc339279",
+              "name": "Insufficient scopes",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "settlement",
+                    "transactions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"ref_id\": \"d840cf31-352f-4190-a476-7522bf3eafda\",\n  \"settlement_window_start\": \"2023-08-25T14:25:41Z\",\n  \"settlement_window_end\": \"2023-08-25T16:25:41Z\",\n  \"source_profile_id\": \"4fd025ab-f29f-47e6-a02e-df90a61c7ec9\",\n  \"target_profile_id\": \"47db6271-50d6-4934-8c81-c42d87bfb390\",\n  \"legs\": [\n    {\n      \"direction\": \"DELIVER\",\n      \"asset\": \"BTC\",\n      \"amount\": \"100\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"about:blank\",\n  \"title\": \"Forbidden\",\n  \"status\": 403,\n  \"detail\": \"insufficient scopes: found 'settlement:read_transaction', required one of '[settlement:write_transaction]'\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f856182d-96cc-4fe4-b566-4df3767dffca",
+              "name": "Already Exists",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "settlement",
+                    "transactions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"ref_id\": \"d840cf31-352f-4190-a476-7522bf3eafda\",\n  \"settlement_window_start\": \"2023-08-25T14:25:41Z\",\n  \"settlement_window_end\": \"2023-08-25T16:25:41Z\",\n  \"source_profile_id\": \"4fd025ab-f29f-47e6-a02e-df90a61c7ec9\",\n  \"target_profile_id\": \"47db6271-50d6-4934-8c81-c42d87bfb390\",\n  \"legs\": [\n    {\n      \"direction\": \"DELIVER\",\n      \"asset\": \"BTC\",\n      \"amount\": \"100\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": 409,\n  \"title\": \"Conflict\",\n  \"type\": \"about:blank\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "e61c9bc7-f831-4040-b91b-effb639357cf",
+          "name": "Get Transaction",
+          "request": {
+            "name": "Get Transaction",
+            "description": {
+              "content": "Get a Settlement Transaction by its (transaction) id, you must have created the transaction (own the `source_profile_id`) or\nhave had the transaction alleged against you (own the `target_profile_id`).",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "settlement",
+                "transactions",
+                ":transaction_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "transaction_id",
+                  "description": "(Required) The unique `id` in the `Transaction` object."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "conversion:read_conversion_stablecoin conversion:write_conversion_stablecoin exchange:historical_prices exchange:read_order exchange:read_quote exchange:read_quote_execution exchange:write_quote_execution exchange:write_order fee:write_crypto_withdrawal_fee funding:read_bank_balance funding:read_profile funding:write_profile identity:read_account identity:read_identity identity:write_account identity:write_identity settlement:read_transaction settlement:write_transaction tax:read_tax_form tax:read_tax_lot tax:write_tax_lot transfer:read_deposit_address transfer:read_fiat_account transfer:read_fiat_deposit_instructions transfer:read_transfer transfer:read_transfer_limit transfer:reject_crypto_deposit transfer:update_crypto_deposit transfer:write_crypto_withdrawal transfer:write_deposit_address transfer:write_fiat_account transfer:write_fiat_deposit_instructions transfer:write_internal_transfer transfer:write_sandbox_fiat_deposit transfer:write_fiat_withdrawal events:read_event"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://oauth.paxos.com/oauth2/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "16bea492-6d3f-4c8f-b9f5-8a50581b65f6",
+              "name": "A successful response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "settlement",
+                    "transactions",
+                    ":transaction_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "transaction_id",
+                      "description": "(Required) The unique `id` in the `Transaction` object."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"id\": \"d99a03ee-6b88-4362-89da-087c2c8cd4a7\",\n    \"ref_id\": \"d840cf31-352f-4190-a476-7522bf3eafda\",\n    \"settlement_window_start\": \"2023-08-25T14:25:41.648486573Z\",\n    \"settlement_window_end\": \"2023-08-25T14:25:41.648486953Z\",\n    \"source_profile_id\": \"4fd025ab-f29f-47e6-a02e-df90a61c7ec9\",\n    \"target_profile_id\": \"47db6271-50d6-4934-8c81-c42d87bfb390\",\n    \"legs\": [\n      {\n        \"id\": \"ace21517-447e-4764-8733-765cb12a7fab\",\n        \"direction\": \"DELIVER\",\n        \"asset\": \"BTC\",\n        \"amount\": \"100\"\n      }\n    ],\n    \"status\": \"PENDING\",\n    \"created_at\": \"2023-08-25T14:25:41.648489333Z\",\n    \"updated_at\": \"2023-08-25T17:53:23.648489493Z\"\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "fda6f9ff-8fdf-4cc8-9afd-fe37cf3a8e24",
+              "name": "Insufficient scopes",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "settlement",
+                    "transactions",
+                    ":transaction_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "transaction_id",
+                      "description": "(Required) The unique `id` in the `Transaction` object."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"about:blank\",\n  \"title\": \"Forbidden\",\n  \"status\": 403,\n  \"detail\": \"insufficient scopes: found 'settlement:write_transaction', required one of '[settlement:read_transaction]'\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "fe834e19-75b0-4a8c-8604-4a45ca370f65",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "settlement",
+                    "transactions",
+                    ":transaction_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "transaction_id",
+                      "description": "(Required) The unique `id` in the `Transaction` object."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": 404,\n  \"title\": \"Not Found\",\n  \"type\": \"about:blank\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "82670190-2df8-4ff5-b42b-837150c0bc1e",
+          "name": "Cancel Transaction",
+          "request": {
+            "name": "Cancel Transaction",
+            "description": {
+              "content": "Cancels the Settlement Transaction, this action can only be done by the customer owning the source profile (`source_profile_id`).\nThe transaction must be in a `\"PENDING\"` status for this to take effect, you cannot cancel a transaction which\nis `\"AFFIRMED\"`.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "settlement",
+                "transactions",
+                ":transaction_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "transaction_id",
+                  "description": "(Required) The unique `id` in the `Transaction` object."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "conversion:read_conversion_stablecoin conversion:write_conversion_stablecoin exchange:historical_prices exchange:read_order exchange:read_quote exchange:read_quote_execution exchange:write_quote_execution exchange:write_order fee:write_crypto_withdrawal_fee funding:read_bank_balance funding:read_profile funding:write_profile identity:read_account identity:read_identity identity:write_account identity:write_identity settlement:read_transaction settlement:write_transaction tax:read_tax_form tax:read_tax_lot tax:write_tax_lot transfer:read_deposit_address transfer:read_fiat_account transfer:read_fiat_deposit_instructions transfer:read_transfer transfer:read_transfer_limit transfer:reject_crypto_deposit transfer:update_crypto_deposit transfer:write_crypto_withdrawal transfer:write_deposit_address transfer:write_fiat_account transfer:write_fiat_deposit_instructions transfer:write_internal_transfer transfer:write_sandbox_fiat_deposit transfer:write_fiat_withdrawal events:read_event"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://oauth.paxos.com/oauth2/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "ffb8a53c-920b-4674-ad9c-fd912cc0e17f",
+              "name": "A successful response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "settlement",
+                    "transactions",
+                    ":transaction_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "transaction_id",
+                      "description": "(Required) The unique `id` in the `Transaction` object."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"d99a03ee-6b88-4362-89da-087c2c8cd4a7\",\n  \"ref_id\": \"d840cf31-352f-4190-a476-7522bf3eafda\",\n  \"settlement_window_start\": \"2023-08-25T14:25:41.648486573Z\",\n  \"settlement_window_end\": \"2023-08-25T14:25:41.648486953Z\",\n  \"source_profile_id\": \"4fd025ab-f29f-47e6-a02e-df90a61c7ec9\",\n  \"target_profile_id\": \"47db6271-50d6-4934-8c81-c42d87bfb390\",\n  \"legs\": [\n    {\n      \"id\": \"ace21517-447e-4764-8733-765cb12a7fab\",\n      \"direction\": \"DELIVER\",\n      \"asset\": \"BTC\",\n      \"amount\": \"100\"\n    }\n  ],\n  \"status\": \"CANCELLED\",\n  \"created_at\": \"2023-08-25T14:25:41.648489333Z\",\n  \"updated_at\": \"2023-08-25T17:53:23.648489493Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0ea011cd-956e-4cf1-bc43-272041d8e1cf",
+              "name": "Insufficient scopes",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "settlement",
+                    "transactions",
+                    ":transaction_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "transaction_id",
+                      "description": "(Required) The unique `id` in the `Transaction` object."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"about:blank\",\n  \"title\": \"Forbidden\",\n  \"status\": 403,\n  \"detail\": \"insufficient scopes: found 'settlement:read_transaction', required one of '[settlement:write_transaction]'\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "642a1fbd-2cc3-4f30-9506-50739c6ff8a8",
+              "name": "Already Exists",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "settlement",
+                    "transactions",
+                    ":transaction_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "transaction_id",
+                      "description": "(Required) The unique `id` in the `Transaction` object."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": 409,\n  \"title\": \"Conflict\",\n  \"type\": \"about:blank\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "5ae57c2f-e856-4424-988a-85c0467cc451",
+          "name": "Affirm Transaction",
+          "request": {
+            "name": "Affirm Transaction",
+            "description": {
+              "content": "Affirms the Settlement Transaction for settlement, the transaction is now eligible for settlement once the current time is\nbetween the provided `settlement_window_start` and `settlement_window_end`. This action can only be done by the\ncustomer owning the target profile (`target_profile_id`).\nThe transaction must be in a `\"PENDING\"` status for this to take effect.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "settlement",
+                "transactions",
+                ":transaction_id",
+                "affirm"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "transaction_id",
+                  "description": "(Required) The unique `id` in the `Transaction` object."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "conversion:read_conversion_stablecoin conversion:write_conversion_stablecoin exchange:historical_prices exchange:read_order exchange:read_quote exchange:read_quote_execution exchange:write_quote_execution exchange:write_order fee:write_crypto_withdrawal_fee funding:read_bank_balance funding:read_profile funding:write_profile identity:read_account identity:read_identity identity:write_account identity:write_identity settlement:read_transaction settlement:write_transaction tax:read_tax_form tax:read_tax_lot tax:write_tax_lot transfer:read_deposit_address transfer:read_fiat_account transfer:read_fiat_deposit_instructions transfer:read_transfer transfer:read_transfer_limit transfer:reject_crypto_deposit transfer:update_crypto_deposit transfer:write_crypto_withdrawal transfer:write_deposit_address transfer:write_fiat_account transfer:write_fiat_deposit_instructions transfer:write_internal_transfer transfer:write_sandbox_fiat_deposit transfer:write_fiat_withdrawal events:read_event"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://oauth.paxos.com/oauth2/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "d6fb7dd3-1f8f-4a9c-894a-dd15c5e2614a",
+              "name": "A successful response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "settlement",
+                    "transactions",
+                    ":transaction_id",
+                    "affirm"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "transaction_id",
+                      "description": "(Required) The unique `id` in the `Transaction` object."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"d99a03ee-6b88-4362-89da-087c2c8cd4a7\",\n  \"ref_id\": \"d840cf31-352f-4190-a476-7522bf3eafda\",\n  \"settlement_window_start\": \"2023-08-25T14:25:41.648486573Z\",\n  \"settlement_window_end\": \"2023-08-25T14:25:41.648486953Z\",\n  \"source_profile_id\": \"4fd025ab-f29f-47e6-a02e-df90a61c7ec9\",\n  \"target_profile_id\": \"47db6271-50d6-4934-8c81-c42d87bfb390\",\n  \"legs\": [\n    {\n      \"id\": \"ace21517-447e-4764-8733-765cb12a7fab\",\n      \"direction\": \"DELIVER\",\n      \"asset\": \"BTC\",\n      \"amount\": \"100\"\n    }\n  ],\n  \"status\": \"AFFIRMED\",\n  \"created_at\": \"2023-08-25T14:25:41.648489333Z\",\n  \"updated_at\": \"2023-08-25T17:53:23.648489493Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e92d24a7-08ab-4ee4-bc85-a6202cf35ef6",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "settlement",
+                    "transactions",
+                    ":transaction_id",
+                    "affirm"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "transaction_id",
+                      "description": "(Required) The unique `id` in the `Transaction` object."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"about:blank\",\n  \"title\": \"Bad Request\",\n  \"status\": 400\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "29cf9fdb-c8da-4148-bc4f-16742e3d5257",
+              "name": "Insufficient scopes",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "settlement",
+                    "transactions",
+                    ":transaction_id",
+                    "affirm"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "transaction_id",
+                      "description": "(Required) The unique `id` in the `Transaction` object."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"about:blank\",\n  \"title\": \"Forbidden\",\n  \"status\": 403,\n  \"detail\": \"insufficient scopes: found 'settlement:write_transaction', required one of '[settlement:read_transaction]'\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.paxos.com/v2",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "837a255c-49ff-4186-bf6d-7bc8f7699e5f",
+    "name": "Paxos Account Members Settlement API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "<p>Welcome to Paxos APIs. At Paxos, our mission is to enable the movement of any asset, any time, in a trustworthy way. These APIs serve that mission by making it easier than ever for you to directly integrate our product capabilities into your application, leveraging the speed, stability, and security of the Paxos platform.</p> <p>The documentation that follows gives you access to our Crypto Brokerage, Trading, and Exchange products. It includes APIs for market data, orders, and the held rate quote flow.</p> <p>To test in our sandbox environment, <a href=\"https://account.sandbox.paxos.com\" target=\"_blank\">sign up</a> for an account. For more information about Paxos and our APIs, visit <a href=\"https://www.paxos.com/\" target=\"_blank\">Paxos.com</a>.</p>\n",
+      "type": "text/plain"
+    }
+  }
+}

@@ -1,0 +1,388 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Paxos Account Members Fiat Transfers API",
+    "version": "2.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Fiat Transfers",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Fiat Accounts",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.paxos.com/v2/transfer/fiat-accounts",
+            "params": [
+              {
+                "name": "ids",
+                "value": "",
+                "type": "query",
+                "description": "Optionally filter by the UUIDs of the accounts. Limit 100."
+              },
+              {
+                "name": "ref_ids",
+                "value": "",
+                "type": "query",
+                "description": "Optionally filter by the client-specified IDs provided during account creation. Limit 100."
+              },
+              {
+                "name": "created_at.lt",
+                "value": "",
+                "type": "query",
+                "description": "Include timestamps strictly less than lt. RFC3339 format, like `2006-01-02T15:04:05Z`."
+              },
+              {
+                "name": "created_at.lte",
+                "value": "",
+                "type": "query",
+                "description": "Include timestamps less than or equal to lte. RFC3339 format, like `2006-01-02T15:04:05Z`."
+              },
+              {
+                "name": "created_at.eq",
+                "value": "",
+                "type": "query",
+                "description": "Include timestamps exactly equal to eq. RFC3339 format, like `2006-01-02T15:04:05Z`."
+              },
+              {
+                "name": "created_at.gte",
+                "value": "",
+                "type": "query",
+                "description": "Include timestamps greater than or equal to gte. RFC3339 format, like `2006-01-02T15:04:05Z`."
+              },
+              {
+                "name": "created_at.gt",
+                "value": "",
+                "type": "query",
+                "description": "Include timestamps strictly greater than gt. RFC3339 format, like `2006-01-02T15:04:05Z`."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of results to return. Defaults to 100 if no limit is provided. Maximum 1000."
+              },
+              {
+                "name": "order",
+                "value": "",
+                "type": "query",
+                "description": "Return items in ascending (ASC) or descending (DESC) order. Defaults to DESC."
+              },
+              {
+                "name": "order_by",
+                "value": "",
+                "type": "query",
+                "description": "The specific method by which the returned results will be ordered. Defaults to CREATED_AT."
+              },
+              {
+                "name": "page_cursor",
+                "value": "",
+                "type": "query",
+                "description": "Optional: Cursor for getting the next page of results."
+              },
+              {
+                "name": "include_deleted",
+                "value": "",
+                "type": "query",
+                "description": "Used to include deleted accounts in the response."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://oauth.paxos.com/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "List all Fiat Accounts, optionally filtering and paging the results.\nThe response includes an abbreviated `FiatAccount` object:\n\n- Beneficiary name and address details are excluded.\n- Only the last four (**4**) digits of the account number are included.\n\nUse [Get Fiat Account](#operation/GetFiatAccount) to retrieve the complete `FiatAccount` object.\n\nThe paginated results default to the maximum limit of 1,000 Fiat Accounts, unless otherwise specified with the `limit` parameter.\nEvery paginated r"
+        },
+        {
+          "info": {
+            "name": "Create Fiat Account",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.paxos.com/v2/transfer/fiat-accounts",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://oauth.paxos.com/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Create an account to initiate a fiat withdrawal.\n\nFor U.S. wires, set `fiat_network_instructions` > `wire` > `routing_details` > `routing_number_type` to `ABA`. For international (SWIFT) wires, set `fiat_network_instructions` > `wire` > `routing_details` > `routing_number_type` to `SWIFT`.\nFor CUBIX, set `fiat_network_instructions` > `cubix` > `account_id`, and do not specify `routing_number_type`. For CUBIX, the `account_id` is the CUBIX account ID."
+        },
+        {
+          "info": {
+            "name": "Get Fiat Account",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.paxos.com/v2/transfer/fiat-accounts/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The Paxos fiat account ID (UUID).\nThe Fiat Account ID (`id`) is provided in the response of the [Create Fiat Account](#operation/CreateFiatAccount).\nUse this ID to retrieve the instructions using [Get Fiat Account](#operation/GetFiatAccount) & [List Fiat Accounts](#operation/ListFiatAccounts)."
+              },
+              {
+                "name": "include_deleted",
+                "value": "",
+                "type": "query",
+                "description": "Used to include deleted accounts in the response."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://oauth.paxos.com/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Get a single Fiat Account by ID.\n\nIn the polling workflow, this endpoint can be called to monitor a FiatAccount's status.\nThe Fiat Account response includes the full account number, beneficiary name and address details."
+        },
+        {
+          "info": {
+            "name": "Update Fiat Account",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.paxos.com/v2/transfer/fiat-accounts/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The Paxos fiat account ID (UUID).\nThe Fiat Account ID (`id`) is provided in the response of the [Create Fiat Account](#operation/CreateFiatAccount).\nUse this ID to retrieve the instructions using [Get Fiat Account](#operation/GetFiatAccount) & [List Fiat Accounts](#operation/ListFiatAccounts)."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://oauth.paxos.com/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Change an existing value or add a new value on one or more fields for the given Fiat Account and return the modified Fiat Account in `PENDING` status.\nUpdate fields in **either** `fiat_account_owner.person_details` or `fiat_account_owner.institution_details`.\nAttempts to convert the `fiat_account_owner` type results in an error.\nEmpty strings or null values are ignored.\n\nUpon successful response, Paxos initiates an automated review of the requested changes and then either sets the status to `APP"
+        },
+        {
+          "info": {
+            "name": "Delete Fiat Account",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.paxos.com/v2/transfer/fiat-accounts/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The Paxos fiat account ID (UUID)."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://oauth.paxos.com/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Delete a Fiat Account.\nOnce a Fiat Account is deleted, transfers cannot be initiated to it."
+        },
+        {
+          "info": {
+            "name": "List Fiat Deposit Instructions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.paxos.com/v2/transfer/fiat-deposit-instructions",
+            "params": [
+              {
+                "name": "ids",
+                "value": "",
+                "type": "query",
+                "description": "Optionally filter by the UUIDs of the instructions. Limit 100."
+              },
+              {
+                "name": "ref_ids",
+                "value": "",
+                "type": "query",
+                "description": "Optionally filter by the client-specified IDs provided during instructions creation. Limit 100."
+              },
+              {
+                "name": "created_at.lt",
+                "value": "",
+                "type": "query",
+                "description": "Include timestamps strictly less than lt. RFC3339 format, like `2006-01-02T15:04:05Z`."
+              },
+              {
+                "name": "created_at.lte",
+                "value": "",
+                "type": "query",
+                "description": "Include timestamps less than or equal to lte. RFC3339 format, like `2006-01-02T15:04:05Z`."
+              },
+              {
+                "name": "created_at.eq",
+                "value": "",
+                "type": "query",
+                "description": "Include timestamps exactly equal to eq. RFC3339 format, like `2006-01-02T15:04:05Z`."
+              },
+              {
+                "name": "created_at.gte",
+                "value": "",
+                "type": "query",
+                "description": "Include timestamps greater than or equal to gte. RFC3339 format, like `2006-01-02T15:04:05Z`."
+              },
+              {
+                "name": "created_at.gt",
+                "value": "",
+                "type": "query",
+                "description": "Include timestamps strictly greater than gt. RFC3339 format, like `2006-01-02T15:04:05Z`."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of results to return. Defaults to 100 if no limit is provided. Maximum 1000."
+              },
+              {
+                "name": "order",
+                "value": "",
+                "type": "query",
+                "description": "Return items in ascending (ASC) or descending (DESC) order. Defaults to DESC."
+              },
+              {
+                "name": "page_cursor",
+                "value": "",
+                "type": "query",
+                "description": "Optional: Cursor for getting the next page of results."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://oauth.paxos.com/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Return the associated Fiat Deposit Instructions matching the search criteria for the current Account.\nThe paginated results default to the maximum limit of 1,000 Fiat Deposit instructions, unless otherwise specified with the `limit` parameter.\nEvery paginated response contains a `next_page` field until the last page is reached.\nPass the `next_page` value into the `page_cursor` field of the next request to retrieve the next page of results."
+        },
+        {
+          "info": {
+            "name": "Create Fiat Deposit Instructions",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.paxos.com/v2/transfer/fiat-deposit-instructions",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://oauth.paxos.com/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Create instructions for depositing fiat."
+        },
+        {
+          "info": {
+            "name": "Get Fiat Deposit Instructions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.paxos.com/v2/transfer/fiat-deposit-instructions/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Retrieve the Paxos Fiat Deposit Instructions for the given `id`."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://oauth.paxos.com/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Get instructions for depositing fiat using a Paxos Fiat Deposit Instructions ID.\nThe Fiat Deposit Instructions ID (`id`) is provided in the response of the [Create Fiat Deposit Instructions](#operation/CreateFiatDepositInstructions)."
+        },
+        {
+          "info": {
+            "name": "Create Fiat Withdrawal",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.paxos.com/v2/transfer/fiat-withdrawals",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://oauth.paxos.com/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Withdraw fiat to the given destination."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

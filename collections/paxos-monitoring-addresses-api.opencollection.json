@@ -1,0 +1,154 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Paxos Account Members Monitoring Addresses API",
+    "version": "2.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Monitoring Addresses",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Monitoring Address",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.paxos.com/v2/rewards/monitor/address",
+            "params": [
+              {
+                "name": "address",
+                "value": "",
+                "type": "query",
+                "description": "On-chain address Paxos is monitoring for eligible reward activity. Must be valid for the specified network.\nFor `SOLANA` specify the wallet account (ie: not a derived/token account like an ATA)."
+              },
+              {
+                "name": "crypto_network",
+                "value": "",
+                "type": "query",
+                "description": "Network the address belongs to. Supported: `ETHEREUM`, `SOLANA`, `INK`, `XLAYER`."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of results to return. Defaults to `100` if no limit is provided. Maximum `1000`."
+              },
+              {
+                "name": "order",
+                "value": "",
+                "type": "query",
+                "description": "Results are ordered by `created_at`. Specify the ordering of the results. Defaults to `DESC`."
+              },
+              {
+                "name": "page_cursor",
+                "value": "",
+                "type": "query",
+                "description": "Cursor for pagination"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://oauth.paxos.com/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Retrieve a list of monitoring address\n\nFilter by network to retrieve a list of addresses on that network, or filter by network & address to retrieve a single record."
+        },
+        {
+          "info": {
+            "name": "Create Monitoring Address",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.paxos.com/v2/rewards/monitor/address",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://oauth.paxos.com/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Adds an address to be monitored for rewards tracking.\n\nCurrently only `ETHEREUM`, `SOLANA`, `INK` & `XLAYER` addresses are supported."
+        },
+        {
+          "info": {
+            "name": "Get Monitoring Address",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.paxos.com/v2/rewards/monitor/address/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "UUID direct reference to a particular monitored address."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://oauth.paxos.com/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Retrieves a monitoring address by ID"
+        },
+        {
+          "info": {
+            "name": "Update Monitoring Address",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.paxos.com/v2/rewards/monitor/address/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "UUID direct reference to a particular monitored address."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://oauth.paxos.com/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Updates a monitored address name"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

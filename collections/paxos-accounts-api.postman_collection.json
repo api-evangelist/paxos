@@ -1,0 +1,624 @@
+{
+  "item": [
+    {
+      "id": "bb296bdb-046f-4219-8011-f3694149b65a",
+      "name": "Accounts",
+      "description": {
+        "content": "Accounts connect Identities (persons or institutions) to Profiles (asset balances).\nKey features include:\n\n- **Balance Management**: Track and manage profile balances via [Subledgering](https://docs.paxos.com/crypto-brokerage/ledger-type#fiat-and-crypto-subledger)\n- **Joint Account Support**: Link multiple Identities to a single Account for shared on platform balance\n\nAccounts are required for all Identity API integrations.\n",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "85aefc98-abb3-4c83-a5f4-0edfbcccd810",
+          "name": "List Accounts",
+          "request": {
+            "name": "List Accounts",
+            "description": {
+              "content": "List accounts with pagination. Every response will contain a `next_page` field,\nas long as the end of the list has not been reached. Pass this value into the `page_cursor` field of the next request\nto retrieve the next page of results.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "identity",
+                "accounts"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "page_cursor",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "order",
+                  "value": "<string>",
+                  "description": "Return items in ascending (ASC) or descending (DESC) order. Defaults to DESC."
+                },
+                {
+                  "disabled": false,
+                  "key": "order_by",
+                  "value": "<string>",
+                  "description": "The specific method by which the returned results will be ordered."
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "<integer>",
+                  "description": "Number of results to return."
+                },
+                {
+                  "disabled": false,
+                  "key": "created_at.lt",
+                  "value": "<dateTime>",
+                  "description": "Include timestamps strictly less than lt. RFC3339 format, like `2006-01-02T15:04:05Z`."
+                },
+                {
+                  "disabled": false,
+                  "key": "created_at.lte",
+                  "value": "<dateTime>",
+                  "description": "Include timestamps less than or equal to lte. RFC3339 format, like `2006-01-02T15:04:05Z`."
+                },
+                {
+                  "disabled": false,
+                  "key": "created_at.eq",
+                  "value": "<dateTime>",
+                  "description": "Include timestamps exactly equal to eq. RFC3339 format, like `2006-01-02T15:04:05Z`."
+                },
+                {
+                  "disabled": false,
+                  "key": "created_at.gte",
+                  "value": "<dateTime>",
+                  "description": "Include timestamps greater than or equal to gte. RFC3339 format, like `2006-01-02T15:04:05Z`."
+                },
+                {
+                  "disabled": false,
+                  "key": "created_at.gt",
+                  "value": "<dateTime>",
+                  "description": "Include timestamps strictly greater than gt. RFC3339 format, like `2006-01-02T15:04:05Z`."
+                },
+                {
+                  "disabled": false,
+                  "key": "identity_id",
+                  "value": "<string>",
+                  "description": "Optionally filter by primary identity identity."
+                },
+                {
+                  "disabled": false,
+                  "key": "updated_at.lt",
+                  "value": "<dateTime>",
+                  "description": "Include timestamps strictly less than lt. RFC3339 format, like `2006-01-02T15:04:05Z`."
+                },
+                {
+                  "disabled": false,
+                  "key": "updated_at.lte",
+                  "value": "<dateTime>",
+                  "description": "Include timestamps less than or equal to lte. RFC3339 format, like `2006-01-02T15:04:05Z`."
+                },
+                {
+                  "disabled": false,
+                  "key": "updated_at.eq",
+                  "value": "<dateTime>",
+                  "description": "Include timestamps exactly equal to eq. RFC3339 format, like `2006-01-02T15:04:05Z`."
+                },
+                {
+                  "disabled": false,
+                  "key": "updated_at.gte",
+                  "value": "<dateTime>",
+                  "description": "Include timestamps greater than or equal to gte. RFC3339 format, like `2006-01-02T15:04:05Z`."
+                },
+                {
+                  "disabled": false,
+                  "key": "updated_at.gt",
+                  "value": "<dateTime>",
+                  "description": "Include timestamps strictly greater than gt. RFC3339 format, like `2006-01-02T15:04:05Z`."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "conversion:read_conversion_stablecoin conversion:write_conversion_stablecoin exchange:historical_prices exchange:read_order exchange:read_quote exchange:read_quote_execution exchange:write_quote_execution exchange:write_order fee:write_crypto_withdrawal_fee funding:read_bank_balance funding:read_profile funding:write_profile identity:read_account identity:read_identity identity:write_account identity:write_identity settlement:read_transaction settlement:write_transaction tax:read_tax_form tax:read_tax_lot tax:write_tax_lot transfer:read_deposit_address transfer:read_fiat_account transfer:read_fiat_deposit_instructions transfer:read_transfer transfer:read_transfer_limit transfer:reject_crypto_deposit transfer:update_crypto_deposit transfer:write_crypto_withdrawal transfer:write_deposit_address transfer:write_fiat_account transfer:write_fiat_deposit_instructions transfer:write_internal_transfer transfer:write_sandbox_fiat_deposit transfer:write_fiat_withdrawal events:read_event"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://oauth.paxos.com/oauth2/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "a1cdb6e1-52fe-4e11-9ba4-7fe3c2efdb57",
+              "name": "A successful response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "identity",
+                    "accounts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page_cursor",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "order",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "order_by",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "created_at.lt",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "created_at.lte",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "created_at.eq",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "created_at.gte",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "created_at.gt",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "identity_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "updated_at.lt",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "updated_at.lte",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "updated_at.eq",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "updated_at.gte",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "updated_at.gt",
+                      "value": "<dateTime>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"next_page_cursor\": \"string\",\n  \"items\": [\n    {\n      \"id\": \"string\",\n      \"identity_id\": \"string\",\n      \"description\": \"string\",\n      \"admin_disabled\": true,\n      \"user_disabled\": false,\n      \"metadata\": {\n        \"key_0\": \"string\",\n        \"key_1\": \"string\"\n      },\n      \"ref_id\": \"string\",\n      \"members\": [\n        {\n          \"identity_id\": \"string\",\n          \"type\": \"FINANCIAL_ADVISOR\",\n          \"roles\": [\n            \"AUTHORIZED_USER\",\n            \"BENEFICIAL_OWNER\"\n          ],\n          \"id\": \"string\"\n        },\n        {\n          \"identity_id\": \"string\",\n          \"type\": \"AUTHORIZED_USER\",\n          \"roles\": [\n            \"BENEFICIAL_OWNER\",\n            \"AUTHORIZED_USER\"\n          ],\n          \"id\": \"string\"\n        }\n      ],\n      \"created_at\": \"1963-10-08T22:08:08.554Z\",\n      \"summary_status\": \"DENIED\",\n      \"updated_at\": \"1948-04-03T09:25:26.462Z\",\n      \"profile_id\": \"string\",\n      \"type\": \"SEP_IRA\"\n    },\n    {\n      \"id\": \"string\",\n      \"identity_id\": \"string\",\n      \"description\": \"string\",\n      \"admin_disabled\": true,\n      \"user_disabled\": false,\n      \"metadata\": {\n        \"key_0\": \"string\"\n      },\n      \"ref_id\": \"string\",\n      \"members\": [\n        {\n          \"identity_id\": \"string\",\n          \"type\": \"AUTHORIZED_USER\",\n          \"roles\": [\n            \"BENEFICIAL_OWNER\",\n            \"AUTHORIZED_USER\"\n          ],\n          \"id\": \"string\"\n        },\n        {\n          \"identity_id\": \"string\",\n          \"type\": \"AUTHORIZED_USER\",\n          \"roles\": [\n            \"BENEFICIAL_OWNER\",\n            \"FINANCIAL_ADVISOR\"\n          ],\n          \"id\": \"string\"\n        }\n      ],\n      \"created_at\": \"1954-02-14T21:23:06.980Z\",\n      \"summary_status\": \"DENIED\",\n      \"updated_at\": \"1993-01-05T08:57:10.666Z\",\n      \"profile_id\": \"string\",\n      \"type\": \"ROTH_IRA\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "01c985b3-b975-4288-abb6-82ec35290326",
+          "name": "Create Account",
+          "request": {
+            "name": "Create Account",
+            "description": {
+              "content": "Create an account for a given identity, via the `identity_id` field.\nThis identity is the primary owner of the account for all tax-related purposes.\n\nTo track user balances using Paxos [Profiles](#tag/Profiles), use `create_profile=true` when creating the account.\nOnce an account has been created, it is not possible to associate it with a [Profile](#tag/Profiles).\n\n### Account Members\n\nIn addition to the primary owner, other identities may be associated with the account, by using `members`.\nThe identity on the account is treated as a BENEFICIAL_OWNER.\n\nTo add a financial advisor to an account, add a member with the FINANCIAL_ADVISOR role.\n\n#### Example\nThis example request creates a joint account for John and Jane Doe. John has identity_id=82c338f4-3cb7-4d9b-be2a-4b077c82ee3a,\nand Jane has identity_id=0f5d8475-33f3-4ebd-88a0-66dedc2581c1. John is the primary owner of the account for tax-purposes, but Jane\nis a full beneficial owner.\n\nAdditionally, this account has an associated financial advisor with identity_id=0d26f878-298e-4d47-81be-cdf4e982a3d3.\n\n```json\n{\n\"account\": {\n\"identity_id\": \"82c338f4-3cb7-4d9b-be2a-4b077c82ee3a\",\n\"members\": [{\n\"identity_id\": \"0f5d8475-33f3-4ebd-88a0-66dedc2581c1\",\n\"roles\": [\"BENEFICIAL_OWNER\"]\n}, {\n\"identity_id\": \"0d26f878-298e-4d47-81be-cdf4e982a3d3\",\n\"roles\": [\"FINANCIAL_ADVISOR\"]\n}]\n}\n}\n```\n\n### Fields\n\nAny fields not listed are forbidden in this request.\n\nField | Notes\n---|---\nidentity_id | Required\ndescription | Optional\nmetadata | Optional\nref_id | Optional\nmembers | Optional",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "identity",
+                "accounts"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "conversion:read_conversion_stablecoin conversion:write_conversion_stablecoin exchange:historical_prices exchange:read_order exchange:read_quote exchange:read_quote_execution exchange:write_quote_execution exchange:write_order fee:write_crypto_withdrawal_fee funding:read_bank_balance funding:read_profile funding:write_profile identity:read_account identity:read_identity identity:write_account identity:write_identity settlement:read_transaction settlement:write_transaction tax:read_tax_form tax:read_tax_lot tax:write_tax_lot transfer:read_deposit_address transfer:read_fiat_account transfer:read_fiat_deposit_instructions transfer:read_transfer transfer:read_transfer_limit transfer:reject_crypto_deposit transfer:update_crypto_deposit transfer:write_crypto_withdrawal transfer:write_deposit_address transfer:write_fiat_account transfer:write_fiat_deposit_instructions transfer:write_internal_transfer transfer:write_sandbox_fiat_deposit transfer:write_fiat_withdrawal events:read_event"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://oauth.paxos.com/oauth2/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"account\": {\n    \"id\": \"<string>\",\n    \"identity_id\": \"<string>\",\n    \"description\": \"<string>\",\n    \"admin_disabled\": \"<boolean>\",\n    \"user_disabled\": \"<boolean>\",\n    \"metadata\": {\n      \"key_0\": \"<string>\",\n      \"key_1\": \"<string>\",\n      \"key_2\": \"<string>\"\n    },\n    \"ref_id\": \"<string>\",\n    \"members\": [\n      {\n        \"identity_id\": \"<string>\",\n        \"type\": \"<string>\",\n        \"roles\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"id\": \"<string>\"\n      },\n      {\n        \"identity_id\": \"<string>\",\n        \"type\": \"<string>\",\n        \"roles\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"id\": \"<string>\"\n      }\n    ],\n    \"created_at\": \"<dateTime>\",\n    \"summary_status\": \"<string>\",\n    \"updated_at\": \"<dateTime>\",\n    \"profile_id\": \"<string>\",\n    \"type\": \"<string>\"\n  },\n  \"create_profile\": \"<boolean>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "7f6d77b9-5a4b-4da8-bb87-8a544242ee3c",
+              "name": "A successful response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "identity",
+                    "accounts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"account\": {\n    \"identity_id\": \"82c338f4-3cb7-4d9b-be2a-4b077c82ee3a\",\n    \"ref_id\": \"fec36070-4c23-48ac-9ee1-df338b8233fc\",\n    \"description\": \"Individual account for John Doe\",\n    \"metadata\": {\n      \"custom_field\": \"custom_value\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"e69e4e31-6dca-4a46-bb85-af40b5fe2d59\",\n  \"identity_id\": \"82c338f4-3cb7-4d9b-be2a-4b077c82ee3a\",\n  \"ref_id\": \"fec36070-4c23-48ac-9ee1-df338b8233fc\",\n  \"description\": \"Individual account for John Doe\",\n  \"metadata\": {\n    \"custom_field\": \"custom_value\"\n  },\n  \"admin_disabled\": false,\n  \"user_disabled\": false\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "f49ea8eb-45d4-4813-959d-0c1da1d93ad2",
+          "name": "Update Account",
+          "request": {
+            "name": "Update Account",
+            "description": {
+              "content": "This enables you to update an existing account with new information. Please refer to the following\ntable for fields that can be updated via this endpoint.\n\nField | Notes\n---|---\naccount.id | Required\naccount.description | Optional\naccount.ref_id | Optional\naccount.metadata | Optional. This will overwrite any existing metadata added to the account.\naccount.members | Optional. The only roles that can be added/removed are `FINANCIAL_ADVISOR` or `AUTHORIZED_USER.` You must always specify the full members object as we do not currently support differential member updates.\nset_user_disabled | Optional. Setting this to `true` will disable the account, limiting its ability to be used within the Paxos platform.\n\n#### Example Requests\n#### Disabling an account\n\n```json\n{\n\"set_user_disabled\": true,\n\"account\": {\n\"id\": \"82c338f4-3cb7-4d9b-be2a-4b077c82ee3a\",\n\"description\": \"Account Description\",\n\"ref_id\": \"82c338f4-3cb7\"\n}\n}\n```\n\n### Adding an account member\nTo retain the existing account members and add a new account member, the `members` field must contain the existing \naccount members and the new member. The below example adds an `AUTHORIZED_USER` to the account.\n\nIn order to add account members while leaving existing account members unaffected, clients \nshould use the [Add Account Members](#operation/AddAccountMembers) API.\n\n```json\n{\n\"account\": {\n\"id\": \"82c338f4-3cb7-4d9b-be2a-4b077c82ee3a\",\n\"members\": [{\n\"identity_id\": \"0f5d8475-33f3-4ebd-88a0-66dedc2581c1\",\n\"roles\": [\"BENEFICIAL_OWNER\"]\n}, {\n\"identity_id\": \"0d26f878-298e-4d47-81be-cdf4e982a3d3\",\n\"roles\": [\"FINANCIAL_ADVISOR\"]\n}, {\n\"identity_id\": \"012k23eb-298e-4d47-81be-cdf4e982a3d3\",\n\"roles\": [\"AUTHORIZED_USER\"]\n}]\n}\n}\n```\n\n### Removing an account member\nTo remove an existing account member and retain other needed members, the `members` field must contain \nthe existing account members without the account member you'd like to remove. The below example removes an `AUTHORIZED_USER` from the account.\n\nNote, this API requires the `members` array to have at least one element. In order to delete all members \nfrom an account, clients should use the [Delete Account Member](#operation/DeleteAccountMember) API.\n\n```json\n{\n\"account\": {\n\"id\": \"82c338f4-3cb7-4d9b-be2a-4b077c82ee3a\",\n\"members\": [{\n\"identity_id\": \"0f5d8475-33f3-4ebd-88a0-66dedc2581c1\",\n\"roles\": [\"BENEFICIAL_OWNER\"]\n}]\n}\n}\n```\n\n### Updating an account members' roles\nTo update an account members' roles, the `members` field must contain all the existing members with their roles along \nwith the additional role that you'd like to add or remove. The below example adds the `FINANCIAL_ADVISOR` role to an member that is already a `BENEFICIAL_OWNER`.\n\n```json\n{\n\"account\": {\n\"id\": \"82c338f4-3cb7-4d9b-be2a-4b077c82ee3a\",\n\"members\": [{\n\"identity_id\": \"0f5d8475-33f3-4ebd-88a0-66dedc2581c1\",\n\"roles\": [\"BENEFICIAL_OWNER\", \"FINANCIAL_ADVISOR\"]\n}]\n}\n}\n```",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "identity",
+                "accounts"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "conversion:read_conversion_stablecoin conversion:write_conversion_stablecoin exchange:historical_prices exchange:read_order exchange:read_quote exchange:read_quote_execution exchange:write_quote_execution exchange:write_order fee:write_crypto_withdrawal_fee funding:read_bank_balance funding:read_profile funding:write_profile identity:read_account identity:read_identity identity:write_account identity:write_identity settlement:read_transaction settlement:write_transaction tax:read_tax_form tax:read_tax_lot tax:write_tax_lot transfer:read_deposit_address transfer:read_fiat_account transfer:read_fiat_deposit_instructions transfer:read_transfer transfer:read_transfer_limit transfer:reject_crypto_deposit transfer:update_crypto_deposit transfer:write_crypto_withdrawal transfer:write_deposit_address transfer:write_fiat_account transfer:write_fiat_deposit_instructions transfer:write_internal_transfer transfer:write_sandbox_fiat_deposit transfer:write_fiat_withdrawal events:read_event"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://oauth.paxos.com/oauth2/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"account\": {\n    \"id\": \"<string>\",\n    \"identity_id\": \"<string>\",\n    \"description\": \"<string>\",\n    \"admin_disabled\": \"<boolean>\",\n    \"user_disabled\": \"<boolean>\",\n    \"metadata\": {\n      \"key_0\": \"<string>\",\n      \"key_1\": \"<string>\",\n      \"key_2\": \"<string>\"\n    },\n    \"ref_id\": \"<string>\",\n    \"members\": [\n      {\n        \"identity_id\": \"<string>\",\n        \"type\": \"<string>\",\n        \"roles\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"id\": \"<string>\"\n      },\n      {\n        \"identity_id\": \"<string>\",\n        \"type\": \"<string>\",\n        \"roles\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"id\": \"<string>\"\n      }\n    ],\n    \"created_at\": \"<dateTime>\",\n    \"summary_status\": \"<string>\",\n    \"updated_at\": \"<dateTime>\",\n    \"profile_id\": \"<string>\",\n    \"type\": \"<string>\"\n  },\n  \"set_user_disabled\": \"<boolean>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "5e991512-98e4-4deb-b128-5d774606f60c",
+              "name": "A successful response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "identity",
+                    "accounts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"account\": {\n    \"id\": \"79c27a0e-46a2-4276-9769-e1ebc055fa72\",\n    \"members\": [\n      {\n        \"identity_id\": \"11a3122a-0c50-4950-9934-2ad48a782b78\",\n        \"roles\": [\n          \"FINANCIAL_ADVISOR\"\n        ]\n      },\n      {\n        \"identity_id\": \"08ba6b70-bcc0-4e4a-a67f-1d28842dedfc\",\n        \"roles\": [\n          \"AUTHORIZED_USER\"\n        ]\n      },\n      {\n        \"identity_id\": \"2dedfc70-a67f-4e4a-bcc0-1d288408ba6b\",\n        \"roles\": [\n          \"BENEFICIAL_OWNER\"\n        ]\n      }\n    ]\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"created_at\": \"2014-02-20T04:22:22.222221Z\",\n  \"id\": \"79c27a0e-46a2-4276-9769-e1ebc055fa72\",\n  \"identity_id\": \"0acd56b7-140b-4b29-83e4-7e717f03afd9\",\n  \"members\": [\n    {\n      \"identity_id\": \"11a3122a-0c50-4950-9934-2ad48a782b78\",\n      \"roles\": [\n        \"FINANCIAL_ADVISOR\"\n      ]\n    },\n    {\n      \"identity_id\": \"08ba6b70-bcc0-4e4a-a67f-1d28842dedfc\",\n      \"roles\": [\n        \"AUTHORIZED_USER\"\n      ]\n    },\n    {\n      \"identity_id\": \"2dedfc70-a67f-4e4a-bcc0-1d288408ba6b\",\n      \"roles\": [\n        \"BENEFICIAL_OWNER\"\n      ]\n    }\n  ],\n  \"summary_status\": \"PENDING\",\n  \"updated_at\": \"2022-02-24T04:20:22.222222Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "fc7efbd9-1782-4582-8dda-7d0695b8b27c",
+          "name": "Get Account",
+          "request": {
+            "name": "Get Account",
+            "description": {},
+            "url": {
+              "path": [
+                "identity",
+                "accounts",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) uuid id of account"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "conversion:read_conversion_stablecoin conversion:write_conversion_stablecoin exchange:historical_prices exchange:read_order exchange:read_quote exchange:read_quote_execution exchange:write_quote_execution exchange:write_order fee:write_crypto_withdrawal_fee funding:read_bank_balance funding:read_profile funding:write_profile identity:read_account identity:read_identity identity:write_account identity:write_identity settlement:read_transaction settlement:write_transaction tax:read_tax_form tax:read_tax_lot tax:write_tax_lot transfer:read_deposit_address transfer:read_fiat_account transfer:read_fiat_deposit_instructions transfer:read_transfer transfer:read_transfer_limit transfer:reject_crypto_deposit transfer:update_crypto_deposit transfer:write_crypto_withdrawal transfer:write_deposit_address transfer:write_fiat_account transfer:write_fiat_deposit_instructions transfer:write_internal_transfer transfer:write_sandbox_fiat_deposit transfer:write_fiat_withdrawal events:read_event"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://oauth.paxos.com/oauth2/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "b0ce1563-73b2-466d-9a18-be3f6232a02d",
+              "name": "A successful response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "identity",
+                    "accounts",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) uuid id of account"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"<string>\",\n  \"identity_id\": \"<string>\",\n  \"description\": \"<string>\",\n  \"admin_disabled\": \"<boolean>\",\n  \"user_disabled\": \"<boolean>\",\n  \"metadata\": {\n    \"key_0\": \"<string>\",\n    \"key_1\": \"<string>\"\n  },\n  \"ref_id\": \"<string>\",\n  \"members\": [\n    {\n      \"identity_id\": \"<string>\",\n      \"type\": \"<string>\",\n      \"roles\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"id\": \"<string>\"\n    },\n    {\n      \"identity_id\": \"<string>\",\n      \"type\": \"<string>\",\n      \"roles\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"id\": \"<string>\"\n    }\n  ],\n  \"created_at\": \"<dateTime>\",\n  \"summary_status\": \"<string>\",\n  \"updated_at\": \"<dateTime>\",\n  \"profile_id\": \"<string>\",\n  \"type\": \"<string>\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.paxos.com/v2",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "ff94ab05-4bd7-4d61-89a9-ff2eb24907d2",
+    "name": "Paxos Account Members Accounts API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "<p>Welcome to Paxos APIs. At Paxos, our mission is to enable the movement of any asset, any time, in a trustworthy way. These APIs serve that mission by making it easier than ever for you to directly integrate our product capabilities into your application, leveraging the speed, stability, and security of the Paxos platform.</p> <p>The documentation that follows gives you access to our Crypto Brokerage, Trading, and Exchange products. It includes APIs for market data, orders, and the held rate quote flow.</p> <p>To test in our sandbox environment, <a href=\"https://account.sandbox.paxos.com\" target=\"_blank\">sign up</a> for an account. For more information about Paxos and our APIs, visit <a href=\"https://www.paxos.com/\" target=\"_blank\">Paxos.com</a>.</p>\n",
+      "type": "text/plain"
+    }
+  }
+}

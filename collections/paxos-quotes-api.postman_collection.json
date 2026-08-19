@@ -1,0 +1,148 @@
+{
+  "item": [
+    {
+      "id": "e58241e4-73f9-4592-9389-8a3595de96f3",
+      "name": "Quotes",
+      "description": {
+        "content": "Quotes are \"held rates\" offered by Paxos to buy or sell assets at a specific\nprice within a period of time - for example, the option to buy BTC within\nthe next 30 seconds for $8,000.\n\nThe typical Quotes workflow is as follows:\n\n1. Call [List Quotes](#operation/ListQuotes) to get the latest available\n   quoted prices for the assets you want to buy or sell.\n1. Present the offered price to one or more end-users, with a timer\n   indicating the time to expiration.\n1. If a user accepts the price, call [Create Quote Execution](#operation/CreateQuoteExecution) with the amount to buy or sell.\n1. Call [Get Quote Execution](#operation/GetQuoteExecution) to monitor\n   for completion and know when the funds from the execution are available.\n\nIt's important to show end-users the latest available price. If you cache\nprices to show them to multiple users, you should refresh the cache once\nper second.\n\nYou can call [List Quote Executions](#operation/ListQuoteExecutions) to\nreview or construct reports on quote execution activity.\n",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "1a894629-878c-469b-9346-997832603dc6",
+          "name": "List Quotes",
+          "request": {
+            "name": "List Quotes",
+            "description": {
+              "content": "List quotes for buying or selling assets. By default, the list will\ninclude the latest available quotes for both buying and selling all supported\nassets.\n\nEach quote is valid until `expires_at`, and can be executed on by\ncalling [Create Quote Execution](#operation/CreateQuoteExecution).\n\nMultiple calls to list quotes in quick succession may return the same quote\nvalues. Paxos currently issues new quotes at most once per second.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "quotes"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "markets",
+                  "value": "<string>",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "markets",
+                  "value": "<string>",
+                  "description": "(Required) "
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "conversion:read_conversion_stablecoin conversion:write_conversion_stablecoin exchange:historical_prices exchange:read_order exchange:read_quote exchange:read_quote_execution exchange:write_quote_execution exchange:write_order fee:write_crypto_withdrawal_fee funding:read_bank_balance funding:read_profile funding:write_profile identity:read_account identity:read_identity identity:write_account identity:write_identity settlement:read_transaction settlement:write_transaction tax:read_tax_form tax:read_tax_lot tax:write_tax_lot transfer:read_deposit_address transfer:read_fiat_account transfer:read_fiat_deposit_instructions transfer:read_transfer transfer:read_transfer_limit transfer:reject_crypto_deposit transfer:update_crypto_deposit transfer:write_crypto_withdrawal transfer:write_deposit_address transfer:write_fiat_account transfer:write_fiat_deposit_instructions transfer:write_internal_transfer transfer:write_sandbox_fiat_deposit transfer:write_fiat_withdrawal events:read_event"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://oauth.paxos.com/oauth2/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "4c77a3c5-2f62-4902-91e3-a773c953cc5e",
+              "name": "A successful response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "quotes"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "markets",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "markets",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"items\": [\n    {\n      \"id\": \"366a26d2-3098-4226-a520-4bb43ae4d922\",\n      \"market\": \"BTCUSD\",\n      \"side\": \"BUY\",\n      \"price\": \"6001.2\",\n      \"base_asset\": \"BTC\",\n      \"quote_asset\": \"USD\",\n      \"created_at\": \"2020-01-17T18:36:08Z\",\n      \"expires_at\": \"2020-01-17T18:36:38Z\"\n    },\n    {\n      \"id\": \"71e2a297-f2d7-423c-8e4f-486aac70fa9f\",\n      \"market\": \"BTCUSD\",\n      \"side\": \"SELL\",\n      \"price\": \"5999.8\",\n      \"base_asset\": \"BTC\",\n      \"quote_asset\": \"USD\",\n      \"created_at\": \"2020-01-17T18:36:08Z\",\n      \"expires_at\": \"2020-01-17T18:36:38Z\"\n    },\n    {\n      \"id\": \"ee018e41-0379-41c6-a099-1ea81204b192\",\n      \"market\": \"ETHUSD\",\n      \"side\": \"BUY\",\n      \"price\": \"225.88\",\n      \"base_asset\": \"ETH\",\n      \"quote_asset\": \"USD\",\n      \"created_at\": \"2020-01-17T18:36:08Z\",\n      \"expires_at\": \"2020-01-17T18:36:38Z\"\n    },\n    {\n      \"id\": \"5a336768-5bc1-4401-9d95-9cb251ce4b58\",\n      \"market\": \"ETHUSD\",\n      \"side\": \"SELL\",\n      \"price\": \"224.11\",\n      \"base_asset\": \"ETH\",\n      \"quote_asset\": \"USD\",\n      \"created_at\": \"2020-01-17T18:36:08Z\",\n      \"expires_at\": \"2020-01-17T18:36:38Z\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.paxos.com/v2",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "275665dc-c7e4-4639-b763-76f5dc2662b9",
+    "name": "Paxos Account Members Quotes API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "<p>Welcome to Paxos APIs. At Paxos, our mission is to enable the movement of any asset, any time, in a trustworthy way. These APIs serve that mission by making it easier than ever for you to directly integrate our product capabilities into your application, leveraging the speed, stability, and security of the Paxos platform.</p> <p>The documentation that follows gives you access to our Crypto Brokerage, Trading, and Exchange products. It includes APIs for market data, orders, and the held rate quote flow.</p> <p>To test in our sandbox environment, <a href=\"https://account.sandbox.paxos.com\" target=\"_blank\">sign up</a> for an account. For more information about Paxos and our APIs, visit <a href=\"https://www.paxos.com/\" target=\"_blank\">Paxos.com</a>.</p>\n",
+      "type": "text/plain"
+    }
+  }
+}
