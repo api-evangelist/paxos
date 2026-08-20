@@ -59,6 +59,17 @@ tags:
 - Trading
 - Custody
 - Blockchain
+- Financial-Services
+- Digital Assets
+tags_raw:
+- Company
+- Stablecoins
+- Cryptocurrency
+- Payments
+- Crypto Brokerage
+- Trading
+- Custody
+- Blockchain
 - Financial Services
 - Digital Assets
 maintainers:
@@ -101,6 +112,8 @@ apis:
   humanURL: https://docs.paxos.com/api-reference/introduction
   baseURL: https://api.paxos.com/v2
   tags:
+  - Account
+  tags_raw:
   - Accounts
   properties:
   - type: OpenAPI
@@ -207,6 +220,8 @@ apis:
   humanURL: https://docs.paxos.com/api-reference/introduction
   baseURL: https://api.paxos.com/v2
   tags:
+  - Event
+  tags_raw:
   - Events
   properties:
   - type: OpenAPI
@@ -324,6 +339,8 @@ apis:
   humanURL: https://docs.paxos.com/api-reference/introduction
   baseURL: https://api.paxos.com/v2
   tags:
+  - Identity documents
+  tags_raw:
   - Identity Documents
   properties:
   - type: OpenAPI
@@ -471,6 +488,8 @@ apis:
   humanURL: https://docs.paxos.com/api-reference/introduction
   baseURL: https://api.paxos.com/v2
   tags:
+  - Order
+  tags_raw:
   - Orders
   properties:
   - type: OpenAPI
