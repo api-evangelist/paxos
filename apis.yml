@@ -19,7 +19,7 @@ deliveryModel:
   source:
   - openapi
   - pricing
-  generated: '2026-08-11'
+  generated: '2026-08-28'
   method: derived
 accessModel:
   pricing: unknown
@@ -857,6 +857,9 @@ apis:
   - type: LLMsTxt
     url: llms/paxos-llms.txt
 common:
+- type: CapabilityMap
+  url: capabilities/paxos-capability-edges.yml
+  name: Paxos Business Capability Map
 - type: DeveloperPortal
   url: https://docs.paxos.com
 - type: Documentation
