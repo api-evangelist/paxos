@@ -339,7 +339,7 @@ apis:
   humanURL: https://docs.paxos.com/api-reference/introduction
   baseURL: https://api.paxos.com/v2
   tags:
-  - Identity documents
+  - Identity Documents
   tags_raw:
   - Identity Documents
   properties:
