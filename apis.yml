@@ -1,13 +1,12 @@
 aid: paxos
 name: Paxos
-description: >-
-  Paxos is a regulated blockchain and stablecoin infrastructure company that lets enterprises move
-  any asset, any time, through a single API. The Paxos v2 REST/FIX/WebSocket platform covers
-  stablecoin issuance and 1:1 conversion (USDG, PYUSD, USDP, PAXG), crypto brokerage and order-book
-  trading, held-rate quotes, custody, fiat and crypto transfers, identity/KYC and account onboarding,
-  orchestration workflows, rewards, tax forms, and Travel Rule compliance. Authentication is OAuth 2.0
-  client credentials, errors are RFC 9457 problem+json, and a full sandbox with test tooling is
-  provided. Paxos issues PayPal USD (PYUSD) and the Global Dollar (USDG).
+description: Paxos is a regulated blockchain and stablecoin infrastructure company that lets enterprises
+  move any asset, any time, through a single API. The Paxos v2 REST/FIX/WebSocket platform covers stablecoin
+  issuance and 1:1 conversion (USDG, PYUSD, USDP, PAXG), crypto brokerage and order-book trading, held-rate
+  quotes, custody, fiat and crypto transfers, identity/KYC and account onboarding, orchestration workflows,
+  rewards, tax forms, and Travel Rule compliance. Authentication is OAuth 2.0 client credentials, errors
+  are RFC 9457 problem+json, and a full sandbox with test tooling is provided. Paxos issues PayPal USD
+  (PYUSD) and the Global Dollar (USDG).
 url: https://raw.githubusercontent.com/api-evangelist/paxos/refs/heads/main/apis.yml
 deliveryModel:
   model: saas
@@ -44,7 +43,7 @@ x-tier: enriched
 x-tier-reason: portfolio-lead
 specificationVersion: '0.23'
 created: '2026-07-17'
-modified: '2026-07-20'
+modified: '2026-09-16'
 x-enrichment:
   date: '2026-07-20'
   status: enriched
@@ -97,8 +96,7 @@ apis:
     url: llms/paxos-llms.txt
 - aid: paxos:paxos-accounts-api
   name: Paxos Accounts API
-  description: >-
-    Accounts connect Identities (persons or institutions) to Profiles (asset balances).
+  description: 'Accounts connect Identities (persons or institutions) to Profiles (asset balances).
 
     Key features include:
 
@@ -108,7 +106,7 @@ apis:
     - **Joint Account Support**: Link multiple Identities to a single Account for shared on platform balance
 
 
-    Accounts are required for all Identity API integrations.
+    Accounts are required for all Identity API integrations.'
   humanURL: https://docs.paxos.com/api-reference/introduction
   baseURL: https://api.paxos.com/v2
   tags:
@@ -134,9 +132,8 @@ apis:
     url: llms/paxos-llms.txt
 - aid: paxos:paxos-api-credentials-api
   name: Paxos API Credentials API
-  description: >-
-    API credentials allow programmatic access to Paxos APIs. These endpoints enable you to manage and
-    view your API credentials.
+  description: API credentials allow programmatic access to Paxos APIs. These endpoints enable you to
+    manage and view your API credentials.
   humanURL: https://docs.paxos.com/api-reference/introduction
   baseURL: https://api.paxos.com/v2
   tags:
@@ -148,11 +145,11 @@ apis:
     url: llms/paxos-llms.txt
 - aid: paxos:paxos-claims-api
   name: Paxos Claims API
-  description: >-
-    Claims represent rewards paid out on-chain. Use claim schedules to automate daily reward claims.
+  description: 'Claims represent rewards paid out on-chain. Use claim schedules to automate daily reward
+    claims.
 
 
-    *These endpoints are only relevant for whitelisted Rewards partners.*
+    *These endpoints are only relevant for whitelisted Rewards partners.*'
   humanURL: https://docs.paxos.com/api-reference/introduction
   baseURL: https://api.paxos.com/v2
   tags:
@@ -164,9 +161,8 @@ apis:
     url: llms/paxos-llms.txt
 - aid: paxos:paxos-crypto-deposits-api
   name: Paxos Crypto Deposits API
-  description: >-
-    For [Paxos Global PTE Ltd](https://help.paxos.com/hc/en-us/articles/9647005243284) users, update or
-    reject a crypto deposit that does not contain the required [travel rule](https://help.paxos.com/hc/en-us/articles/25928845778068)
+  description: 'For [Paxos Global PTE Ltd](https://help.paxos.com/hc/en-us/articles/9647005243284) users,
+    update or reject a crypto deposit that does not contain the required [travel rule](https://help.paxos.com/hc/en-us/articles/25928845778068)
     information.
 
     Deposits with the `NEEDS_INFO` status require additional sender information before they can be processed.
@@ -176,7 +172,7 @@ apis:
     - For institutions, the institution name is required.
 
 
-    If a deposit is rejected, the funds will no longer be available.
+    If a deposit is rejected, the funds will no longer be available.'
   humanURL: https://docs.paxos.com/api-reference/introduction
   baseURL: https://api.paxos.com/v2
   tags:
@@ -212,11 +208,10 @@ apis:
     url: llms/paxos-llms.txt
 - aid: paxos:paxos-events-api
   name: Paxos Events API
-  description: >-
-    The Events API allows you to fetch events that occurred on the Paxos platform with the full event
-    payload. This REST API can be used as part of your webhook integrations (including rebuilding your
-    event history should your webhook consumer exceed its retries), or standalone by polling for events
-    related to your identities.
+  description: The Events API allows you to fetch events that occurred on the Paxos platform with the
+    full event payload. This REST API can be used as part of your webhook integrations (including rebuilding
+    your event history should your webhook consumer exceed its retries), or standalone by polling for
+    events related to your identities.
   humanURL: https://docs.paxos.com/api-reference/introduction
   baseURL: https://api.paxos.com/v2
   tags:
@@ -254,24 +249,14 @@ apis:
     url: llms/paxos-llms.txt
 - aid: paxos:paxos-fiat-transfers-api
   name: Paxos Fiat Transfers API
-  description: >-
-    The Fiat Transfers API allows clients to deposit and withdraw fiat via the following Fiat Networks:
-    Wire (Fedwire and SWIFT) and CUBIX. The supported asset is USD.
-
-
-    The full set of Fiat Transfers API endpoints is:
-
-    - For Deposits:
-      - [Create Fiat Deposit Instructions](#operation/CreateFiatDepositInstructions)
-      - [List Fiat Deposit Instructions](#operation/ListFiatDepositInstructions)
-      - [Get Fiat Deposit Instructions](#operation/GetFiatDepositInstructions)
-    - For Withdrawals:
-      - [Create Fiat Account](#operation/CreateFiatAccount)
-      - [List Fiat Accounts](#operation/ListFiatAccounts)
-      - [Get Fiat Account](#operation/GetFiatAccount)
-      - [Delete Fiat Account](#operation/DeleteFiatAccount)
-      - [Update Fiat Account](#operation/UpdateFiatAccount)
-      - [Create Fiat Withdrawal](#operation/CreateFiatWithdrawal)
+  description: "The Fiat Transfers API allows clients to deposit and withdraw fiat via the following Fiat\
+    \ Networks: Wire (Fedwire and SWIFT) and CUBIX. The supported asset is USD.\n\nThe full set of Fiat\
+    \ Transfers API endpoints is:\n- For Deposits:\n  - [Create Fiat Deposit Instructions](#operation/CreateFiatDepositInstructions)\n\
+    \  - [List Fiat Deposit Instructions](#operation/ListFiatDepositInstructions)\n  - [Get Fiat Deposit\
+    \ Instructions](#operation/GetFiatDepositInstructions)\n- For Withdrawals:\n  - [Create Fiat Account](#operation/CreateFiatAccount)\n\
+    \  - [List Fiat Accounts](#operation/ListFiatAccounts)\n  - [Get Fiat Account](#operation/GetFiatAccount)\n\
+    \  - [Delete Fiat Account](#operation/DeleteFiatAccount)\n  - [Update Fiat Account](#operation/UpdateFiatAccount)\n\
+    \  - [Create Fiat Withdrawal](#operation/CreateFiatWithdrawal)"
   humanURL: https://docs.paxos.com/api-reference/introduction
   baseURL: https://api.paxos.com/v2
   tags:
@@ -311,31 +296,13 @@ apis:
     url: llms/paxos-llms.txt
 - aid: paxos:paxos-identity-documents-api
   name: Paxos Identity Documents API
-  description: >-
-    The Identity Documents API allows clients to send documents to Paxos to validate identities
-
-    during the KYC process. Files can be updated multiple times by re-sending the document type
-
-    for processing.
-
-
-    We currently accept the following file formats:
-
-    - <code>pdf</code>
-
-    - <code>jpg</code>
-
-    - <code>png</code>
-
-
-    Steps to upload a document are as follows:
-
-    1. Send a <code>PUT</code> request to <code>/identity/identities/{id}/documents</code> to get
-      the upload URL.
-    1. Send your document to the provided URL via a PUT request. Take the following example using curl:
-      <code>$ curl --upload-file Proof_of_residence.jpg $URI </code>
-
-    Uploaded document metadata will be available via <code>GET</code> request to <code>/identity/identities/{id}/documents</code>
+  description: "The Identity Documents API allows clients to send documents to Paxos to validate identities\n\
+    during the KYC process. Files can be updated multiple times by re-sending the document type\nfor processing.\n\
+    \nWe currently accept the following file formats:\n- <code>pdf</code>\n- <code>jpg</code>\n- <code>png</code>\n\
+    \nSteps to upload a document are as follows:\n1. Send a <code>PUT</code> request to <code>/identity/identities/{id}/documents</code>\
+    \ to get\n  the upload URL.\n1. Send your document to the provided URL via a PUT request. Take the\
+    \ following example using curl:\n  <code>$ curl --upload-file Proof_of_residence.jpg $URI </code>\n\
+    \nUploaded document metadata will be available via <code>GET</code> request to <code>/identity/identities/{id}/documents</code>"
   humanURL: https://docs.paxos.com/api-reference/introduction
   baseURL: https://api.paxos.com/v2
   tags:
@@ -349,8 +316,7 @@ apis:
     url: llms/paxos-llms.txt
 - aid: paxos:paxos-institution-members-api
   name: Paxos Institution Members API
-  description: >-
-    Institution Members allow you to associate persons with an institution on our Platform.
+  description: 'Institution Members allow you to associate persons with an institution on our Platform.
 
     Each institution can have multiple members, with each member representing the relationship to a person
     identity.
@@ -358,9 +324,9 @@ apis:
 
     When creating an institution identity, you must designate at least one institution member.
 
-    This requirement ensures we have complete information about the institution's ownership structure
+    This requirement ensures we have complete information about the institution''s ownership structure
 
-    and key personnel, which is necessary to onboard institutions.
+    and key personnel, which is necessary to onboard institutions.'
   humanURL: https://docs.paxos.com/api-reference/introduction
   baseURL: https://api.paxos.com/v2
   tags:
@@ -384,10 +350,9 @@ apis:
     url: llms/paxos-llms.txt
 - aid: paxos:paxos-issuer-quotes-api
   name: Paxos Issuer Quotes API
-  description: >-
-    Issuer Quotes are "held rates" offered by Paxos to mint or redeem Paxos-issued assets at a specific
-    price within a period of time - for example, the option to buy PAXG within the next 5 seconds for
-    $3,000.
+  description: 'Issuer Quotes are "held rates" offered by Paxos to mint or redeem Paxos-issued assets
+    at a specific price within a period of time - for example, the option to buy PAXG within the next
+    5 seconds for $3,000.
 
 
     The typical Issuer Quotes workflow is as follows:
@@ -401,7 +366,7 @@ apis:
 
 
     You can call [List Issuer Quote Executions](#operation/ListIssuerQuoteExecutions) to review or construct
-    reports on issuer quote execution activity.
+    reports on issuer quote execution activity.'
   humanURL: https://docs.paxos.com/api-reference/introduction
   baseURL: https://api.paxos.com/v2
   tags:
@@ -479,12 +444,11 @@ apis:
     url: llms/paxos-llms.txt
 - aid: paxos:paxos-orders-api
   name: Paxos Orders API
-  description: >-
-    <p>There are three types of orders: market, limit and post-only.</p>
+  description: '<p>There are three types of orders: market, limit and post-only.</p>
 
     <p>Market orders guarantee execution at a variable price and quantity. Limit orders guarantee price
     and quantity at the time of execution but do not guarantee execution. Post-only is an order type that
-    will only be placed on the order book if it is the maker side of a trade.</p>
+    will only be placed on the order book if it is the maker side of a trade.</p>'
   humanURL: https://docs.paxos.com/api-reference/introduction
   baseURL: https://api.paxos.com/v2
   tags:
@@ -497,10 +461,9 @@ apis:
   - type: LLMsTxt
     url: llms/paxos-llms.txt
 - aid: paxos:paxos-paxos-transfers-api
-  name: Paxos Paxos Transfers API
-  description: >-
-    Move assets between two Entities belonging to the same Organization or to a different Organization
-    on the Paxos platform.
+  name: Paxos Transfers API
+  description: 'Move assets between two Entities belonging to the same Organization or to a different
+    Organization on the Paxos platform.
 
 
     > Transferring USD between Entities is prohibited in some jurisdictions. Contact [Support](https://support.paxos.com/)
@@ -509,7 +472,7 @@ apis:
 
     Ensure the destination [Profile](https://docs.paxos.com/dashboard/organization#profile) already exists
     before beginning the transfer. This may require contacting someone outside your Organization to get
-    the destination Profile ID.
+    the destination Profile ID.'
   humanURL: https://docs.paxos.com/api-reference/introduction
   baseURL: https://api.paxos.com/v2
   tags:
@@ -537,13 +500,12 @@ apis:
     url: llms/paxos-llms.txt
 - aid: paxos:paxos-payout-groups-api
   name: Paxos Payout Groups API
-  description: >-
-    Payout groups encapsulate common rewards characteristics. All monitored addresses that reference a
-    payout group accumulate rewards at the same rate and claim to the payout destination specified for
-    that group.
+  description: 'Payout groups encapsulate common rewards characteristics. All monitored addresses that
+    reference a payout group accumulate rewards at the same rate and claim to the payout destination specified
+    for that group.
 
 
-    *These endpoints are only relevant for whitelisted Rewards partners.*
+    *These endpoints are only relevant for whitelisted Rewards partners.*'
   humanURL: https://docs.paxos.com/api-reference/introduction
   baseURL: https://api.paxos.com/v2
   tags:
@@ -555,11 +517,10 @@ apis:
     url: llms/paxos-llms.txt
 - aid: paxos:paxos-pricing-api
   name: Paxos Pricing API
-  description: >-
-    Pricing provides historical data related to charting of asset prices.
+  description: 'Pricing provides historical data related to charting of asset prices.
 
 
-    Note: Some Pricing API markets may be unavailable for trading.
+    Note: Some Pricing API markets may be unavailable for trading.'
   humanURL: https://docs.paxos.com/api-reference/introduction
   baseURL: https://api.paxos.com/v2
   tags:
@@ -571,8 +532,7 @@ apis:
     url: llms/paxos-llms.txt
 - aid: paxos:paxos-profiles-api
   name: Paxos Profiles API
-  description: >-
-    Profiles hold asset balances, and every Paxos transaction is on a particular profile.
+  description: 'Profiles hold asset balances, and every Paxos transaction is on a particular profile.
 
     Depending on your integration type, Profiles may be used to reflect both corporate balances or individual
     user balances.
@@ -582,7 +542,7 @@ apis:
     - `DEFAULT` Profiles are system-generated.
 
     - `NORMAL` Profiles are created using the [Create Profile](#operation/CreateProfile) endpoint and
-    are the only type of Profile you can create.
+    are the only type of Profile you can create.'
   humanURL: https://docs.paxos.com/api-reference/introduction
   baseURL: https://api.paxos.com/v2
   tags:
@@ -594,10 +554,9 @@ apis:
     url: llms/paxos-llms.txt
 - aid: paxos:paxos-quote-executions-api
   name: Paxos Quote Executions API
-  description: >-
-    Quote Executions buy or sell assets using a Quote obtained from
+  description: 'Quote Executions buy or sell assets using a Quote obtained from
 
-    the [Quotes](#tag/Quotes) flow.
+    the [Quotes](#tag/Quotes) flow.'
   humanURL: https://docs.paxos.com/api-reference/introduction
   baseURL: https://api.paxos.com/v2
   tags:
@@ -609,37 +568,17 @@ apis:
     url: llms/paxos-llms.txt
 - aid: paxos:paxos-quotes-api
   name: Paxos Quotes API
-  description: >-
-    Quotes are "held rates" offered by Paxos to buy or sell assets at a specific
-
-    price within a period of time - for example, the option to buy BTC within
-
-    the next 30 seconds for $8,000.
-
-
-    The typical Quotes workflow is as follows:
-
-
-    1. Call [List Quotes](#operation/ListQuotes) to get the latest available
-       quoted prices for the assets you want to buy or sell.
-    1. Present the offered price to one or more end-users, with a timer
-       indicating the time to expiration.
-    1. If a user accepts the price, call [Create Quote Execution](#operation/CreateQuoteExecution) with
-    the amount to buy or sell.
-
-    1. Call [Get Quote Execution](#operation/GetQuoteExecution) to monitor
-       for completion and know when the funds from the execution are available.
-
-    It's important to show end-users the latest available price. If you cache
-
-    prices to show them to multiple users, you should refresh the cache once
-
-    per second.
-
-
-    You can call [List Quote Executions](#operation/ListQuoteExecutions) to
-
-    review or construct reports on quote execution activity.
+  description: "Quotes are \"held rates\" offered by Paxos to buy or sell assets at a specific\nprice\
+    \ within a period of time - for example, the option to buy BTC within\nthe next 30 seconds for $8,000.\n\
+    \nThe typical Quotes workflow is as follows:\n\n1. Call [List Quotes](#operation/ListQuotes) to get\
+    \ the latest available\n   quoted prices for the assets you want to buy or sell.\n1. Present the offered\
+    \ price to one or more end-users, with a timer\n   indicating the time to expiration.\n1. If a user\
+    \ accepts the price, call [Create Quote Execution](#operation/CreateQuoteExecution) with the amount\
+    \ to buy or sell.\n1. Call [Get Quote Execution](#operation/GetQuoteExecution) to monitor\n   for\
+    \ completion and know when the funds from the execution are available.\n\nIt's important to show end-users\
+    \ the latest available price. If you cache\nprices to show them to multiple users, you should refresh\
+    \ the cache once\nper second.\n\nYou can call [List Quote Executions](#operation/ListQuoteExecutions)\
+    \ to\nreview or construct reports on quote execution activity."
   humanURL: https://docs.paxos.com/api-reference/introduction
   baseURL: https://api.paxos.com/v2
   tags:
@@ -651,8 +590,7 @@ apis:
     url: llms/paxos-llms.txt
 - aid: paxos:paxos-reward-addresses-api
   name: Paxos Reward Addresses API
-  description: >-
-    Reward addresses are blockchain addresses registered for reward attribution.
+  description: 'Reward addresses are blockchain addresses registered for reward attribution.
 
 
     Custody Rewards: For EVM chains, Paxos registers these addresses on-chain for reward calculation and
@@ -666,7 +604,7 @@ apis:
     non-custody rewards to your organization.
 
 
-    *These endpoints are only relevant for whitelisted Rewards partners.*
+    *These endpoints are only relevant for whitelisted Rewards partners.*'
   humanURL: https://docs.paxos.com/api-reference/introduction
   baseURL: https://api.paxos.com/v2
   tags:
@@ -678,12 +616,11 @@ apis:
     url: llms/paxos-llms.txt
 - aid: paxos:paxos-rewards-api
   name: Paxos Rewards API
-  description: >-
-    Rewards details including current reward rates, next accrual time, lifetime earned amounts, and estimated
-    next accrual.
+  description: 'Rewards details including current reward rates, next accrual time, lifetime earned amounts,
+    and estimated next accrual.
 
 
-    *These endpoints are only relevant for whitelisted Rewards partners.*
+    *These endpoints are only relevant for whitelisted Rewards partners.*'
   humanURL: https://docs.paxos.com/api-reference/introduction
   baseURL: https://api.paxos.com/v2
   tags:
@@ -743,11 +680,10 @@ apis:
     url: llms/paxos-llms.txt
 - aid: paxos:paxos-settlement-api
   name: Paxos Settlement API
-  description: >-
-    Use the Settlements API to facilitate simultaneous exchange of pre-funded assets. Automate a variety
-    of use cases that require two-party approval, including net settlement of over-the-counter trades,
-    withdrawal requests for tri-party collateral, payment requests, and bilateral settlement for marketplace
-    end users.
+  description: 'Use the Settlements API to facilitate simultaneous exchange of pre-funded assets. Automate
+    a variety of use cases that require two-party approval, including net settlement of over-the-counter
+    trades, withdrawal requests for tri-party collateral, payment requests, and bilateral settlement for
+    marketplace end users.
 
 
     The simple request-and-approval workflow supports both one-directional and bidirectional transactions
@@ -759,7 +695,7 @@ apis:
 
     The Source Profile initiates the transaction for the Target Profile to approve. The `DIRECTION` of
     each asset is always relative to the Source Profile and only the owner of the Source Profile can cancel
-    a transaction if it hasn't been approved by the Target Profile.
+    a transaction if it hasn''t been approved by the Target Profile.'
   humanURL: https://docs.paxos.com/api-reference/introduction
   baseURL: https://api.paxos.com/v2
   tags:
@@ -771,8 +707,7 @@ apis:
     url: llms/paxos-llms.txt
 - aid: paxos:paxos-stablecoin-conversion-api
   name: Paxos Stablecoin Conversion API
-  description: >-
-    <p>Convert between fiat and stablecoin using <a href="#operation/CreateStablecoinConversion">Create
+  description: <p>Convert between fiat and stablecoin using <a href="#operation/CreateStablecoinConversion">Create
     Stablecoin Conversion</a> and check the status of a <a href="#operation/GetStablecoinConversion">single
     conversion</a> or retrieve a <a href="#operation/ListStablecoinConversions">list of conversions</a>.</p>
   humanURL: https://docs.paxos.com/api-reference/introduction
@@ -786,10 +721,9 @@ apis:
     url: llms/paxos-llms.txt
 - aid: paxos:paxos-statements-api
   name: Paxos Statements API
-  description: >-
-    A Statement summarizes all eligible stablecoin rewards for a given organization over a fixed time
-    period. It aggregates earned reward types (e.g., custody, mint, acceptance) and records whether the
-    statement was paid.
+  description: 'A Statement summarizes all eligible stablecoin rewards for a given organization over a
+    fixed time period. It aggregates earned reward types (e.g., custody, mint, acceptance) and records
+    whether the statement was paid.
 
 
     Statements are generated monthly and are immutable. Revised statements will be issued as a new statement
@@ -797,7 +731,7 @@ apis:
     purposes.
 
 
-    *These endpoints are only relevant for Global Dollar Network (GDN) partners.*
+    *These endpoints are only relevant for Global Dollar Network (GDN) partners.*'
   humanURL: https://docs.paxos.com/api-reference/introduction
   baseURL: https://api.paxos.com/v2
   tags:
@@ -809,15 +743,14 @@ apis:
     url: llms/paxos-llms.txt
 - aid: paxos:paxos-tax-forms-api
   name: Paxos Tax Forms API
-  description: >-
-    All tax forms are associated to a single account_id.
+  description: 'All tax forms are associated to a single account_id.
 
     An account_id can have multiple tax forms associated with it.
 
     US 1099-B and 1099-Misc tax forms for the previous fiscal year will be available in February of the
     current calendar year.
 
-    Previous years tax forms are also available by request.
+    Previous years tax forms are also available by request.'
   humanURL: https://docs.paxos.com/api-reference/introduction
   baseURL: https://api.paxos.com/v2
   tags:
@@ -829,12 +762,11 @@ apis:
     url: llms/paxos-llms.txt
 - aid: paxos:paxos-transfers-api
   name: Paxos Transfers API
-  description: >-
-    Each deposit to and withdrawal from a Paxos account is a Transfer.
+  description: 'Each deposit to and withdrawal from a Paxos account is a Transfer.
 
     A Transfer is associated with a particular Profile, and increases or
 
-    decreases the available balance of a single asset in that Profile.
+    decreases the available balance of a single asset in that Profile.'
   humanURL: https://docs.paxos.com/api-reference/introduction
   baseURL: https://api.paxos.com/v2
   tags:
@@ -896,7 +828,10 @@ common:
   url: well-known/paxos-well-known.yml
 - type: X-MCPServerCandidate
   url: mcp/paxos-mcp.yml
-  note: 'Renamed from MCPServer 2026-09-03 (roadmap#247): the manifest self-describes as status: candidate — a tool list derived from the published API contracts, not an existing server. The scorer already read the manifest and reported mcp_server correctly; the MCPServer type was crediting the artifact-type surfaces with a server that does not exist.'
+  note: 'Renamed from MCPServer 2026-09-03 (roadmap#247): the manifest self-describes as status: candidate
+    — a tool list derived from the published API contracts, not an existing server. The scorer already
+    read the manifest and reported mcp_server correctly; the MCPServer type was crediting the artifact-type
+    surfaces with a server that does not exist.'
 - type: Conventions
   url: conventions/paxos-conventions.yml
 - type: Idempotency
