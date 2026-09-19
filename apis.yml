@@ -436,6 +436,8 @@ apis:
   humanURL: https://docs.paxos.com/api-reference/introduction
   baseURL: https://api.paxos.com/v2
   tags:
+  - Orchestration
+  tags_raw:
   - Orchestrations
   properties:
   - type: OpenAPI
