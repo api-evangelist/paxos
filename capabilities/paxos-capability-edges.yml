@@ -1,0 +1,131 @@
+slug: paxos
+provider: Paxos
+generated_by: planning/capability-mapping/scripts/classify_capabilities.py
+model: claude-opus-5
+frame:
+- Banking & Capital Markets
+min_confidence: 0.7
+capability_model:
+  source: https://github.com/vincentmakes/turbo-ea-capabilities
+  license: CC-BY-4.0
+  attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
+    CC BY 4.0
+  notice: NOTICE
+edge_count: 11
+edges:
+- tag: ExchangePublic
+  spec_file: paxos-exchangepublic-api-openapi.yml
+  capability_id: BC-1370.30
+  capability_id_l1: BC-1370
+  capability_name: Trading Order Management
+  confidence: 0.9
+  evidence: GET /profiles/{profile_id}/orders 'List Orders'; GET /profiles/{profile_id}/executions 'List
+    Executions'; schemas Market, OrderSide, OrderType, TimeInForce, Execution
+  reason: Order and execution retrieval with market, side, type and time-in-force semantics is order-book
+    trading order management on an exchange venue.
+- tag: Orders
+  spec_file: paxos-orders-api-openapi.yml
+  capability_id: BC-1370.30
+  capability_id_l1: BC-1370
+  capability_name: Trading Order Management
+  confidence: 0.88
+  evidence: POST /profiles/{profile_id}/orders CreateOrder; DELETE .../orders/{id} CancelOrder; schemas
+    OrderType, TimeInForce, OrderSide, Execution
+  reason: Order-book trading order lifecycle — create, get, cancel orders and list executions with time-in-force
+    and side. This is front-office trading order capture and execution, not a purchase order or subscription
+    order.
+- tag: Quote Executions
+  spec_file: paxos-quote-executions-api-openapi.yml
+  capability_id: BC-1370.30
+  capability_id_l1: BC-1370
+  capability_name: Trading Order Management
+  confidence: 0.78
+  evidence: POST /profiles/{profile_id}/quote-executions CreateQuoteExecution; schemas QuoteExecution,
+    QuoteExecutionStatus, OrderSide, Market
+  reason: Execution of a held-rate quote into a trade on a market with a side — trade order capture and
+    execution in the RFQ flow.
+- tag: Identity
+  spec_file: paxos-identity-api-openapi.yml
+  capability_id: BC-1300.20
+  capability_id_l1: BC-1300
+  capability_name: KYC & Customer Due Diligence Management
+  confidence: 0.75
+  evidence: POST /identity/identities  CreateIdentity; schemas InstitutionCIPIDType, WealthSource, RegulationStatus,
+    IdentityRequirementRequirementType
+  reason: Identity records carrying CIP identification types, source of wealth and requirement/verification
+    statuses are KYC/CDD artefacts for onboarding customers of a regulated financial institution; vendor
+    description explicitly cites 'identity/KYC and account onboarding'.
+- tag: Fiat Transfers
+  spec_file: paxos-fiat-transfers-api-openapi.yml
+  capability_id: BC-1340.10
+  capability_id_l1: BC-1340
+  capability_name: Payment Initiation Management
+  confidence: 0.72
+  evidence: POST /transfer/fiat-withdrawals  CreateFiatWithdrawal  Create Fiat Withdrawal; POST /transfer/fiat-deposit-instructions;
+    schema FiatNetworkInstructionsWireRoutingDetails
+  reason: Operations register fiat bank accounts, issue deposit instructions with wire/RTP routing details
+    and initiate fiat withdrawals — capture and authorisation of payment instructions, i.e. payment initiation
+    within Payments Management. L2 slightly uncertain between initiation and processing/clearing.
+- tag: Identity Documents
+  spec_file: paxos-identity-documents-api-openapi.yml
+  capability_id: BC-1300.20
+  capability_id_l1: BC-1300
+  capability_name: KYC & Customer Due Diligence Management
+  confidence: 0.72
+  evidence: PUT /identity/identities/{identity_id}/documents  DocumentUpload; schemas DocumentType, ListIdentityDocumentsResponse
+  reason: Upload and listing of identity verification documents against a customer identity is the evidence-collection
+    step of KYC/customer due diligence for this regulated platform.
+- tag: Settlement
+  spec_file: paxos-settlement-api-openapi.yml
+  capability_id: BC-1380.30
+  capability_id_l1: BC-1380
+  capability_name: Settlement Management
+  confidence: 0.72
+  evidence: 'POST /settlement/transactions  CreateTransaction; PUT /settlement/transactions/{transaction_id}/affirm  AffirmTransaction;
+    schemas: Transaction, Obligation, ObligationDirection'
+  reason: The surface creates, affirms and cancels settlement transactions composed of obligations between
+    counterparties — i.e. bilateral settlement instruction and affirmation, which is Capital Markets Operations
+    settlement rather than trading or retail payments. Some residual ambiguity between Settlement Management
+    and Trade Confirmation (affirm), hence moderate confidence.
+- tag: API Credentials
+  spec_file: paxos-api-credentials-api-openapi.yml
+  capability_id: BC-4270.40
+  capability_id_l1: BC-4270
+  capability_name: Developer Identity & Credential Management
+  confidence: 0.7
+  evidence: GET /api-creds/credentials 'List API Credentials'; DELETE /api-creds/credentials/{client_id};
+    schemas FirstPartyClient, ClientPublicKey
+  reason: Operations manage API client credentials and public keys for integrators of the platform — issuance/stewardship
+    of developer credentials rather than any banking business process. Some chance this is better read
+    as generic IAM, hence moderate confidence.
+- tag: Accounts
+  spec_file: paxos-accounts-api-openapi.yml
+  capability_id: BC-1300.10
+  capability_id_l1: BC-1300
+  capability_name: Customer Onboarding Management
+  confidence: 0.7
+  evidence: POST /identity/accounts 'Create Account'; PUT /identity/accounts 'Update Account'; schemas
+    Account, AccountAccountType, IdentityStatus
+  reason: Account creation and maintenance under the /identity path with an IdentityStatus field matches
+    account opening / onboarding of customers onto a regulated financial platform. Ambiguity remains between
+    onboarding and ongoing customer information maintenance.
+- tag: Crypto Withdrawals
+  spec_file: paxos-crypto-withdrawals-api-openapi.yml
+  capability_id: BC-1340.10
+  capability_id_l1: BC-1340
+  capability_name: Payment Initiation Management
+  confidence: 0.7
+  evidence: POST /transfer/crypto-withdrawals 'Create Crypto Withdrawal'; PUT /transfer/crypto-destination-address;
+    schemas CryptoWithdrawalBeneficiary, InvalidDestinationAddress, TransferStatusDetails
+  reason: Creating an outbound transfer against a whitelisted destination address with beneficiary details
+    and validation errors is payment instruction capture, validation and authorisation.
+- tag: Market Data
+  spec_file: paxos-market-data-api-openapi.yml
+  capability_id: BC-1370
+  capability_id_l1: BC-1370
+  capability_name: Capital Markets Trading Management
+  confidence: 0.7
+  evidence: GET /markets/{market}/order-book  GetOrderBook; GET /markets/{market}/ticker  GetTicker; GET
+    /markets/{market}/recent-executions
+  reason: Order book, ticker and recent execution feeds for exchange markets are front-office capital
+    markets trading data; no listed L2 covers market data specifically, so only the L1 is asserted.
