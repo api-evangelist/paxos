@@ -11,7 +11,7 @@ capability_model:
   attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
     CC BY 4.0
   notice: NOTICE
-edge_count: 11
+edge_count: 12
 edges:
 - tag: ExchangePublic
   spec_file: paxos-exchangepublic-api-openapi.yml
@@ -98,6 +98,18 @@ edges:
   reason: Operations manage API client credentials and public keys for integrators of the platform — issuance/stewardship
     of developer credentials rather than any banking business process. Some chance this is better read
     as generic IAM, hence moderate confidence.
+- tag: Account Members
+  spec_file: paxos-account-members-api-openapi.yml
+  capability_id: BC-620.20
+  capability_id_l1: BC-620
+  capability_name: Identity & Access Management
+  confidence: 0.7
+  evidence: POST /identity/account-members 'Add Account Members'; DELETE /identity/account-members/{id}
+    'Remove Account Member'; schema AccountMemberAccountRoleType
+  reason: Adding and removing members of an account with role types under an /identity path is user access
+    and role administration (joiner/leaver on the account), i.e. Identity & Access Management; some ambiguity
+    versus tenant user lifecycle keeps confidence moderate.
+  recovered_from: sweep-20260829T005356Z-edges.json
 - tag: Accounts
   spec_file: paxos-accounts-api-openapi.yml
   capability_id: BC-1300.10
