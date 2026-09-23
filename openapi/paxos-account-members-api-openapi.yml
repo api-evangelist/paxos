@@ -1,10 +1,8 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
   title: Paxos Account Members API
   version: '2.0'
-  description: '<p>Welcome to Paxos APIs. At Paxos, our mission is to enable the movement of any asset, any time, in a trustworthy way. These APIs serve that mission by making it easier than ever for you to directly integrate our product capabilities into your application, leveraging the speed, stability, and security of the Paxos platform.</p> <p>The documentation that follows gives you access to our Crypto Brokerage, Trading, and Exchange products. It includes APIs for market data, orders, and the held rate quote flow.</p> <p>To test in our sandbox environment, <a href="https://account.sandbox.paxos.com" target="_blank">sign up</a> for an account. For more information about Paxos and our APIs, visit <a href="https://www.paxos.com/" target="_blank">Paxos.com</a>.</p>
-
-    '
+  description: Welcome to Paxos APIs.
   x-logo:
     url: /docs/paxos.svg
     backgroundColor: '#FFFFFF'
@@ -16,7 +14,7 @@ servers:
   description: Sandbox
 tags:
 - name: Account Members
-  description: "Account Members allow you to associate an Identity with an Account on our Platform.\nEach Account can be linked to multiple Identities, which supports Joint Accounts (where two Identities have the ability\nto transact against a single Profile)  \n\nAccount members are effectively immutable. In order to update an account member,\nclients should remove then re-add the account member with the desired state.\n\nThe API requires clients to have write access on the account and all identities\nassociated with the account.\n"
+  description: Account Members allow you to associate an Identity with an Account on our Platform.
 paths:
   /identity/account-members:
     post:
@@ -31,7 +29,7 @@ paths:
         end up with three members.
 
 
-        For more information on properties of account members, see [Account Members](#account-members).'
+        For more information on properties of account members, see Account Members.'
       operationId: AddAccountMembers
       responses:
         '200':
@@ -101,6 +99,22 @@ paths:
         - identity:write_account
 components:
   schemas:
+    DeleteAccountMemberResponse:
+      type: object
+    AddAccountMembersRequest:
+      type: object
+      properties:
+        account_id:
+          type: string
+          description: ID of account to which members will be added.
+        members:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccountMember'
+          description: A non-empty array of account members to be added. Account members allow additional identities to act on this account (e.g. joint accounts).
+      required:
+      - account_id
+      - members
     AccountMember:
       type: object
       properties:
@@ -117,28 +131,6 @@ components:
           description: 'Account member ID. Note: This field is auto-generated. Specifying an ID when creating an account member is a client error.'
       required:
       - identity_id
-    AddAccountMembersRequest:
-      type: object
-      properties:
-        account_id:
-          type: string
-          description: ID of account to which members will be added.
-        members:
-          type: array
-          items:
-            $ref: '#/components/schemas/AccountMember'
-          description: A non-empty array of account members to be added. Account members allow additional identities to act on this account (e.g. joint accounts).
-      required:
-      - account_id
-      - members
-    AccountMemberAccountRoleType:
-      type: string
-      enum:
-      - BENEFICIAL_OWNER
-      - AUTHORIZED_USER
-      - FINANCIAL_ADVISOR
-    DeleteAccountMemberResponse:
-      type: object
     AddAccountMembersResponse:
       type: object
       properties:
@@ -152,6 +144,12 @@ components:
           description: List of account members that were added to the account.
       required:
       - account_id
+    AccountMemberAccountRoleType:
+      type: string
+      enum:
+      - BENEFICIAL_OWNER
+      - AUTHORIZED_USER
+      - FINANCIAL_ADVISOR
   securitySchemes:
     OAuth2:
       type: oauth2

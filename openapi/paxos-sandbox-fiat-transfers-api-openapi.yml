@@ -1,10 +1,8 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
-  title: Paxos Account Members Sandbox Fiat Transfers API
+  title: Paxos Sandbox Fiat Transfers API
   version: '2.0'
-  description: '<p>Welcome to Paxos APIs. At Paxos, our mission is to enable the movement of any asset, any time, in a trustworthy way. These APIs serve that mission by making it easier than ever for you to directly integrate our product capabilities into your application, leveraging the speed, stability, and security of the Paxos platform.</p> <p>The documentation that follows gives you access to our Crypto Brokerage, Trading, and Exchange products. It includes APIs for market data, orders, and the held rate quote flow.</p> <p>To test in our sandbox environment, <a href="https://account.sandbox.paxos.com" target="_blank">sign up</a> for an account. For more information about Paxos and our APIs, visit <a href="https://www.paxos.com/" target="_blank">Paxos.com</a>.</p>
-
-    '
+  description: Welcome to Paxos APIs.
   x-logo:
     url: /docs/paxos.svg
     backgroundColor: '#FFFFFF'
@@ -88,6 +86,157 @@ paths:
         - transfer:write_sandbox_fiat_deposit
 components:
   schemas:
+    FiatNetworkInstructionsRtpRoutingDetails:
+      type: object
+      properties:
+        routing_number:
+          type: string
+          description: The routing number.
+        bank_name:
+          type: string
+          description: The name of the bank.
+        bank_address:
+          $ref: '#/components/schemas/MailingAddress'
+      required:
+      - routing_number
+    FiatWireAccountType:
+      type: string
+      enum:
+      - ABA
+      - SWIFT
+    MailingAddress:
+      type: object
+      properties:
+        country:
+          type: string
+          maxLength: 35
+          pattern: ^[0-9A-Za-z /?:().,&'+-]+$
+        address1:
+          type: string
+          maxLength: 35
+          pattern: ^[0-9A-Za-z /?:().,&'+-]+$
+        address2:
+          type: string
+          maxLength: 35
+          pattern: ^[0-9A-Za-z /?:().,&'+-]+$
+        city:
+          type: string
+          maxLength: 35
+          pattern: ^[0-9A-Za-z /?:().,&'+-]+$
+        province:
+          type: string
+          maxLength: 35
+          pattern: ^[0-9A-Za-z /?:().,&'+-]+$
+        zip_code:
+          type: string
+          maxLength: 35
+          pattern: ^[0-9A-Za-z /?:().,&'+-]+$
+      description: A mailing address.
+      required:
+      - country
+    FiatNetworkInstructions:
+      type: object
+      properties:
+        wire:
+          $ref: '#/components/schemas/FiatNetworkInstructionsWire'
+        cbit:
+          $ref: '#/components/schemas/FiatNetworkInstructionsCbit'
+        dbs_act:
+          $ref: '#/components/schemas/FiatNetworkInstructionsDbsAct'
+        cubix:
+          $ref: '#/components/schemas/FiatNetworkInstructionsCubix'
+        scb:
+          $ref: '#/components/schemas/FiatNetworkInstructionsScb'
+        rtp:
+          $ref: '#/components/schemas/FiatNetworkInstructionsRtp'
+    FiatNetworkInstructionsDbsAct:
+      type: object
+      properties:
+        account_number:
+          type: string
+          description: The account number of the DBS account.
+      required:
+      - account_number
+    FiatNetworkInstructionsWireRoutingDetails:
+      type: object
+      properties:
+        routing_number_type:
+          $ref: '#/components/schemas/FiatWireAccountType'
+        routing_number:
+          type: string
+          description: The routing number.
+        bank_name:
+          type: string
+          description: The name of the bank.
+        bank_address:
+          $ref: '#/components/schemas/MailingAddress'
+      required:
+      - routing_number_type
+      - routing_number
+      - bank_name
+      - bank_address
+    FiatNetworkInstructionsScb:
+      type: object
+      properties:
+        account_number:
+          type: string
+          description: The account number of the StandChart account.
+      required:
+      - account_number
+    FiatAccountOwnerPersonDetails:
+      type: object
+      properties:
+        first_name:
+          type: string
+        last_name:
+          type: string
+      required:
+      - first_name
+      - last_name
+    FiatNetworkInstructionsRtp:
+      type: object
+      properties:
+        account_number:
+          type: string
+          description: The FiatAccount owner's bank account number.
+        fiat_account_owner_address:
+          $ref: '#/components/schemas/MailingAddress'
+        routing_details:
+          $ref: '#/components/schemas/FiatNetworkInstructionsRtpRoutingDetails'
+      required:
+      - account_number
+      - routing_details
+    FiatAccountOwnerInstitutionDetails:
+      type: object
+      properties:
+        name:
+          type: string
+      required:
+      - name
+    InitiateSandboxFiatDepositResponse:
+      type: object
+    InitiateSandboxFiatDepositRequest:
+      type: object
+      properties:
+        amount:
+          type: string
+          description: The amount to deposit.
+          pattern: ^[0-9]*\.?[0-9]{1,2}$
+        asset:
+          type: string
+          description: 'The asset to deposit. Current supported asset: "USD".'
+        memo_id:
+          type: string
+          description: The string that the client must provide in the memo field on their deposit to credit their Paxos platform balance.
+        fiat_network_instructions:
+          $ref: '#/components/schemas/FiatNetworkInstructions'
+        fiat_account_owner:
+          $ref: '#/components/schemas/FiatAccountOwner'
+      required:
+      - amount
+      - asset
+      - memo_id
+      - fiat_network_instructions
     Problem:
       type: object
       properties:
@@ -122,9 +271,8 @@ components:
 
             '
           minimum: 100
-          maximum: 600
-          exclusiveMaximum: true
           example: 403
+          exclusiveMaximum: 600
         detail:
           type: string
           description: 'A human readable explanation specific to this occurrence of the
@@ -138,16 +286,14 @@ components:
           description: 'Additional structured metadata about the error.
 
             '
-    FiatAccountOwnerPersonDetails:
+    FiatNetworkInstructionsCbit:
       type: object
       properties:
-        first_name:
+        wallet_address:
           type: string
-        last_name:
-          type: string
+          description: The wallet address of the CBIT account.
       required:
-      - first_name
-      - last_name
+      - wallet_address
     FiatNetworkInstructionsCubix:
       type: object
       properties:
@@ -156,104 +302,13 @@ components:
           description: The uuid account id of the CUBIX account.
       required:
       - account_id
-    FiatNetworkInstructionsWireRoutingDetails:
+    FiatAccountOwner:
       type: object
       properties:
-        routing_number_type:
-          $ref: '#/components/schemas/FiatWireAccountType'
-        routing_number:
-          type: string
-          description: The routing number.
-        bank_name:
-          type: string
-          description: The name of the bank.
-        bank_address:
-          $ref: '#/components/schemas/MailingAddress'
-      required:
-      - routing_number_type
-      - routing_number
-      - bank_name
-      - bank_address
-    FiatNetworkInstructionsRtp:
-      type: object
-      properties:
-        account_number:
-          type: string
-          description: The FiatAccount owner's bank account number.
-        fiat_account_owner_address:
-          $ref: '#/components/schemas/MailingAddress'
-        routing_details:
-          $ref: '#/components/schemas/FiatNetworkInstructionsRtpRoutingDetails'
-      required:
-      - account_number
-      - routing_details
-    FiatAccountOwnerInstitutionDetails:
-      type: object
-      properties:
-        name:
-          type: string
-      required:
-      - name
-    MailingAddress:
-      type: object
-      properties:
-        country:
-          type: string
-          maxLength: 35
-          pattern: ^[0-9A-Za-z /?:().,&'+-]+$
-        address1:
-          type: string
-          maxLength: 35
-          pattern: ^[0-9A-Za-z /?:().,&'+-]+$
-        address2:
-          type: string
-          maxLength: 35
-          pattern: ^[0-9A-Za-z /?:().,&'+-]+$
-        city:
-          type: string
-          maxLength: 35
-          pattern: ^[0-9A-Za-z /?:().,&'+-]+$
-        province:
-          type: string
-          maxLength: 35
-          pattern: ^[0-9A-Za-z /?:().,&'+-]+$
-        zip_code:
-          type: string
-          maxLength: 35
-          pattern: ^[0-9A-Za-z /?:().,&'+-]+$
-      description: A mailing address.
-      required:
-      - country
-    InitiateSandboxFiatDepositRequest:
-      type: object
-      properties:
-        amount:
-          type: string
-          description: The amount to deposit.
-          pattern: ^[0-9]*\.?[0-9]{1,2}$
-        asset:
-          type: string
-          description: 'The asset to deposit. Current supported asset: "USD".'
-        memo_id:
-          type: string
-          description: The string that the client must provide in the memo field on their deposit to credit their Paxos platform balance.
-        fiat_network_instructions:
-          $ref: '#/components/schemas/FiatNetworkInstructions'
-        fiat_account_owner:
-          $ref: '#/components/schemas/FiatAccountOwner'
-      required:
-      - amount
-      - asset
-      - memo_id
-      - fiat_network_instructions
-    FiatNetworkInstructionsScb:
-      type: object
-      properties:
-        account_number:
-          type: string
-          description: The account number of the StandChart account.
-      required:
-      - account_number
+        person_details:
+          $ref: '#/components/schemas/FiatAccountOwnerPersonDetails'
+        institution_details:
+          $ref: '#/components/schemas/FiatAccountOwnerInstitutionDetails'
     FiatNetworkInstructionsWire:
       type: object
       properties:
@@ -270,64 +325,6 @@ components:
       - account_number
       - fiat_account_owner_address
       - routing_details
-    InitiateSandboxFiatDepositResponse:
-      type: object
-    FiatNetworkInstructionsRtpRoutingDetails:
-      type: object
-      properties:
-        routing_number:
-          type: string
-          description: The routing number.
-        bank_name:
-          type: string
-          description: The name of the bank.
-        bank_address:
-          $ref: '#/components/schemas/MailingAddress'
-      required:
-      - routing_number
-    FiatNetworkInstructionsDbsAct:
-      type: object
-      properties:
-        account_number:
-          type: string
-          description: The account number of the DBS account.
-      required:
-      - account_number
-    FiatAccountOwner:
-      type: object
-      properties:
-        person_details:
-          $ref: '#/components/schemas/FiatAccountOwnerPersonDetails'
-        institution_details:
-          $ref: '#/components/schemas/FiatAccountOwnerInstitutionDetails'
-    FiatNetworkInstructions:
-      type: object
-      properties:
-        wire:
-          $ref: '#/components/schemas/FiatNetworkInstructionsWire'
-        cbit:
-          $ref: '#/components/schemas/FiatNetworkInstructionsCbit'
-        dbs_act:
-          $ref: '#/components/schemas/FiatNetworkInstructionsDbsAct'
-        cubix:
-          $ref: '#/components/schemas/FiatNetworkInstructionsCubix'
-        scb:
-          $ref: '#/components/schemas/FiatNetworkInstructionsScb'
-        rtp:
-          $ref: '#/components/schemas/FiatNetworkInstructionsRtp'
-    FiatWireAccountType:
-      type: string
-      enum:
-      - ABA
-      - SWIFT
-    FiatNetworkInstructionsCbit:
-      type: object
-      properties:
-        wallet_address:
-          type: string
-          description: The wallet address of the CBIT account.
-      required:
-      - wallet_address
   securitySchemes:
     OAuth2:
       type: oauth2

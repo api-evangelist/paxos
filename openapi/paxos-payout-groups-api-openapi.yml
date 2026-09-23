@@ -1,10 +1,8 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
-  title: Paxos Account Members Payout Groups API
+  title: Paxos Payout Groups API
   version: '2.0'
-  description: '<p>Welcome to Paxos APIs. At Paxos, our mission is to enable the movement of any asset, any time, in a trustworthy way. These APIs serve that mission by making it easier than ever for you to directly integrate our product capabilities into your application, leveraging the speed, stability, and security of the Paxos platform.</p> <p>The documentation that follows gives you access to our Crypto Brokerage, Trading, and Exchange products. It includes APIs for market data, orders, and the held rate quote flow.</p> <p>To test in our sandbox environment, <a href="https://account.sandbox.paxos.com" target="_blank">sign up</a> for an account. For more information about Paxos and our APIs, visit <a href="https://www.paxos.com/" target="_blank">Paxos.com</a>.</p>
-
-    '
+  description: Welcome to Paxos APIs.
   x-logo:
     url: /docs/paxos.svg
     backgroundColor: '#FFFFFF'
@@ -19,9 +17,7 @@ tags:
   description: 'Payout groups encapsulate common rewards characteristics. All monitored addresses that reference a payout group accumulate rewards at the same rate and claim to the payout destination specified for that group.
 
 
-    *These endpoints are only relevant for whitelisted Rewards partners.*
-
-    '
+    *These endpoints are only relevant for whitelisted Rewards partners.*'
 paths:
   /rewards/payout-groups:
     get:
@@ -212,11 +208,6 @@ paths:
         - rewards:write_payout_groups
 components:
   schemas:
-    CreatePayoutGroupResponse:
-      type: object
-      properties:
-        group:
-          $ref: '#/components/schemas/PayoutGroup'
     CreatePayoutGroupRequest:
       type: object
       properties:
@@ -237,6 +228,20 @@ components:
           description: Address with signing authority to claim rewards for this group.
         schedule:
           $ref: '#/components/schemas/ClaimScheduleConfig'
+    PayoutGroupOnchainStatus:
+      type: string
+      enum:
+      - UNREGISTERED
+      - PENDING_REGISTRATION
+      - NEEDS_REREGISTRATION
+      - ACTIVE
+      - FAILED_REGISTRATION
+      - PENDING_DELETION
+      - FAILED_DELETION
+      - PENDING_MULTIPLIER_UPDATE
+      - MULTIPLIER_UPDATE_FAILED
+      - UNREGISTERED_INSUFFICIENT_BALANCE
+      description: PayoutGroupOnchainStatus represents the on-chain registration status of a payout group.
     RewardsPayoutGroupServiceUpdatePayoutGroupBody:
       type: object
       properties:
@@ -246,6 +251,34 @@ components:
         jurisdiction:
           type: string
           title: Jurisdiction for this payout group (optional, e.g. "US", "EU")
+    ClaimScheduleConfig:
+      type: object
+      properties:
+        schedule_type:
+          $ref: '#/components/schemas/ScheduleType'
+        days_of_week:
+          type: array
+          items:
+            type: integer
+            format: int32
+        days_of_month:
+          type: array
+          items:
+            type: integer
+            format: int32
+        hour:
+          type: integer
+          format: int32
+        minute:
+          type: integer
+          format: int32
+    CreatePayoutGroupResponse:
+      type: object
+      properties:
+        group:
+          $ref: '#/components/schemas/PayoutGroup'
+    DeletePayoutGroupResponse:
+      type: object
     ListPayoutGroupsResponse:
       type: object
       properties:
@@ -260,6 +293,12 @@ components:
           type: integer
           format: int32
           description: Total number of payout groups matching the current filters (without pagination).
+    ScheduleType:
+      type: string
+      enum:
+      - DAILY
+      - MONTHLY
+      - WEEKLY
     PayoutGroup:
       type: object
       properties:
@@ -326,49 +365,6 @@ components:
       - balance
       - created_at
       - updated_at
-    ClaimScheduleConfig:
-      type: object
-      properties:
-        schedule_type:
-          $ref: '#/components/schemas/ScheduleType'
-        days_of_week:
-          type: array
-          items:
-            type: integer
-            format: int32
-        days_of_month:
-          type: array
-          items:
-            type: integer
-            format: int32
-        hour:
-          type: integer
-          format: int32
-        minute:
-          type: integer
-          format: int32
-    DeletePayoutGroupResponse:
-      type: object
-    PayoutGroupOnchainStatus:
-      type: string
-      enum:
-      - UNREGISTERED
-      - PENDING_REGISTRATION
-      - NEEDS_REREGISTRATION
-      - ACTIVE
-      - FAILED_REGISTRATION
-      - PENDING_DELETION
-      - FAILED_DELETION
-      - PENDING_MULTIPLIER_UPDATE
-      - MULTIPLIER_UPDATE_FAILED
-      - UNREGISTERED_INSUFFICIENT_BALANCE
-      description: PayoutGroupOnchainStatus represents the on-chain registration status of a payout group.
-    ScheduleType:
-      type: string
-      enum:
-      - DAILY
-      - MONTHLY
-      - WEEKLY
     UpdatePayoutGroupResponse:
       type: object
       properties:

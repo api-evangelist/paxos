@@ -1,10 +1,8 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
-  title: Paxos Account Members Accounts API
+  title: Paxos Accounts API
   version: '2.0'
-  description: '<p>Welcome to Paxos APIs. At Paxos, our mission is to enable the movement of any asset, any time, in a trustworthy way. These APIs serve that mission by making it easier than ever for you to directly integrate our product capabilities into your application, leveraging the speed, stability, and security of the Paxos platform.</p> <p>The documentation that follows gives you access to our Crypto Brokerage, Trading, and Exchange products. It includes APIs for market data, orders, and the held rate quote flow.</p> <p>To test in our sandbox environment, <a href="https://account.sandbox.paxos.com" target="_blank">sign up</a> for an account. For more information about Paxos and our APIs, visit <a href="https://www.paxos.com/" target="_blank">Paxos.com</a>.</p>
-
-    '
+  description: Welcome to Paxos APIs.
   x-logo:
     url: /docs/paxos.svg
     backgroundColor: '#FFFFFF'
@@ -21,14 +19,12 @@ tags:
     Key features include:
 
 
-    - **Balance Management**: Track and manage profile balances via [Subledgering](https://docs.paxos.com/crypto-brokerage/ledger-type#fiat-and-crypto-subledger)
+    - **Balance Management**: Track and manage profile balances via Subledgering
 
     - **Joint Account Support**: Link multiple Identities to a single Account for shared on platform balance
 
 
-    Accounts are required for all Identity API integrations.
-
-    '
+    Accounts are required for all Identity API integrations.'
 paths:
   /identity/accounts:
     get:
@@ -164,9 +160,9 @@ paths:
         This identity is the primary owner of the account for all tax-related purposes.
 
 
-        To track user balances using Paxos [Profiles](#tag/Profiles), use `create_profile=true` when creating the account.
+        To track user balances using Paxos Profiles, use `create_profile=true` when creating the account.
 
-        Once an account has been created, it is not possible to associate it with a [Profile](#tag/Profiles).
+        Once an account has been created, it is not possible to associate it with a Profile.
 
 
         ### Account Members
@@ -270,7 +266,164 @@ paths:
         - identity:write_account
     put:
       summary: Update Account
-      description: "This enables you to update an existing account with new information. Please refer to the following\ntable for fields that can be updated via this endpoint.\n\nField | Notes\n---|---\naccount.id | Required\naccount.description | Optional\naccount.ref_id | Optional\naccount.metadata | Optional. This will overwrite any existing metadata added to the account.\naccount.members | Optional. The only roles that can be added/removed are `FINANCIAL_ADVISOR` or `AUTHORIZED_USER.` You must always specify the full members object as we do not currently support differential member updates.\nset_user_disabled | Optional. Setting this to `true` will disable the account, limiting its ability to be used within the Paxos platform.\n\n#### Example Requests\n#### Disabling an account\n\n```json\n{\n\"set_user_disabled\": true,\n\"account\": {\n\"id\": \"82c338f4-3cb7-4d9b-be2a-4b077c82ee3a\",\n\"description\": \"Account Description\",\n\"ref_id\": \"82c338f4-3cb7\"\n}\n}\n```\n\n### Adding an account member\nTo retain the existing account members and add a new account member, the `members` field must contain the existing \naccount members and the new member. The below example adds an `AUTHORIZED_USER` to the account.\n\nIn order to add account members while leaving existing account members unaffected, clients \nshould use the [Add Account Members](#operation/AddAccountMembers) API.\n\n```json\n{\n\"account\": {\n\"id\": \"82c338f4-3cb7-4d9b-be2a-4b077c82ee3a\",\n\"members\": [{\n\"identity_id\": \"0f5d8475-33f3-4ebd-88a0-66dedc2581c1\",\n\"roles\": [\"BENEFICIAL_OWNER\"]\n}, {\n\"identity_id\": \"0d26f878-298e-4d47-81be-cdf4e982a3d3\",\n\"roles\": [\"FINANCIAL_ADVISOR\"]\n}, {\n\"identity_id\": \"012k23eb-298e-4d47-81be-cdf4e982a3d3\",\n\"roles\": [\"AUTHORIZED_USER\"]\n}]\n}\n}\n```\n\n### Removing an account member\nTo remove an existing account member and retain other needed members, the `members` field must contain \nthe existing account members without the account member you'd like to remove. The below example removes an `AUTHORIZED_USER` from the account.\n\nNote, this API requires the `members` array to have at least one element. In order to delete all members \nfrom an account, clients should use the [Delete Account Member](#operation/DeleteAccountMember) API.\n\n```json\n{\n\"account\": {\n\"id\": \"82c338f4-3cb7-4d9b-be2a-4b077c82ee3a\",\n\"members\": [{\n\"identity_id\": \"0f5d8475-33f3-4ebd-88a0-66dedc2581c1\",\n\"roles\": [\"BENEFICIAL_OWNER\"]\n}]\n}\n}\n```\n\n### Updating an account members' roles\nTo update an account members' roles, the `members` field must contain all the existing members with their roles along \nwith the additional role that you'd like to add or remove. The below example adds the `FINANCIAL_ADVISOR` role to an member that is already a `BENEFICIAL_OWNER`.\n\n```json\n{\n\"account\": {\n\"id\": \"82c338f4-3cb7-4d9b-be2a-4b077c82ee3a\",\n\"members\": [{\n\"identity_id\": \"0f5d8475-33f3-4ebd-88a0-66dedc2581c1\",\n\"roles\": [\"BENEFICIAL_OWNER\", \"FINANCIAL_ADVISOR\"]\n}]\n}\n}\n```"
+      description: 'This enables you to update an existing account with new information. Please refer to the following
+
+        table for fields that can be updated via this endpoint.
+
+
+        Field | Notes
+
+        ---|---
+
+        account.id | Required
+
+        account.description | Optional
+
+        account.ref_id | Optional
+
+        account.metadata | Optional. This will overwrite any existing metadata added to the account.
+
+        account.members | Optional. The only roles that can be added/removed are `FINANCIAL_ADVISOR` or `AUTHORIZED_USER.` You must always specify the full members object as we do not currently support differential member updates.
+
+        set_user_disabled | Optional. Setting this to `true` will disable the account, limiting its ability to be used within the Paxos platform.
+
+
+        #### Example Requests
+
+        #### Disabling an account
+
+
+        ```json
+
+        {
+
+        "set_user_disabled": true,
+
+        "account": {
+
+        "id": "82c338f4-3cb7-4d9b-be2a-4b077c82ee3a",
+
+        "description": "Account Description",
+
+        "ref_id": "82c338f4-3cb7"
+
+        }
+
+        }
+
+        ```
+
+
+        ### Adding an account member
+
+        To retain the existing account members and add a new account member, the `members` field must contain the existing
+
+        account members and the new member. The below example adds an `AUTHORIZED_USER` to the account.
+
+
+        In order to add account members while leaving existing account members unaffected, clients
+
+        should use the Add Account Members API.
+
+
+        ```json
+
+        {
+
+        "account": {
+
+        "id": "82c338f4-3cb7-4d9b-be2a-4b077c82ee3a",
+
+        "members": [{
+
+        "identity_id": "0f5d8475-33f3-4ebd-88a0-66dedc2581c1",
+
+        "roles": ["BENEFICIAL_OWNER"]
+
+        }, {
+
+        "identity_id": "0d26f878-298e-4d47-81be-cdf4e982a3d3",
+
+        "roles": ["FINANCIAL_ADVISOR"]
+
+        }, {
+
+        "identity_id": "012k23eb-298e-4d47-81be-cdf4e982a3d3",
+
+        "roles": ["AUTHORIZED_USER"]
+
+        }]
+
+        }
+
+        }
+
+        ```
+
+
+        ### Removing an account member
+
+        To remove an existing account member and retain other needed members, the `members` field must contain
+
+        the existing account members without the account member you''d like to remove. The below example removes an `AUTHORIZED_USER` from the account.
+
+
+        Note, this API requires the `members` array to have at least one element. In order to delete all members
+
+        from an account, clients should use the Delete Account Member API.
+
+
+        ```json
+
+        {
+
+        "account": {
+
+        "id": "82c338f4-3cb7-4d9b-be2a-4b077c82ee3a",
+
+        "members": [{
+
+        "identity_id": "0f5d8475-33f3-4ebd-88a0-66dedc2581c1",
+
+        "roles": ["BENEFICIAL_OWNER"]
+
+        }]
+
+        }
+
+        }
+
+        ```
+
+
+        ### Updating an account members'' roles
+
+        To update an account members'' roles, the `members` field must contain all the existing members with their roles along
+
+        with the additional role that you''d like to add or remove. The below example adds the `FINANCIAL_ADVISOR` role to an member that is already a `BENEFICIAL_OWNER`.
+
+
+        ```json
+
+        {
+
+        "account": {
+
+        "id": "82c338f4-3cb7-4d9b-be2a-4b077c82ee3a",
+
+        "members": [{
+
+        "identity_id": "0f5d8475-33f3-4ebd-88a0-66dedc2581c1",
+
+        "roles": ["BENEFICIAL_OWNER", "FINANCIAL_ADVISOR"]
+
+        }]
+
+        }
+
+        }
+
+        ```'
       operationId: UpdateAccount
       responses:
         '200':
@@ -341,16 +494,21 @@ paths:
       security:
       - OAuth2:
         - identity:read_account
+      summary: Get account
+      x-summary-source: derived
 components:
   schemas:
-    AccountAccountType:
-      type: string
-      enum:
-      - BROKERAGE
-      - TRADITIONAL_IRA
-      - ROTH_IRA
-      - SEP_IRA
-      - FINANCIAL_ADVISOR
+    ListAccountsResponse:
+      type: object
+      properties:
+        next_page_cursor:
+          type: string
+          description: Cursor token required for fetching the next page.
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Account'
+          description: The result list of accounts.
     AccountMember:
       type: object
       properties:
@@ -367,17 +525,6 @@ components:
           description: 'Account member ID. Note: This field is auto-generated. Specifying an ID when creating an account member is a client error.'
       required:
       - identity_id
-    ListAccountsResponse:
-      type: object
-      properties:
-        next_page_cursor:
-          type: string
-          description: Cursor token required for fetching the next page.
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/Account'
-          description: The result list of accounts.
     CreateAccountRequest:
       type: object
       properties:
@@ -399,6 +546,24 @@ components:
           description: Individual account for John Doe
           metadata:
             custom_field: custom_value
+    AccountAccountType:
+      type: string
+      enum:
+      - BROKERAGE
+      - TRADITIONAL_IRA
+      - ROTH_IRA
+      - SEP_IRA
+      - FINANCIAL_ADVISOR
+    UpdateAccountRequest:
+      type: object
+      properties:
+        account:
+          $ref: '#/components/schemas/Account'
+        set_user_disabled:
+          type: boolean
+          description: true if the account is required to be disabled by the API user.
+      required:
+      - account
     AccountMemberAccountRoleType:
       type: string
       enum:
@@ -464,16 +629,6 @@ components:
             The field is omitted when the account has no associated [Profile](#tag/Profiles).'
         type:
           $ref: '#/components/schemas/AccountAccountType'
-    UpdateAccountRequest:
-      type: object
-      properties:
-        account:
-          $ref: '#/components/schemas/Account'
-        set_user_disabled:
-          type: boolean
-          description: true if the account is required to be disabled by the API user.
-      required:
-      - account
   securitySchemes:
     OAuth2:
       type: oauth2

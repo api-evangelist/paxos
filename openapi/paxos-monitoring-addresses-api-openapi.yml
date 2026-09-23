@@ -1,10 +1,8 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
-  title: Paxos Account Members Monitoring Addresses API
+  title: Paxos Monitoring Addresses API
   version: '2.0'
-  description: '<p>Welcome to Paxos APIs. At Paxos, our mission is to enable the movement of any asset, any time, in a trustworthy way. These APIs serve that mission by making it easier than ever for you to directly integrate our product capabilities into your application, leveraging the speed, stability, and security of the Paxos platform.</p> <p>The documentation that follows gives you access to our Crypto Brokerage, Trading, and Exchange products. It includes APIs for market data, orders, and the held rate quote flow.</p> <p>To test in our sandbox environment, <a href="https://account.sandbox.paxos.com" target="_blank">sign up</a> for an account. For more information about Paxos and our APIs, visit <a href="https://www.paxos.com/" target="_blank">Paxos.com</a>.</p>
-
-    '
+  description: Welcome to Paxos APIs.
   x-logo:
     url: /docs/paxos.svg
     backgroundColor: '#FFFFFF'
@@ -16,7 +14,7 @@ servers:
   description: Sandbox
 tags:
 - name: Monitoring Addresses
-  description: "A Monitoring Address is a blockchain address that Paxos monitors daily for eligible stablecoin activity and determines the amount of rewards your organization will earn. We recommend adding any addresses you expect to hold, receive, or mint Paxos stablecoins as a monitoring address in order to receive rewards for all of your qualifying on-chain activity. \n\n> Monitoring addresses must be added by month end (`23:59 UTC+0`) in order to earn rewards for that month. Addresses added after month end will start earning rewards for the following month.\n\n*These endpoints are only relevant for Global Dollar Network (GDN) partners.*\n"
+  description: A Monitoring Address is a blockchain address that Paxos monitors daily for eligible stablecoin activity and determines the amount of rewards your organization will earn.
 paths:
   /rewards/monitor/address:
     get:
@@ -310,40 +308,6 @@ paths:
         - rewards:write_monitoring_address
 components:
   schemas:
-    MonitoringAddress:
-      type: object
-      properties:
-        address:
-          type: string
-          description: On-chain address Paxos will monitor for eligible reward activity.
-        crypto_network:
-          $ref: '#/components/schemas/CryptoNetwork'
-        name:
-          type: string
-          description: Optional display name. Useful for grouping or reporting.
-        created_at:
-          type: string
-          format: date-time
-          description: When the address was registered.
-        id:
-          type: string
-          description: UUID direct reference to the created address (to be used for updates).
-      required:
-      - id
-      - address
-      - crypto_network
-      - created_at
-    AutoRewardsPublicUpdateMonitoringAddressBody:
-      type: object
-      properties:
-        name:
-          type: string
-          description: Optional display name. Useful for grouping or reporting.
-    CreateMonitoringAddressResponse:
-      type: object
-      properties:
-        address:
-          $ref: '#/components/schemas/MonitoringAddress'
     ListMonitoringAddressResponse:
       type: object
       properties:
@@ -354,11 +318,6 @@ components:
         next_page_cursor:
           type: string
           title: Value to use as `page_cursor` in subsequent request
-    UpdateMonitoringAddressResponse:
-      type: object
-      properties:
-        address:
-          $ref: '#/components/schemas/MonitoringAddress'
     CreateMonitoringAddressRequest:
       type: object
       properties:
@@ -372,6 +331,22 @@ components:
         name:
           type: string
           description: Optional display name. Useful for grouping or reporting.
+    AutoRewardsPublicUpdateMonitoringAddressBody:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Optional display name. Useful for grouping or reporting.
+    UpdateMonitoringAddressResponse:
+      type: object
+      properties:
+        address:
+          $ref: '#/components/schemas/MonitoringAddress'
+    CreateMonitoringAddressResponse:
+      type: object
+      properties:
+        address:
+          $ref: '#/components/schemas/MonitoringAddress'
     CryptoNetwork:
       type: string
       enum:
@@ -392,11 +367,6 @@ components:
       - ROBINHOOD
       - BNB
       description: A CryptoNetwork is a blockchain transmitting cryptocurrencies.
-    GetMonitoringAddressResponse:
-      type: object
-      properties:
-        address:
-          $ref: '#/components/schemas/MonitoringAddress'
     Problem:
       type: object
       properties:
@@ -431,9 +401,8 @@ components:
 
             '
           minimum: 100
-          maximum: 600
-          exclusiveMaximum: true
           example: 403
+          exclusiveMaximum: 600
         detail:
           type: string
           description: 'A human readable explanation specific to this occurrence of the
@@ -447,6 +416,34 @@ components:
           description: 'Additional structured metadata about the error.
 
             '
+    GetMonitoringAddressResponse:
+      type: object
+      properties:
+        address:
+          $ref: '#/components/schemas/MonitoringAddress'
+    MonitoringAddress:
+      type: object
+      properties:
+        address:
+          type: string
+          description: On-chain address Paxos will monitor for eligible reward activity.
+        crypto_network:
+          $ref: '#/components/schemas/CryptoNetwork'
+        name:
+          type: string
+          description: Optional display name. Useful for grouping or reporting.
+        created_at:
+          type: string
+          format: date-time
+          description: When the address was registered.
+        id:
+          type: string
+          description: UUID direct reference to the created address (to be used for updates).
+      required:
+      - id
+      - address
+      - crypto_network
+      - created_at
   securitySchemes:
     OAuth2:
       type: oauth2

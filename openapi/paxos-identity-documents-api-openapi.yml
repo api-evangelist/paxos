@@ -1,10 +1,8 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
-  title: Paxos Account Members Identity Documents API
+  title: Paxos Identity Documents API
   version: '2.0'
-  description: '<p>Welcome to Paxos APIs. At Paxos, our mission is to enable the movement of any asset, any time, in a trustworthy way. These APIs serve that mission by making it easier than ever for you to directly integrate our product capabilities into your application, leveraging the speed, stability, and security of the Paxos platform.</p> <p>The documentation that follows gives you access to our Crypto Brokerage, Trading, and Exchange products. It includes APIs for market data, orders, and the held rate quote flow.</p> <p>To test in our sandbox environment, <a href="https://account.sandbox.paxos.com" target="_blank">sign up</a> for an account. For more information about Paxos and our APIs, visit <a href="https://www.paxos.com/" target="_blank">Paxos.com</a>.</p>
-
-    '
+  description: Welcome to Paxos APIs.
   x-logo:
     url: /docs/paxos.svg
     backgroundColor: '#FFFFFF'
@@ -16,7 +14,9 @@ servers:
   description: Sandbox
 tags:
 - name: Identity Documents
-  description: "The Identity Documents API allows clients to send documents to Paxos to validate identities\nduring the KYC process. Files can be updated multiple times by re-sending the document type\nfor processing.\n\nWe currently accept the following file formats:\n- <code>pdf</code>\n- <code>jpg</code>\n- <code>png</code>\n\nSteps to upload a document are as follows:\n1. Send a <code>PUT</code> request to <code>/identity/identities/{id}/documents</code> to get\n  the upload URL.\n1. Send your document to the provided URL via a PUT request. Take the following example using curl:\n  <code>$ curl --upload-file Proof_of_residence.jpg $URI </code>\n\nUploaded document metadata will be available via <code>GET</code> request to <code>/identity/identities/{id}/documents</code>\n"
+  description: 'The Identity Documents API allows clients to send documents to Paxos to validate identities
+
+    during the KYC process.'
 paths:
   /identity/identities/{identity_id}/documents:
     get:
@@ -100,7 +100,7 @@ paths:
         - Supported formats include PDF, JPG, and PNG
 
 
-        For more information on document requirements for enhanced due diligence, see [here](https://docs.paxos.com/identity/edd).'
+        For more information on document requirements for enhanced due diligence, see here.'
       operationId: DocumentUpload
       responses:
         '200':
@@ -196,45 +196,6 @@ paths:
         - identity:write_identity
 components:
   schemas:
-    IdentityPublicDocumentUploadBody:
-      type: object
-      properties:
-        name:
-          type: string
-          description: The file name.
-        document_types:
-          type: array
-          items:
-            $ref: '#/components/schemas/DocumentType'
-          description: A list of document types contained within the uploaded file.
-      title: DocumentUploadRequest
-      required:
-      - name
-    DocumentUploadResponse:
-      type: object
-      properties:
-        file_id:
-          type: string
-          description: The id assigned to the file.
-        name:
-          type: string
-          description: The file name.
-        upload_url:
-          type: string
-          description: The URI where we expect the file to be uploaded into.
-    ListIdentityDocumentsResponse:
-      type: object
-      properties:
-        documents:
-          type: array
-          items:
-            $ref: '#/components/schemas/DocumentDescription'
-          title: A list of documents
-        pending_documents:
-          type: array
-          items:
-            $ref: '#/components/schemas/DocumentType'
-          title: The document types that are mandatory for the identity but are missing
     DocumentType:
       type: string
       enum:
@@ -262,6 +223,18 @@ components:
       - LEGAL_DOMICILE_OF_BENEFICIAL_OWNERS
       - GOVERNING_BODY_MEMBER_NAMES
       - INDEPENDENT_AUDIT
+    DocumentUploadResponse:
+      type: object
+      properties:
+        file_id:
+          type: string
+          description: The id assigned to the file.
+        name:
+          type: string
+          description: The file name.
+        upload_url:
+          type: string
+          description: The URI where we expect the file to be uploaded into.
     DocumentDescription:
       type: object
       properties:
@@ -318,9 +291,8 @@ components:
 
             '
           minimum: 100
-          maximum: 600
-          exclusiveMaximum: true
           example: 403
+          exclusiveMaximum: 600
         detail:
           type: string
           description: 'A human readable explanation specific to this occurrence of the
@@ -334,6 +306,33 @@ components:
           description: 'Additional structured metadata about the error.
 
             '
+    IdentityPublicDocumentUploadBody:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The file name.
+        document_types:
+          type: array
+          items:
+            $ref: '#/components/schemas/DocumentType'
+          description: A list of document types contained within the uploaded file.
+      title: DocumentUploadRequest
+      required:
+      - name
+    ListIdentityDocumentsResponse:
+      type: object
+      properties:
+        documents:
+          type: array
+          items:
+            $ref: '#/components/schemas/DocumentDescription'
+          title: A list of documents
+        pending_documents:
+          type: array
+          items:
+            $ref: '#/components/schemas/DocumentType'
+          title: The document types that are mandatory for the identity but are missing
   securitySchemes:
     OAuth2:
       type: oauth2

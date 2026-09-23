@@ -1,10 +1,8 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
-  title: Paxos Account Members Issuer Quotes API
+  title: Paxos Issuer Quotes API
   version: '2.0'
-  description: '<p>Welcome to Paxos APIs. At Paxos, our mission is to enable the movement of any asset, any time, in a trustworthy way. These APIs serve that mission by making it easier than ever for you to directly integrate our product capabilities into your application, leveraging the speed, stability, and security of the Paxos platform.</p> <p>The documentation that follows gives you access to our Crypto Brokerage, Trading, and Exchange products. It includes APIs for market data, orders, and the held rate quote flow.</p> <p>To test in our sandbox environment, <a href="https://account.sandbox.paxos.com" target="_blank">sign up</a> for an account. For more information about Paxos and our APIs, visit <a href="https://www.paxos.com/" target="_blank">Paxos.com</a>.</p>
-
-    '
+  description: Welcome to Paxos APIs.
   x-logo:
     url: /docs/paxos.svg
     backgroundColor: '#FFFFFF'
@@ -16,20 +14,7 @@ servers:
   description: Sandbox
 tags:
 - name: Issuer Quotes
-  description: 'Issuer Quotes are "held rates" offered by Paxos to mint or redeem Paxos-issued assets at a specific price within a period of time - for example, the option to buy PAXG within the next 5 seconds for $3,000.
-
-
-    The typical Issuer Quotes workflow is as follows:
-
-
-    1. Call [Create Issuer Quote](#operation/CreateIssuerQuote) to get a quote for the asset you want to mint or redeem to a specific profile.
-
-    1. Call [Create Issuer Quote Execution](#operation/CreateIssuerQuoteExecution) with the quote ID and profile ID.
-
-
-    You can call [List Issuer Quote Executions](#operation/ListIssuerQuoteExecutions) to review or construct reports on issuer quote execution activity.
-
-    '
+  description: Issuer Quotes are "held rates" offered by Paxos to mint or redeem Paxos-issued assets at a specific price within a period of time - for example, the option to buy PAXG within the next 5 seconds for $3,000.
 paths:
   /issuer-quote:
     post:
@@ -229,12 +214,63 @@ paths:
         - exchange:read_issuer_quote_execution
 components:
   schemas:
+    GetIssuerQuoteSettlementAvailabilityResponse:
+      type: object
+      properties:
+        buy_quantity:
+          type: string
+          description: 'Maximum PAXG quantity available for immediate (T+0) purchase, to 3 decimal places.
+
+            Returns "0.000" when the gold market is closed or unavailable.'
+        sell_quantity:
+          type: string
+          description: Always "0.000" — PAXG sell settlement is T+1, not instant.
+        market:
+          type: string
+          description: Trading pair for the issuer quote.
+        snapshot_at:
+          type: string
+          format: date-time
+          description: Approximate time at which availability was computed.
+      required:
+      - buy_quantity
+      - sell_quantity
+      - market
+      - snapshot_at
+    ExchangePublicCreateIssuerQuoteExecutionBody:
+      type: object
+      properties:
+        profile_id:
+          type: string
+          description: The profile ID under which to execute this order.
+      required:
+      - profile_id
     IssuerQuoteExecutionStatus:
       type: string
       enum:
       - PENDING
       - COMPLETE
       - FAILED
+    CreateIssuerQuoteRequest:
+      type: object
+      properties:
+        profile_id:
+          type: string
+          description: The profile ID under which to execute this order.
+        market:
+          type: string
+          description: Trading pair for the quote. Only "PAXGUSD" is currently supported.
+        side:
+          $ref: '#/components/schemas/OrderSide'
+        base_amount:
+          type: string
+          format: decimal
+          description: The amount of assets (crypto) to mint or redeem.
+      required:
+      - profile_id
+      - market
+      - side
+      - base_amount
     IssuerQuoteExecution:
       type: object
       properties:
@@ -287,49 +323,6 @@ components:
       - token_price
       - token_principal
       - profile_id
-    GetIssuerQuoteSettlementAvailabilityResponse:
-      type: object
-      properties:
-        buy_quantity:
-          type: string
-          description: 'Maximum PAXG quantity available for immediate (T+0) purchase, to 3 decimal places.
-
-            Returns "0.000" when the gold market is closed or unavailable.'
-        sell_quantity:
-          type: string
-          description: Always "0.000" — PAXG sell settlement is T+1, not instant.
-        market:
-          type: string
-          description: Trading pair for the issuer quote.
-        snapshot_at:
-          type: string
-          format: date-time
-          description: Approximate time at which availability was computed.
-      required:
-      - buy_quantity
-      - sell_quantity
-      - market
-      - snapshot_at
-    CreateIssuerQuoteRequest:
-      type: object
-      properties:
-        profile_id:
-          type: string
-          description: The profile ID under which to execute this order.
-        market:
-          type: string
-          description: Trading pair for the quote. Only "PAXGUSD" is currently supported.
-        side:
-          $ref: '#/components/schemas/OrderSide'
-        base_amount:
-          type: string
-          format: decimal
-          description: The amount of assets (crypto) to mint or redeem.
-      required:
-      - profile_id
-      - market
-      - side
-      - base_amount
     ListIssuerQuoteExecutionsResponse:
       type: object
       properties:
@@ -379,20 +372,6 @@ components:
       - fee
       - quote_amount
       - expires_at
-    OrderSide:
-      type: string
-      enum:
-      - BUY
-      - SELL
-      description: Trade side.
-    ExchangePublicCreateIssuerQuoteExecutionBody:
-      type: object
-      properties:
-        profile_id:
-          type: string
-          description: The profile ID under which to execute this order.
-      required:
-      - profile_id
     CreateIssuerQuoteExecutionResponse:
       type: object
       properties:
@@ -401,6 +380,12 @@ components:
           description: The UUID of the issuer quote execution.
       required:
       - id
+    OrderSide:
+      type: string
+      enum:
+      - BUY
+      - SELL
+      description: Trade side.
   securitySchemes:
     OAuth2:
       type: oauth2

@@ -1,10 +1,8 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
-  title: Paxos Account Members Fees API
+  title: Paxos Fees API
   version: '2.0'
-  description: '<p>Welcome to Paxos APIs. At Paxos, our mission is to enable the movement of any asset, any time, in a trustworthy way. These APIs serve that mission by making it easier than ever for you to directly integrate our product capabilities into your application, leveraging the speed, stability, and security of the Paxos platform.</p> <p>The documentation that follows gives you access to our Crypto Brokerage, Trading, and Exchange products. It includes APIs for market data, orders, and the held rate quote flow.</p> <p>To test in our sandbox environment, <a href="https://account.sandbox.paxos.com" target="_blank">sign up</a> for an account. For more information about Paxos and our APIs, visit <a href="https://www.paxos.com/" target="_blank">Paxos.com</a>.</p>
-
-    '
+  description: Welcome to Paxos APIs.
   x-logo:
     url: /docs/paxos.svg
     backgroundColor: '#FFFFFF'
@@ -25,7 +23,7 @@ paths:
         Specify exactly one of `amount` or `total`, otherwise an error is returned.
 
 
-        The [Create Crypto Withdrawal](#operation/CreateCryptoWithdrawal) request that uses the guaranteed fee endpoint
+        The Create Crypto Withdrawal request that uses the guaranteed fee endpoint
 
         must specify an `amount` less than or equal to the guaranteed fee `amount`, otherwise the withdrawal is rejected.'
       operationId: CreateCryptoWithdrawalFee
@@ -49,6 +47,38 @@ paths:
         - fee:write_crypto_withdrawal_fee
 components:
   schemas:
+    CreateCryptoWithdrawalFeeRequest:
+      type: object
+      example:
+        asset: ETH
+        amount: '0.00005'
+        destination_address: '0xF0Aa84466e353E5390be37FE2934301c07c19a55'
+        crypto_network: ETHEREUM
+      properties:
+        asset:
+          type: string
+          description: The currency to withdraw.
+        destination_address:
+          type: string
+          description: The destination address.
+        crypto_network:
+          $ref: '#/components/schemas/CryptoNetwork'
+        amount:
+          type: string
+          description: 'The amount to withdraw. Must be greater than `0`.
+
+            Specify exactly one of `amount` or `total`, otherwise an error is returned.'
+          pattern: ^[0-9]*\.?[0-9]+$
+        total:
+          type: string
+          description: 'Total amount to withdraw, including fees. Must be greater than `0`.
+
+            Specify exactly one of `total ` or `amount`, otherwise an error is returned.'
+          pattern: ^[0-9]*\.?[0-9]+$
+      required:
+      - asset
+      - destination_address
+      - crypto_network
     CryptoWithdrawalFee:
       type: object
       example:
@@ -118,38 +148,6 @@ components:
       - ROBINHOOD
       - BNB
       description: A CryptoNetwork is a blockchain transmitting cryptocurrencies.
-    CreateCryptoWithdrawalFeeRequest:
-      type: object
-      example:
-        asset: ETH
-        amount: '0.00005'
-        destination_address: '0xF0Aa84466e353E5390be37FE2934301c07c19a55'
-        crypto_network: ETHEREUM
-      properties:
-        asset:
-          type: string
-          description: The currency to withdraw.
-        destination_address:
-          type: string
-          description: The destination address.
-        crypto_network:
-          $ref: '#/components/schemas/CryptoNetwork'
-        amount:
-          type: string
-          description: 'The amount to withdraw. Must be greater than `0`.
-
-            Specify exactly one of `amount` or `total`, otherwise an error is returned.'
-          pattern: ^[0-9]*\.?[0-9]+$
-        total:
-          type: string
-          description: 'Total amount to withdraw, including fees. Must be greater than `0`.
-
-            Specify exactly one of `total ` or `amount`, otherwise an error is returned.'
-          pattern: ^[0-9]*\.?[0-9]+$
-      required:
-      - asset
-      - destination_address
-      - crypto_network
   securitySchemes:
     OAuth2:
       type: oauth2

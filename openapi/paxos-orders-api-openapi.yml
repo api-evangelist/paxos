@@ -1,10 +1,8 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
-  title: Paxos Account Members Orders API
+  title: Paxos Orders API
   version: '2.0'
-  description: '<p>Welcome to Paxos APIs. At Paxos, our mission is to enable the movement of any asset, any time, in a trustworthy way. These APIs serve that mission by making it easier than ever for you to directly integrate our product capabilities into your application, leveraging the speed, stability, and security of the Paxos platform.</p> <p>The documentation that follows gives you access to our Crypto Brokerage, Trading, and Exchange products. It includes APIs for market data, orders, and the held rate quote flow.</p> <p>To test in our sandbox environment, <a href="https://account.sandbox.paxos.com" target="_blank">sign up</a> for an account. For more information about Paxos and our APIs, visit <a href="https://www.paxos.com/" target="_blank">Paxos.com</a>.</p>
-
-    '
+  description: Welcome to Paxos APIs.
   x-logo:
     url: /docs/paxos.svg
     backgroundColor: '#FFFFFF'
@@ -16,11 +14,10 @@ servers:
   description: Sandbox
 tags:
 - name: Orders
-  description: '<p>There are three types of orders: market, limit and post-only.</p>
+  description: 'There are three types of orders: market, limit and post-only.
 
-    <p>Market orders guarantee execution at a variable price and quantity. Limit orders guarantee price and quantity at the time of execution but do not guarantee execution. Post-only is an order type that will only be placed on the order book if it is the maker side of a trade.</p>
 
-    '
+    Market orders guarantee execution at a variable price and quantity. Limit orders guarantee price and quantity at the time of execution but do not guarantee execution. Post-only is an order type that will only be placed on the order book if it is the maker side of a trade.'
 paths:
   /executions:
     get:
@@ -512,62 +509,6 @@ paths:
       - OAuth2:
         - exchange:write_order
 components:
-  examples:
-    Problem_market_conditions_prevented_execution:
-      value:
-        type: https://developer.paxos.com/docs/v2/problems/market-conditions-prevented-execution
-        title: Market Conditions Prevented Execution
-        status: 403
-        detail: market conditions have invalidated this order
-    Problem_bad_request:
-      value:
-        type: about:blank
-        title: Bad Request
-        status: 400
-        detail: 'base_amount invalid: invalid amount ''-10'': must be positive decimal'
-    Problem_insufficient_funds:
-      value:
-        type: https://developer.paxos.com/docs/v2/problems/insufficient-funds
-        title: Insufficient Funds
-        status: 403
-        detail: 'insufficient USD funds in profile b7b77d82-e6a7-4ae9-9904-36231aedf985: 100 needed, 50 available'
-        meta:
-          profile_id: b7b77d82-e6a7-4ae9-9904-36231aedf985
-          asset: USD
-          available: '50'
-          needed: '100'
-    Problem_already_exists_order:
-      value:
-        type: https://developer.paxos.com/docs/v2/problems/already-exists
-        title: Already Exists
-        status: 409
-        detail: order already exists with ref_id 'already_used_ref_id'
-        meta:
-          existing:
-            id: f190b163-208f-4d73-8deb-4fb8b24add00
-            profile_id: b7b77d82-e6a7-4ae9-9904-36231aedf985
-            ref_id: already_used_ref_id
-            status: SUBMITTED
-            side: BUY
-            market: BTCUSD
-            quote_amount: '100.00'
-    Problem_notional_value_too_large:
-      value:
-        type: https://developer.paxos.com/docs/v2/problems/notional-value-too-large
-        title: Notional Value Too Large
-        status: 403
-        detail: 'notional value too large for BTCUSD LIMIT order: order had notional value 1501234.56, but maximum allowed notional value is 1500000'
-        meta:
-          market: BTCUSD
-          order_type: LIMIT
-          order_notional_value: '1501234.56'
-          max_notional_value: '1500000'
-    Problem_forbidden_order_cancel:
-      value:
-        type: about:blank
-        title: Forbidden
-        status: 403
-        detail: order is not in cancellable state
   schemas:
     Execution:
       type: object
@@ -616,8 +557,178 @@ components:
           type: string
           format: decimal
           description: The total asset traded (asset amount multiplied by price paid).
+    ListExecutionsResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Execution'
+        next_page_cursor:
+          type: string
+          description: Cursor token required for fetching the next page.
+    Market:
+      type: string
+      enum:
+      - ETHEUR
+      - ETHSGD
+      - ETHUSD
+      - BTCEUR
+      - BTCSGD
+      - BTCUSD
+      - PAXGUSD
+      - BCHUSD
+      - LTCUSD
+      - USDPUSD
+      - LINKUSD
+      - AAVEUSD
+      - UNIUSD
+      - PEPEUSD
+      - TRUMPUSD
+      - SHIBUSD
+      - ARBUSD
+      - BONKUSD
+      - ENAUSD
+      - MNTUSD
+      - ONDOUSD
+      - PENGUUSD
+      - QNTUSD
+      - RENDERUSD
+      - SKYUSD
+      - WIFUSD
+      - WLDUSD
+      - DOGEUSD
+      - AVAXUSD
+      - SUIUSD
+      - POLUSD
+      - XLMUSD
+      - BNBUSD
+      title: ''
+    TimeInForce:
+      type: string
+      enum:
+      - GTC
+      - FOK
+      - IOC
+      - GTT
+      description: 'How long an order will remain active before it expires.
+
+        - Immediate-or-Cancel (IOC): Cancel if not executed immediately, partial fills allowed.
+
+        - Good-Til-Canceled (GTC): Order can be canceled at any point until executed.
+
+        - Good-Til-Time (GTT): Expires if not executed by a specified time. GTT must be greater than 10 seconds after the order is placed, otherwise the order will be rejected.
+
+        - Fill-or-Kill (FOK): Fill entire order only or cancel entire order, does not allow for partial filling.
+
+
+        **Time in Force validity for Order Types**
+
+
+        | Order type      | Immediate or Cancel (IOC) | Good Til Canceled (GTC) | Good Til Time (GTT) | Fill or Kill (FOK) |
+
+        | --------------- | ------------------------- | ----------------------- | ------------------- | ------------------ |
+
+        | Market Order    | Default                   |  -                      |  -                  |  -                 |
+
+        | Limit Order     | Valid                     | Default                 | Valid               | Valid              |
+
+        | Post Only Limit | Valid                     | Default                 | Valid               | Valid              |
+
+        | Stop Market     |  -                        | Default                 | Valid               |  -                 |
+
+        | Stop Limit      |  -                        | Default                 | Valid               |  -                 |'
+    ListOrdersResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Order'
+        next_page_cursor:
+          type: string
+          description: Cursor token required for fetching the next page.
+    Problem:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+          description: 'An absolute URI that identifies the problem type.  When dereferenced,
+
+            it SHOULD provide human-readable documentation for the problem type
+
+            (e.g., using HTML).
+
+            '
+          default: about:blank
+          example: https://api.paxos.com/v2/problems/insufficient_funds
+        title:
+          type: string
+          description: 'A short, summary of the problem type. Written in english and readable
+
+            for engineers (usually not suited for non technical stakeholders and
+
+            not localized); example: Service Unavailable
+
+            '
+          example: Insufficient Funds
+        status:
+          type: integer
+          format: int32
+          description: 'The HTTP status code generated by the origin server for this occurrence
+
+            of the problem.
+
+            '
+          minimum: 100
+          example: 403
+          exclusiveMaximum: 600
+        detail:
+          type: string
+          description: 'A human readable explanation specific to this occurrence of the
+
+            problem.
+
+            '
+          example: Not enough funds in account.
+        meta:
+          type: object
+          description: 'Additional structured metadata about the error.
+
+            '
+    OrderSide:
+      type: string
+      enum:
+      - BUY
+      - SELL
+      description: Trade side.
     CancelOrderResponse:
       type: object
+    OrderType:
+      type: string
+      enum:
+      - LIMIT
+      - MARKET
+      - POST_ONLY_LIMIT
+      - STOP_MARKET
+      - STOP_LIMIT
+      description: Trade type.
+    OrderStatus:
+      type: string
+      enum:
+      - PENDING_SUBMISSION
+      - SUBMITTED
+      - OPEN
+      - FILLED
+      - CANCELLED
+      - REJECTED
+      - EXPIRED
+      description: 'Status of the order. The `EXPIRED` status is only applicable
+
+        for Smart Order Routing customers.
+
+        '
     ExchangePublicCreateOrderBody:
       type: object
       example:
@@ -693,31 +804,6 @@ components:
       - side
       - market
       - type
-    OrderStatus:
-      type: string
-      enum:
-      - PENDING_SUBMISSION
-      - SUBMITTED
-      - OPEN
-      - FILLED
-      - CANCELLED
-      - REJECTED
-      - EXPIRED
-      description: 'Status of the order. The `EXPIRED` status is only applicable
-
-        for Smart Order Routing customers.
-
-        '
-    ListExecutionsResponse:
-      type: object
-      properties:
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/Execution'
-        next_page_cursor:
-          type: string
-          description: Cursor token required for fetching the next page.
     Order:
       type: object
       properties:
@@ -793,152 +879,6 @@ components:
         is_triggered:
           type: boolean
           description: Returns `true` when a stop order has been triggered.
-    TimeInForce:
-      type: string
-      enum:
-      - GTC
-      - FOK
-      - IOC
-      - GTT
-      description: 'How long an order will remain active before it expires.
-
-        - Immediate-or-Cancel (IOC): Cancel if not executed immediately, partial fills allowed.
-
-        - Good-Til-Canceled (GTC): Order can be canceled at any point until executed.
-
-        - Good-Til-Time (GTT): Expires if not executed by a specified time. GTT must be greater than 10 seconds after the order is placed, otherwise the order will be rejected.
-
-        - Fill-or-Kill (FOK): Fill entire order only or cancel entire order, does not allow for partial filling.
-
-
-        **Time in Force validity for Order Types**
-
-
-        | Order type      | Immediate or Cancel (IOC) | Good Til Canceled (GTC) | Good Til Time (GTT) | Fill or Kill (FOK) |
-
-        | --------------- | ------------------------- | ----------------------- | ------------------- | ------------------ |
-
-        | Market Order    | Default                   |  -                      |  -                  |  -                 |
-
-        | Limit Order     | Valid                     | Default                 | Valid               | Valid              |
-
-        | Post Only Limit | Valid                     | Default                 | Valid               | Valid              |
-
-        | Stop Market     |  -                        | Default                 | Valid               |  -                 |
-
-        | Stop Limit      |  -                        | Default                 | Valid               |  -                 |'
-    ListOrdersResponse:
-      type: object
-      properties:
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/Order'
-        next_page_cursor:
-          type: string
-          description: Cursor token required for fetching the next page.
-    OrderType:
-      type: string
-      enum:
-      - LIMIT
-      - MARKET
-      - POST_ONLY_LIMIT
-      - STOP_MARKET
-      - STOP_LIMIT
-      description: Trade type.
-    Market:
-      type: string
-      enum:
-      - ETHEUR
-      - ETHSGD
-      - ETHUSD
-      - BTCEUR
-      - BTCSGD
-      - BTCUSD
-      - PAXGUSD
-      - BCHUSD
-      - LTCUSD
-      - USDPUSD
-      - LINKUSD
-      - AAVEUSD
-      - UNIUSD
-      - PEPEUSD
-      - TRUMPUSD
-      - SHIBUSD
-      - ARBUSD
-      - BONKUSD
-      - ENAUSD
-      - MNTUSD
-      - ONDOUSD
-      - PENGUUSD
-      - QNTUSD
-      - RENDERUSD
-      - SKYUSD
-      - WIFUSD
-      - WLDUSD
-      - DOGEUSD
-      - AVAXUSD
-      - SUIUSD
-      - POLUSD
-      - XLMUSD
-      - BNBUSD
-      title: ''
-    OrderSide:
-      type: string
-      enum:
-      - BUY
-      - SELL
-      description: Trade side.
-    Problem:
-      type: object
-      properties:
-        type:
-          type: string
-          format: uri
-          description: 'An absolute URI that identifies the problem type.  When dereferenced,
-
-            it SHOULD provide human-readable documentation for the problem type
-
-            (e.g., using HTML).
-
-            '
-          default: about:blank
-          example: https://api.paxos.com/v2/problems/insufficient_funds
-        title:
-          type: string
-          description: 'A short, summary of the problem type. Written in english and readable
-
-            for engineers (usually not suited for non technical stakeholders and
-
-            not localized); example: Service Unavailable
-
-            '
-          example: Insufficient Funds
-        status:
-          type: integer
-          format: int32
-          description: 'The HTTP status code generated by the origin server for this occurrence
-
-            of the problem.
-
-            '
-          minimum: 100
-          maximum: 600
-          exclusiveMaximum: true
-          example: 403
-        detail:
-          type: string
-          description: 'A human readable explanation specific to this occurrence of the
-
-            problem.
-
-            '
-          example: Not enough funds in account.
-        meta:
-          type: object
-          description: 'Additional structured metadata about the error.
-
-            '
   responses:
     bad_request_trade:
       description: Bad Request
@@ -949,6 +889,62 @@ components:
           examples:
             Invalid Base Amount:
               $ref: '#/components/examples/Problem_bad_request'
+  examples:
+    Problem_insufficient_funds:
+      value:
+        type: https://developer.paxos.com/docs/v2/problems/insufficient-funds
+        title: Insufficient Funds
+        status: 403
+        detail: 'insufficient USD funds in profile b7b77d82-e6a7-4ae9-9904-36231aedf985: 100 needed, 50 available'
+        meta:
+          profile_id: b7b77d82-e6a7-4ae9-9904-36231aedf985
+          asset: USD
+          available: '50'
+          needed: '100'
+    Problem_forbidden_order_cancel:
+      value:
+        type: about:blank
+        title: Forbidden
+        status: 403
+        detail: order is not in cancellable state
+    Problem_notional_value_too_large:
+      value:
+        type: https://developer.paxos.com/docs/v2/problems/notional-value-too-large
+        title: Notional Value Too Large
+        status: 403
+        detail: 'notional value too large for BTCUSD LIMIT order: order had notional value 1501234.56, but maximum allowed notional value is 1500000'
+        meta:
+          market: BTCUSD
+          order_type: LIMIT
+          order_notional_value: '1501234.56'
+          max_notional_value: '1500000'
+    Problem_already_exists_order:
+      value:
+        type: https://developer.paxos.com/docs/v2/problems/already-exists
+        title: Already Exists
+        status: 409
+        detail: order already exists with ref_id 'already_used_ref_id'
+        meta:
+          existing:
+            id: f190b163-208f-4d73-8deb-4fb8b24add00
+            profile_id: b7b77d82-e6a7-4ae9-9904-36231aedf985
+            ref_id: already_used_ref_id
+            status: SUBMITTED
+            side: BUY
+            market: BTCUSD
+            quote_amount: '100.00'
+    Problem_bad_request:
+      value:
+        type: about:blank
+        title: Bad Request
+        status: 400
+        detail: 'base_amount invalid: invalid amount ''-10'': must be positive decimal'
+    Problem_market_conditions_prevented_execution:
+      value:
+        type: https://developer.paxos.com/docs/v2/problems/market-conditions-prevented-execution
+        title: Market Conditions Prevented Execution
+        status: 403
+        detail: market conditions have invalidated this order
   securitySchemes:
     OAuth2:
       type: oauth2

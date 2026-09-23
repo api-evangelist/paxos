@@ -1,10 +1,8 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
-  title: Paxos Account Members Reward Addresses API
+  title: Paxos Reward Addresses API
   version: '2.0'
-  description: '<p>Welcome to Paxos APIs. At Paxos, our mission is to enable the movement of any asset, any time, in a trustworthy way. These APIs serve that mission by making it easier than ever for you to directly integrate our product capabilities into your application, leveraging the speed, stability, and security of the Paxos platform.</p> <p>The documentation that follows gives you access to our Crypto Brokerage, Trading, and Exchange products. It includes APIs for market data, orders, and the held rate quote flow.</p> <p>To test in our sandbox environment, <a href="https://account.sandbox.paxos.com" target="_blank">sign up</a> for an account. For more information about Paxos and our APIs, visit <a href="https://www.paxos.com/" target="_blank">Paxos.com</a>.</p>
-
-    '
+  description: Welcome to Paxos APIs.
   x-logo:
     url: /docs/paxos.svg
     backgroundColor: '#FFFFFF'
@@ -16,18 +14,7 @@ servers:
   description: Sandbox
 tags:
 - name: Reward Addresses
-  description: 'Reward addresses are blockchain addresses registered for reward attribution.
-
-
-    Custody Rewards: For EVM chains, Paxos registers these addresses on-chain for reward calculation and accrual in the token contract. For Solana, provide the **owner account** (not a token account) — Paxos will derive and register the associated token account on-chain for the given asset. Providing a token account will result in a derived address with no meaning. For other non-EVM chains, Paxos tracks on-chain activity for custody reward calculation.
-
-
-    Non-Custody Rewards: Paxos tracks on-chain activity for these addresses to calculate and distribute non-custody rewards to your organization.
-
-
-    *These endpoints are only relevant for whitelisted Rewards partners.*
-
-    '
+  description: Reward addresses are blockchain addresses registered for reward attribution.
 paths:
   /rewards/addresses:
     get:
@@ -278,26 +265,30 @@ paths:
         - rewards:write_monitoring_address
 components:
   schemas:
-    AttributionAddressError:
+    AttributionLedgerType:
+      type: string
+      enum:
+      - PAXOS
+      - ETHEREUM
+      - SOLANA
+      - INK
+      - XLAYER
+      - ARBITRUM_ONE
+      - ROBINHOOD
+      description: 'An AttributionLedgerType is a data source which produces events which cause monitored
+
+        to occur. Examples include blockchains and the Paxos platform. Each event includes
+
+        a source and/or destination address which will be compared against the addresses
+
+        configured relative to the same ledger type.'
+    DeleteAttributionAddressResponse:
+      type: object
+    CreateAttributionAddressResponse:
       type: object
       properties:
         address:
           $ref: '#/components/schemas/AttributionAddress'
-        error:
-          type: string
-          title: Error message
-      title: Failed address with error details
-    ListAttributionAddressesResponse:
-      type: object
-      properties:
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/AttributionAddress'
-          description: Monitored addresses in this page of results.
-        next_page_cursor:
-          type: string
-          description: Token for the next page of results; empty if no more results.
     BatchCreateAttributionAddressesRequest:
       type: object
       properties:
@@ -305,11 +296,22 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/AttributionAddress'
-    CreateAttributionAddressResponse:
+    CreateAttributionAddressRequest:
       type: object
       properties:
         address:
           $ref: '#/components/schemas/AttributionAddress'
+    BatchCreateAttributionAddressesResponse:
+      type: object
+      properties:
+        successful_addresses:
+          type: array
+          items:
+            $ref: '#/components/schemas/AttributionAddress'
+        failed_addresses:
+          type: array
+          items:
+            $ref: '#/components/schemas/AttributionAddressError'
     AttributionAddress:
       type: object
       properties:
@@ -362,41 +364,26 @@ components:
           description: Output only. Expiry of the latest proof. Absent when no proof exists.
           readOnly: true
       title: All data associated with an attribution address
-    CreateAttributionAddressRequest:
+    ListAttributionAddressesResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/AttributionAddress'
+          description: Monitored addresses in this page of results.
+        next_page_cursor:
+          type: string
+          description: Token for the next page of results; empty if no more results.
+    AttributionAddressError:
       type: object
       properties:
         address:
           $ref: '#/components/schemas/AttributionAddress'
-    DeleteAttributionAddressResponse:
-      type: object
-    BatchCreateAttributionAddressesResponse:
-      type: object
-      properties:
-        successful_addresses:
-          type: array
-          items:
-            $ref: '#/components/schemas/AttributionAddress'
-        failed_addresses:
-          type: array
-          items:
-            $ref: '#/components/schemas/AttributionAddressError'
-    AttributionLedgerType:
-      type: string
-      enum:
-      - PAXOS
-      - ETHEREUM
-      - SOLANA
-      - INK
-      - XLAYER
-      - ARBITRUM_ONE
-      - ROBINHOOD
-      description: 'An AttributionLedgerType is a data source which produces events which cause monitored
-
-        to occur. Examples include blockchains and the Paxos platform. Each event includes
-
-        a source and/or destination address which will be compared against the addresses
-
-        configured relative to the same ledger type.'
+        error:
+          type: string
+          title: Error message
+      title: Failed address with error details
     UpdateAttributionAddressResponse:
       type: object
       properties:

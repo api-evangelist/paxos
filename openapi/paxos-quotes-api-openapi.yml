@@ -1,10 +1,8 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
-  title: Paxos Account Members Quotes API
+  title: Paxos Quotes API
   version: '2.0'
-  description: '<p>Welcome to Paxos APIs. At Paxos, our mission is to enable the movement of any asset, any time, in a trustworthy way. These APIs serve that mission by making it easier than ever for you to directly integrate our product capabilities into your application, leveraging the speed, stability, and security of the Paxos platform.</p> <p>The documentation that follows gives you access to our Crypto Brokerage, Trading, and Exchange products. It includes APIs for market data, orders, and the held rate quote flow.</p> <p>To test in our sandbox environment, <a href="https://account.sandbox.paxos.com" target="_blank">sign up</a> for an account. For more information about Paxos and our APIs, visit <a href="https://www.paxos.com/" target="_blank">Paxos.com</a>.</p>
-
-    '
+  description: Welcome to Paxos APIs.
   x-logo:
     url: /docs/paxos.svg
     backgroundColor: '#FFFFFF'
@@ -16,7 +14,11 @@ servers:
   description: Sandbox
 tags:
 - name: Quotes
-  description: "Quotes are \"held rates\" offered by Paxos to buy or sell assets at a specific\nprice within a period of time - for example, the option to buy BTC within\nthe next 30 seconds for $8,000.\n\nThe typical Quotes workflow is as follows:\n\n1. Call [List Quotes](#operation/ListQuotes) to get the latest available\n   quoted prices for the assets you want to buy or sell.\n1. Present the offered price to one or more end-users, with a timer\n   indicating the time to expiration.\n1. If a user accepts the price, call [Create Quote Execution](#operation/CreateQuoteExecution) with the amount to buy or sell.\n1. Call [Get Quote Execution](#operation/GetQuoteExecution) to monitor\n   for completion and know when the funds from the execution are available.\n\nIt's important to show end-users the latest available price. If you cache\nprices to show them to multiple users, you should refresh the cache once\nper second.\n\nYou can call [List Quote Executions](#operation/ListQuoteExecutions) to\nreview or construct reports on quote execution activity.\n"
+  description: 'Quotes are "held rates" offered by Paxos to buy or sell assets at a specific
+
+    price within a period of time - for example, the option to buy BTC within
+
+    the next 30 seconds for $8,000.'
 paths:
   /quotes:
     get:
@@ -30,7 +32,7 @@ paths:
 
         Each quote is valid until `expires_at`, and can be executed on by
 
-        calling [Create Quote Execution](#operation/CreateQuoteExecution).
+        calling Create Quote Execution.
 
 
         Multiple calls to list quotes in quick succession may return the same quote
@@ -131,6 +133,56 @@ paths:
         - exchange:read_quote
 components:
   schemas:
+    Market:
+      type: string
+      enum:
+      - ETHEUR
+      - ETHSGD
+      - ETHUSD
+      - BTCEUR
+      - BTCSGD
+      - BTCUSD
+      - PAXGUSD
+      - BCHUSD
+      - LTCUSD
+      - USDPUSD
+      - LINKUSD
+      - AAVEUSD
+      - UNIUSD
+      - PEPEUSD
+      - TRUMPUSD
+      - SHIBUSD
+      - ARBUSD
+      - BONKUSD
+      - ENAUSD
+      - MNTUSD
+      - ONDOUSD
+      - PENGUUSD
+      - QNTUSD
+      - RENDERUSD
+      - SKYUSD
+      - WIFUSD
+      - WLDUSD
+      - DOGEUSD
+      - AVAXUSD
+      - SUIUSD
+      - POLUSD
+      - XLMUSD
+      - BNBUSD
+      title: ''
+    OrderSide:
+      type: string
+      enum:
+      - BUY
+      - SELL
+      description: Trade side.
+    ListQuotesResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Quote'
     Quote:
       type: object
       example:
@@ -180,56 +232,6 @@ components:
       - quote_asset
       - created_at
       - expires_at
-    ListQuotesResponse:
-      type: object
-      properties:
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/Quote'
-    Market:
-      type: string
-      enum:
-      - ETHEUR
-      - ETHSGD
-      - ETHUSD
-      - BTCEUR
-      - BTCSGD
-      - BTCUSD
-      - PAXGUSD
-      - BCHUSD
-      - LTCUSD
-      - USDPUSD
-      - LINKUSD
-      - AAVEUSD
-      - UNIUSD
-      - PEPEUSD
-      - TRUMPUSD
-      - SHIBUSD
-      - ARBUSD
-      - BONKUSD
-      - ENAUSD
-      - MNTUSD
-      - ONDOUSD
-      - PENGUUSD
-      - QNTUSD
-      - RENDERUSD
-      - SKYUSD
-      - WIFUSD
-      - WLDUSD
-      - DOGEUSD
-      - AVAXUSD
-      - SUIUSD
-      - POLUSD
-      - XLMUSD
-      - BNBUSD
-      title: ''
-    OrderSide:
-      type: string
-      enum:
-      - BUY
-      - SELL
-      description: Trade side.
   securitySchemes:
     OAuth2:
       type: oauth2

@@ -1,10 +1,8 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
-  title: Paxos Account Members Settlement API
+  title: Paxos Settlement API
   version: '2.0'
-  description: '<p>Welcome to Paxos APIs. At Paxos, our mission is to enable the movement of any asset, any time, in a trustworthy way. These APIs serve that mission by making it easier than ever for you to directly integrate our product capabilities into your application, leveraging the speed, stability, and security of the Paxos platform.</p> <p>The documentation that follows gives you access to our Crypto Brokerage, Trading, and Exchange products. It includes APIs for market data, orders, and the held rate quote flow.</p> <p>To test in our sandbox environment, <a href="https://account.sandbox.paxos.com" target="_blank">sign up</a> for an account. For more information about Paxos and our APIs, visit <a href="https://www.paxos.com/" target="_blank">Paxos.com</a>.</p>
-
-    '
+  description: Welcome to Paxos APIs.
   x-logo:
     url: /docs/paxos.svg
     backgroundColor: '#FFFFFF'
@@ -16,15 +14,7 @@ servers:
   description: Sandbox
 tags:
 - name: Settlement
-  description: 'Use the Settlements API to facilitate simultaneous exchange of pre-funded assets. Automate a variety of use cases that require two-party approval, including net settlement of over-the-counter trades, withdrawal requests for tri-party collateral, payment requests, and bilateral settlement for marketplace end users.
-
-
-    The simple request-and-approval workflow supports both one-directional and bidirectional transactions to allow a user to receive an asset (for example, send USDP) or simultaneously send and receive assets (for example, send USD and receive BTC and ETH). Only when all parties are in agreement and assets are fully funded does the Settlements API allow for change of custody. Upon completion, all settled assets are immediately available for trading, transferring, withdrawal or other supported activities.
-
-
-    The Source Profile initiates the transaction for the Target Profile to approve. The `DIRECTION` of each asset is always relative to the Source Profile and only the owner of the Source Profile can cancel a transaction if it hasn''t been approved by the Target Profile.
-
-    '
+  description: Use the Settlements API to facilitate simultaneous exchange of pre-funded assets.
   externalDocs:
     description: Learn more about the Settlement APIs →
     url: https://docs.paxos.com/settlements
@@ -445,6 +435,111 @@ paths:
         - settlement:write_transaction
 components:
   schemas:
+    CreateTransactionRequest:
+      type: object
+      properties:
+        ref_id:
+          type: string
+          description: Idempotency key.
+        settlement_window_start:
+          type: string
+          format: date-time
+          description: 'The start of the window which the transaction is eligible for settlement.
+
+            If omitted, transactions are immediately eligible for settlement upon success.
+
+            RFC3339 format, like `2006-01-02T15:04:05Z`.'
+        settlement_window_end:
+          type: string
+          format: date-time
+          description: 'The end of the window which the transaction is eligible for settlement.
+
+            Transactions which are not cancelled or settled by this time will expire.
+
+            RFC3339 format, like `2006-01-02T15:04:05Z`.'
+        source_profile_id:
+          type: string
+          description: The `profile_id` of the entity submitting the transaction.
+        target_profile_id:
+          type: string
+          description: The `profile_id` of the entity receiving the transaction.
+        legs:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreateObligationRequest'
+          description: The obligations (representing one-way asset movements) to be settled atomically.
+      description: Request to create a bilateral settlement transaction with one or more legs.
+    ListTransactionsResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Transaction'
+        next_page_cursor:
+          type: string
+    CreateObligationRequest:
+      type: object
+      properties:
+        direction:
+          $ref: '#/components/schemas/ObligationDirection'
+        asset:
+          type: string
+          description: Asset which is obliged.
+        amount:
+          type: string
+          format: decimal
+          description: Amount of the asset which is obliged.
+      description: Request to create a obligation.
+    Problem:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+          description: 'An absolute URI that identifies the problem type.  When dereferenced,
+
+            it SHOULD provide human-readable documentation for the problem type
+
+            (e.g., using HTML).
+
+            '
+          default: about:blank
+          example: https://api.paxos.com/v2/problems/insufficient_funds
+        title:
+          type: string
+          description: 'A short, summary of the problem type. Written in english and readable
+
+            for engineers (usually not suited for non technical stakeholders and
+
+            not localized); example: Service Unavailable
+
+            '
+          example: Insufficient Funds
+        status:
+          type: integer
+          format: int32
+          description: 'The HTTP status code generated by the origin server for this occurrence
+
+            of the problem.
+
+            '
+          minimum: 100
+          example: 403
+          exclusiveMaximum: 600
+        detail:
+          type: string
+          description: 'A human readable explanation specific to this occurrence of the
+
+            problem.
+
+            '
+          example: Not enough funds in account.
+        meta:
+          type: object
+          description: 'Additional structured metadata about the error.
+
+            '
     Transaction:
       type: object
       example:
@@ -518,6 +613,12 @@ components:
       - status
       - created_at
       - updated_at
+    ObligationDirection:
+      type: string
+      enum:
+      - DELIVER
+      - RECEIVE
+      description: "Direction of asset delivery for an obligation.\n\n - DELIVER: Assets are delivered from the source profile to the target profile.\n - RECEIVE: Assets are delivered from the target profile to the source profile."
     TransactionStatus:
       type: string
       enum:
@@ -528,68 +629,6 @@ components:
       - AFFIRMED
       description: "- PENDING: Initial state of a settlement transaction upon creation.\n - SETTLED: Indicates all obligations belong to the settlement transaction have been enacted.\n - EXPIRED: Indicates the settlement transaction is no longer eligible for settlement.\n - CANCELLED: Indicates the settlement transaction was cancelled by the source profile.\n - AFFIRMED: Indicates the settlement transaction will be eligible for settlement once within the window."
       title: Status of the transaction
-    CreateObligationRequest:
-      type: object
-      properties:
-        direction:
-          $ref: '#/components/schemas/ObligationDirection'
-        asset:
-          type: string
-          description: Asset which is obliged.
-        amount:
-          type: string
-          format: decimal
-          description: Amount of the asset which is obliged.
-      description: Request to create a obligation.
-    CreateTransactionRequest:
-      type: object
-      properties:
-        ref_id:
-          type: string
-          description: Idempotency key.
-        settlement_window_start:
-          type: string
-          format: date-time
-          description: 'The start of the window which the transaction is eligible for settlement.
-
-            If omitted, transactions are immediately eligible for settlement upon success.
-
-            RFC3339 format, like `2006-01-02T15:04:05Z`.'
-        settlement_window_end:
-          type: string
-          format: date-time
-          description: 'The end of the window which the transaction is eligible for settlement.
-
-            Transactions which are not cancelled or settled by this time will expire.
-
-            RFC3339 format, like `2006-01-02T15:04:05Z`.'
-        source_profile_id:
-          type: string
-          description: The `profile_id` of the entity submitting the transaction.
-        target_profile_id:
-          type: string
-          description: The `profile_id` of the entity receiving the transaction.
-        legs:
-          type: array
-          items:
-            $ref: '#/components/schemas/CreateObligationRequest'
-          description: The obligations (representing one-way asset movements) to be settled atomically.
-      description: Request to create a bilateral settlement transaction with one or more legs.
-    ObligationDirection:
-      type: string
-      enum:
-      - DELIVER
-      - RECEIVE
-      description: "Direction of asset delivery for an obligation.\n\n - DELIVER: Assets are delivered from the source profile to the target profile.\n - RECEIVE: Assets are delivered from the target profile to the source profile."
-    ListTransactionsResponse:
-      type: object
-      properties:
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/Transaction'
-        next_page_cursor:
-          type: string
     Obligation:
       type: object
       example:
@@ -614,56 +653,6 @@ components:
       - direction
       - asset
       - amount
-    Problem:
-      type: object
-      properties:
-        type:
-          type: string
-          format: uri
-          description: 'An absolute URI that identifies the problem type.  When dereferenced,
-
-            it SHOULD provide human-readable documentation for the problem type
-
-            (e.g., using HTML).
-
-            '
-          default: about:blank
-          example: https://api.paxos.com/v2/problems/insufficient_funds
-        title:
-          type: string
-          description: 'A short, summary of the problem type. Written in english and readable
-
-            for engineers (usually not suited for non technical stakeholders and
-
-            not localized); example: Service Unavailable
-
-            '
-          example: Insufficient Funds
-        status:
-          type: integer
-          format: int32
-          description: 'The HTTP status code generated by the origin server for this occurrence
-
-            of the problem.
-
-            '
-          minimum: 100
-          maximum: 600
-          exclusiveMaximum: true
-          example: 403
-        detail:
-          type: string
-          description: 'A human readable explanation specific to this occurrence of the
-
-            problem.
-
-            '
-          example: Not enough funds in account.
-        meta:
-          type: object
-          description: 'Additional structured metadata about the error.
-
-            '
   securitySchemes:
     OAuth2:
       type: oauth2

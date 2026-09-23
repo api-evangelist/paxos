@@ -1,10 +1,8 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
-  title: Paxos Account Members Limits API
+  title: Paxos Limits API
   version: '2.0'
-  description: '<p>Welcome to Paxos APIs. At Paxos, our mission is to enable the movement of any asset, any time, in a trustworthy way. These APIs serve that mission by making it easier than ever for you to directly integrate our product capabilities into your application, leveraging the speed, stability, and security of the Paxos platform.</p> <p>The documentation that follows gives you access to our Crypto Brokerage, Trading, and Exchange products. It includes APIs for market data, orders, and the held rate quote flow.</p> <p>To test in our sandbox environment, <a href="https://account.sandbox.paxos.com" target="_blank">sign up</a> for an account. For more information about Paxos and our APIs, visit <a href="https://www.paxos.com/" target="_blank">Paxos.com</a>.</p>
-
-    '
+  description: Welcome to Paxos APIs.
   x-logo:
     url: /docs/paxos.svg
     backgroundColor: '#FFFFFF'
@@ -63,6 +61,15 @@ paths:
         - transfer:read_transfer_limit
 components:
   schemas:
+    ListTransferLimitsResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/TransferLimit'
+        next_page_cursor:
+          type: string
     TransferType:
       type: string
       enum:
@@ -114,15 +121,6 @@ components:
         limit_asset:
           type: string
           description: The asset that limit and remaining are given in, e.g. "USD", "BTC", "ETH".
-    ListTransferLimitsResponse:
-      type: object
-      properties:
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/TransferLimit'
-        next_page_cursor:
-          type: string
   securitySchemes:
     OAuth2:
       type: oauth2

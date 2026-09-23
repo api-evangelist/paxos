@@ -1,10 +1,8 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
-  title: Paxos Account Members Identity Controls API
+  title: Paxos Identity Controls API
   version: '2.0'
-  description: '<p>Welcome to Paxos APIs. At Paxos, our mission is to enable the movement of any asset, any time, in a trustworthy way. These APIs serve that mission by making it easier than ever for you to directly integrate our product capabilities into your application, leveraging the speed, stability, and security of the Paxos platform.</p> <p>The documentation that follows gives you access to our Crypto Brokerage, Trading, and Exchange products. It includes APIs for market data, orders, and the held rate quote flow.</p> <p>To test in our sandbox environment, <a href="https://account.sandbox.paxos.com" target="_blank">sign up</a> for an account. For more information about Paxos and our APIs, visit <a href="https://www.paxos.com/" target="_blank">Paxos.com</a>.</p>
-
-    '
+  description: Welcome to Paxos APIs.
   x-logo:
     url: /docs/paxos.svg
     backgroundColor: '#FFFFFF'
@@ -113,28 +111,26 @@ paths:
         - identity:write_identity_control
 components:
   schemas:
-    IdentityControlReasonCode:
+    CreateIdentityControlRequestClientIdentityControlType:
       type: string
       enum:
-      - OTHER
-      - END_USER_REQUEST
-      - INACTIVITY
-      - COMPLIANCE_KYC
-      - COMPLIANCE_EDD
-      - COMPLIANCE_SCREENING
-      - COMPLIANCE_INVESTIGATION
-      - COMPLIANCE_INCOMPLETE
-      - RISK_FRAUD
-      - LEGAL_ORDER
-      - ADMINISTRATIVE
-      description: " - OTHER: Miscellaneous reason not captured by existing categories.\n - END_USER_REQUEST: Control applied at the end user's request.\n - INACTIVITY: Control applied due to prolonged inactivity in accordance with dormancy or lifecycle management policies.\n - COMPLIANCE_KYC: Control applied due to unmet KYC requirements, including missing, expired, failed, or unresponsiveness to refresh obligations.\n - COMPLIANCE_EDD: Control applied due to Enhanced Due Diligence (EDD) requirements, including failure to complete EDD reviews, provide requested information, or satisfy heightened risk assessment criteria.\n - COMPLIANCE_SCREENING: Control applied as a result of sanctions, politically exposed person (PEP), or adverse media screening hits.\n - COMPLIANCE_INVESTIGATION: Control applied while an identity is under active compliance, risk, or regulatory investigation, including reviews triggered by monitoring alerts or external inquiries.\n - COMPLIANCE_INCOMPLETE: Control applied because the onboarding process was not successfully completed, including failure to respond to requests for information or provide required documentation.\n - RISK_FRAUD: Control applied due to suspected or confirmed fraud, abuse, or security risk, including account compromise, transaction fraud, or policy violations.\n - LEGAL_ORDER: Control applied to comply with a legal, regulatory, or law-enforcement directive, including court orders, asset preservation requests, or regulatory instructions.\n - ADMINISTRATIVE: Control applied for operational or platform-initiated reasons not attributable to the end user or compliance failure, such as system remediation or account restructuring."
-    DeleteIdentityControlResponse:
-      type: object
+      - SELL_ONLY
+      - DORMANT
+      - CLOSED
     IdentityControlSetBy:
       type: string
       enum:
       - SET_BY_PAXOS
       - SET_BY_CLIENT
+    DeleteIdentityControlResponse:
+      type: object
+    IdentityControlType:
+      type: string
+      enum:
+      - SELL_ONLY
+      - CLOSED
+      - FROZEN
+      - DORMANT
     ListIdentityControlsResponse:
       type: object
       properties:
@@ -146,19 +142,6 @@ components:
         next_page_cursor:
           type: string
           description: Cursor token for fetching the next page. Empty if there are no more pages.
-    IdentityControlType:
-      type: string
-      enum:
-      - SELL_ONLY
-      - CLOSED
-      - FROZEN
-      - DORMANT
-    CreateIdentityControlRequestClientIdentityControlType:
-      type: string
-      enum:
-      - SELL_ONLY
-      - DORMANT
-      - CLOSED
     IdentityControl:
       type: object
       properties:
@@ -202,6 +185,21 @@ components:
       - identity_id
       - type
       - reason_code
+    IdentityControlReasonCode:
+      type: string
+      enum:
+      - OTHER
+      - END_USER_REQUEST
+      - INACTIVITY
+      - COMPLIANCE_KYC
+      - COMPLIANCE_EDD
+      - COMPLIANCE_SCREENING
+      - COMPLIANCE_INVESTIGATION
+      - COMPLIANCE_INCOMPLETE
+      - RISK_FRAUD
+      - LEGAL_ORDER
+      - ADMINISTRATIVE
+      description: " - OTHER: Miscellaneous reason not captured by existing categories.\n - END_USER_REQUEST: Control applied at the end user's request.\n - INACTIVITY: Control applied due to prolonged inactivity in accordance with dormancy or lifecycle management policies.\n - COMPLIANCE_KYC: Control applied due to unmet KYC requirements, including missing, expired, failed, or unresponsiveness to refresh obligations.\n - COMPLIANCE_EDD: Control applied due to Enhanced Due Diligence (EDD) requirements, including failure to complete EDD reviews, provide requested information, or satisfy heightened risk assessment criteria.\n - COMPLIANCE_SCREENING: Control applied as a result of sanctions, politically exposed person (PEP), or adverse media screening hits.\n - COMPLIANCE_INVESTIGATION: Control applied while an identity is under active compliance, risk, or regulatory investigation, including reviews triggered by monitoring alerts or external inquiries.\n - COMPLIANCE_INCOMPLETE: Control applied because the onboarding process was not successfully completed, including failure to respond to requests for information or provide required documentation.\n - RISK_FRAUD: Control applied due to suspected or confirmed fraud, abuse, or security risk, including account compromise, transaction fraud, or policy violations.\n - LEGAL_ORDER: Control applied to comply with a legal, regulatory, or law-enforcement directive, including court orders, asset preservation requests, or regulatory instructions.\n - ADMINISTRATIVE: Control applied for operational or platform-initiated reasons not attributable to the end user or compliance failure, such as system remediation or account restructuring."
   securitySchemes:
     OAuth2:
       type: oauth2

@@ -1,10 +1,8 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
-  title: Paxos Account Members Profiles API
+  title: Paxos Profiles API
   version: '2.0'
-  description: '<p>Welcome to Paxos APIs. At Paxos, our mission is to enable the movement of any asset, any time, in a trustworthy way. These APIs serve that mission by making it easier than ever for you to directly integrate our product capabilities into your application, leveraging the speed, stability, and security of the Paxos platform.</p> <p>The documentation that follows gives you access to our Crypto Brokerage, Trading, and Exchange products. It includes APIs for market data, orders, and the held rate quote flow.</p> <p>To test in our sandbox environment, <a href="https://account.sandbox.paxos.com" target="_blank">sign up</a> for an account. For more information about Paxos and our APIs, visit <a href="https://www.paxos.com/" target="_blank">Paxos.com</a>.</p>
-
-    '
+  description: Welcome to Paxos APIs.
   x-logo:
     url: /docs/paxos.svg
     backgroundColor: '#FFFFFF'
@@ -24,9 +22,7 @@ tags:
 
     - `DEFAULT` Profiles are system-generated.
 
-    - `NORMAL` Profiles are created using the [Create Profile](#operation/CreateProfile) endpoint and are the only type of Profile you can create.
-
-    '
+    - `NORMAL` Profiles are created using the Create Profile endpoint and are the only type of Profile you can create.'
 paths:
   /profiles:
     get:
@@ -370,19 +366,6 @@ components:
       - NORMAL
       - DEFAULT
       description: "The profile type.\n\n - NORMAL: A client-created profile. All Profiles created using the `CreateProfile` endpoint are of this type.\n - DEFAULT: A system-generated profile."
-    CreateProfileRequest:
-      type: object
-      properties:
-        nickname:
-          type: string
-          description: The display name of the profile. Must be unique.
-        description:
-          type: string
-          description: The description of the created profile.
-      required:
-      - nickname
-    DeactivateProfileResponse:
-      type: object
     ProfileBalance:
       type: object
       example:
@@ -406,35 +389,6 @@ components:
       - asset
       - available
       - trading
-    ListProfilesResponse:
-      type: object
-      properties:
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/Profile'
-        next_page_cursor:
-          type: string
-          description: Cursor token required for fetching the next page.
-    ListProfileBalancesResponse:
-      type: object
-      properties:
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/ProfileBalance'
-      required:
-      - items
-    ProfilePublicUpdateProfileBody:
-      type: object
-      example:
-        profile_id: b7b77d82-e6a7-4ae9-9904-36231aedf985
-        nickname: MyProfileName
-      properties:
-        nickname:
-          type: string
-      required:
-      - nickname
     Profile:
       type: object
       example:
@@ -457,6 +411,48 @@ components:
       - id
       - nickname
       - type
+    ListProfilesResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Profile'
+        next_page_cursor:
+          type: string
+          description: Cursor token required for fetching the next page.
+    ListProfileBalancesResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProfileBalance'
+      required:
+      - items
+    CreateProfileRequest:
+      type: object
+      properties:
+        nickname:
+          type: string
+          description: The display name of the profile. Must be unique.
+        description:
+          type: string
+          description: The description of the created profile.
+      required:
+      - nickname
+    DeactivateProfileResponse:
+      type: object
+    ProfilePublicUpdateProfileBody:
+      type: object
+      example:
+        profile_id: b7b77d82-e6a7-4ae9-9904-36231aedf985
+        nickname: MyProfileName
+      properties:
+        nickname:
+          type: string
+      required:
+      - nickname
   securitySchemes:
     OAuth2:
       type: oauth2

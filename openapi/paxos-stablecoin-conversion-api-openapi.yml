@@ -1,10 +1,8 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
-  title: Paxos Account Members Stablecoin Conversion API
+  title: Paxos Stablecoin Conversion API
   version: '2.0'
-  description: '<p>Welcome to Paxos APIs. At Paxos, our mission is to enable the movement of any asset, any time, in a trustworthy way. These APIs serve that mission by making it easier than ever for you to directly integrate our product capabilities into your application, leveraging the speed, stability, and security of the Paxos platform.</p> <p>The documentation that follows gives you access to our Crypto Brokerage, Trading, and Exchange products. It includes APIs for market data, orders, and the held rate quote flow.</p> <p>To test in our sandbox environment, <a href="https://account.sandbox.paxos.com" target="_blank">sign up</a> for an account. For more information about Paxos and our APIs, visit <a href="https://www.paxos.com/" target="_blank">Paxos.com</a>.</p>
-
-    '
+  description: Welcome to Paxos APIs.
   x-logo:
     url: /docs/paxos.svg
     backgroundColor: '#FFFFFF'
@@ -16,9 +14,7 @@ servers:
   description: Sandbox
 tags:
 - name: Stablecoin Conversion
-  description: '<p>Convert between fiat and stablecoin using <a href="#operation/CreateStablecoinConversion">Create Stablecoin Conversion</a> and check the status of a <a href="#operation/GetStablecoinConversion">single conversion</a> or retrieve a <a href="#operation/ListStablecoinConversions">list of conversions</a>.</p>
-
-    '
+  description: Convert between fiat and stablecoin using Create Stablecoin Conversion and check the status of a single conversion or retrieve a list of conversions.
   externalDocs:
     description: Learn more about stablecoin conversions →
     url: https://docs.paxos.com/developer/convert
@@ -182,7 +178,22 @@ paths:
         - conversion:read_conversion_stablecoin
     post:
       summary: Create Stablecoin Conversion
-      description: "Create a Conversion request to exchange assets 1:1.\n\nA request to create a conversion can fail with one of the following\ntypes of errors:\n - [Insufficient Funds](https://developer.paxos.com/docs/v2/problems/insufficient-funds)\n   if the Profile (`profile_id`) has insufficient available balance to\n   fund the execution.\n - [Already Exists](https://developer.paxos.com/docs/v2/problems/already-exists)\n   if a conversion with the same external ID (`ref_id`) has already been created."
+      description: 'Create a Conversion request to exchange assets 1:1.
+
+
+        A request to create a conversion can fail with one of the following
+
+        types of errors:
+
+        - Insufficient Funds
+
+        if the Profile (`profile_id`) has insufficient available balance to
+
+        fund the execution.
+
+        - Already Exists
+
+        if a conversion with the same external ID (`ref_id`) has already been created.'
       operationId: CreateStablecoinConversion
       responses:
         '200':
@@ -300,7 +311,7 @@ paths:
   /conversion/stablecoins/{id}:
     get:
       summary: Get Stablecoin Conversion
-      description: Retrieve a single conversion using the transaction `id` from the [Create Stablecoin Conversion](#operation/CreateStablecoinConversion) response.
+      description: Retrieve a single conversion using the transaction `id` from the Create Stablecoin Conversion response.
       operationId: GetStablecoinConversion
       responses:
         '200':
@@ -371,7 +382,7 @@ paths:
       summary: Cancel Stablecoin Conversion
       description: 'Cancel a single conversion using the `id` from the
 
-        [Create Stablecoin Conversion](#operation/CreateStablecoinConversion) response.'
+        Create Stablecoin Conversion response.'
       operationId: CancelStablecoinConversion
       responses:
         '200':
@@ -437,6 +448,97 @@ paths:
         - conversion:write_conversion_stablecoin
 components:
   schemas:
+    CreateStablecoinConversionRequest:
+      type: object
+      properties:
+        profile_id:
+          type: string
+          description: The Profile associated with a conversion.
+        amount:
+          type: string
+          description: Asset amount to convert. [Details](https://docs.paxos.com/developer/convert#assets).
+          pattern: ^[0-9]*\.?[0-9]+$
+        source_asset:
+          type: string
+          description: The asset to convert from. [Details](https://docs.paxos.com/developer/convert#assets).
+        target_asset:
+          type: string
+          description: The asset to convert to. [Details](https://docs.paxos.com/developer/convert#assets).
+        ref_id:
+          type: string
+          description: Client provided, unique Reference ID for lookup and replay protection.
+        identity_id:
+          type: string
+          description: 'The Identity ID associated with the user requesting the conversion.
+
+            Required only for customers with [3rd-Party integrations](/crypto-brokerage/ledger-type#fiat-and-crypto-subledger).'
+        account_id:
+          type: string
+          description: 'The Account ID associated with the user requesting the conversion.
+
+            Required only for customers with [3rd-Party integrations](/crypto-brokerage/ledger-type#fiat-and-crypto-subledger).'
+        metadata:
+          type: object
+          additionalProperties:
+            type: string
+          description: Optional client-specified stored metadata.
+        recipient_profile_id:
+          type: string
+          description: For directed settlement, the receiving side `profile_id`.
+      required:
+      - profile_id
+      - amount
+      - source_asset
+      - target_asset
+    Problem:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+          description: 'An absolute URI that identifies the problem type.  When dereferenced,
+
+            it SHOULD provide human-readable documentation for the problem type
+
+            (e.g., using HTML).
+
+            '
+          default: about:blank
+          example: https://api.paxos.com/v2/problems/insufficient_funds
+        title:
+          type: string
+          description: 'A short, summary of the problem type. Written in english and readable
+
+            for engineers (usually not suited for non technical stakeholders and
+
+            not localized); example: Service Unavailable
+
+            '
+          example: Insufficient Funds
+        status:
+          type: integer
+          format: int32
+          description: 'The HTTP status code generated by the origin server for this occurrence
+
+            of the problem.
+
+            '
+          minimum: 100
+          example: 403
+          exclusiveMaximum: 600
+        detail:
+          type: string
+          description: 'A human readable explanation specific to this occurrence of the
+
+            problem.
+
+            '
+          example: Not enough funds in account.
+        meta:
+          type: object
+          description: 'Additional structured metadata about the error.
+
+            '
     StablecoinConversion:
       type: object
       properties:
@@ -519,98 +621,6 @@ components:
         recipient_profile_id:
           type: string
           description: For directed settlement, the receiving side `profile_id`.
-    CreateStablecoinConversionRequest:
-      type: object
-      properties:
-        profile_id:
-          type: string
-          description: The Profile associated with a conversion.
-        amount:
-          type: string
-          description: Asset amount to convert. [Details](https://docs.paxos.com/developer/convert#assets).
-          pattern: ^[0-9]*\.?[0-9]+$
-        source_asset:
-          type: string
-          description: The asset to convert from. [Details](https://docs.paxos.com/developer/convert#assets).
-        target_asset:
-          type: string
-          description: The asset to convert to. [Details](https://docs.paxos.com/developer/convert#assets).
-        ref_id:
-          type: string
-          description: Client provided, unique Reference ID for lookup and replay protection.
-        identity_id:
-          type: string
-          description: 'The Identity ID associated with the user requesting the conversion.
-
-            Required only for customers with [3rd-Party integrations](/crypto-brokerage/ledger-type#fiat-and-crypto-subledger).'
-        account_id:
-          type: string
-          description: 'The Account ID associated with the user requesting the conversion.
-
-            Required only for customers with [3rd-Party integrations](/crypto-brokerage/ledger-type#fiat-and-crypto-subledger).'
-        metadata:
-          type: object
-          additionalProperties:
-            type: string
-          description: Optional client-specified stored metadata.
-        recipient_profile_id:
-          type: string
-          description: For directed settlement, the receiving side `profile_id`.
-      required:
-      - profile_id
-      - amount
-      - source_asset
-      - target_asset
-    Problem:
-      type: object
-      properties:
-        type:
-          type: string
-          format: uri
-          description: 'An absolute URI that identifies the problem type.  When dereferenced,
-
-            it SHOULD provide human-readable documentation for the problem type
-
-            (e.g., using HTML).
-
-            '
-          default: about:blank
-          example: https://api.paxos.com/v2/problems/insufficient_funds
-        title:
-          type: string
-          description: 'A short, summary of the problem type. Written in english and readable
-
-            for engineers (usually not suited for non technical stakeholders and
-
-            not localized); example: Service Unavailable
-
-            '
-          example: Insufficient Funds
-        status:
-          type: integer
-          format: int32
-          description: 'The HTTP status code generated by the origin server for this occurrence
-
-            of the problem.
-
-            '
-          minimum: 100
-          maximum: 600
-          exclusiveMaximum: true
-          example: 403
-        detail:
-          type: string
-          description: 'A human readable explanation specific to this occurrence of the
-
-            problem.
-
-            '
-          example: Not enough funds in account.
-        meta:
-          type: object
-          description: 'Additional structured metadata about the error.
-
-            '
     ListStablecoinConversionsResponse:
       type: object
       properties:

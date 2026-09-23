@@ -1,10 +1,8 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
-  title: Paxos Account Members Crypto Deposits API
+  title: Paxos Crypto Deposits API
   version: '2.0'
-  description: '<p>Welcome to Paxos APIs. At Paxos, our mission is to enable the movement of any asset, any time, in a trustworthy way. These APIs serve that mission by making it easier than ever for you to directly integrate our product capabilities into your application, leveraging the speed, stability, and security of the Paxos platform.</p> <p>The documentation that follows gives you access to our Crypto Brokerage, Trading, and Exchange products. It includes APIs for market data, orders, and the held rate quote flow.</p> <p>To test in our sandbox environment, <a href="https://account.sandbox.paxos.com" target="_blank">sign up</a> for an account. For more information about Paxos and our APIs, visit <a href="https://www.paxos.com/" target="_blank">Paxos.com</a>.</p>
-
-    '
+  description: Welcome to Paxos APIs.
   x-logo:
     url: /docs/paxos.svg
     backgroundColor: '#FFFFFF'
@@ -16,7 +14,7 @@ servers:
   description: Sandbox
 tags:
 - name: Crypto Deposits
-  description: 'For [Paxos Global PTE Ltd](https://help.paxos.com/hc/en-us/articles/9647005243284) users, update or reject a crypto deposit that does not contain the required [travel rule](https://help.paxos.com/hc/en-us/articles/25928845778068) information.
+  description: 'For Paxos Global PTE Ltd users, update or reject a crypto deposit that does not contain the required travel rule information.
 
     Deposits with the `NEEDS_INFO` status require additional sender information before they can be processed.
 
@@ -25,9 +23,7 @@ tags:
     - For institutions, the institution name is required.
 
 
-    If a deposit is rejected, the funds will no longer be available.
-
-    '
+    If a deposit is rejected, the funds will no longer be available.'
   externalDocs:
     description: Learn more about travel rule udpates →
     url: https://help.paxos.com/hc/en-us/articles/25422999706900
@@ -176,6 +172,27 @@ paths:
         - transfer:update_crypto_deposit
 components:
   schemas:
+    UpdateCryptoDepositResponse:
+      type: object
+    RejectCryptoDepositResponse:
+      type: object
+    AddressInfo:
+      type: object
+      properties:
+        individual_info:
+          $ref: '#/components/schemas/IndividualInfo'
+        institution_info:
+          $ref: '#/components/schemas/InstitutionInfo'
+    IndividualInfo:
+      type: object
+      properties:
+        first_name:
+          type: string
+        last_name:
+          type: string
+      required:
+      - first_name
+      - last_name
     TransferPublicRejectCryptoDepositBody:
       type: object
       example:
@@ -187,49 +204,6 @@ components:
       title: RejectCryptoDepositRequest
       required:
       - identity_id
-    InstitutionInfo:
-      type: object
-      properties:
-        institution_name:
-          type: string
-      required:
-      - institution_name
-    TransferPublicUpdateCryptoDepositBody:
-      type: object
-      example:
-        identity_id: 54385e67-d7ef-40d1-b488-ceda6dd9b264
-        originator_address_info:
-          first_name: John
-          last_name: Doe
-      properties:
-        identity_id:
-          type: string
-          description: The Identity (`identity_id`) of the end user updating the deposit.
-        originator_address_info:
-          $ref: '#/components/schemas/AddressInfo'
-      title: UpdateCryptoDepositRequest
-      required:
-      - identity_id
-      - originator_address_info
-    AddressInfo:
-      type: object
-      properties:
-        individual_info:
-          $ref: '#/components/schemas/IndividualInfo'
-        institution_info:
-          $ref: '#/components/schemas/InstitutionInfo'
-    RejectCryptoDepositResponse:
-      type: object
-    IndividualInfo:
-      type: object
-      properties:
-        first_name:
-          type: string
-        last_name:
-          type: string
-      required:
-      - first_name
-      - last_name
     Problem:
       type: object
       properties:
@@ -264,9 +238,8 @@ components:
 
             '
           minimum: 100
-          maximum: 600
-          exclusiveMaximum: true
           example: 403
+          exclusiveMaximum: 600
         detail:
           type: string
           description: 'A human readable explanation specific to this occurrence of the
@@ -280,8 +253,30 @@ components:
           description: 'Additional structured metadata about the error.
 
             '
-    UpdateCryptoDepositResponse:
+    InstitutionInfo:
       type: object
+      properties:
+        institution_name:
+          type: string
+      required:
+      - institution_name
+    TransferPublicUpdateCryptoDepositBody:
+      type: object
+      example:
+        identity_id: 54385e67-d7ef-40d1-b488-ceda6dd9b264
+        originator_address_info:
+          first_name: John
+          last_name: Doe
+      properties:
+        identity_id:
+          type: string
+          description: The Identity (`identity_id`) of the end user updating the deposit.
+        originator_address_info:
+          $ref: '#/components/schemas/AddressInfo'
+      title: UpdateCryptoDepositRequest
+      required:
+      - identity_id
+      - originator_address_info
   securitySchemes:
     OAuth2:
       type: oauth2

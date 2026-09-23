@@ -1,10 +1,8 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
-  title: Paxos Account Members Market Data API
+  title: Paxos Market Data API
   version: '2.0'
-  description: '<p>Welcome to Paxos APIs. At Paxos, our mission is to enable the movement of any asset, any time, in a trustworthy way. These APIs serve that mission by making it easier than ever for you to directly integrate our product capabilities into your application, leveraging the speed, stability, and security of the Paxos platform.</p> <p>The documentation that follows gives you access to our Crypto Brokerage, Trading, and Exchange products. It includes APIs for market data, orders, and the held rate quote flow.</p> <p>To test in our sandbox environment, <a href="https://account.sandbox.paxos.com" target="_blank">sign up</a> for an account. For more information about Paxos and our APIs, visit <a href="https://www.paxos.com/" target="_blank">Paxos.com</a>.</p>
-
-    '
+  description: Welcome to Paxos APIs.
   x-logo:
     url: /docs/paxos.svg
     backgroundColor: '#FFFFFF'
@@ -16,9 +14,7 @@ servers:
   description: Sandbox
 tags:
 - name: Market Data
-  description: 'Market data provides various parameters of the order book and historical order data.
-
-    '
+  description: Market data provides various parameters of the order book and historical order data.
 paths:
   /markets:
     get:
@@ -337,81 +333,6 @@ paths:
       deprecated: true
 components:
   schemas:
-    MarketDetails:
-      type: object
-      properties:
-        market:
-          $ref: '#/components/schemas/Market'
-        base_asset:
-          type: string
-          title: Base asset. Crypto Only (BTC, ETH, PAXG)
-        quote_asset:
-          type: string
-          description: Quote asset. Fiat Only (USD, EUR, SGD).
-        tick_rate:
-          type: string
-          format: decimal
-          title: Tick rate for market
-        market_status:
-          $ref: '#/components/schemas/MarketStatus'
-        min_base_amount:
-          type: string
-          description: Minimum base amount allowed for this market.
-        min_quote_amount:
-          type: string
-          description: Minimum quote amount allowed for this market.
-        max_base_amount:
-          type: string
-          description: Maximum base amount allowed for this market.
-        max_quote_amount:
-          type: string
-          description: Maximum quote amount allowed for this market.
-    GetOrderBookResponse:
-      properties:
-        asks:
-          description: All Asks.
-          items:
-            $ref: '#/components/schemas/BookLevel'
-          type: array
-        bids:
-          description: All Bids.
-          items:
-            $ref: '#/components/schemas/BookLevel'
-          type: array
-        market:
-          $ref: '#/components/schemas/Market'
-      type: object
-    RecentExecution:
-      type: object
-      properties:
-        match_number:
-          type: string
-          description: Unique execution match number.
-        price:
-          type: string
-          format: decimal
-          description: Price of the execution.
-        amount:
-          type: string
-          format: decimal
-          description: Amount of the execution.
-        executed_at:
-          type: string
-          description: Execution timestamp.
-    ScheduledMaintenance:
-      type: object
-      properties:
-        starts_at:
-          type: string
-          format: date-time
-          description: Start of the maintenance window.
-        ends_at:
-          type: string
-          format: date-time
-          description: Expected end of the maintenance window.
-        recurrence:
-          $ref: '#/components/schemas/MaintenanceRecurrence'
-      description: A scheduled maintenance window during which a market may become unavailable.
     PricePriceMarket:
       type: string
       enum:
@@ -446,22 +367,47 @@ components:
       - BNBUSD
       description: ''
       title: Market
-    ListRecentExecutionsResponse:
+    ListMarketsResponse:
       type: object
       properties:
-        items:
+        markets:
           type: array
           items:
-            $ref: '#/components/schemas/RecentExecution'
-          description: Recent Executions.
-    MarketStatusReason:
-      type: string
-      enum:
-      - MARKET_STATUS_REASON_UNSPECIFIED
-      - SCHEDULED_MAINTENANCE
-      - TRADING_SUSPENDED
-      - UNSCHEDULED_MAINTENANCE
-      description: Reason a market is unavailable.
+            $ref: '#/components/schemas/MarketDetails'
+    GetOrderBookResponse:
+      properties:
+        asks:
+          description: All Asks.
+          items:
+            $ref: '#/components/schemas/BookLevel'
+          type: array
+        bids:
+          description: All Bids.
+          items:
+            $ref: '#/components/schemas/BookLevel'
+          type: array
+        market:
+          $ref: '#/components/schemas/Market'
+      type: object
+    TickerRecord:
+      type: object
+      properties:
+        market:
+          $ref: '#/components/schemas/PricePriceMarket'
+        best_bid:
+          $ref: '#/components/schemas/BookLevel'
+        best_ask:
+          $ref: '#/components/schemas/BookLevel'
+        last_execution:
+          $ref: '#/components/schemas/BookLevel'
+        last_day:
+          $ref: '#/components/schemas/ExchangeStats'
+        today:
+          $ref: '#/components/schemas/ExchangeStats'
+        snapshot_at:
+          type: string
+          format: date-time
+          description: The time at which this data was retrieved.
     TimestampRange:
       type: object
       properties:
@@ -473,14 +419,50 @@ components:
           type: string
           format: date-time
           description: Only return records before this timestamp, inclusive. RFC3339 format, like `2006-01-02T15:04:05Z`.
-    MaintenanceRecurrence:
+    RecentExecution:
+      type: object
+      properties:
+        match_number:
+          type: string
+          description: Unique execution match number.
+        price:
+          type: string
+          format: decimal
+          description: Price of the execution.
+        amount:
+          type: string
+          format: decimal
+          description: Amount of the execution.
+        executed_at:
+          type: string
+          description: Execution timestamp.
+    MarketStatusReason:
       type: string
       enum:
-      - MAINTENANCE_RECURRENCE_UNSPECIFIED
-      - NONE
-      - DAILY
-      - WEEKLY
-      description: "How often a maintenance window repeats.\n\n - NONE: A one-off maintenance window that will not repeat.\n - DAILY: The window recurs every day at the same time.\n - WEEKLY: The window recurs every week on the same day and time."
+      - MARKET_STATUS_REASON_UNSPECIFIED
+      - SCHEDULED_MAINTENANCE
+      - TRADING_SUSPENDED
+      - UNSCHEDULED_MAINTENANCE
+      description: Reason a market is unavailable.
+    ListRecentExecutionsResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/RecentExecution'
+          description: Recent Executions.
+    BookLevel:
+      type: object
+      properties:
+        price:
+          type: string
+          format: decimal
+          description: Price at level.
+        amount:
+          type: string
+          format: decimal
+          description: Amount of orders at pricing level.
     Market:
       type: string
       enum:
@@ -518,6 +500,77 @@ components:
       - XLMUSD
       - BNBUSD
       title: ''
+    MarketDetails:
+      type: object
+      properties:
+        market:
+          $ref: '#/components/schemas/Market'
+        base_asset:
+          type: string
+          title: Base asset. Crypto Only (BTC, ETH, PAXG)
+        quote_asset:
+          type: string
+          description: Quote asset. Fiat Only (USD, EUR, SGD).
+        tick_rate:
+          type: string
+          format: decimal
+          title: Tick rate for market
+        market_status:
+          $ref: '#/components/schemas/MarketStatus'
+        min_base_amount:
+          type: string
+          description: Minimum base amount allowed for this market.
+        min_quote_amount:
+          type: string
+          description: Minimum quote amount allowed for this market.
+        max_base_amount:
+          type: string
+          description: Maximum base amount allowed for this market.
+        max_quote_amount:
+          type: string
+          description: Maximum quote amount allowed for this market.
+    MarketTradingStatus:
+      type: string
+      enum:
+      - MARKET_TRADING_STATUS_UNSPECIFIED
+      - AVAILABLE
+      - UNAVAILABLE
+      description: "Trading status of a market.\n\n - AVAILABLE: The market is open and accepting orders.\n - UNAVAILABLE: The market is not currently accepting IOC or FOK orders."
+    ScheduledMaintenance:
+      type: object
+      properties:
+        starts_at:
+          type: string
+          format: date-time
+          description: Start of the maintenance window.
+        ends_at:
+          type: string
+          format: date-time
+          description: Expected end of the maintenance window.
+        recurrence:
+          $ref: '#/components/schemas/MaintenanceRecurrence'
+      description: A scheduled maintenance window during which a market may become unavailable.
+    MarketStatus:
+      type: object
+      properties:
+        buy_status:
+          $ref: '#/components/schemas/MarketTradingStatus'
+        buy_reason:
+          $ref: '#/components/schemas/MarketStatusReason'
+        sell_status:
+          $ref: '#/components/schemas/MarketTradingStatus'
+        sell_reason:
+          $ref: '#/components/schemas/MarketStatusReason'
+        updated_at:
+          type: string
+          format: date-time
+        scheduled_maintenance:
+          type: array
+          items:
+            $ref: '#/components/schemas/ScheduledMaintenance'
+      description: 'Current trading status of a market, including availability, reason codes,
+
+        and scheduled maintenance windows.'
     ExchangeStats:
       type: object
       properties:
@@ -543,71 +596,14 @@ components:
           description: Volume-Weighted Average Price over Time Period.
         range:
           $ref: '#/components/schemas/TimestampRange'
-    TickerRecord:
-      type: object
-      properties:
-        market:
-          $ref: '#/components/schemas/PricePriceMarket'
-        best_bid:
-          $ref: '#/components/schemas/BookLevel'
-        best_ask:
-          $ref: '#/components/schemas/BookLevel'
-        last_execution:
-          $ref: '#/components/schemas/BookLevel'
-        last_day:
-          $ref: '#/components/schemas/ExchangeStats'
-        today:
-          $ref: '#/components/schemas/ExchangeStats'
-        snapshot_at:
-          type: string
-          format: date-time
-          description: The time at which this data was retrieved.
-    ListMarketsResponse:
-      type: object
-      properties:
-        markets:
-          type: array
-          items:
-            $ref: '#/components/schemas/MarketDetails'
-    MarketStatus:
-      type: object
-      properties:
-        buy_status:
-          $ref: '#/components/schemas/MarketTradingStatus'
-        buy_reason:
-          $ref: '#/components/schemas/MarketStatusReason'
-        sell_status:
-          $ref: '#/components/schemas/MarketTradingStatus'
-        sell_reason:
-          $ref: '#/components/schemas/MarketStatusReason'
-        updated_at:
-          type: string
-          format: date-time
-        scheduled_maintenance:
-          type: array
-          items:
-            $ref: '#/components/schemas/ScheduledMaintenance'
-      description: 'Current trading status of a market, including availability, reason codes,
-
-        and scheduled maintenance windows.'
-    MarketTradingStatus:
+    MaintenanceRecurrence:
       type: string
       enum:
-      - MARKET_TRADING_STATUS_UNSPECIFIED
-      - AVAILABLE
-      - UNAVAILABLE
-      description: "Trading status of a market.\n\n - AVAILABLE: The market is open and accepting orders.\n - UNAVAILABLE: The market is not currently accepting IOC or FOK orders."
-    BookLevel:
-      type: object
-      properties:
-        price:
-          type: string
-          format: decimal
-          description: Price at level.
-        amount:
-          type: string
-          format: decimal
-          description: Amount of orders at pricing level.
+      - MAINTENANCE_RECURRENCE_UNSPECIFIED
+      - NONE
+      - DAILY
+      - WEEKLY
+      description: "How often a maintenance window repeats.\n\n - NONE: A one-off maintenance window that will not repeat.\n - DAILY: The window recurs every day at the same time.\n - WEEKLY: The window recurs every week on the same day and time."
   securitySchemes:
     OAuth2:
       type: oauth2

@@ -1,10 +1,8 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
-  title: Paxos Account Members Institution Members API
+  title: Paxos Institution Members API
   version: '2.0'
-  description: '<p>Welcome to Paxos APIs. At Paxos, our mission is to enable the movement of any asset, any time, in a trustworthy way. These APIs serve that mission by making it easier than ever for you to directly integrate our product capabilities into your application, leveraging the speed, stability, and security of the Paxos platform.</p> <p>The documentation that follows gives you access to our Crypto Brokerage, Trading, and Exchange products. It includes APIs for market data, orders, and the held rate quote flow.</p> <p>To test in our sandbox environment, <a href="https://account.sandbox.paxos.com" target="_blank">sign up</a> for an account. For more information about Paxos and our APIs, visit <a href="https://www.paxos.com/" target="_blank">Paxos.com</a>.</p>
-
-    '
+  description: Welcome to Paxos APIs.
   x-logo:
     url: /docs/paxos.svg
     backgroundColor: '#FFFFFF'
@@ -25,9 +23,7 @@ tags:
 
     This requirement ensures we have complete information about the institution''s ownership structure
 
-    and key personnel, which is necessary to onboard institutions.
-
-    '
+    and key personnel, which is necessary to onboard institutions.'
 paths:
   /identity/institution-members:
     post:
@@ -42,7 +38,7 @@ paths:
 
         For details on the properties that can be specified when creating institution members,
 
-        see [Specifying Institution Members and Their Roles](#specifying-institution-members-and-their-roles).'
+        see Specifying Institution Members and Their Roles.'
       operationId: AddInstitutionMembers
       responses:
         '200':
@@ -112,6 +108,20 @@ paths:
         - identity:write_identity
 components:
   schemas:
+    DeleteInstitutionMemberResponse:
+      type: object
+    InstitutionRoleType:
+      type: string
+      enum:
+      - BENEFICIAL_OWNER
+      - ACCOUNT_OPENER
+      - TRUSTEE
+      - AUTHORIZED_USER
+      - GRANTOR
+      - MANAGEMENT_CONTROL_PERSON
+      - BENEFICIARY
+      - SOLE_PROPRIETOR
+      title: ''
     AddInstitutionMembersRequest:
       type: object
       properties:
@@ -154,8 +164,15 @@ components:
           description: 'Institution member ID. Note: This field is auto-generated. Specifying an ID when creating an institution member is a client error.'
       required:
       - identity_id
-    DeleteInstitutionMemberResponse:
-      type: object
+    IdentityStatus:
+      type: string
+      enum:
+      - PENDING
+      - ERROR
+      - APPROVED
+      - DENIED
+      - DISABLED
+      title: ''
     AddInstitutionMembersResponse:
       type: object
       properties:
@@ -169,27 +186,6 @@ components:
           description: List of institution members that were added to the institution.
       required:
       - institution_id
-    IdentityStatus:
-      type: string
-      enum:
-      - PENDING
-      - ERROR
-      - APPROVED
-      - DENIED
-      - DISABLED
-      title: ''
-    InstitutionRoleType:
-      type: string
-      enum:
-      - BENEFICIAL_OWNER
-      - ACCOUNT_OPENER
-      - TRUSTEE
-      - AUTHORIZED_USER
-      - GRANTOR
-      - MANAGEMENT_CONTROL_PERSON
-      - BENEFICIARY
-      - SOLE_PROPRIETOR
-      title: ''
   securitySchemes:
     OAuth2:
       type: oauth2
