@@ -308,16 +308,40 @@ paths:
         - rewards:write_monitoring_address
 components:
   schemas:
-    ListMonitoringAddressResponse:
+    MonitoringAddress:
       type: object
       properties:
-        addresses:
-          type: array
-          items:
-            $ref: '#/components/schemas/MonitoringAddress'
-        next_page_cursor:
+        address:
           type: string
-          title: Value to use as `page_cursor` in subsequent request
+          description: On-chain address Paxos will monitor for eligible reward activity.
+        crypto_network:
+          $ref: '#/components/schemas/CryptoNetwork'
+        name:
+          type: string
+          description: Optional display name. Useful for grouping or reporting.
+        created_at:
+          type: string
+          format: date-time
+          description: When the address was registered.
+        id:
+          type: string
+          description: UUID direct reference to the created address (to be used for updates).
+      required:
+      - id
+      - address
+      - crypto_network
+      - created_at
+    AutoRewardsPublicUpdateMonitoringAddressBody:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Optional display name. Useful for grouping or reporting.
+    CreateMonitoringAddressResponse:
+      type: object
+      properties:
+        address:
+          $ref: '#/components/schemas/MonitoringAddress'
     CreateMonitoringAddressRequest:
       type: object
       properties:
@@ -331,42 +355,21 @@ components:
         name:
           type: string
           description: Optional display name. Useful for grouping or reporting.
-    AutoRewardsPublicUpdateMonitoringAddressBody:
+    GetMonitoringAddressResponse:
       type: object
       properties:
-        name:
+        address:
+          $ref: '#/components/schemas/MonitoringAddress'
+    ListMonitoringAddressResponse:
+      type: object
+      properties:
+        addresses:
+          type: array
+          items:
+            $ref: '#/components/schemas/MonitoringAddress'
+        next_page_cursor:
           type: string
-          description: Optional display name. Useful for grouping or reporting.
-    UpdateMonitoringAddressResponse:
-      type: object
-      properties:
-        address:
-          $ref: '#/components/schemas/MonitoringAddress'
-    CreateMonitoringAddressResponse:
-      type: object
-      properties:
-        address:
-          $ref: '#/components/schemas/MonitoringAddress'
-    CryptoNetwork:
-      type: string
-      enum:
-      - BITCOIN
-      - ETHEREUM
-      - BITCOIN_CASH
-      - LITECOIN
-      - SOLANA
-      - POLYGON_POS
-      - BASE
-      - ARBITRUM_ONE
-      - STELLAR
-      - INK
-      - XLAYER
-      - AVALANCHE
-      - DOGECOIN
-      - SUI
-      - ROBINHOOD
-      - BNB
-      description: A CryptoNetwork is a blockchain transmitting cryptocurrencies.
+          title: Value to use as `page_cursor` in subsequent request
     Problem:
       type: object
       properties:
@@ -416,34 +419,31 @@ components:
           description: 'Additional structured metadata about the error.
 
             '
-    GetMonitoringAddressResponse:
+    UpdateMonitoringAddressResponse:
       type: object
       properties:
         address:
           $ref: '#/components/schemas/MonitoringAddress'
-    MonitoringAddress:
-      type: object
-      properties:
-        address:
-          type: string
-          description: On-chain address Paxos will monitor for eligible reward activity.
-        crypto_network:
-          $ref: '#/components/schemas/CryptoNetwork'
-        name:
-          type: string
-          description: Optional display name. Useful for grouping or reporting.
-        created_at:
-          type: string
-          format: date-time
-          description: When the address was registered.
-        id:
-          type: string
-          description: UUID direct reference to the created address (to be used for updates).
-      required:
-      - id
-      - address
-      - crypto_network
-      - created_at
+    CryptoNetwork:
+      type: string
+      enum:
+      - BITCOIN
+      - ETHEREUM
+      - BITCOIN_CASH
+      - LITECOIN
+      - SOLANA
+      - POLYGON_POS
+      - BASE
+      - ARBITRUM_ONE
+      - STELLAR
+      - INK
+      - XLAYER
+      - AVALANCHE
+      - DOGECOIN
+      - SUI
+      - ROBINHOOD
+      - BNB
+      description: A CryptoNetwork is a blockchain transmitting cryptocurrencies.
   securitySchemes:
     OAuth2:
       type: oauth2

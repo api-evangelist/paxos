@@ -99,8 +99,6 @@ paths:
         - identity:write_account
 components:
   schemas:
-    DeleteAccountMemberResponse:
-      type: object
     AddAccountMembersRequest:
       type: object
       properties:
@@ -115,22 +113,6 @@ components:
       required:
       - account_id
       - members
-    AccountMember:
-      type: object
-      properties:
-        identity_id:
-          type: string
-        type:
-          $ref: '#/components/schemas/AccountMemberAccountRoleType'
-        roles:
-          type: array
-          items:
-            $ref: '#/components/schemas/AccountMemberAccountRoleType'
-        id:
-          type: string
-          description: 'Account member ID. Note: This field is auto-generated. Specifying an ID when creating an account member is a client error.'
-      required:
-      - identity_id
     AddAccountMembersResponse:
       type: object
       properties:
@@ -150,6 +132,24 @@ components:
       - BENEFICIAL_OWNER
       - AUTHORIZED_USER
       - FINANCIAL_ADVISOR
+    AccountMember:
+      type: object
+      properties:
+        identity_id:
+          type: string
+        type:
+          $ref: '#/components/schemas/AccountMemberAccountRoleType'
+        roles:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccountMemberAccountRoleType'
+        id:
+          type: string
+          description: 'Account member ID. Note: This field is auto-generated. Specifying an ID when creating an account member is a client error.'
+      required:
+      - identity_id
+    DeleteAccountMemberResponse:
+      type: object
   securitySchemes:
     OAuth2:
       type: oauth2

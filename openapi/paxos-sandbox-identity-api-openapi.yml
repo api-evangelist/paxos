@@ -129,31 +129,6 @@ paths:
         - identity:write_identity
 components:
   schemas:
-    SandboxSetIdentityResponse:
-      type: object
-    SetDisable:
-      type: object
-      properties:
-        disabled:
-          type: boolean
-    SandboxForceStartKycRefreshRequest:
-      type: object
-      properties:
-        identity_id:
-          type: string
-          maxLength: 64
-          minLength: 6
-          pattern: ^[a-zA-Z0-9][a-zA-Z0-9-.]{4,62}[a-zA-Z0-9]$
-        expiry_days:
-          type: integer
-          format: int32
-          description: Number of days until the forced KYC refresh expires. Must be between 1 and 90.
-          maximum: 90
-          minimum: 1
-      title: SandboxForceStartKycRefreshRequest
-      required:
-      - identity_id
-      - expiry_days
     IdentitySandboxSandboxSetIdentityStatusBody:
       type: object
       example:
@@ -174,19 +149,11 @@ components:
         additional_screening_status:
           $ref: '#/components/schemas/IdentityStatus'
       title: SandboxSetIdentityStatusRequest
-    SandboxResetKycRefreshResponse:
+    SetDisable:
       type: object
-    IdentityStatus:
-      type: string
-      enum:
-      - PENDING
-      - ERROR
-      - APPROVED
-      - DENIED
-      - DISABLED
-      title: ''
-    SandboxStartKycRefreshResponse:
-      type: object
+      properties:
+        disabled:
+          type: boolean
     SandboxResetKycRefreshRequest:
       type: object
       properties:
@@ -199,6 +166,39 @@ components:
       required:
       - identity_id
     SandboxForceStartKycRefreshResponse:
+      type: object
+    IdentityStatus:
+      type: string
+      enum:
+      - PENDING
+      - ERROR
+      - APPROVED
+      - DENIED
+      - DISABLED
+      title: ''
+    SandboxForceStartKycRefreshRequest:
+      type: object
+      properties:
+        identity_id:
+          type: string
+          maxLength: 64
+          minLength: 6
+          pattern: ^[a-zA-Z0-9][a-zA-Z0-9-.]{4,62}[a-zA-Z0-9]$
+        expiry_days:
+          type: integer
+          format: int32
+          description: Number of days until the forced KYC refresh expires. Must be between 1 and 90.
+          maximum: 90
+          minimum: 1
+      title: SandboxForceStartKycRefreshRequest
+      required:
+      - identity_id
+      - expiry_days
+    SandboxSetIdentityResponse:
+      type: object
+    SandboxResetKycRefreshResponse:
+      type: object
+    SandboxStartKycRefreshResponse:
       type: object
   securitySchemes:
     OAuth2:

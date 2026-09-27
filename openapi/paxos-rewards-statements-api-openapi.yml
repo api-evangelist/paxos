@@ -221,13 +221,32 @@ paths:
         - rewards:read_statements
 components:
   schemas:
-    RewardsStatementStatus:
+    RewardsStatementFile:
+      type: object
+      properties:
+        format:
+          $ref: '#/components/schemas/RewardsStatementFormat'
+        download_url:
+          type: string
+          description: Presigned S3 download URL. Populated for completed statements in both list and get responses.
+        generated_at:
+          type: string
+          format: date-time
+          description: When the file was written to S3.
+      description: RewardsStatementFile describes one generated file attached to a reward statement.
+    RewardsStatementType:
       type: string
       enum:
-      - STATEMENT_STATUS_GENERATING
-      - STATEMENT_STATUS_COMPLETED
-      - STATEMENT_STATUS_FAILED
-      description: "RewardsStatementStatus reflects the overall generation lifecycle of a reward statement.\n\n - STATEMENT_STATUS_GENERATING: Files are currently being generated.\n - STATEMENT_STATUS_COMPLETED: All files were successfully generated and are available for download.\n - STATEMENT_STATUS_FAILED: Generation failed; files may be incomplete or unavailable."
+      - STATEMENT_TYPE_MONTHLY_REWARDS
+      description: "RewardsStatementType identifies the content and purpose of a reward statement.\n\n - STATEMENT_TYPE_MONTHLY_REWARDS: Monthly statement: PDF rewards summary with daily balance totals, rates, and\nper-payout-group breakdown, plus a CSV per-wallet daily balance export."
+      x-enum-varnames:
+      - MonthlyRewards
+    RewardsStatementFormat:
+      type: string
+      enum:
+      - STATEMENT_FORMAT_PDF
+      - STATEMENT_FORMAT_CSV
+      description: "RewardsStatementFormat identifies the file encoding of a generated statement file.\n\n - STATEMENT_FORMAT_PDF: PDF report suitable for printing or archival.\n - STATEMENT_FORMAT_CSV: CSV with per-wallet daily balance rows."
     RewardsStatement:
       type: object
       properties:
@@ -271,19 +290,13 @@ components:
         one or more files (tracked in files), whose presigned download URLs are
 
         populated for completed statements in both list and get responses.'
-    RewardsStatementFormat:
+    RewardsStatementStatus:
       type: string
       enum:
-      - STATEMENT_FORMAT_PDF
-      - STATEMENT_FORMAT_CSV
-      description: "RewardsStatementFormat identifies the file encoding of a generated statement file.\n\n - STATEMENT_FORMAT_PDF: PDF report suitable for printing or archival.\n - STATEMENT_FORMAT_CSV: CSV with per-wallet daily balance rows."
-    RewardsStatementType:
-      type: string
-      enum:
-      - STATEMENT_TYPE_MONTHLY_REWARDS
-      description: "RewardsStatementType identifies the content and purpose of a reward statement.\n\n - STATEMENT_TYPE_MONTHLY_REWARDS: Monthly statement: PDF rewards summary with daily balance totals, rates, and\nper-payout-group breakdown, plus a CSV per-wallet daily balance export."
-      x-enum-varnames:
-      - MonthlyRewards
+      - STATEMENT_STATUS_GENERATING
+      - STATEMENT_STATUS_COMPLETED
+      - STATEMENT_STATUS_FAILED
+      description: "RewardsStatementStatus reflects the overall generation lifecycle of a reward statement.\n\n - STATEMENT_STATUS_GENERATING: Files are currently being generated.\n - STATEMENT_STATUS_COMPLETED: All files were successfully generated and are available for download.\n - STATEMENT_STATUS_FAILED: Generation failed; files may be incomplete or unavailable."
     GetRewardsStatementResponse:
       type: object
       properties:
@@ -349,19 +362,6 @@ components:
           description: 'Additional structured metadata about the error.
 
             '
-    RewardsStatementFile:
-      type: object
-      properties:
-        format:
-          $ref: '#/components/schemas/RewardsStatementFormat'
-        download_url:
-          type: string
-          description: Presigned S3 download URL. Populated for completed statements in both list and get responses.
-        generated_at:
-          type: string
-          format: date-time
-          description: When the file was written to S3.
-      description: RewardsStatementFile describes one generated file attached to a reward statement.
   securitySchemes:
     OAuth2:
       type: oauth2

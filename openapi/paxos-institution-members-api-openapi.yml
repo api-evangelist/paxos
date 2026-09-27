@@ -110,18 +110,19 @@ components:
   schemas:
     DeleteInstitutionMemberResponse:
       type: object
-    InstitutionRoleType:
-      type: string
-      enum:
-      - BENEFICIAL_OWNER
-      - ACCOUNT_OPENER
-      - TRUSTEE
-      - AUTHORIZED_USER
-      - GRANTOR
-      - MANAGEMENT_CONTROL_PERSON
-      - BENEFICIARY
-      - SOLE_PROPRIETOR
-      title: ''
+    AddInstitutionMembersResponse:
+      type: object
+      properties:
+        institution_id:
+          type: string
+          description: ID of institution identity to which members were added.
+        members:
+          type: array
+          items:
+            $ref: '#/components/schemas/InstitutionMember'
+          description: List of institution members that were added to the institution.
+      required:
+      - institution_id
     AddInstitutionMembersRequest:
       type: object
       properties:
@@ -136,6 +137,27 @@ components:
       required:
       - institution_id
       - members
+    IdentityStatus:
+      type: string
+      enum:
+      - PENDING
+      - ERROR
+      - APPROVED
+      - DENIED
+      - DISABLED
+      title: ''
+    InstitutionRoleType:
+      type: string
+      enum:
+      - BENEFICIAL_OWNER
+      - ACCOUNT_OPENER
+      - TRUSTEE
+      - AUTHORIZED_USER
+      - GRANTOR
+      - MANAGEMENT_CONTROL_PERSON
+      - BENEFICIARY
+      - SOLE_PROPRIETOR
+      title: ''
     InstitutionMember:
       type: object
       properties:
@@ -164,28 +186,6 @@ components:
           description: 'Institution member ID. Note: This field is auto-generated. Specifying an ID when creating an institution member is a client error.'
       required:
       - identity_id
-    IdentityStatus:
-      type: string
-      enum:
-      - PENDING
-      - ERROR
-      - APPROVED
-      - DENIED
-      - DISABLED
-      title: ''
-    AddInstitutionMembersResponse:
-      type: object
-      properties:
-        institution_id:
-          type: string
-          description: ID of institution identity to which members were added.
-        members:
-          type: array
-          items:
-            $ref: '#/components/schemas/InstitutionMember'
-          description: List of institution members that were added to the institution.
-      required:
-      - institution_id
   securitySchemes:
     OAuth2:
       type: oauth2

@@ -58,8 +58,9 @@ tags:
 - Trading
 - Custody
 - Blockchain
-- Financial-Services
+- Financial Services
 - Digital Assets
+- Stablecoin Issuance
 tags_raw:
 - Company
 - Stablecoins
@@ -71,6 +72,8 @@ tags_raw:
 - Blockchain
 - Financial Services
 - Digital Assets
+- Financial-Services
+- Stablecoin Issuance
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com

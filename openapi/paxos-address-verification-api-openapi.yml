@@ -260,38 +260,12 @@ components:
           description: expires_at is computed server-side at creation time and is always populated.
         ref_id:
           type: string
-    publicVerificationMethod:
-      type: string
-      enum:
-      - SIGNATURE
-      - SMALL_DEPOSIT
-      - MANUAL
-    publicListVerificationsResponse:
+    publicSubmitSignatureRequest:
       type: object
       properties:
-        next_page_cursor:
+        id:
           type: string
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/publicVerification'
-    publicVerificationStatus:
-      type: string
-      enum:
-      - PENDING
-      - APPROVED
-      - EXPIRED
-    publicSmallDepositVerification:
-      type: object
-      properties:
-        amount:
-          type: string
-          format: decimal
-        deposit_address:
-          type: string
-        transaction_hash:
-          type: string
-        asset:
+        signature:
           type: string
     publicSignatureVerification:
       type: object
@@ -313,6 +287,30 @@ components:
           $ref: '#/components/schemas/publicVerificationMethod'
         ref_id:
           type: string
+    publicSmallDepositVerification:
+      type: object
+      properties:
+        amount:
+          type: string
+          format: decimal
+        deposit_address:
+          type: string
+        transaction_hash:
+          type: string
+        asset:
+          type: string
+    publicVerificationStatus:
+      type: string
+      enum:
+      - PENDING
+      - APPROVED
+      - EXPIRED
+    publicVerificationMethod:
+      type: string
+      enum:
+      - SIGNATURE
+      - SMALL_DEPOSIT
+      - MANUAL
     publicManualVerification:
       type: object
       properties:
@@ -324,13 +322,15 @@ components:
       description: 'ManualVerification is populated on admin endpoints only when
 
         verification_method is MANUAL. Not returned on public endpoints.'
-    publicSubmitSignatureRequest:
+    publicListVerificationsResponse:
       type: object
       properties:
-        id:
+        next_page_cursor:
           type: string
-        signature:
-          type: string
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/publicVerification'
   securitySchemes:
     OAuth2:
       type: oauth2

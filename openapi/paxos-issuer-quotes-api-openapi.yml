@@ -214,37 +214,6 @@ paths:
         - exchange:read_issuer_quote_execution
 components:
   schemas:
-    GetIssuerQuoteSettlementAvailabilityResponse:
-      type: object
-      properties:
-        buy_quantity:
-          type: string
-          description: 'Maximum PAXG quantity available for immediate (T+0) purchase, to 3 decimal places.
-
-            Returns "0.000" when the gold market is closed or unavailable.'
-        sell_quantity:
-          type: string
-          description: Always "0.000" — PAXG sell settlement is T+1, not instant.
-        market:
-          type: string
-          description: Trading pair for the issuer quote.
-        snapshot_at:
-          type: string
-          format: date-time
-          description: Approximate time at which availability was computed.
-      required:
-      - buy_quantity
-      - sell_quantity
-      - market
-      - snapshot_at
-    ExchangePublicCreateIssuerQuoteExecutionBody:
-      type: object
-      properties:
-        profile_id:
-          type: string
-          description: The profile ID under which to execute this order.
-      required:
-      - profile_id
     IssuerQuoteExecutionStatus:
       type: string
       enum:
@@ -271,6 +240,77 @@ components:
       - market
       - side
       - base_amount
+    ExchangePublicCreateIssuerQuoteExecutionBody:
+      type: object
+      properties:
+        profile_id:
+          type: string
+          description: The profile ID under which to execute this order.
+      required:
+      - profile_id
+    CreateIssuerQuoteResponse:
+      type: object
+      properties:
+        quote_id:
+          type: string
+          description: The ID of the held issuer quote for buying or selling an asset.
+        market:
+          type: string
+          description: Trading pair for the issuer quote.
+        side:
+          $ref: '#/components/schemas/OrderSide'
+        quantity:
+          type: string
+          format: decimal
+          description: Amount of asset (crypto) in the issuer quote.
+        price:
+          type: string
+          format: decimal
+          description: Cost per unit of the asset.
+        fee:
+          type: string
+          format: decimal
+          description: Fee to pay for the transaction.
+        quote_amount:
+          type: string
+          format: decimal
+          description: Amount of fiat to spend or acquire using the issuer quote, excluding fees.
+        expires_at:
+          type: string
+          format: date-time
+          description: The time at which the issuer quote expires.
+      required:
+      - quote_id
+      - market
+      - side
+      - quantity
+      - price
+      - fee
+      - quote_amount
+      - expires_at
+    ListIssuerQuoteExecutionsResponse:
+      type: object
+      properties:
+        issuer_quote_executions:
+          type: array
+          items:
+            $ref: '#/components/schemas/IssuerQuoteExecution'
+        next_page_cursor:
+          type: string
+    CreateIssuerQuoteExecutionResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The UUID of the issuer quote execution.
+      required:
+      - id
+    OrderSide:
+      type: string
+      enum:
+      - BUY
+      - SELL
+      description: Trade side.
     IssuerQuoteExecution:
       type: object
       properties:
@@ -323,69 +363,29 @@ components:
       - token_price
       - token_principal
       - profile_id
-    ListIssuerQuoteExecutionsResponse:
+    GetIssuerQuoteSettlementAvailabilityResponse:
       type: object
       properties:
-        issuer_quote_executions:
-          type: array
-          items:
-            $ref: '#/components/schemas/IssuerQuoteExecution'
-        next_page_cursor:
+        buy_quantity:
           type: string
-    CreateIssuerQuoteResponse:
-      type: object
-      properties:
-        quote_id:
+          description: 'Maximum PAXG quantity available for immediate (T+0) purchase, to 3 decimal places.
+
+            Returns "0.000" when the gold market is closed or unavailable.'
+        sell_quantity:
           type: string
-          description: The ID of the held issuer quote for buying or selling an asset.
+          description: Always "0.000" — PAXG sell settlement is T+1, not instant.
         market:
           type: string
           description: Trading pair for the issuer quote.
-        side:
-          $ref: '#/components/schemas/OrderSide'
-        quantity:
-          type: string
-          format: decimal
-          description: Amount of asset (crypto) in the issuer quote.
-        price:
-          type: string
-          format: decimal
-          description: Cost per unit of the asset.
-        fee:
-          type: string
-          format: decimal
-          description: Fee to pay for the transaction.
-        quote_amount:
-          type: string
-          format: decimal
-          description: Amount of fiat to spend or acquire using the issuer quote, excluding fees.
-        expires_at:
+        snapshot_at:
           type: string
           format: date-time
-          description: The time at which the issuer quote expires.
+          description: Approximate time at which availability was computed.
       required:
-      - quote_id
+      - buy_quantity
+      - sell_quantity
       - market
-      - side
-      - quantity
-      - price
-      - fee
-      - quote_amount
-      - expires_at
-    CreateIssuerQuoteExecutionResponse:
-      type: object
-      properties:
-        id:
-          type: string
-          description: The UUID of the issuer quote execution.
-      required:
-      - id
-    OrderSide:
-      type: string
-      enum:
-      - BUY
-      - SELL
-      description: Trade side.
+      - snapshot_at
   securitySchemes:
     OAuth2:
       type: oauth2

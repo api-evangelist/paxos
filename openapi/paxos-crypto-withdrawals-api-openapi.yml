@@ -296,59 +296,6 @@ paths:
         - transfer:write_crypto_withdrawal
 components:
   schemas:
-    PutCryptoDestinationAddressRequestTravelruleMetadata:
-      type: object
-      properties:
-        beneficiary:
-          $ref: '#/components/schemas/Beneficiary'
-        vasp:
-          $ref: '#/components/schemas/PutCryptoDestinationAddressRequestVasp'
-        custodian_type:
-          $ref: '#/components/schemas/CustodianType'
-        transfer_purpose:
-          type: string
-          description: Purpose of the transfer.
-      description: Travel Rule metadata for the destination address. See the [Travel Rule guide](/guides/travel-rule).
-    BeneficiaryPerson:
-      type: object
-      properties:
-        first_name:
-          type: string
-        last_name:
-          type: string
-        physical_address:
-          $ref: '#/components/schemas/GeographicAddress'
-      description: Person details if beneficiary is a person.
-      required:
-      - first_name
-      - last_name
-    CryptoWithdrawalBeneficiaryPerson:
-      type: object
-      properties:
-        first_name:
-          type: string
-        last_name:
-          type: string
-      description: Person beneficiary details. Provided when the beneficiary is an individual.
-      required:
-      - first_name
-      - last_name
-    PendingCustomerApproval:
-      type: object
-      properties:
-        message:
-          type: string
-          title: Human-readable explanation
-      description: PendingCustomerApproval represents that this resource is awaiting customer approval.
-    ListCryptoDestinationAddressesResponse:
-      type: object
-      properties:
-        addresses:
-          type: array
-          items:
-            $ref: '#/components/schemas/CryptoDestinationAddress'
-        next_page_cursor:
-          type: string
     CryptoWithdrawalBeneficiary:
       type: object
       properties:
@@ -359,220 +306,6 @@ components:
       description: 'Inline beneficiary (legacy). Being deprecated soon, for new integrations collect Travel Rule data
 
         on the destination address via PutCryptoDestinationAddress instead. See the [Travel Rule guide](/guides/travel-rule).'
-    BeneficiaryInstitution:
-      type: object
-      properties:
-        name:
-          type: string
-        physical_address:
-          $ref: '#/components/schemas/GeographicAddress'
-      description: Institution details if beneficiary is an institution.
-      required:
-      - name
-    MissingTrustline:
-      type: object
-      properties:
-        message:
-          type: string
-          title: Human-readable explanation of the error
-        destination_address:
-          type: string
-          title: The destination account address that is missing the trustline
-        asset:
-          type: string
-          title: The asset that requires a trustline
-      description: 'MissingTrustline represents a failed transfer where the destination account
-
-        lacks the required asset trustline.'
-    AutoConversion:
-      type: object
-      properties:
-        from_transfer_id:
-          type: string
-          title: Transfer Id of the deposit triggering this transfer (only on withdrawal transfers)
-        to_transfer_id:
-          type: string
-          title: Transfer Id of the withdrawal triggered by this deposit(only on deposit transfers)
-    MaxRentExceeded:
-      type: object
-      properties:
-        message:
-          type: string
-          title: Human-readable explanation of the error
-        destination_address:
-          type: string
-          title: The destination account address that triggered the check
-      description: 'MaxRentExceeded represents a failed transfer that was flagged for system abuse.
-
-        When a withdrawal''s rent calculation for the destination account exceeds the
-
-        maximum allowed rent threshold, it may indicate malicious behavior. This status
-
-        detail is set when such transfers are automatically cancelled.'
-    Beneficiary:
-      type: object
-      properties:
-        person_details:
-          $ref: '#/components/schemas/BeneficiaryPerson'
-        institution_details:
-          $ref: '#/components/schemas/BeneficiaryInstitution'
-        self:
-          type: boolean
-          description: '`true` when the beneficiary is the end user themselves (their own wallet) in which case
-
-            `person_details` and `institution_details` are omitted and resolved from the end user''s Identity.'
-      description: 'Beneficiary of the transfer: the party receiving the funds, identified by `person_details` or
-
-        `institution_details`, or by `self = true` when the destination is the end user''s own wallet.'
-    CryptoDestinationAddressTravelruleMetadata:
-      type: object
-      properties:
-        beneficiary:
-          $ref: '#/components/schemas/Beneficiary'
-        vasp:
-          $ref: '#/components/schemas/CryptoDestinationAddressVasp'
-        custodian_type:
-          $ref: '#/components/schemas/CustodianType'
-        transfer_purpose:
-          type: string
-          description: Purpose of the transfer.
-      description: Travel Rule metadata for the destination address. See the [Travel Rule guide](/guides/travel-rule).
-    CryptoNetwork:
-      type: string
-      enum:
-      - BITCOIN
-      - ETHEREUM
-      - BITCOIN_CASH
-      - LITECOIN
-      - SOLANA
-      - POLYGON_POS
-      - BASE
-      - ARBITRUM_ONE
-      - STELLAR
-      - INK
-      - XLAYER
-      - AVALANCHE
-      - DOGECOIN
-      - SUI
-      - ROBINHOOD
-      - BNB
-      description: A CryptoNetwork is a blockchain transmitting cryptocurrencies.
-    Problem:
-      type: object
-      properties:
-        type:
-          type: string
-          format: uri
-          description: 'An absolute URI that identifies the problem type.  When dereferenced,
-
-            it SHOULD provide human-readable documentation for the problem type
-
-            (e.g., using HTML).
-
-            '
-          default: about:blank
-          example: https://api.paxos.com/v2/problems/insufficient_funds
-        title:
-          type: string
-          description: 'A short, summary of the problem type. Written in english and readable
-
-            for engineers (usually not suited for non technical stakeholders and
-
-            not localized); example: Service Unavailable
-
-            '
-          example: Insufficient Funds
-        status:
-          type: integer
-          format: int32
-          description: 'The HTTP status code generated by the origin server for this occurrence
-
-            of the problem.
-
-            '
-          minimum: 100
-          example: 403
-          exclusiveMaximum: 600
-        detail:
-          type: string
-          description: 'A human readable explanation specific to this occurrence of the
-
-            problem.
-
-            '
-          example: Not enough funds in account.
-        meta:
-          type: object
-          description: 'Additional structured metadata about the error.
-
-            '
-    SecondaryStatus:
-      type: object
-      properties:
-        name:
-          $ref: '#/components/schemas/SecondaryStatusName'
-        detail:
-          type: string
-          description: Additional information about the current status of the transfer (e.g. if information is missing).
-      description: Secondary status for the transfer, used for more granular explanation of the transfer status.
-    TransferType:
-      type: string
-      enum:
-      - INTERNAL_TRANSFER_DEBIT
-      - INTERNAL_TRANSFER_CREDIT
-      - CRYPTO_DEPOSIT
-      - CRYPTO_WITHDRAWAL
-      - WIRE_DEPOSIT
-      - WIRE_WITHDRAWAL
-      - SEN_DEPOSIT
-      - SEN_WITHDRAWAL
-      - BANK_DEPOSIT
-      - BANK_WITHDRAWAL
-      - PAXOS_TRANSFER_DEBIT
-      - PAXOS_TRANSFER_CREDIT
-      - SIGNET_DEPOSIT
-      - SIGNET_WITHDRAWAL
-      - CBIT_WITHDRAWAL
-      - CBIT_DEPOSIT
-      - CUBIX_DEPOSIT
-      - CUBIX_WITHDRAWAL
-      - RTP_DEPOSIT
-      description: Type of transfer.
-    TransferStatus:
-      type: string
-      enum:
-      - PENDING
-      - COMPLETED
-      - FAILED
-    PutCryptoDestinationAddressRequestVasp:
-      type: object
-      properties:
-        id:
-          type: string
-          description: 'Specify the id of a known VASP (from ListVasps). Specify exactly one of
-
-            `id` (known VASP) or `custom_vasp_name` + `custom_vasp_website` (other VASP).'
-        custom_vasp_name:
-          type: string
-          description: 'Specify the name of a VASP that is not in the known list. Specify exactly
-
-            one of `id` (known VASP) or `custom_vasp_name` + `custom_vasp_website` (other VASP).'
-        custom_vasp_website:
-          type: string
-          description: 'Website URL of the VASP. Required when `custom_vasp_name` is specified
-
-            (VASP not in the Paxos directory).'
-      description: 'The receiving VASP, when `custodian_type` is `VASP`. Provide `id` (from ListVasps) for a known VASP,
-
-        or `custom_vasp_name` + `custom_vasp_website` for a VASP not in the Paxos directory.'
-    SecondaryStatusName:
-      type: string
-      enum:
-      - TRAVEL_RULE_INFO_REQUESTED
-      - TRAVEL_RULE_REJECTED
-      - CUSTOMER_REJECTED
-      - PENDING_CUSTOMER_APPROVAL
-      description: "Identifier for secondary status.\n\n - TRAVEL_RULE_INFO_REQUESTED: Travel rule information is required to continue processing the transfer.\n - TRAVEL_RULE_REJECTED: Transfer has been terminally rejected due to failing travel rule checks.\n - CUSTOMER_REJECTED: Transfer was rejected by a customer.\n - PENDING_CUSTOMER_APPROVAL: Transfer is pending customer approval."
     Transfer:
       type: object
       example:
@@ -709,36 +442,187 @@ components:
       enum:
       - VASP
       - PRIVATE
-    PutCryptoDestinationAddressRequest:
+    Beneficiary:
       type: object
       properties:
-        id:
-          type: string
-          description: 'Optional field to specify the crypto destination address to update by its unique id.
-
-            Specify either `id` or the `(crypto_network, address, identity_id)` tuple, not both.'
-        identity_id:
-          type: string
-          description: 'The Identity that owns this destination address. Required for 3P integrations.
-
-            When looking up an existing address to update, `(crypto_network, address, identity_id)`
-
-            uniquely identifies it; omit for first-party addresses with no identity scope.'
-        crypto_network:
-          $ref: '#/components/schemas/CryptoNetwork'
-        address:
-          type: string
-          description: 'Specify the address of the crypto destination address to create/update.
-
-            Specify either `id` or the `(crypto_network, address, identity_id)` tuple, not both.'
-        nickname:
-          type: string
-          description: Optional field to update the nickname of the crypto destination address. Defaults to an auto-generated nickname if not specified on creation.
-        bookmarked_status:
+        person_details:
+          $ref: '#/components/schemas/BeneficiaryPerson'
+        institution_details:
+          $ref: '#/components/schemas/BeneficiaryInstitution'
+        self:
           type: boolean
-          description: Optional field to update the bookmarked status of the crypto destination address. Defaults to false if not specified on creation.
-        travelrule_metadata:
-          $ref: '#/components/schemas/PutCryptoDestinationAddressRequestTravelruleMetadata'
+          description: '`true` when the beneficiary is the end user themselves (their own wallet) in which case
+
+            `person_details` and `institution_details` are omitted and resolved from the end user''s Identity.'
+      description: 'Beneficiary of the transfer: the party receiving the funds, identified by `person_details` or
+
+        `institution_details`, or by `self = true` when the destination is the end user''s own wallet.'
+    CryptoDestinationAddressTravelruleMetadata:
+      type: object
+      properties:
+        beneficiary:
+          $ref: '#/components/schemas/Beneficiary'
+        vasp:
+          $ref: '#/components/schemas/CryptoDestinationAddressVasp'
+        custodian_type:
+          $ref: '#/components/schemas/CustodianType'
+        transfer_purpose:
+          type: string
+          description: Purpose of the transfer.
+      description: Travel Rule metadata for the destination address. See the [Travel Rule guide](/guides/travel-rule).
+    TransferStatusDetails:
+      type: object
+      properties:
+        missing_trustline:
+          $ref: '#/components/schemas/MissingTrustline'
+        max_rent_exceeded:
+          $ref: '#/components/schemas/MaxRentExceeded'
+        pending_customer_approval:
+          $ref: '#/components/schemas/PendingCustomerApproval'
+        stale_fee_quote:
+          $ref: '#/components/schemas/StaleFeeQuote'
+        invalid_destination_address:
+          $ref: '#/components/schemas/InvalidDestinationAddress'
+      description: 'TransferStatusDetails provides additional information about why a transfer
+
+        is in its current state. This field is only populated when a transfer
+
+        encounters specific error conditions or requires additional context.'
+    GeographicAddress:
+      type: object
+      properties:
+        country:
+          type: string
+          description: ISO 3166-1 alpha-3 country code (e.g. "USA", "SGP").
+          pattern: ^[A-Z]{3}$
+        address1:
+          type: string
+          description: First line of the street address (e.g. "123 Main St").
+          maxLength: 35
+          pattern: ^[0-9A-Za-z /?:().,&'+-]+$
+        address2:
+          type: string
+          description: Optional second line of the street address (e.g. unit, suite, or floor).
+          maxLength: 35
+          pattern: ^[0-9A-Za-z /?:().,&'+-]+$
+        city:
+          type: string
+          description: City or town.
+          maxLength: 35
+          pattern: ^[0-9A-Za-z /?:().,&'+-]+$
+        province:
+          type: string
+          description: State, province, or region.
+          maxLength: 35
+          pattern: ^[0-9A-Za-z /?:().,&'+-]+$
+        zip_code:
+          type: string
+          description: Postal or ZIP code.
+          maxLength: 35
+          pattern: ^[0-9A-Za-z /?:().,&'+-]+$
+      description: A geographic (postal) address.
+      required:
+      - country
+    CryptoDestinationAddressStatus:
+      type: string
+      enum:
+      - PENDING
+      - APPROVED
+      - REJECTED
+    BeneficiaryInstitution:
+      type: object
+      properties:
+        name:
+          type: string
+        physical_address:
+          $ref: '#/components/schemas/GeographicAddress'
+      description: Institution details if beneficiary is an institution.
+      required:
+      - name
+    CryptoNetwork:
+      type: string
+      enum:
+      - BITCOIN
+      - ETHEREUM
+      - BITCOIN_CASH
+      - LITECOIN
+      - SOLANA
+      - POLYGON_POS
+      - BASE
+      - ARBITRUM_ONE
+      - STELLAR
+      - INK
+      - XLAYER
+      - AVALANCHE
+      - DOGECOIN
+      - SUI
+      - ROBINHOOD
+      - BNB
+      description: A CryptoNetwork is a blockchain transmitting cryptocurrencies.
+    CryptoWithdrawalBeneficiaryInstitution:
+      type: object
+      properties:
+        name:
+          type: string
+      description: Institution beneficiary details. Provided when the beneficiary is an organization.
+      required:
+      - name
+    BeneficiaryPerson:
+      type: object
+      properties:
+        first_name:
+          type: string
+        last_name:
+          type: string
+        physical_address:
+          $ref: '#/components/schemas/GeographicAddress'
+      description: Person details if beneficiary is a person.
+      required:
+      - first_name
+      - last_name
+    CryptoWithdrawalBeneficiaryPerson:
+      type: object
+      properties:
+        first_name:
+          type: string
+        last_name:
+          type: string
+      description: Person beneficiary details. Provided when the beneficiary is an individual.
+      required:
+      - first_name
+      - last_name
+    PutCryptoDestinationAddressRequestTravelruleMetadata:
+      type: object
+      properties:
+        beneficiary:
+          $ref: '#/components/schemas/Beneficiary'
+        vasp:
+          $ref: '#/components/schemas/PutCryptoDestinationAddressRequestVasp'
+        custodian_type:
+          $ref: '#/components/schemas/CustodianType'
+        transfer_purpose:
+          type: string
+          description: Purpose of the transfer.
+      description: Travel Rule metadata for the destination address. See the [Travel Rule guide](/guides/travel-rule).
+    StaleFeeQuote:
+      type: object
+      properties:
+        message:
+          type: string
+          title: Human-readable explanation
+      description: StaleFeeQuote represents a transfer cancelled because on-chain state changed after the fee was quoted.
+    InvalidDestinationAddress:
+      type: object
+      properties:
+        message:
+          type: string
+          title: Human-readable explanation of the error
+        destination_address:
+          type: string
+          title: The destination address that caused the cancellation
+      description: 'InvalidDestinationAddress represents a transfer cancelled because the destination address
+
+        cannot receive the requested asset (e.g. it is a token account for a different mint).'
     CryptoDestinationAddress:
       type: object
       example:
@@ -776,66 +660,30 @@ components:
       - id
       - crypto_network
       - address
-    CryptoDestinationAddressStatus:
+    TransferType:
       type: string
       enum:
-      - PENDING
-      - APPROVED
-      - REJECTED
-    GeographicAddress:
-      type: object
-      properties:
-        country:
-          type: string
-          description: ISO 3166-1 alpha-3 country code (e.g. "USA", "SGP").
-          pattern: ^[A-Z]{3}$
-        address1:
-          type: string
-          description: First line of the street address (e.g. "123 Main St").
-          maxLength: 35
-          pattern: ^[0-9A-Za-z /?:().,&'+-]+$
-        address2:
-          type: string
-          description: Optional second line of the street address (e.g. unit, suite, or floor).
-          maxLength: 35
-          pattern: ^[0-9A-Za-z /?:().,&'+-]+$
-        city:
-          type: string
-          description: City or town.
-          maxLength: 35
-          pattern: ^[0-9A-Za-z /?:().,&'+-]+$
-        province:
-          type: string
-          description: State, province, or region.
-          maxLength: 35
-          pattern: ^[0-9A-Za-z /?:().,&'+-]+$
-        zip_code:
-          type: string
-          description: Postal or ZIP code.
-          maxLength: 35
-          pattern: ^[0-9A-Za-z /?:().,&'+-]+$
-      description: A geographic (postal) address.
-      required:
-      - country
-    TransferStatusDetails:
-      type: object
-      properties:
-        missing_trustline:
-          $ref: '#/components/schemas/MissingTrustline'
-        max_rent_exceeded:
-          $ref: '#/components/schemas/MaxRentExceeded'
-        pending_customer_approval:
-          $ref: '#/components/schemas/PendingCustomerApproval'
-        stale_fee_quote:
-          $ref: '#/components/schemas/StaleFeeQuote'
-        invalid_destination_address:
-          $ref: '#/components/schemas/InvalidDestinationAddress'
-      description: 'TransferStatusDetails provides additional information about why a transfer
-
-        is in its current state. This field is only populated when a transfer
-
-        encounters specific error conditions or requires additional context.'
-    InvalidDestinationAddress:
+      - INTERNAL_TRANSFER_DEBIT
+      - INTERNAL_TRANSFER_CREDIT
+      - CRYPTO_DEPOSIT
+      - CRYPTO_WITHDRAWAL
+      - WIRE_DEPOSIT
+      - WIRE_WITHDRAWAL
+      - SEN_DEPOSIT
+      - SEN_WITHDRAWAL
+      - BANK_DEPOSIT
+      - BANK_WITHDRAWAL
+      - PAXOS_TRANSFER_DEBIT
+      - PAXOS_TRANSFER_CREDIT
+      - SIGNET_DEPOSIT
+      - SIGNET_WITHDRAWAL
+      - CBIT_WITHDRAWAL
+      - CBIT_DEPOSIT
+      - CUBIX_DEPOSIT
+      - CUBIX_WITHDRAWAL
+      - RTP_DEPOSIT
+      description: Type of transfer.
+    MaxRentExceeded:
       type: object
       properties:
         message:
@@ -843,30 +691,167 @@ components:
           title: Human-readable explanation of the error
         destination_address:
           type: string
-          title: The destination address that caused the cancellation
-      description: 'InvalidDestinationAddress represents a transfer cancelled because the destination address
+          title: The destination account address that triggered the check
+      description: 'MaxRentExceeded represents a failed transfer that was flagged for system abuse.
 
-        cannot receive the requested asset (e.g. it is a token account for a different mint).'
-    StaleFeeQuote:
+        When a withdrawal''s rent calculation for the destination account exceeds the
+
+        maximum allowed rent threshold, it may indicate malicious behavior. This status
+
+        detail is set when such transfers are automatically cancelled.'
+    Problem:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+          description: 'An absolute URI that identifies the problem type.  When dereferenced,
+
+            it SHOULD provide human-readable documentation for the problem type
+
+            (e.g., using HTML).
+
+            '
+          default: about:blank
+          example: https://api.paxos.com/v2/problems/insufficient_funds
+        title:
+          type: string
+          description: 'A short, summary of the problem type. Written in english and readable
+
+            for engineers (usually not suited for non technical stakeholders and
+
+            not localized); example: Service Unavailable
+
+            '
+          example: Insufficient Funds
+        status:
+          type: integer
+          format: int32
+          description: 'The HTTP status code generated by the origin server for this occurrence
+
+            of the problem.
+
+            '
+          minimum: 100
+          example: 403
+          exclusiveMaximum: 600
+        detail:
+          type: string
+          description: 'A human readable explanation specific to this occurrence of the
+
+            problem.
+
+            '
+          example: Not enough funds in account.
+        meta:
+          type: object
+          description: 'Additional structured metadata about the error.
+
+            '
+    PendingCustomerApproval:
       type: object
       properties:
         message:
           type: string
           title: Human-readable explanation
-      description: StaleFeeQuote represents a transfer cancelled because on-chain state changed after the fee was quoted.
+      description: PendingCustomerApproval represents that this resource is awaiting customer approval.
+    SecondaryStatus:
+      type: object
+      properties:
+        name:
+          $ref: '#/components/schemas/SecondaryStatusName'
+        detail:
+          type: string
+          description: Additional information about the current status of the transfer (e.g. if information is missing).
+      description: Secondary status for the transfer, used for more granular explanation of the transfer status.
     PutCryptoDestinationAddressResponse:
       type: object
       properties:
         address:
           $ref: '#/components/schemas/CryptoDestinationAddress'
-    CryptoWithdrawalBeneficiaryInstitution:
+    AutoConversion:
       type: object
       properties:
-        name:
+        from_transfer_id:
           type: string
-      description: Institution beneficiary details. Provided when the beneficiary is an organization.
-      required:
-      - name
+          title: Transfer Id of the deposit triggering this transfer (only on withdrawal transfers)
+        to_transfer_id:
+          type: string
+          title: Transfer Id of the withdrawal triggered by this deposit(only on deposit transfers)
+    PutCryptoDestinationAddressRequest:
+      type: object
+      properties:
+        id:
+          type: string
+          description: 'Optional field to specify the crypto destination address to update by its unique id.
+
+            Specify either `id` or the `(crypto_network, address, identity_id)` tuple, not both.'
+        identity_id:
+          type: string
+          description: 'The Identity that owns this destination address. Required for 3P integrations.
+
+            When looking up an existing address to update, `(crypto_network, address, identity_id)`
+
+            uniquely identifies it; omit for first-party addresses with no identity scope.'
+        crypto_network:
+          $ref: '#/components/schemas/CryptoNetwork'
+        address:
+          type: string
+          description: 'Specify the address of the crypto destination address to create/update.
+
+            Specify either `id` or the `(crypto_network, address, identity_id)` tuple, not both.'
+        nickname:
+          type: string
+          description: Optional field to update the nickname of the crypto destination address. Defaults to an auto-generated nickname if not specified on creation.
+        bookmarked_status:
+          type: boolean
+          description: Optional field to update the bookmarked status of the crypto destination address. Defaults to false if not specified on creation.
+        travelrule_metadata:
+          $ref: '#/components/schemas/PutCryptoDestinationAddressRequestTravelruleMetadata'
+    TransferStatus:
+      type: string
+      enum:
+      - PENDING
+      - COMPLETED
+      - FAILED
+    SecondaryStatusName:
+      type: string
+      enum:
+      - TRAVEL_RULE_INFO_REQUESTED
+      - TRAVEL_RULE_REJECTED
+      - CUSTOMER_REJECTED
+      - PENDING_CUSTOMER_APPROVAL
+      description: "Identifier for secondary status.\n\n - TRAVEL_RULE_INFO_REQUESTED: Travel rule information is required to continue processing the transfer.\n - TRAVEL_RULE_REJECTED: Transfer has been terminally rejected due to failing travel rule checks.\n - CUSTOMER_REJECTED: Transfer was rejected by a customer.\n - PENDING_CUSTOMER_APPROVAL: Transfer is pending customer approval."
+    PutCryptoDestinationAddressRequestVasp:
+      type: object
+      properties:
+        id:
+          type: string
+          description: 'Specify the id of a known VASP (from ListVasps). Specify exactly one of
+
+            `id` (known VASP) or `custom_vasp_name` + `custom_vasp_website` (other VASP).'
+        custom_vasp_name:
+          type: string
+          description: 'Specify the name of a VASP that is not in the known list. Specify exactly
+
+            one of `id` (known VASP) or `custom_vasp_name` + `custom_vasp_website` (other VASP).'
+        custom_vasp_website:
+          type: string
+          description: 'Website URL of the VASP. Required when `custom_vasp_name` is specified
+
+            (VASP not in the Paxos directory).'
+      description: 'The receiving VASP, when `custodian_type` is `VASP`. Provide `id` (from ListVasps) for a known VASP,
+
+        or `custom_vasp_name` + `custom_vasp_website` for a VASP not in the Paxos directory.'
+    ListCryptoDestinationAddressesResponse:
+      type: object
+      properties:
+        addresses:
+          type: array
+          items:
+            $ref: '#/components/schemas/CryptoDestinationAddress'
+        next_page_cursor:
+          type: string
     CryptoDestinationAddressVasp:
       type: object
       properties:
@@ -881,12 +866,6 @@ components:
           type: string
           description: Customer-supplied VASP website, used when the "Other" VASP is selected.
       description: The receiving VASP for this destination address, when `custodian_type` is `VASP`.
-    TransferDirection:
-      type: string
-      enum:
-      - CREDIT
-      - DEBIT
-      description: Direction of the transfer.
     CreateCryptoWithdrawalRequest:
       type: object
       example:
@@ -956,6 +935,27 @@ components:
       - asset
       - destination_address
       - crypto_network
+    TransferDirection:
+      type: string
+      enum:
+      - CREDIT
+      - DEBIT
+      description: Direction of the transfer.
+    MissingTrustline:
+      type: object
+      properties:
+        message:
+          type: string
+          title: Human-readable explanation of the error
+        destination_address:
+          type: string
+          title: The destination account address that is missing the trustline
+        asset:
+          type: string
+          title: The asset that requires a trustline
+      description: 'MissingTrustline represents a failed transfer where the destination account
+
+        lacks the required asset trustline.'
   examples:
     Problem_fee_expired_crypto_withdrawal:
       value:
@@ -965,17 +965,6 @@ components:
         detail: fee 9e5828e2-0a10-4273-aa9c-f50bd0eaf344 expired at 2020-01-17T18:36:08.737Z
         meta:
           expired_at: '2020-01-17T18:36:08.737Z'
-    Problem_insufficient_funds:
-      value:
-        type: https://developer.paxos.com/docs/v2/problems/insufficient-funds
-        title: Insufficient Funds
-        status: 403
-        detail: 'insufficient USD funds in profile b7b77d82-e6a7-4ae9-9904-36231aedf985: 100 needed, 50 available'
-        meta:
-          profile_id: b7b77d82-e6a7-4ae9-9904-36231aedf985
-          asset: USD
-          available: '50'
-          needed: '100'
     Problem_already_exists_crypto_withdrawal:
       value:
         type: https://developer.paxos.com/docs/v2/problems/already-exists
@@ -1003,6 +992,17 @@ components:
             destination_address: 1BvBMSEYstWetqTFn5Au4m4GFg7xJaNVN2
             crypto_network: BITCOIN
             crypto_tx_hash: f4184fc596403b9d638783cf57adfe4c75c605f6356fbc91338530e9831e9e16
+    Problem_insufficient_funds:
+      value:
+        type: https://developer.paxos.com/docs/v2/problems/insufficient-funds
+        title: Insufficient Funds
+        status: 403
+        detail: 'insufficient USD funds in profile b7b77d82-e6a7-4ae9-9904-36231aedf985: 100 needed, 50 available'
+        meta:
+          profile_id: b7b77d82-e6a7-4ae9-9904-36231aedf985
+          asset: USD
+          available: '50'
+          needed: '100'
     Problem_fee_not_found_crypto_withdrawal:
       value:
         type: about:blank

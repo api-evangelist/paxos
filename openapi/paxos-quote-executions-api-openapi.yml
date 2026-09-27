@@ -318,104 +318,7 @@ paths:
       - OAuth2:
         - exchange:read_quote_execution
 components:
-  examples:
-    Problem_insufficient_funds:
-      value:
-        type: https://developer.paxos.com/docs/v2/problems/insufficient-funds
-        title: Insufficient Funds
-        status: 403
-        detail: 'insufficient USD funds in profile b7b77d82-e6a7-4ae9-9904-36231aedf985: 100 needed, 50 available'
-        meta:
-          profile_id: b7b77d82-e6a7-4ae9-9904-36231aedf985
-          asset: USD
-          available: '50'
-          needed: '100'
-    Problem_expired_quote:
-      value:
-        type: https://developer.paxos.com/docs/v2/problems/expired
-        title: Expired
-        status: 403
-        detail: quote 366a26d2-3098-4226-a520-4bb43ae4d922 expired at 2020-01-17T18:36:38Z
-        meta:
-          expired_at: '2020-01-17T18:36:38Z'
-    Problem_already_exists_quote_execution:
-      value:
-        type: https://developer.paxos.com/docs/v2/problems/already-exists
-        title: Already Exists
-        status: 409
-        detail: quote execution already exists with ref_id 'already_used_ref_id'
-        meta:
-          existing:
-            id: f190b163-208f-4d73-8deb-4fb8b24add00
-            profile_id: b7b77d82-e6a7-4ae9-9904-36231aedf985
-            quote_id: 366a26d2-3098-4226-a520-4bb43ae4d922
-            ref_id: already_used_ref_id
-            status: CREATED
-            market: BTCUSD
-            side: BUY
-            price: '6001.2'
-            base_amount: '0.016663334'
-            base_asset: BTC
-            quote_amount: '100.00'
-            quote_asset: USD
-            created_at: '2020-01-17T18:36:31.345Z'
-            metadata:
-              customer_id: 9b8c9cba-801e-4418-adc0-ede709df6339
-    Problem_not_found_quote:
-      value:
-        type: about:blank
-        title: Not Found
-        status: 404
-        detail: quote not found with id 366a26d2-3098-4226-a520-4bb43ae4d922
-    Problem_rejected:
-      value:
-        type: https://developer.paxos.com/docs/v2/problems/rejected
-        title: Rejected
-        status: 403
-        detail: extreme market conditions have invalidated this quote execution
-        meta: {}
   schemas:
-    ExchangePublicCreateQuoteExecutionBody:
-      type: object
-      example:
-        quote_id: 366a26d2-3098-4226-a520-4bb43ae4d922
-        quote_amount: '14102.82'
-        metadata:
-          customer_id: 9b8c9cba-801e-4418-adc0-ede709df6339
-      properties:
-        quote_id:
-          type: string
-          description: The ID of the held Quote for buying or selling some asset.
-        ref_id:
-          type: string
-          description: A unique identifier for the quote execution (for idempotence).
-        base_amount:
-          type: string
-          description: The amount of the base asset (crypto) to buy or sell using the specified quote. The maximum precision is 8 decimals.
-          pattern: ^[0-9]*\.?[0-9]+$
-        quote_amount:
-          type: string
-          description: The amount of the quote asset (fiat) to spend or acquire using the specified quote. The maximum precision is 2 decimals.
-          pattern: ^[0-9]*\.?[0-9]+$
-        metadata:
-          type: object
-          additionalProperties:
-            type: string
-          description: 'Metadata to store on the quote execution.
-
-            Up to 6 key/value pairs may be stored, with each key and value at most 100 characters.'
-        identity_id:
-          type: string
-          description: The end user that requests the quote execution.
-        account_id:
-          type: string
-          description: The account under which this quote execution is placed. The provided identity must be allowed to trade on behalf of this account.
-        recipient_profile_id:
-          type: string
-          description: The ID of the profile under which to deposit the funds.
-      title: Create Quote Execution Request
-      required:
-      - quote_id
     QuoteExecution:
       type: object
       example:
@@ -507,12 +410,60 @@ components:
       - quote_amount
       - quote_asset
       - created_at
-    OrderSide:
-      type: string
-      enum:
-      - BUY
-      - SELL
-      description: Trade side.
+    ExchangePublicCreateQuoteExecutionBody:
+      type: object
+      example:
+        quote_id: 366a26d2-3098-4226-a520-4bb43ae4d922
+        quote_amount: '14102.82'
+        metadata:
+          customer_id: 9b8c9cba-801e-4418-adc0-ede709df6339
+      properties:
+        quote_id:
+          type: string
+          description: The ID of the held Quote for buying or selling some asset.
+        ref_id:
+          type: string
+          description: A unique identifier for the quote execution (for idempotence).
+        base_amount:
+          type: string
+          description: The amount of the base asset (crypto) to buy or sell using the specified quote. The maximum precision is 8 decimals.
+          pattern: ^[0-9]*\.?[0-9]+$
+        quote_amount:
+          type: string
+          description: The amount of the quote asset (fiat) to spend or acquire using the specified quote. The maximum precision is 2 decimals.
+          pattern: ^[0-9]*\.?[0-9]+$
+        metadata:
+          type: object
+          additionalProperties:
+            type: string
+          description: 'Metadata to store on the quote execution.
+
+            Up to 6 key/value pairs may be stored, with each key and value at most 100 characters.'
+        identity_id:
+          type: string
+          description: The end user that requests the quote execution.
+        account_id:
+          type: string
+          description: The account under which this quote execution is placed. The provided identity must be allowed to trade on behalf of this account.
+        recipient_profile_id:
+          type: string
+          description: The ID of the profile under which to deposit the funds.
+      title: Create Quote Execution Request
+      required:
+      - quote_id
+    ListQuoteExecutionsResponse:
+      type: object
+      properties:
+        total_count:
+          type: integer
+          format: int32
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/QuoteExecution'
+        next_page_cursor:
+          type: string
+          description: Cursor token required for fetching the next page.
     Market:
       type: string
       enum:
@@ -550,6 +501,20 @@ components:
       - XLMUSD
       - BNBUSD
       title: ''
+    OrderSide:
+      type: string
+      enum:
+      - BUY
+      - SELL
+      description: Trade side.
+    QuoteExecutionStatus:
+      type: string
+      enum:
+      - CREATED
+      - SETTLED
+      description: 'A QuoteExecution begins in state `CREATED` and transitions to end state `SETTLED`
+
+        when all accounting movements are complete.'
     Problem:
       type: object
       properties:
@@ -599,27 +564,62 @@ components:
           description: 'Additional structured metadata about the error.
 
             '
-    ListQuoteExecutionsResponse:
-      type: object
-      properties:
-        total_count:
-          type: integer
-          format: int32
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/QuoteExecution'
-        next_page_cursor:
-          type: string
-          description: Cursor token required for fetching the next page.
-    QuoteExecutionStatus:
-      type: string
-      enum:
-      - CREATED
-      - SETTLED
-      description: 'A QuoteExecution begins in state `CREATED` and transitions to end state `SETTLED`
-
-        when all accounting movements are complete.'
+  examples:
+    Problem_not_found_quote:
+      value:
+        type: about:blank
+        title: Not Found
+        status: 404
+        detail: quote not found with id 366a26d2-3098-4226-a520-4bb43ae4d922
+    Problem_expired_quote:
+      value:
+        type: https://developer.paxos.com/docs/v2/problems/expired
+        title: Expired
+        status: 403
+        detail: quote 366a26d2-3098-4226-a520-4bb43ae4d922 expired at 2020-01-17T18:36:38Z
+        meta:
+          expired_at: '2020-01-17T18:36:38Z'
+    Problem_already_exists_quote_execution:
+      value:
+        type: https://developer.paxos.com/docs/v2/problems/already-exists
+        title: Already Exists
+        status: 409
+        detail: quote execution already exists with ref_id 'already_used_ref_id'
+        meta:
+          existing:
+            id: f190b163-208f-4d73-8deb-4fb8b24add00
+            profile_id: b7b77d82-e6a7-4ae9-9904-36231aedf985
+            quote_id: 366a26d2-3098-4226-a520-4bb43ae4d922
+            ref_id: already_used_ref_id
+            status: CREATED
+            market: BTCUSD
+            side: BUY
+            price: '6001.2'
+            base_amount: '0.016663334'
+            base_asset: BTC
+            quote_amount: '100.00'
+            quote_asset: USD
+            created_at: '2020-01-17T18:36:31.345Z'
+            metadata:
+              customer_id: 9b8c9cba-801e-4418-adc0-ede709df6339
+    Problem_rejected:
+      value:
+        type: https://developer.paxos.com/docs/v2/problems/rejected
+        title: Rejected
+        status: 403
+        detail: extreme market conditions have invalidated this quote execution
+        meta: {}
+    Problem_insufficient_funds:
+      value:
+        type: https://developer.paxos.com/docs/v2/problems/insufficient-funds
+        title: Insufficient Funds
+        status: 403
+        detail: 'insufficient USD funds in profile b7b77d82-e6a7-4ae9-9904-36231aedf985: 100 needed, 50 available'
+        meta:
+          profile_id: b7b77d82-e6a7-4ae9-9904-36231aedf985
+          asset: USD
+          available: '50'
+          needed: '100'
   securitySchemes:
     OAuth2:
       type: oauth2

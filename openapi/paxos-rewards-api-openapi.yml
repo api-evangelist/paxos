@@ -71,16 +71,20 @@ paths:
         - rewards:read_rewards_details
 components:
   schemas:
-    Tier:
+    Jurisdiction:
       type: string
       enum:
-      - TIER_UNSPECIFIED
-      - FOUNDER
-      - PARTNER_CUSTODY_REMOVAL_PROGRAM
-      - PARTNER_STANDARD_CUSTODY_TIER_1
-      - PARTNER_STANDARD_CUSTODY_TIER_2
-      - PARTNER_STANDARD_CUSTODY_TIER_3
-      - FOUNDER_TIER_2
+      - JURISDICTION_UNSPECIFIED
+      - EU
+      - US
+    GetRewardsRatesResponse:
+      type: object
+      properties:
+        rates:
+          type: array
+          items:
+            $ref: '#/components/schemas/RewardRate'
+          description: Reward rates for the requested asset type.
     RewardRate:
       type: object
       properties:
@@ -111,14 +115,6 @@ components:
           format: date-time
           title: When this rate was created
       title: RewardRate represents a reward rate configuration
-    GetRewardsRatesResponse:
-      type: object
-      properties:
-        rates:
-          type: array
-          items:
-            $ref: '#/components/schemas/RewardRate'
-          description: Reward rates for the requested asset type.
     GetRewardDetailsResponse:
       type: object
       properties:
@@ -145,12 +141,16 @@ components:
           items:
             $ref: '#/components/schemas/AssetRewardDetails'
           description: Per-asset reward details breakdown. Supports partners with multiple asset types.
-    Jurisdiction:
+    Tier:
       type: string
       enum:
-      - JURISDICTION_UNSPECIFIED
-      - EU
-      - US
+      - TIER_UNSPECIFIED
+      - FOUNDER
+      - PARTNER_CUSTODY_REMOVAL_PROGRAM
+      - PARTNER_STANDARD_CUSTODY_TIER_1
+      - PARTNER_STANDARD_CUSTODY_TIER_2
+      - PARTNER_STANDARD_CUSTODY_TIER_3
+      - FOUNDER_TIER_2
     AssetRewardDetails:
       type: object
       properties:

@@ -335,46 +335,22 @@ paths:
         - transfer:read_transfer
 components:
   schemas:
-    StaleFeeQuote:
+    PendingCustomerApproval:
       type: object
       properties:
         message:
           type: string
           title: Human-readable explanation
-      description: StaleFeeQuote represents a transfer cancelled because on-chain state changed after the fee was quoted.
-    MaxRentExceeded:
+      description: PendingCustomerApproval represents that this resource is awaiting customer approval.
+    SecondaryStatus:
       type: object
       properties:
-        message:
+        name:
+          $ref: '#/components/schemas/SecondaryStatusName'
+        detail:
           type: string
-          title: Human-readable explanation of the error
-        destination_address:
-          type: string
-          title: The destination account address that triggered the check
-      description: 'MaxRentExceeded represents a failed transfer that was flagged for system abuse.
-
-        When a withdrawal''s rent calculation for the destination account exceeds the
-
-        maximum allowed rent threshold, it may indicate malicious behavior. This status
-
-        detail is set when such transfers are automatically cancelled.'
-    SecondaryStatusName:
-      type: string
-      enum:
-      - TRAVEL_RULE_INFO_REQUESTED
-      - TRAVEL_RULE_REJECTED
-      - CUSTOMER_REJECTED
-      - PENDING_CUSTOMER_APPROVAL
-      description: "Identifier for secondary status.\n\n - TRAVEL_RULE_INFO_REQUESTED: Travel rule information is required to continue processing the transfer.\n - TRAVEL_RULE_REJECTED: Transfer has been terminally rejected due to failing travel rule checks.\n - CUSTOMER_REJECTED: Transfer was rejected by a customer.\n - PENDING_CUSTOMER_APPROVAL: Transfer is pending customer approval."
-    AutoConversion:
-      type: object
-      properties:
-        from_transfer_id:
-          type: string
-          title: Transfer Id of the deposit triggering this transfer (only on withdrawal transfers)
-        to_transfer_id:
-          type: string
-          title: Transfer Id of the withdrawal triggered by this deposit(only on deposit transfers)
+          description: Additional information about the current status of the transfer (e.g. if information is missing).
+      description: Secondary status for the transfer, used for more granular explanation of the transfer status.
     Transfer:
       type: object
       example:
@@ -506,13 +482,15 @@ components:
       - status
       - direction
       - type
-    PendingCustomerApproval:
+    AutoConversion:
       type: object
       properties:
-        message:
+        from_transfer_id:
           type: string
-          title: Human-readable explanation
-      description: PendingCustomerApproval represents that this resource is awaiting customer approval.
+          title: Transfer Id of the deposit triggering this transfer (only on withdrawal transfers)
+        to_transfer_id:
+          type: string
+          title: Transfer Id of the withdrawal triggered by this deposit(only on deposit transfers)
     CryptoNetwork:
       type: string
       enum:
@@ -533,12 +511,68 @@ components:
       - ROBINHOOD
       - BNB
       description: A CryptoNetwork is a blockchain transmitting cryptocurrencies.
+    StaleFeeQuote:
+      type: object
+      properties:
+        message:
+          type: string
+          title: Human-readable explanation
+      description: StaleFeeQuote represents a transfer cancelled because on-chain state changed after the fee was quoted.
+    InvalidDestinationAddress:
+      type: object
+      properties:
+        message:
+          type: string
+          title: Human-readable explanation of the error
+        destination_address:
+          type: string
+          title: The destination address that caused the cancellation
+      description: 'InvalidDestinationAddress represents a transfer cancelled because the destination address
+
+        cannot receive the requested asset (e.g. it is a token account for a different mint).'
     TransferDirection:
       type: string
       enum:
       - CREDIT
       - DEBIT
       description: Direction of the transfer.
+    TransferStatus:
+      type: string
+      enum:
+      - PENDING
+      - COMPLETED
+      - FAILED
+    SecondaryStatusName:
+      type: string
+      enum:
+      - TRAVEL_RULE_INFO_REQUESTED
+      - TRAVEL_RULE_REJECTED
+      - CUSTOMER_REJECTED
+      - PENDING_CUSTOMER_APPROVAL
+      description: "Identifier for secondary status.\n\n - TRAVEL_RULE_INFO_REQUESTED: Travel rule information is required to continue processing the transfer.\n - TRAVEL_RULE_REJECTED: Transfer has been terminally rejected due to failing travel rule checks.\n - CUSTOMER_REJECTED: Transfer was rejected by a customer.\n - PENDING_CUSTOMER_APPROVAL: Transfer is pending customer approval."
+    TransferType:
+      type: string
+      enum:
+      - INTERNAL_TRANSFER_DEBIT
+      - INTERNAL_TRANSFER_CREDIT
+      - CRYPTO_DEPOSIT
+      - CRYPTO_WITHDRAWAL
+      - WIRE_DEPOSIT
+      - WIRE_WITHDRAWAL
+      - SEN_DEPOSIT
+      - SEN_WITHDRAWAL
+      - BANK_DEPOSIT
+      - BANK_WITHDRAWAL
+      - PAXOS_TRANSFER_DEBIT
+      - PAXOS_TRANSFER_CREDIT
+      - SIGNET_DEPOSIT
+      - SIGNET_WITHDRAWAL
+      - CBIT_WITHDRAWAL
+      - CBIT_DEPOSIT
+      - CUBIX_DEPOSIT
+      - CUBIX_WITHDRAWAL
+      - RTP_DEPOSIT
+      description: Type of transfer.
     ListTransfersResponse:
       type: object
       properties:
@@ -566,16 +600,7 @@ components:
         is in its current state. This field is only populated when a transfer
 
         encounters specific error conditions or requires additional context.'
-    SecondaryStatus:
-      type: object
-      properties:
-        name:
-          $ref: '#/components/schemas/SecondaryStatusName'
-        detail:
-          type: string
-          description: Additional information about the current status of the transfer (e.g. if information is missing).
-      description: Secondary status for the transfer, used for more granular explanation of the transfer status.
-    InvalidDestinationAddress:
+    MaxRentExceeded:
       type: object
       properties:
         message:
@@ -583,33 +608,14 @@ components:
           title: Human-readable explanation of the error
         destination_address:
           type: string
-          title: The destination address that caused the cancellation
-      description: 'InvalidDestinationAddress represents a transfer cancelled because the destination address
+          title: The destination account address that triggered the check
+      description: 'MaxRentExceeded represents a failed transfer that was flagged for system abuse.
 
-        cannot receive the requested asset (e.g. it is a token account for a different mint).'
-    TransferType:
-      type: string
-      enum:
-      - INTERNAL_TRANSFER_DEBIT
-      - INTERNAL_TRANSFER_CREDIT
-      - CRYPTO_DEPOSIT
-      - CRYPTO_WITHDRAWAL
-      - WIRE_DEPOSIT
-      - WIRE_WITHDRAWAL
-      - SEN_DEPOSIT
-      - SEN_WITHDRAWAL
-      - BANK_DEPOSIT
-      - BANK_WITHDRAWAL
-      - PAXOS_TRANSFER_DEBIT
-      - PAXOS_TRANSFER_CREDIT
-      - SIGNET_DEPOSIT
-      - SIGNET_WITHDRAWAL
-      - CBIT_WITHDRAWAL
-      - CBIT_DEPOSIT
-      - CUBIX_DEPOSIT
-      - CUBIX_WITHDRAWAL
-      - RTP_DEPOSIT
-      description: Type of transfer.
+        When a withdrawal''s rent calculation for the destination account exceeds the
+
+        maximum allowed rent threshold, it may indicate malicious behavior. This status
+
+        detail is set when such transfers are automatically cancelled.'
     MissingTrustline:
       type: object
       properties:
@@ -625,12 +631,6 @@ components:
       description: 'MissingTrustline represents a failed transfer where the destination account
 
         lacks the required asset trustline.'
-    TransferStatus:
-      type: string
-      enum:
-      - PENDING
-      - COMPLETED
-      - FAILED
   securitySchemes:
     OAuth2:
       type: oauth2

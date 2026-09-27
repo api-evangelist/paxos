@@ -265,6 +265,33 @@ paths:
         - rewards:write_monitoring_address
 components:
   schemas:
+    UpdateAttributionAddressResponse:
+      type: object
+      properties:
+        address:
+          $ref: '#/components/schemas/AttributionAddress'
+    ListAttributionAddressesResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/AttributionAddress'
+          description: Monitored addresses in this page of results.
+        next_page_cursor:
+          type: string
+          description: Token for the next page of results; empty if no more results.
+    BatchCreateAttributionAddressesResponse:
+      type: object
+      properties:
+        successful_addresses:
+          type: array
+          items:
+            $ref: '#/components/schemas/AttributionAddress'
+        failed_addresses:
+          type: array
+          items:
+            $ref: '#/components/schemas/AttributionAddressError'
     AttributionLedgerType:
       type: string
       enum:
@@ -282,36 +309,13 @@ components:
         a source and/or destination address which will be compared against the addresses
 
         configured relative to the same ledger type.'
-    DeleteAttributionAddressResponse:
-      type: object
-    CreateAttributionAddressResponse:
-      type: object
-      properties:
-        address:
-          $ref: '#/components/schemas/AttributionAddress'
-    BatchCreateAttributionAddressesRequest:
-      type: object
-      properties:
-        addresses:
-          type: array
-          items:
-            $ref: '#/components/schemas/AttributionAddress'
     CreateAttributionAddressRequest:
       type: object
       properties:
         address:
           $ref: '#/components/schemas/AttributionAddress'
-    BatchCreateAttributionAddressesResponse:
+    DeleteAttributionAddressResponse:
       type: object
-      properties:
-        successful_addresses:
-          type: array
-          items:
-            $ref: '#/components/schemas/AttributionAddress'
-        failed_addresses:
-          type: array
-          items:
-            $ref: '#/components/schemas/AttributionAddressError'
     AttributionAddress:
       type: object
       properties:
@@ -364,17 +368,6 @@ components:
           description: Output only. Expiry of the latest proof. Absent when no proof exists.
           readOnly: true
       title: All data associated with an attribution address
-    ListAttributionAddressesResponse:
-      type: object
-      properties:
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/AttributionAddress'
-          description: Monitored addresses in this page of results.
-        next_page_cursor:
-          type: string
-          description: Token for the next page of results; empty if no more results.
     AttributionAddressError:
       type: object
       properties:
@@ -384,11 +377,18 @@ components:
           type: string
           title: Error message
       title: Failed address with error details
-    UpdateAttributionAddressResponse:
+    CreateAttributionAddressResponse:
       type: object
       properties:
         address:
           $ref: '#/components/schemas/AttributionAddress'
+    BatchCreateAttributionAddressesRequest:
+      type: object
+      properties:
+        addresses:
+          type: array
+          items:
+            $ref: '#/components/schemas/AttributionAddress'
   securitySchemes:
     OAuth2:
       type: oauth2

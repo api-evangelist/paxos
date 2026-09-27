@@ -217,26 +217,6 @@ paths:
         - orchestration:write_orchestration_rule
 components:
   schemas:
-    OrchestrationRuleFiatSource:
-      type: object
-      properties:
-        deposit_instructions_id:
-          type: string
-        network:
-          type: string
-        account_type:
-          type: string
-        memo_id:
-          type: string
-    CreateOrchestrationRuleRequestDestination:
-      type: object
-      properties:
-        crypto:
-          $ref: '#/components/schemas/CreateOrchestrationRuleRequestCryptoDestination'
-        fiat:
-          $ref: '#/components/schemas/CreateOrchestrationRuleRequestFiatDestination'
-        profile:
-          $ref: '#/components/schemas/CreateOrchestrationRuleRequestProfileDestination'
     CreateOrchestrationRuleResponse:
       type: object
       properties:
@@ -249,6 +229,24 @@ components:
           type: string
         network:
           type: string
+    OrchestrationRuleProfileDestination:
+      type: object
+      properties:
+        profile_id:
+          type: string
+    OrchestrationRuleStatus:
+      type: string
+      enum:
+      - ACTIVE
+      - DELETED
+      - PENDING
+      - REJECTED
+      description: " - ACTIVE: The rule is active, deposits matching the `source_asset` and `source` of this rule start a conversion and\nsubsequent delivery of the `destination_asset` to the specified `destination`.\n - DELETED: The rule has been deleted, newly deposited `source_assets` to the `source` of this rule will not be converted.\nThe deposited `source_asset` is still going to be credited to the Profile specified by `profile_id`.\n - PENDING: The rule creation is pending approval(s) before the rule becomes ACTIVE.\n - REJECTED: The rule creation has been rejected during the approval process."
+    OrchestrationRuleProfileSource:
+      type: object
+      properties:
+        profile_id:
+          type: string
     CreateOrchestrationRuleRequestSource:
       type: object
       properties:
@@ -256,43 +254,15 @@ components:
           $ref: '#/components/schemas/CreateOrchestrationRuleRequestCryptoSource'
         fiat:
           $ref: '#/components/schemas/CreateOrchestrationRuleRequestFiatSource'
-    OrchestrationRule:
+    OrchestrationRuleSource:
       type: object
       properties:
-        id:
-          type: string
-          description: Unique identifier for the orchestration rule.
-        ref_id:
-          type: string
-          description: Unique reference ID for the rule.
-        nickname:
-          type: string
-          description: Optional human-readable nickname for the rule.
-        profile_id:
-          type: string
-          description: Profile ID of the account owner.
-        identity_id:
-          type: string
-          description: Identity ID of the account owner.
-        account_id:
-          type: string
-          description: Account ID where the rule applies.
-        status:
-          $ref: '#/components/schemas/OrchestrationRuleStatus'
-        source_asset:
-          type: string
-          description: Asset being converted from.
-        destination_asset:
-          type: string
-          description: Asset being converted to.
-        source:
-          $ref: '#/components/schemas/OrchestrationRuleSource'
-        destination:
-          $ref: '#/components/schemas/OrchestrationRuleDestination'
-        created_at:
-          type: string
-          format: date-time
-          description: Timestamp when the rule was created.
+        crypto:
+          $ref: '#/components/schemas/OrchestrationRuleCryptoSource'
+        fiat:
+          $ref: '#/components/schemas/OrchestrationRuleFiatSource'
+        profile:
+          $ref: '#/components/schemas/OrchestrationRuleProfileSource'
     CreateOrchestrationRuleRequest:
       type: object
       example:
@@ -345,25 +315,15 @@ components:
       - source_asset
       - destination_asset
       - source
-    CreateOrchestrationRuleRequestProfileDestination:
+    CreateOrchestrationRuleRequestDestination:
       type: object
       properties:
-        profile_id:
-          type: string
-    ListOrchestrationRulesResponse:
-      type: object
-      properties:
-        rules:
-          type: array
-          items:
-            $ref: '#/components/schemas/OrchestrationRule'
-          description: 'Deprecated: Use items instead. This field will be removed in a future version.'
-        next_page_cursor:
-          type: string
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/OrchestrationRule'
+        crypto:
+          $ref: '#/components/schemas/CreateOrchestrationRuleRequestCryptoDestination'
+        fiat:
+          $ref: '#/components/schemas/CreateOrchestrationRuleRequestFiatDestination'
+        profile:
+          $ref: '#/components/schemas/CreateOrchestrationRuleRequestProfileDestination'
     CreateOrchestrationRuleRequestCryptoSource:
       type: object
       properties:
@@ -373,79 +333,16 @@ components:
 
 
             Valid values: ETHEREUM, SOLANA, STELLAR, BASE, POLYGON'
-    OrchestrationRuleStatus:
-      type: string
-      enum:
-      - ACTIVE
-      - DELETED
-      - PENDING
-      - REJECTED
-      description: " - ACTIVE: The rule is active, deposits matching the `source_asset` and `source` of this rule start a conversion and\nsubsequent delivery of the `destination_asset` to the specified `destination`.\n - DELETED: The rule has been deleted, newly deposited `source_assets` to the `source` of this rule will not be converted.\nThe deposited `source_asset` is still going to be credited to the Profile specified by `profile_id`.\n - PENDING: The rule creation is pending approval(s) before the rule becomes ACTIVE.\n - REJECTED: The rule creation has been rejected during the approval process."
-    DeleteOrchestrationRuleResponse:
+    OrchestrationRuleFiatSource:
       type: object
       properties:
-        rule:
-          $ref: '#/components/schemas/OrchestrationRule'
-    CreateOrchestrationRuleRequestCryptoDestination:
-      type: object
-      properties:
-        address:
+        deposit_instructions_id:
           type: string
-          description: 'The blockchain destination address. Specify together with `network`
-
-            (and `identity_id` on the parent request for 3P integrations).
-
-            These together identify a CryptoDestinationAddress whose travel rule metadata will be used.'
         network:
           type: string
-          description: The blockchain network of the destination address.
-        crypto_address_id:
-          type: string
-          description: Deprecated. Specify `address` and `network` instead.
-    OrchestrationRuleSource:
-      type: object
-      properties:
-        crypto:
-          $ref: '#/components/schemas/OrchestrationRuleCryptoSource'
-        fiat:
-          $ref: '#/components/schemas/OrchestrationRuleFiatSource'
-        profile:
-          $ref: '#/components/schemas/OrchestrationRuleProfileSource'
-    OrchestrationRuleFiatDestination:
-      type: object
-      properties:
-        fiat_account_id:
-          type: string
-        memo:
-          type: string
-    OrchestrationRuleProfileSource:
-      type: object
-      properties:
-        profile_id:
-          type: string
-    CreateOrchestrationRuleRequestFiatSource:
-      type: object
-      properties:
-        network:
-          type: string
-          description: 'The fiat network for the source.
-
-
-            Valid values: WIRE, CUBIX'
         account_type:
           type: string
-          description: 'The account type for the fiat source.
-
-
-            Valid values: SWIFT, ABA'
-    OrchestrationRuleCryptoSource:
-      type: object
-      properties:
-        address_id:
-          type: string
-        address:
-          type: string
-        network:
+        memo_id:
           type: string
     OrchestrationRuleDestination:
       type: object
@@ -456,6 +353,62 @@ components:
           $ref: '#/components/schemas/OrchestrationRuleFiatDestination'
         profile:
           $ref: '#/components/schemas/OrchestrationRuleProfileDestination'
+    DeleteOrchestrationRuleResponse:
+      type: object
+      properties:
+        rule:
+          $ref: '#/components/schemas/OrchestrationRule'
+    OrchestrationRule:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the orchestration rule.
+        ref_id:
+          type: string
+          description: Unique reference ID for the rule.
+        nickname:
+          type: string
+          description: Optional human-readable nickname for the rule.
+        profile_id:
+          type: string
+          description: Profile ID of the account owner.
+        identity_id:
+          type: string
+          description: Identity ID of the account owner.
+        account_id:
+          type: string
+          description: Account ID where the rule applies.
+        status:
+          $ref: '#/components/schemas/OrchestrationRuleStatus'
+        source_asset:
+          type: string
+          description: Asset being converted from.
+        destination_asset:
+          type: string
+          description: Asset being converted to.
+        source:
+          $ref: '#/components/schemas/OrchestrationRuleSource'
+        destination:
+          $ref: '#/components/schemas/OrchestrationRuleDestination'
+        created_at:
+          type: string
+          format: date-time
+          description: Timestamp when the rule was created.
+    CreateOrchestrationRuleRequestProfileDestination:
+      type: object
+      properties:
+        profile_id:
+          type: string
+    OrchestrationRuleCryptoSource:
+      type: object
+      properties:
+        address_id:
+          type: string
+        address:
+          type: string
+        network:
+          type: string
     CreateOrchestrationRuleRequestFiatDestination:
       type: object
       properties:
@@ -473,11 +426,58 @@ components:
             - ListFiatAccounts endpoint (/transfer/fiat-accounts)'
         memo:
           type: string
-    OrchestrationRuleProfileDestination:
+    ListOrchestrationRulesResponse:
       type: object
       properties:
-        profile_id:
+        rules:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrchestrationRule'
+          description: 'Deprecated: Use items instead. This field will be removed in a future version.'
+        next_page_cursor:
           type: string
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrchestrationRule'
+    CreateOrchestrationRuleRequestFiatSource:
+      type: object
+      properties:
+        network:
+          type: string
+          description: 'The fiat network for the source.
+
+
+            Valid values: WIRE, CUBIX'
+        account_type:
+          type: string
+          description: 'The account type for the fiat source.
+
+
+            Valid values: SWIFT, ABA'
+    OrchestrationRuleFiatDestination:
+      type: object
+      properties:
+        fiat_account_id:
+          type: string
+        memo:
+          type: string
+    CreateOrchestrationRuleRequestCryptoDestination:
+      type: object
+      properties:
+        address:
+          type: string
+          description: 'The blockchain destination address. Specify together with `network`
+
+            (and `identity_id` on the parent request for 3P integrations).
+
+            These together identify a CryptoDestinationAddress whose travel rule metadata will be used.'
+        network:
+          type: string
+          description: The blockchain network of the destination address.
+        crypto_address_id:
+          type: string
+          description: Deprecated. Specify `address` and `network` instead.
   securitySchemes:
     OAuth2:
       type: oauth2

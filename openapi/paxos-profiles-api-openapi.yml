@@ -360,12 +360,66 @@ paths:
         - funding:write_profile
 components:
   schemas:
+    ListProfileBalancesResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProfileBalance'
+      required:
+      - items
+    Profile:
+      type: object
+      example:
+        id: b7b77d82-e6a7-4ae9-9904-36231aedf985
+        nickname: MyProfileName
+        type: NORMAL
+      properties:
+        id:
+          type: string
+        nickname:
+          type: string
+        type:
+          $ref: '#/components/schemas/ProfileType'
+        description:
+          type: string
+        account_id:
+          type: string
+          title: '@hidden'
+      required:
+      - id
+      - nickname
+      - type
+    CreateProfileRequest:
+      type: object
+      properties:
+        nickname:
+          type: string
+          description: The display name of the profile. Must be unique.
+        description:
+          type: string
+          description: The description of the created profile.
+      required:
+      - nickname
     ProfileType:
       type: string
       enum:
       - NORMAL
       - DEFAULT
       description: "The profile type.\n\n - NORMAL: A client-created profile. All Profiles created using the `CreateProfile` endpoint are of this type.\n - DEFAULT: A system-generated profile."
+    ListProfilesResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Profile'
+        next_page_cursor:
+          type: string
+          description: Cursor token required for fetching the next page.
+    DeactivateProfileResponse:
+      type: object
     ProfileBalance:
       type: object
       example:
@@ -389,60 +443,6 @@ components:
       - asset
       - available
       - trading
-    Profile:
-      type: object
-      example:
-        id: b7b77d82-e6a7-4ae9-9904-36231aedf985
-        nickname: MyProfileName
-        type: NORMAL
-      properties:
-        id:
-          type: string
-        nickname:
-          type: string
-        type:
-          $ref: '#/components/schemas/ProfileType'
-        description:
-          type: string
-        account_id:
-          type: string
-          title: '@hidden'
-      required:
-      - id
-      - nickname
-      - type
-    ListProfilesResponse:
-      type: object
-      properties:
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/Profile'
-        next_page_cursor:
-          type: string
-          description: Cursor token required for fetching the next page.
-    ListProfileBalancesResponse:
-      type: object
-      properties:
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/ProfileBalance'
-      required:
-      - items
-    CreateProfileRequest:
-      type: object
-      properties:
-        nickname:
-          type: string
-          description: The display name of the profile. Must be unique.
-        description:
-          type: string
-          description: The description of the created profile.
-      required:
-      - nickname
-    DeactivateProfileResponse:
-      type: object
     ProfilePublicUpdateProfileBody:
       type: object
       example:

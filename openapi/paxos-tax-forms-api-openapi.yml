@@ -133,6 +133,12 @@ paths:
         - tax:read_tax_form
 components:
   schemas:
+    TaxFormType:
+      type: string
+      enum:
+      - FORM_1099_B
+      - FORM_1099_MISC
+      - FORM_1099_DA
     ListTaxFormsResponse:
       type: object
       properties:
@@ -149,12 +155,6 @@ components:
           items:
             $ref: '#/components/schemas/TaxFormURL'
           title: List of tax form urls
-    TaxFormType:
-      type: string
-      enum:
-      - FORM_1099_B
-      - FORM_1099_MISC
-      - FORM_1099_DA
     TaxFormURL:
       type: object
       properties:

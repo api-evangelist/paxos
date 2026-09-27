@@ -209,55 +209,6 @@ paths:
         - rewards:read_claims
 components:
   schemas:
-    DeleteClaimScheduleResponse:
-      type: object
-      title: Empty
-    ListClaimSchedulesResponse:
-      type: object
-      properties:
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/ClaimSchedule'
-          description: Claim schedules in this page of results.
-        next_page_cursor:
-          type: string
-          description: Token to retrieve the next page of results, or empty if there are no more results.
-    CreateClaimScheduleRequest:
-      type: object
-      properties:
-        payout_group_id:
-          type: string
-        schedule_type:
-          $ref: '#/components/schemas/ScheduleType'
-        days_of_week:
-          type: array
-          items:
-            type: integer
-            format: int32
-        days_of_month:
-          type: array
-          items:
-            type: integer
-            format: int32
-        hour:
-          type: integer
-          format: int32
-        minute:
-          type: integer
-          format: int32
-      required:
-      - payout_group_id
-      - schedule_type
-      - hour
-      - minute
-    ClaimType:
-      type: string
-      enum:
-      - CLAIM_ALL
-      - CLAIM_FOR_ADDRESSES
-      - CLAIM_UNREGISTER
-      title: Claim-related enums
     ClaimOnchainStatus:
       type: string
       enum:
@@ -290,67 +241,16 @@ components:
       - schedule_type
       - hour
       - minute
-    CreateClaimScheduleResponse:
-      type: object
-      properties:
-        claim_schedule:
-          $ref: '#/components/schemas/ClaimSchedule'
-    ClaimSchedule:
-      type: object
-      properties:
-        id:
-          type: string
-        payout_group_id:
-          type: string
-        schedule_type:
-          $ref: '#/components/schemas/ScheduleType'
-        next_run_at:
-          type: string
-          format: date-time
-        created_at:
-          type: string
-          format: date-time
-        updated_at:
-          type: string
-          format: date-time
-        days_of_week:
-          type: array
-          items:
-            type: integer
-            format: int32
-        days_of_month:
-          type: array
-          items:
-            type: integer
-            format: int32
-        hour:
-          type: integer
-          format: int32
-        minute:
-          type: integer
-          format: int32
-    UpdateClaimScheduleResponse:
-      type: object
-      properties:
-        claim_schedule:
-          $ref: '#/components/schemas/ClaimSchedule'
-    ScheduleType:
+    ClaimType:
       type: string
       enum:
-      - DAILY
-      - MONTHLY
-      - WEEKLY
-    ListClaimsResponse:
+      - CLAIM_ALL
+      - CLAIM_FOR_ADDRESSES
+      - CLAIM_UNREGISTER
+      title: Claim-related enums
+    DeleteClaimScheduleResponse:
       type: object
-      properties:
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/Claim'
-          description: Claims in this page of results.
-        next_page_cursor:
-          type: string
-          description: Token to retrieve the next page of results, or empty if there are no more results.
+      title: Empty
     Claim:
       type: object
       properties:
@@ -395,6 +295,106 @@ components:
           type: string
           format: date-time
       title: Claim represents a reward claim transaction
+    ListClaimSchedulesResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ClaimSchedule'
+          description: Claim schedules in this page of results.
+        next_page_cursor:
+          type: string
+          description: Token to retrieve the next page of results, or empty if there are no more results.
+    CreateClaimScheduleResponse:
+      type: object
+      properties:
+        claim_schedule:
+          $ref: '#/components/schemas/ClaimSchedule'
+    UpdateClaimScheduleResponse:
+      type: object
+      properties:
+        claim_schedule:
+          $ref: '#/components/schemas/ClaimSchedule'
+    ClaimSchedule:
+      type: object
+      properties:
+        id:
+          type: string
+        payout_group_id:
+          type: string
+        schedule_type:
+          $ref: '#/components/schemas/ScheduleType'
+        next_run_at:
+          type: string
+          format: date-time
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        days_of_week:
+          type: array
+          items:
+            type: integer
+            format: int32
+        days_of_month:
+          type: array
+          items:
+            type: integer
+            format: int32
+        hour:
+          type: integer
+          format: int32
+        minute:
+          type: integer
+          format: int32
+    CreateClaimScheduleRequest:
+      type: object
+      properties:
+        payout_group_id:
+          type: string
+        schedule_type:
+          $ref: '#/components/schemas/ScheduleType'
+        days_of_week:
+          type: array
+          items:
+            type: integer
+            format: int32
+        days_of_month:
+          type: array
+          items:
+            type: integer
+            format: int32
+        hour:
+          type: integer
+          format: int32
+        minute:
+          type: integer
+          format: int32
+      required:
+      - payout_group_id
+      - schedule_type
+      - hour
+      - minute
+    ListClaimsResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Claim'
+          description: Claims in this page of results.
+        next_page_cursor:
+          type: string
+          description: Token to retrieve the next page of results, or empty if there are no more results.
+    ScheduleType:
+      type: string
+      enum:
+      - DAILY
+      - MONTHLY
+      - WEEKLY
   securitySchemes:
     OAuth2:
       type: oauth2

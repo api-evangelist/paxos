@@ -498,6 +498,73 @@ paths:
         - exchange:historical_prices
 components:
   schemas:
+    HistoricalPrice:
+      type: object
+      properties:
+        average_price:
+          type: string
+          format: decimal
+          description: 'Time-weighted average price over the specified time period, beginning at the defined timestamp.
+
+            For example, if `increment` is set to `ONE_HOUR`, then `average_price` is the time-weighted average for an hour.
+
+            The entire time period must be completed to display results.'
+        timestamp:
+          type: string
+          format: date-time
+          description: Timestamp at the beginning of an increment.
+    publicListHistoricalCandlesResponse:
+      type: object
+      properties:
+        market:
+          $ref: '#/components/schemas/PricePriceMarket'
+        increment:
+          $ref: '#/components/schemas/Increment'
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/publicCandlestickPrice'
+          description: List of historical candles.
+        next_page_cursor:
+          type: string
+          description: Cursor token required for fetching the next page.
+    ListHistoricalPricesResponse:
+      type: object
+      properties:
+        total_count:
+          type: integer
+          format: int32
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/HistoricalPrice'
+          description: List of historical prices.
+    publicCandlestickPrice:
+      type: object
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+          title: Timestamp at the beginning of an increment
+        open:
+          type: string
+          format: decimal
+          title: Opening price of the period
+        high:
+          type: string
+          format: decimal
+          title: Highest price during the period
+        low:
+          type: string
+          format: decimal
+          title: Lowest price during the period
+        close:
+          type: string
+          title: Closing price of the period
+        volume:
+          type: string
+          format: decimal
+          title: Volume traded during the period
     PricePriceMarket:
       type: string
       enum:
@@ -532,32 +599,20 @@ components:
       - BNBUSD
       description: ''
       title: Market
-    publicCandlestickPrice:
-      type: object
-      properties:
-        timestamp:
-          type: string
-          format: date-time
-          title: Timestamp at the beginning of an increment
-        open:
-          type: string
-          format: decimal
-          title: Opening price of the period
-        high:
-          type: string
-          format: decimal
-          title: Highest price during the period
-        low:
-          type: string
-          format: decimal
-          title: Lowest price during the period
-        close:
-          type: string
-          title: Closing price of the period
-        volume:
-          type: string
-          format: decimal
-          title: Volume traded during the period
+    Increment:
+      type: string
+      enum:
+      - ONE_MINUTE
+      - FIVE_MINUTES
+      - FIFTEEN_MINUTES
+      - THIRTY_MINUTES
+      - ONE_HOUR
+      - TWO_HOURS
+      - TWELVE_HOURS
+      - ONE_DAY
+      - ONE_WEEK
+      - TWO_WEEKS
+      - FOUR_WEEKS
     Pricing:
       type: object
       properties:
@@ -575,46 +630,6 @@ components:
           type: string
           format: date-time
           description: The time when the price was generated. RFC3339 format, like `2023-01-03T18:27:40.294528Z`.
-    Increment:
-      type: string
-      enum:
-      - ONE_MINUTE
-      - FIVE_MINUTES
-      - FIFTEEN_MINUTES
-      - THIRTY_MINUTES
-      - ONE_HOUR
-      - TWO_HOURS
-      - TWELVE_HOURS
-      - ONE_DAY
-      - ONE_WEEK
-      - TWO_WEEKS
-      - FOUR_WEEKS
-    ListHistoricalPricesResponse:
-      type: object
-      properties:
-        total_count:
-          type: integer
-          format: int32
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/HistoricalPrice'
-          description: List of historical prices.
-    HistoricalPrice:
-      type: object
-      properties:
-        average_price:
-          type: string
-          format: decimal
-          description: 'Time-weighted average price over the specified time period, beginning at the defined timestamp.
-
-            For example, if `increment` is set to `ONE_HOUR`, then `average_price` is the time-weighted average for an hour.
-
-            The entire time period must be completed to display results.'
-        timestamp:
-          type: string
-          format: date-time
-          description: Timestamp at the beginning of an increment.
     ListPricesResponse:
       type: object
       properties:
@@ -671,21 +686,6 @@ components:
           description: 'Additional structured metadata about the error.
 
             '
-    publicListHistoricalCandlesResponse:
-      type: object
-      properties:
-        market:
-          $ref: '#/components/schemas/PricePriceMarket'
-        increment:
-          $ref: '#/components/schemas/Increment'
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/publicCandlestickPrice'
-          description: List of historical candles.
-        next_page_cursor:
-          type: string
-          description: Cursor token required for fetching the next page.
   securitySchemes:
     OAuth2:
       type: oauth2

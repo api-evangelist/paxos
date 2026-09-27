@@ -119,17 +119,6 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    ListVaspsResponse:
-      type: object
-      properties:
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/Vasp'
-          description: The VASPs matching the request, ordered by name (ascending by default).
-        next_page_cursor:
-          type: string
-          description: Cursor for the next page of results, or empty when there are no more results.
     GetVaspResponse:
       type: object
       properties:
@@ -147,6 +136,17 @@ components:
       required:
       - id
       - name
+    ListVaspsResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Vasp'
+          description: The VASPs matching the request, ordered by name (ascending by default).
+        next_page_cursor:
+          type: string
+          description: Cursor for the next page of results, or empty when there are no more results.
   securitySchemes:
     OAuth2:
       type: oauth2

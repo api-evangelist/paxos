@@ -53,12 +53,6 @@ paths:
         - funding:read_profile
 components:
   schemas:
-    CreateSandboxDepositResponse:
-      type: object
-      properties:
-        activity_id:
-          type: string
-          description: The UUID of the customer activity created for the deposit.
     FundingSandboxCreateSandboxDepositBody:
       type: object
       properties:
@@ -78,6 +72,12 @@ components:
       required:
       - asset
       - amount
+    CreateSandboxDepositResponse:
+      type: object
+      properties:
+        activity_id:
+          type: string
+          description: The UUID of the customer activity created for the deposit.
     CryptoNetwork:
       type: string
       enum:

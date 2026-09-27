@@ -245,6 +245,17 @@ paths:
         - events:read_event
 components:
   schemas:
+    ListEventsResponse:
+      type: object
+      properties:
+        events:
+          type: array
+          items:
+            $ref: '#/components/schemas/Event'
+          description: Events ordered by `created_at` timestamp in the direction specified by the `order` parameter (ascending by default).
+        next_page_cursor:
+          type: string
+          description: Cursor to pass in the next request to fetch the next page. Empty when no more results.
     Event:
       type: object
       properties:
@@ -317,17 +328,6 @@ components:
           description: 'Additional structured metadata about the error.
 
             '
-    ListEventsResponse:
-      type: object
-      properties:
-        events:
-          type: array
-          items:
-            $ref: '#/components/schemas/Event'
-          description: Events ordered by `created_at` timestamp in the direction specified by the `order` parameter (ascending by default).
-        next_page_cursor:
-          type: string
-          description: Cursor to pass in the next request to fetch the next page. Empty when no more results.
   securitySchemes:
     OAuth2:
       type: oauth2
