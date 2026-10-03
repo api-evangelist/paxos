@@ -228,21 +228,31 @@ paths:
         - exchange:read_order
 components:
   schemas:
-    OrderStatus:
+    ListExecutionsResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Execution'
+        next_page_cursor:
+          type: string
+          description: Cursor token required for fetching the next page.
+    OrderSide:
       type: string
       enum:
-      - PENDING_SUBMISSION
-      - SUBMITTED
-      - OPEN
-      - FILLED
-      - CANCELLED
-      - REJECTED
-      - EXPIRED
-      description: 'Status of the order. The `EXPIRED` status is only applicable
-
-        for Smart Order Routing customers.
-
-        '
+      - BUY
+      - SELL
+      description: Trade side.
+    OrderType:
+      type: string
+      enum:
+      - LIMIT
+      - MARKET
+      - POST_ONLY_LIMIT
+      - STOP_MARKET
+      - STOP_LIMIT
+      description: Trade type.
     TimeInForce:
       type: string
       enum:
@@ -277,15 +287,58 @@ components:
         | Stop Market     |  -                        | Default                 | Valid               |  -                 |
 
         | Stop Limit      |  -                        | Default                 | Valid               |  -                 |'
-    OrderType:
+    Market:
       type: string
       enum:
-      - LIMIT
-      - MARKET
-      - POST_ONLY_LIMIT
-      - STOP_MARKET
-      - STOP_LIMIT
-      description: Trade type.
+      - ETHEUR
+      - ETHSGD
+      - ETHUSD
+      - BTCEUR
+      - BTCSGD
+      - BTCUSD
+      - PAXGUSD
+      - BCHUSD
+      - LTCUSD
+      - USDPUSD
+      - LINKUSD
+      - AAVEUSD
+      - UNIUSD
+      - PEPEUSD
+      - TRUMPUSD
+      - SHIBUSD
+      - ARBUSD
+      - BONKUSD
+      - ENAUSD
+      - MNTUSD
+      - ONDOUSD
+      - PENGUUSD
+      - QNTUSD
+      - RENDERUSD
+      - SKYUSD
+      - WIFUSD
+      - WLDUSD
+      - DOGEUSD
+      - AVAXUSD
+      - SUIUSD
+      - POLUSD
+      - XLMUSD
+      - BNBUSD
+      title: ''
+    OrderStatus:
+      type: string
+      enum:
+      - PENDING_SUBMISSION
+      - SUBMITTED
+      - OPEN
+      - FILLED
+      - CANCELLED
+      - REJECTED
+      - EXPIRED
+      description: 'Status of the order. The `EXPIRED` status is only applicable
+
+        for Smart Order Routing customers.
+
+        '
     ListOrdersResponse:
       type: object
       properties:
@@ -296,6 +349,53 @@ components:
         next_page_cursor:
           type: string
           description: Cursor token required for fetching the next page.
+    Execution:
+      type: object
+      properties:
+        execution_id:
+          type: string
+          format: uint64
+          title: Unique Execution id
+        order_id:
+          type: string
+          description: The UUID of the order associated with the execution.
+        executed_at:
+          type: string
+          format: date-time
+          description: Timestamp of the execution.
+        market:
+          $ref: '#/components/schemas/Market'
+        side:
+          $ref: '#/components/schemas/OrderSide'
+        amount:
+          type: string
+          format: decimal
+          description: Execution amount.
+        price:
+          type: string
+          format: decimal
+          description: Execution price.
+        commission:
+          type: string
+          format: decimal
+          description: Amount of commission paid.
+        commission_asset:
+          type: string
+          description: Currency of Commission payment. Fiat Only (USD, EUR, SGD).
+        rebate:
+          type: string
+          format: decimal
+          description: Amount of rebate applied.
+        rebate_asset:
+          type: string
+          description: Currency of the rebate. Fiat Only (USD, EUR, SGD).
+        account_id:
+          type: string
+          description: Account ID associated with the execution.
+        gross_trade_amount:
+          type: string
+          format: decimal
+          description: The total asset traded (asset amount multiplied by price paid).
     Order:
       type: object
       properties:
@@ -371,106 +471,6 @@ components:
         is_triggered:
           type: boolean
           description: Returns `true` when a stop order has been triggered.
-    Market:
-      type: string
-      enum:
-      - ETHEUR
-      - ETHSGD
-      - ETHUSD
-      - BTCEUR
-      - BTCSGD
-      - BTCUSD
-      - PAXGUSD
-      - BCHUSD
-      - LTCUSD
-      - USDPUSD
-      - LINKUSD
-      - AAVEUSD
-      - UNIUSD
-      - PEPEUSD
-      - TRUMPUSD
-      - SHIBUSD
-      - ARBUSD
-      - BONKUSD
-      - ENAUSD
-      - MNTUSD
-      - ONDOUSD
-      - PENGUUSD
-      - QNTUSD
-      - RENDERUSD
-      - SKYUSD
-      - WIFUSD
-      - WLDUSD
-      - DOGEUSD
-      - AVAXUSD
-      - SUIUSD
-      - POLUSD
-      - XLMUSD
-      - BNBUSD
-      title: ''
-    Execution:
-      type: object
-      properties:
-        execution_id:
-          type: string
-          format: uint64
-          title: Unique Execution id
-        order_id:
-          type: string
-          description: The UUID of the order associated with the execution.
-        executed_at:
-          type: string
-          format: date-time
-          description: Timestamp of the execution.
-        market:
-          $ref: '#/components/schemas/Market'
-        side:
-          $ref: '#/components/schemas/OrderSide'
-        amount:
-          type: string
-          format: decimal
-          description: Execution amount.
-        price:
-          type: string
-          format: decimal
-          description: Execution price.
-        commission:
-          type: string
-          format: decimal
-          description: Amount of commission paid.
-        commission_asset:
-          type: string
-          description: Currency of Commission payment. Fiat Only (USD, EUR, SGD).
-        rebate:
-          type: string
-          format: decimal
-          description: Amount of rebate applied.
-        rebate_asset:
-          type: string
-          description: Currency of the rebate. Fiat Only (USD, EUR, SGD).
-        account_id:
-          type: string
-          description: Account ID associated with the execution.
-        gross_trade_amount:
-          type: string
-          format: decimal
-          description: The total asset traded (asset amount multiplied by price paid).
-    OrderSide:
-      type: string
-      enum:
-      - BUY
-      - SELL
-      description: Trade side.
-    ListExecutionsResponse:
-      type: object
-      properties:
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/Execution'
-        next_page_cursor:
-          type: string
-          description: Cursor token required for fetching the next page.
   securitySchemes:
     OAuth2:
       type: oauth2

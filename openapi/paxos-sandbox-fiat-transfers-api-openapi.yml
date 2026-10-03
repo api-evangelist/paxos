@@ -91,29 +91,16 @@ components:
       enum:
       - ABA
       - SWIFT
-    FiatAccountOwnerInstitutionDetails:
+    FiatNetworkInstructionsCubix:
       type: object
       properties:
-        name:
+        account_id:
           type: string
+          description: The uuid account id of the CUBIX account.
       required:
-      - name
-    FiatNetworkInstructionsWire:
+      - account_id
+    InitiateSandboxFiatDepositResponse:
       type: object
-      properties:
-        account_number:
-          type: string
-          description: The FiatAccount owner's bank account number.
-        fiat_account_owner_address:
-          $ref: '#/components/schemas/MailingAddress'
-        routing_details:
-          $ref: '#/components/schemas/FiatNetworkInstructionsWireRoutingDetails'
-        intermediary_routing_details:
-          $ref: '#/components/schemas/FiatNetworkInstructionsWireRoutingDetails'
-      required:
-      - account_number
-      - fiat_account_owner_address
-      - routing_details
     FiatNetworkInstructionsDbsAct:
       type: object
       properties:
@@ -122,90 +109,6 @@ components:
           description: The account number of the DBS account.
       required:
       - account_number
-    FiatNetworkInstructionsScb:
-      type: object
-      properties:
-        account_number:
-          type: string
-          description: The account number of the StandChart account.
-      required:
-      - account_number
-    FiatNetworkInstructionsRtp:
-      type: object
-      properties:
-        account_number:
-          type: string
-          description: The FiatAccount owner's bank account number.
-        fiat_account_owner_address:
-          $ref: '#/components/schemas/MailingAddress'
-        routing_details:
-          $ref: '#/components/schemas/FiatNetworkInstructionsRtpRoutingDetails'
-      required:
-      - account_number
-      - routing_details
-    FiatNetworkInstructionsCbit:
-      type: object
-      properties:
-        wallet_address:
-          type: string
-          description: The wallet address of the CBIT account.
-      required:
-      - wallet_address
-    FiatNetworkInstructionsWireRoutingDetails:
-      type: object
-      properties:
-        routing_number_type:
-          $ref: '#/components/schemas/FiatWireAccountType'
-        routing_number:
-          type: string
-          description: The routing number.
-        bank_name:
-          type: string
-          description: The name of the bank.
-        bank_address:
-          $ref: '#/components/schemas/MailingAddress'
-      required:
-      - routing_number_type
-      - routing_number
-      - bank_name
-      - bank_address
-    FiatNetworkInstructions:
-      type: object
-      properties:
-        wire:
-          $ref: '#/components/schemas/FiatNetworkInstructionsWire'
-        cbit:
-          $ref: '#/components/schemas/FiatNetworkInstructionsCbit'
-        dbs_act:
-          $ref: '#/components/schemas/FiatNetworkInstructionsDbsAct'
-        cubix:
-          $ref: '#/components/schemas/FiatNetworkInstructionsCubix'
-        scb:
-          $ref: '#/components/schemas/FiatNetworkInstructionsScb'
-        rtp:
-          $ref: '#/components/schemas/FiatNetworkInstructionsRtp'
-    FiatAccountOwner:
-      type: object
-      properties:
-        person_details:
-          $ref: '#/components/schemas/FiatAccountOwnerPersonDetails'
-        institution_details:
-          $ref: '#/components/schemas/FiatAccountOwnerInstitutionDetails'
-    InitiateSandboxFiatDepositResponse:
-      type: object
-    FiatNetworkInstructionsRtpRoutingDetails:
-      type: object
-      properties:
-        routing_number:
-          type: string
-          description: The routing number.
-        bank_name:
-          type: string
-          description: The name of the bank.
-        bank_address:
-          $ref: '#/components/schemas/MailingAddress'
-      required:
-      - routing_number
     MailingAddress:
       type: object
       properties:
@@ -236,46 +139,69 @@ components:
       description: A mailing address.
       required:
       - country
-    FiatAccountOwnerPersonDetails:
+    FiatNetworkInstructionsScb:
       type: object
       properties:
-        first_name:
+        account_number:
           type: string
-        last_name:
-          type: string
+          description: The account number of the StandChart account.
       required:
-      - first_name
-      - last_name
-    InitiateSandboxFiatDepositRequest:
+      - account_number
+    FiatNetworkInstructionsCbit:
       type: object
       properties:
-        amount:
+        wallet_address:
           type: string
-          description: The amount to deposit.
-          pattern: ^[0-9]*\.?[0-9]{1,2}$
-        asset:
-          type: string
-          description: 'The asset to deposit. Current supported asset: "USD".'
-        memo_id:
-          type: string
-          description: The string that the client must provide in the memo field on their deposit to credit their Paxos platform balance.
-        fiat_network_instructions:
-          $ref: '#/components/schemas/FiatNetworkInstructions'
-        fiat_account_owner:
-          $ref: '#/components/schemas/FiatAccountOwner'
+          description: The wallet address of the CBIT account.
       required:
-      - amount
-      - asset
-      - memo_id
-      - fiat_network_instructions
-    FiatNetworkInstructionsCubix:
+      - wallet_address
+    FiatNetworkInstructionsWire:
       type: object
       properties:
-        account_id:
+        account_number:
           type: string
-          description: The uuid account id of the CUBIX account.
+          description: The FiatAccount owner's bank account number.
+        fiat_account_owner_address:
+          $ref: '#/components/schemas/MailingAddress'
+        routing_details:
+          $ref: '#/components/schemas/FiatNetworkInstructionsWireRoutingDetails'
+        intermediary_routing_details:
+          $ref: '#/components/schemas/FiatNetworkInstructionsWireRoutingDetails'
       required:
-      - account_id
+      - account_number
+      - fiat_account_owner_address
+      - routing_details
+    FiatNetworkInstructionsRtp:
+      type: object
+      properties:
+        account_number:
+          type: string
+          description: The FiatAccount owner's bank account number.
+        fiat_account_owner_address:
+          $ref: '#/components/schemas/MailingAddress'
+        routing_details:
+          $ref: '#/components/schemas/FiatNetworkInstructionsRtpRoutingDetails'
+      required:
+      - account_number
+      - routing_details
+    FiatNetworkInstructionsWireRoutingDetails:
+      type: object
+      properties:
+        routing_number_type:
+          $ref: '#/components/schemas/FiatWireAccountType'
+        routing_number:
+          type: string
+          description: The routing number.
+        bank_name:
+          type: string
+          description: The name of the bank.
+        bank_address:
+          $ref: '#/components/schemas/MailingAddress'
+      required:
+      - routing_number_type
+      - routing_number
+      - bank_name
+      - bank_address
     Problem:
       type: object
       properties:
@@ -325,6 +251,80 @@ components:
           description: 'Additional structured metadata about the error.
 
             '
+    FiatNetworkInstructions:
+      type: object
+      properties:
+        wire:
+          $ref: '#/components/schemas/FiatNetworkInstructionsWire'
+        cbit:
+          $ref: '#/components/schemas/FiatNetworkInstructionsCbit'
+        dbs_act:
+          $ref: '#/components/schemas/FiatNetworkInstructionsDbsAct'
+        cubix:
+          $ref: '#/components/schemas/FiatNetworkInstructionsCubix'
+        scb:
+          $ref: '#/components/schemas/FiatNetworkInstructionsScb'
+        rtp:
+          $ref: '#/components/schemas/FiatNetworkInstructionsRtp'
+    FiatAccountOwnerPersonDetails:
+      type: object
+      properties:
+        first_name:
+          type: string
+        last_name:
+          type: string
+      required:
+      - first_name
+      - last_name
+    InitiateSandboxFiatDepositRequest:
+      type: object
+      properties:
+        amount:
+          type: string
+          description: The amount to deposit.
+          pattern: ^[0-9]*\.?[0-9]{1,2}$
+        asset:
+          type: string
+          description: 'The asset to deposit. Current supported asset: "USD".'
+        memo_id:
+          type: string
+          description: The string that the client must provide in the memo field on their deposit to credit their Paxos platform balance.
+        fiat_network_instructions:
+          $ref: '#/components/schemas/FiatNetworkInstructions'
+        fiat_account_owner:
+          $ref: '#/components/schemas/FiatAccountOwner'
+      required:
+      - amount
+      - asset
+      - memo_id
+      - fiat_network_instructions
+    FiatNetworkInstructionsRtpRoutingDetails:
+      type: object
+      properties:
+        routing_number:
+          type: string
+          description: The routing number.
+        bank_name:
+          type: string
+          description: The name of the bank.
+        bank_address:
+          $ref: '#/components/schemas/MailingAddress'
+      required:
+      - routing_number
+    FiatAccountOwner:
+      type: object
+      properties:
+        person_details:
+          $ref: '#/components/schemas/FiatAccountOwnerPersonDetails'
+        institution_details:
+          $ref: '#/components/schemas/FiatAccountOwnerInstitutionDetails'
+    FiatAccountOwnerInstitutionDetails:
+      type: object
+      properties:
+        name:
+          type: string
+      required:
+      - name
   securitySchemes:
     OAuth2:
       type: oauth2

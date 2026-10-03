@@ -138,6 +138,181 @@ paths:
         - transfer:write_paxos_transfer
 components:
   schemas:
+    TransferType:
+      type: string
+      enum:
+      - INTERNAL_TRANSFER_DEBIT
+      - INTERNAL_TRANSFER_CREDIT
+      - CRYPTO_DEPOSIT
+      - CRYPTO_WITHDRAWAL
+      - WIRE_DEPOSIT
+      - WIRE_WITHDRAWAL
+      - SEN_DEPOSIT
+      - SEN_WITHDRAWAL
+      - BANK_DEPOSIT
+      - BANK_WITHDRAWAL
+      - PAXOS_TRANSFER_DEBIT
+      - PAXOS_TRANSFER_CREDIT
+      - SIGNET_DEPOSIT
+      - SIGNET_WITHDRAWAL
+      - CBIT_WITHDRAWAL
+      - CBIT_DEPOSIT
+      - CUBIX_DEPOSIT
+      - CUBIX_WITHDRAWAL
+      - RTP_DEPOSIT
+      description: Type of transfer.
+    CreatePaxosTransferRequest:
+      type: object
+      example:
+        ref_id: idempotence_id
+        from_profile_id: b7b77d82-e6a7-4ae9-9904-36231aedf985
+        to_profile_id: 37867177-f88c-45cc-b9b5-d786e7079609
+        asset: BTC
+        amount: '0.05'
+        metadata:
+          my_id: 4024ee50-eefb-4f2e-85c7-e7899c0b7da5
+        recipient_metadata:
+          your_id: 43ab8d28-be1e-4729-8731-37fd976b167b
+      properties:
+        ref_id:
+          type: string
+          description: Client-specified ID for replay protection and lookup.
+        from_profile_id:
+          type: string
+          description: The profile from which to send funds.
+        to_profile_id:
+          type: string
+          description: The destination profile.
+        amount:
+          type: string
+          format: decimal
+          description: The amount to transfer.
+        asset:
+          type: string
+          description: The asset to transfer, e.g. "USD", "BTC", "ETH".
+        metadata:
+          type: object
+          additionalProperties:
+            type: string
+          description: 'Optional client-specified metadata on the sender side of the transaction.
+
+            Up to 6 key/value pairs may be provided.
+
+            Each key and value must be less than or equal to 100 characters.'
+        recipient_metadata:
+          type: object
+          additionalProperties:
+            type: string
+          description: 'Optional client-specified metadata for the recipient side of the transaction.
+
+            Up to 6 key/value pairs may be provided.
+
+            Each key and value must be less than or equal to 100 characters.'
+        from_identity_id:
+          type: string
+          description: The Paxos Identity (`identity_id`) of the sending user.
+        from_account_id:
+          type: string
+          description: 'The Paxos Account (`account_id`) of the sending user.
+
+            Required only for customers with [3rd-Party integrations](https://docs.paxos.com/crypto-brokerage/ledger-type#fiat-and-crypto-subledger) initiating transfers on behalf of their end users.'
+        to_identity_id:
+          type: string
+          description: The Paxos Identity (`identity_id`) of the destination user.
+        to_account_id:
+          type: string
+          description: 'The Paxos Account (`account_id`) of the destination user.
+
+            Required only for customers with [3rd-Party integrations](https://docs.paxos.com/crypto-brokerage/ledger-type#fiat-and-crypto-subledger) initiating transfers on behalf of their end users.'
+      required:
+      - from_profile_id
+      - to_profile_id
+      - amount
+      - asset
+    TransferStatus:
+      type: string
+      enum:
+      - PENDING
+      - COMPLETED
+      - FAILED
+    SecondaryStatus:
+      type: object
+      properties:
+        name:
+          $ref: '#/components/schemas/SecondaryStatusName'
+        detail:
+          type: string
+          description: Additional information about the current status of the transfer (e.g. if information is missing).
+      description: Secondary status for the transfer, used for more granular explanation of the transfer status.
+    StaleFeeQuote:
+      type: object
+      properties:
+        message:
+          type: string
+          title: Human-readable explanation
+      description: StaleFeeQuote represents a transfer cancelled because on-chain state changed after the fee was quoted.
+    Problem:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+          description: 'An absolute URI that identifies the problem type.  When dereferenced,
+
+            it SHOULD provide human-readable documentation for the problem type
+
+            (e.g., using HTML).
+
+            '
+          default: about:blank
+          example: https://api.paxos.com/v2/problems/insufficient_funds
+        title:
+          type: string
+          description: 'A short, summary of the problem type. Written in english and readable
+
+            for engineers (usually not suited for non technical stakeholders and
+
+            not localized); example: Service Unavailable
+
+            '
+          example: Insufficient Funds
+        status:
+          type: integer
+          format: int32
+          description: 'The HTTP status code generated by the origin server for this occurrence
+
+            of the problem.
+
+            '
+          minimum: 100
+          example: 403
+          exclusiveMaximum: 600
+        detail:
+          type: string
+          description: 'A human readable explanation specific to this occurrence of the
+
+            problem.
+
+            '
+          example: Not enough funds in account.
+        meta:
+          type: object
+          description: 'Additional structured metadata about the error.
+
+            '
+    TransferDirection:
+      type: string
+      enum:
+      - CREDIT
+      - DEBIT
+      description: Direction of the transfer.
+    PendingCustomerApproval:
+      type: object
+      properties:
+        message:
+          type: string
+          title: Human-readable explanation
+      description: PendingCustomerApproval represents that this resource is awaiting customer approval.
     MissingTrustline:
       type: object
       properties:
@@ -153,22 +328,65 @@ components:
       description: 'MissingTrustline represents a failed transfer where the destination account
 
         lacks the required asset trustline.'
-    PendingCustomerApproval:
+    CryptoNetwork:
+      type: string
+      enum:
+      - BITCOIN
+      - ETHEREUM
+      - BITCOIN_CASH
+      - LITECOIN
+      - SOLANA
+      - POLYGON_POS
+      - BASE
+      - ARBITRUM_ONE
+      - STELLAR
+      - INK
+      - XLAYER
+      - AVALANCHE
+      - DOGECOIN
+      - SUI
+      - ROBINHOOD
+      - BNB
+      description: A CryptoNetwork is a blockchain transmitting cryptocurrencies.
+    AutoConversion:
+      type: object
+      properties:
+        from_transfer_id:
+          type: string
+          title: Transfer Id of the deposit triggering this transfer (only on withdrawal transfers)
+        to_transfer_id:
+          type: string
+          title: Transfer Id of the withdrawal triggered by this deposit(only on deposit transfers)
+    InvalidDestinationAddress:
       type: object
       properties:
         message:
           type: string
-          title: Human-readable explanation
-      description: PendingCustomerApproval represents that this resource is awaiting customer approval.
-    SecondaryStatus:
+          title: Human-readable explanation of the error
+        destination_address:
+          type: string
+          title: The destination address that caused the cancellation
+      description: 'InvalidDestinationAddress represents a transfer cancelled because the destination address
+
+        cannot receive the requested asset (e.g. it is a token account for a different mint).'
+    TransferStatusDetails:
       type: object
       properties:
-        name:
-          $ref: '#/components/schemas/SecondaryStatusName'
-        detail:
-          type: string
-          description: Additional information about the current status of the transfer (e.g. if information is missing).
-      description: Secondary status for the transfer, used for more granular explanation of the transfer status.
+        missing_trustline:
+          $ref: '#/components/schemas/MissingTrustline'
+        max_rent_exceeded:
+          $ref: '#/components/schemas/MaxRentExceeded'
+        pending_customer_approval:
+          $ref: '#/components/schemas/PendingCustomerApproval'
+        stale_fee_quote:
+          $ref: '#/components/schemas/StaleFeeQuote'
+        invalid_destination_address:
+          $ref: '#/components/schemas/InvalidDestinationAddress'
+      description: 'TransferStatusDetails provides additional information about why a transfer
+
+        is in its current state. This field is only populated when a transfer
+
+        encounters specific error conditions or requires additional context.'
     Transfer:
       type: object
       example:
@@ -300,183 +518,6 @@ components:
       - status
       - direction
       - type
-    AutoConversion:
-      type: object
-      properties:
-        from_transfer_id:
-          type: string
-          title: Transfer Id of the deposit triggering this transfer (only on withdrawal transfers)
-        to_transfer_id:
-          type: string
-          title: Transfer Id of the withdrawal triggered by this deposit(only on deposit transfers)
-    CryptoNetwork:
-      type: string
-      enum:
-      - BITCOIN
-      - ETHEREUM
-      - BITCOIN_CASH
-      - LITECOIN
-      - SOLANA
-      - POLYGON_POS
-      - BASE
-      - ARBITRUM_ONE
-      - STELLAR
-      - INK
-      - XLAYER
-      - AVALANCHE
-      - DOGECOIN
-      - SUI
-      - ROBINHOOD
-      - BNB
-      description: A CryptoNetwork is a blockchain transmitting cryptocurrencies.
-    StaleFeeQuote:
-      type: object
-      properties:
-        message:
-          type: string
-          title: Human-readable explanation
-      description: StaleFeeQuote represents a transfer cancelled because on-chain state changed after the fee was quoted.
-    CreatePaxosTransferRequest:
-      type: object
-      example:
-        ref_id: idempotence_id
-        from_profile_id: b7b77d82-e6a7-4ae9-9904-36231aedf985
-        to_profile_id: 37867177-f88c-45cc-b9b5-d786e7079609
-        asset: BTC
-        amount: '0.05'
-        metadata:
-          my_id: 4024ee50-eefb-4f2e-85c7-e7899c0b7da5
-        recipient_metadata:
-          your_id: 43ab8d28-be1e-4729-8731-37fd976b167b
-      properties:
-        ref_id:
-          type: string
-          description: Client-specified ID for replay protection and lookup.
-        from_profile_id:
-          type: string
-          description: The profile from which to send funds.
-        to_profile_id:
-          type: string
-          description: The destination profile.
-        amount:
-          type: string
-          format: decimal
-          description: The amount to transfer.
-        asset:
-          type: string
-          description: The asset to transfer, e.g. "USD", "BTC", "ETH".
-        metadata:
-          type: object
-          additionalProperties:
-            type: string
-          description: 'Optional client-specified metadata on the sender side of the transaction.
-
-            Up to 6 key/value pairs may be provided.
-
-            Each key and value must be less than or equal to 100 characters.'
-        recipient_metadata:
-          type: object
-          additionalProperties:
-            type: string
-          description: 'Optional client-specified metadata for the recipient side of the transaction.
-
-            Up to 6 key/value pairs may be provided.
-
-            Each key and value must be less than or equal to 100 characters.'
-        from_identity_id:
-          type: string
-          description: The Paxos Identity (`identity_id`) of the sending user.
-        from_account_id:
-          type: string
-          description: 'The Paxos Account (`account_id`) of the sending user.
-
-            Required only for customers with [3rd-Party integrations](https://docs.paxos.com/crypto-brokerage/ledger-type#fiat-and-crypto-subledger) initiating transfers on behalf of their end users.'
-        to_identity_id:
-          type: string
-          description: The Paxos Identity (`identity_id`) of the destination user.
-        to_account_id:
-          type: string
-          description: 'The Paxos Account (`account_id`) of the destination user.
-
-            Required only for customers with [3rd-Party integrations](https://docs.paxos.com/crypto-brokerage/ledger-type#fiat-and-crypto-subledger) initiating transfers on behalf of their end users.'
-      required:
-      - from_profile_id
-      - to_profile_id
-      - amount
-      - asset
-    InvalidDestinationAddress:
-      type: object
-      properties:
-        message:
-          type: string
-          title: Human-readable explanation of the error
-        destination_address:
-          type: string
-          title: The destination address that caused the cancellation
-      description: 'InvalidDestinationAddress represents a transfer cancelled because the destination address
-
-        cannot receive the requested asset (e.g. it is a token account for a different mint).'
-    TransferDirection:
-      type: string
-      enum:
-      - CREDIT
-      - DEBIT
-      description: Direction of the transfer.
-    TransferStatus:
-      type: string
-      enum:
-      - PENDING
-      - COMPLETED
-      - FAILED
-    TransferType:
-      type: string
-      enum:
-      - INTERNAL_TRANSFER_DEBIT
-      - INTERNAL_TRANSFER_CREDIT
-      - CRYPTO_DEPOSIT
-      - CRYPTO_WITHDRAWAL
-      - WIRE_DEPOSIT
-      - WIRE_WITHDRAWAL
-      - SEN_DEPOSIT
-      - SEN_WITHDRAWAL
-      - BANK_DEPOSIT
-      - BANK_WITHDRAWAL
-      - PAXOS_TRANSFER_DEBIT
-      - PAXOS_TRANSFER_CREDIT
-      - SIGNET_DEPOSIT
-      - SIGNET_WITHDRAWAL
-      - CBIT_WITHDRAWAL
-      - CBIT_DEPOSIT
-      - CUBIX_DEPOSIT
-      - CUBIX_WITHDRAWAL
-      - RTP_DEPOSIT
-      description: Type of transfer.
-    SecondaryStatusName:
-      type: string
-      enum:
-      - TRAVEL_RULE_INFO_REQUESTED
-      - TRAVEL_RULE_REJECTED
-      - CUSTOMER_REJECTED
-      - PENDING_CUSTOMER_APPROVAL
-      description: "Identifier for secondary status.\n\n - TRAVEL_RULE_INFO_REQUESTED: Travel rule information is required to continue processing the transfer.\n - TRAVEL_RULE_REJECTED: Transfer has been terminally rejected due to failing travel rule checks.\n - CUSTOMER_REJECTED: Transfer was rejected by a customer.\n - PENDING_CUSTOMER_APPROVAL: Transfer is pending customer approval."
-    TransferStatusDetails:
-      type: object
-      properties:
-        missing_trustline:
-          $ref: '#/components/schemas/MissingTrustline'
-        max_rent_exceeded:
-          $ref: '#/components/schemas/MaxRentExceeded'
-        pending_customer_approval:
-          $ref: '#/components/schemas/PendingCustomerApproval'
-        stale_fee_quote:
-          $ref: '#/components/schemas/StaleFeeQuote'
-        invalid_destination_address:
-          $ref: '#/components/schemas/InvalidDestinationAddress'
-      description: 'TransferStatusDetails provides additional information about why a transfer
-
-        is in its current state. This field is only populated when a transfer
-
-        encounters specific error conditions or requires additional context.'
     MaxRentExceeded:
       type: object
       properties:
@@ -493,62 +534,15 @@ components:
         maximum allowed rent threshold, it may indicate malicious behavior. This status
 
         detail is set when such transfers are automatically cancelled.'
-    Problem:
-      type: object
-      properties:
-        type:
-          type: string
-          format: uri
-          description: 'An absolute URI that identifies the problem type.  When dereferenced,
-
-            it SHOULD provide human-readable documentation for the problem type
-
-            (e.g., using HTML).
-
-            '
-          default: about:blank
-          example: https://api.paxos.com/v2/problems/insufficient_funds
-        title:
-          type: string
-          description: 'A short, summary of the problem type. Written in english and readable
-
-            for engineers (usually not suited for non technical stakeholders and
-
-            not localized); example: Service Unavailable
-
-            '
-          example: Insufficient Funds
-        status:
-          type: integer
-          format: int32
-          description: 'The HTTP status code generated by the origin server for this occurrence
-
-            of the problem.
-
-            '
-          minimum: 100
-          example: 403
-          exclusiveMaximum: 600
-        detail:
-          type: string
-          description: 'A human readable explanation specific to this occurrence of the
-
-            problem.
-
-            '
-          example: Not enough funds in account.
-        meta:
-          type: object
-          description: 'Additional structured metadata about the error.
-
-            '
+    SecondaryStatusName:
+      type: string
+      enum:
+      - TRAVEL_RULE_INFO_REQUESTED
+      - TRAVEL_RULE_REJECTED
+      - CUSTOMER_REJECTED
+      - PENDING_CUSTOMER_APPROVAL
+      description: "Identifier for secondary status.\n\n - TRAVEL_RULE_INFO_REQUESTED: Travel rule information is required to continue processing the transfer.\n - TRAVEL_RULE_REJECTED: Transfer has been terminally rejected due to failing travel rule checks.\n - CUSTOMER_REJECTED: Transfer was rejected by a customer.\n - PENDING_CUSTOMER_APPROVAL: Transfer is pending customer approval."
   examples:
-    Problem_not_found:
-      value:
-        type: about:blank
-        title: Not Found
-        status: 404
-        detail: 'profile not found: b7b77d82-e6a7-4ae9-9904-36231aedf985'
     Problem_insufficient_funds:
       value:
         type: https://developer.paxos.com/docs/v2/problems/insufficient-funds
@@ -560,6 +554,12 @@ components:
           asset: USD
           available: '50'
           needed: '100'
+    Problem_not_found:
+      value:
+        type: about:blank
+        title: Not Found
+        status: 404
+        detail: 'profile not found: b7b77d82-e6a7-4ae9-9904-36231aedf985'
   securitySchemes:
     OAuth2:
       type: oauth2

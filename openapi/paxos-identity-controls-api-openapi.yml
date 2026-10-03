@@ -111,38 +111,6 @@ paths:
         - identity:write_identity_control
 components:
   schemas:
-    IdentityControlReasonCode:
-      type: string
-      enum:
-      - OTHER
-      - END_USER_REQUEST
-      - INACTIVITY
-      - COMPLIANCE_KYC
-      - COMPLIANCE_EDD
-      - COMPLIANCE_SCREENING
-      - COMPLIANCE_INVESTIGATION
-      - COMPLIANCE_INCOMPLETE
-      - RISK_FRAUD
-      - LEGAL_ORDER
-      - ADMINISTRATIVE
-      description: " - OTHER: Miscellaneous reason not captured by existing categories.\n - END_USER_REQUEST: Control applied at the end user's request.\n - INACTIVITY: Control applied due to prolonged inactivity in accordance with dormancy or lifecycle management policies.\n - COMPLIANCE_KYC: Control applied due to unmet KYC requirements, including missing, expired, failed, or unresponsiveness to refresh obligations.\n - COMPLIANCE_EDD: Control applied due to Enhanced Due Diligence (EDD) requirements, including failure to complete EDD reviews, provide requested information, or satisfy heightened risk assessment criteria.\n - COMPLIANCE_SCREENING: Control applied as a result of sanctions, politically exposed person (PEP), or adverse media screening hits.\n - COMPLIANCE_INVESTIGATION: Control applied while an identity is under active compliance, risk, or regulatory investigation, including reviews triggered by monitoring alerts or external inquiries.\n - COMPLIANCE_INCOMPLETE: Control applied because the onboarding process was not successfully completed, including failure to respond to requests for information or provide required documentation.\n - RISK_FRAUD: Control applied due to suspected or confirmed fraud, abuse, or security risk, including account compromise, transaction fraud, or policy violations.\n - LEGAL_ORDER: Control applied to comply with a legal, regulatory, or law-enforcement directive, including court orders, asset preservation requests, or regulatory instructions.\n - ADMINISTRATIVE: Control applied for operational or platform-initiated reasons not attributable to the end user or compliance failure, such as system remediation or account restructuring."
-    ListIdentityControlsResponse:
-      type: object
-      properties:
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/IdentityControl'
-          description: The list of identity controls.
-        next_page_cursor:
-          type: string
-          description: Cursor token for fetching the next page. Empty if there are no more pages.
-    CreateIdentityControlRequestClientIdentityControlType:
-      type: string
-      enum:
-      - SELL_ONLY
-      - DORMANT
-      - CLOSED
     CreateIdentityControlRequest:
       type: object
       properties:
@@ -160,20 +128,23 @@ components:
       - identity_id
       - type
       - reason_code
-    IdentityControlType:
+    ListIdentityControlsResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/IdentityControl'
+          description: The list of identity controls.
+        next_page_cursor:
+          type: string
+          description: Cursor token for fetching the next page. Empty if there are no more pages.
+    CreateIdentityControlRequestClientIdentityControlType:
       type: string
       enum:
       - SELL_ONLY
-      - CLOSED
-      - FROZEN
       - DORMANT
-    DeleteIdentityControlResponse:
-      type: object
-    IdentityControlSetBy:
-      type: string
-      enum:
-      - SET_BY_PAXOS
-      - SET_BY_CLIENT
+      - CLOSED
     IdentityControl:
       type: object
       properties:
@@ -200,6 +171,35 @@ components:
       - type
       - set_by
       - created_at
+    DeleteIdentityControlResponse:
+      type: object
+    IdentityControlReasonCode:
+      type: string
+      enum:
+      - OTHER
+      - END_USER_REQUEST
+      - INACTIVITY
+      - COMPLIANCE_KYC
+      - COMPLIANCE_EDD
+      - COMPLIANCE_SCREENING
+      - COMPLIANCE_INVESTIGATION
+      - COMPLIANCE_INCOMPLETE
+      - RISK_FRAUD
+      - LEGAL_ORDER
+      - ADMINISTRATIVE
+      description: " - OTHER: Miscellaneous reason not captured by existing categories.\n - END_USER_REQUEST: Control applied at the end user's request.\n - INACTIVITY: Control applied due to prolonged inactivity in accordance with dormancy or lifecycle management policies.\n - COMPLIANCE_KYC: Control applied due to unmet KYC requirements, including missing, expired, failed, or unresponsiveness to refresh obligations.\n - COMPLIANCE_EDD: Control applied due to Enhanced Due Diligence (EDD) requirements, including failure to complete EDD reviews, provide requested information, or satisfy heightened risk assessment criteria.\n - COMPLIANCE_SCREENING: Control applied as a result of sanctions, politically exposed person (PEP), or adverse media screening hits.\n - COMPLIANCE_INVESTIGATION: Control applied while an identity is under active compliance, risk, or regulatory investigation, including reviews triggered by monitoring alerts or external inquiries.\n - COMPLIANCE_INCOMPLETE: Control applied because the onboarding process was not successfully completed, including failure to respond to requests for information or provide required documentation.\n - RISK_FRAUD: Control applied due to suspected or confirmed fraud, abuse, or security risk, including account compromise, transaction fraud, or policy violations.\n - LEGAL_ORDER: Control applied to comply with a legal, regulatory, or law-enforcement directive, including court orders, asset preservation requests, or regulatory instructions.\n - ADMINISTRATIVE: Control applied for operational or platform-initiated reasons not attributable to the end user or compliance failure, such as system remediation or account restructuring."
+    IdentityControlSetBy:
+      type: string
+      enum:
+      - SET_BY_PAXOS
+      - SET_BY_CLIENT
+    IdentityControlType:
+      type: string
+      enum:
+      - SELL_ONLY
+      - CLOSED
+      - FROZEN
+      - DORMANT
   securitySchemes:
     OAuth2:
       type: oauth2

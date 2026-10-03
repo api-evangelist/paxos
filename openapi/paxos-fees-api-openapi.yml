@@ -79,6 +79,26 @@ components:
       - asset
       - destination_address
       - crypto_network
+    CryptoNetwork:
+      type: string
+      enum:
+      - BITCOIN
+      - ETHEREUM
+      - BITCOIN_CASH
+      - LITECOIN
+      - SOLANA
+      - POLYGON_POS
+      - BASE
+      - ARBITRUM_ONE
+      - STELLAR
+      - INK
+      - XLAYER
+      - AVALANCHE
+      - DOGECOIN
+      - SUI
+      - ROBINHOOD
+      - BNB
+      description: A CryptoNetwork is a blockchain transmitting cryptocurrencies.
     CryptoWithdrawalFee:
       type: object
       example:
@@ -128,26 +148,6 @@ components:
       - expires_at
       - destination_address
       - crypto_network
-    CryptoNetwork:
-      type: string
-      enum:
-      - BITCOIN
-      - ETHEREUM
-      - BITCOIN_CASH
-      - LITECOIN
-      - SOLANA
-      - POLYGON_POS
-      - BASE
-      - ARBITRUM_ONE
-      - STELLAR
-      - INK
-      - XLAYER
-      - AVALANCHE
-      - DOGECOIN
-      - SUI
-      - ROBINHOOD
-      - BNB
-      description: A CryptoNetwork is a blockchain transmitting cryptocurrencies.
   securitySchemes:
     OAuth2:
       type: oauth2

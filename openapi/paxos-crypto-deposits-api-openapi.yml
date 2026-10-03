@@ -182,8 +182,17 @@ components:
       required:
       - first_name
       - last_name
-    RejectCryptoDepositResponse:
+    TransferPublicRejectCryptoDepositBody:
       type: object
+      example:
+        identity_id: 54385e67-d7ef-40d1-b488-ceda6dd9b264
+      properties:
+        identity_id:
+          type: string
+          description: The Identity (`identity_id`) of the end user that requests to reject the deposit.
+      title: RejectCryptoDepositRequest
+      required:
+      - identity_id
     InstitutionInfo:
       type: object
       properties:
@@ -198,36 +207,6 @@ components:
           $ref: '#/components/schemas/IndividualInfo'
         institution_info:
           $ref: '#/components/schemas/InstitutionInfo'
-    TransferPublicRejectCryptoDepositBody:
-      type: object
-      example:
-        identity_id: 54385e67-d7ef-40d1-b488-ceda6dd9b264
-      properties:
-        identity_id:
-          type: string
-          description: The Identity (`identity_id`) of the end user that requests to reject the deposit.
-      title: RejectCryptoDepositRequest
-      required:
-      - identity_id
-    UpdateCryptoDepositResponse:
-      type: object
-    TransferPublicUpdateCryptoDepositBody:
-      type: object
-      example:
-        identity_id: 54385e67-d7ef-40d1-b488-ceda6dd9b264
-        originator_address_info:
-          first_name: John
-          last_name: Doe
-      properties:
-        identity_id:
-          type: string
-          description: The Identity (`identity_id`) of the end user updating the deposit.
-        originator_address_info:
-          $ref: '#/components/schemas/AddressInfo'
-      title: UpdateCryptoDepositRequest
-      required:
-      - identity_id
-      - originator_address_info
     Problem:
       type: object
       properties:
@@ -277,6 +256,27 @@ components:
           description: 'Additional structured metadata about the error.
 
             '
+    RejectCryptoDepositResponse:
+      type: object
+    TransferPublicUpdateCryptoDepositBody:
+      type: object
+      example:
+        identity_id: 54385e67-d7ef-40d1-b488-ceda6dd9b264
+        originator_address_info:
+          first_name: John
+          last_name: Doe
+      properties:
+        identity_id:
+          type: string
+          description: The Identity (`identity_id`) of the end user updating the deposit.
+        originator_address_info:
+          $ref: '#/components/schemas/AddressInfo'
+      title: UpdateCryptoDepositRequest
+      required:
+      - identity_id
+      - originator_address_info
+    UpdateCryptoDepositResponse:
+      type: object
   securitySchemes:
     OAuth2:
       type: oauth2

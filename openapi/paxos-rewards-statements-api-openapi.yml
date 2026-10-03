@@ -221,87 +221,6 @@ paths:
         - rewards:read_statements
 components:
   schemas:
-    RewardsStatementFile:
-      type: object
-      properties:
-        format:
-          $ref: '#/components/schemas/RewardsStatementFormat'
-        download_url:
-          type: string
-          description: Presigned S3 download URL. Populated for completed statements in both list and get responses.
-        generated_at:
-          type: string
-          format: date-time
-          description: When the file was written to S3.
-      description: RewardsStatementFile describes one generated file attached to a reward statement.
-    RewardsStatementType:
-      type: string
-      enum:
-      - STATEMENT_TYPE_MONTHLY_REWARDS
-      description: "RewardsStatementType identifies the content and purpose of a reward statement.\n\n - STATEMENT_TYPE_MONTHLY_REWARDS: Monthly statement: PDF rewards summary with daily balance totals, rates, and\nper-payout-group breakdown, plus a CSV per-wallet daily balance export."
-      x-enum-varnames:
-      - MonthlyRewards
-    RewardsStatementFormat:
-      type: string
-      enum:
-      - STATEMENT_FORMAT_PDF
-      - STATEMENT_FORMAT_CSV
-      description: "RewardsStatementFormat identifies the file encoding of a generated statement file.\n\n - STATEMENT_FORMAT_PDF: PDF report suitable for printing or archival.\n - STATEMENT_FORMAT_CSV: CSV with per-wallet daily balance rows."
-    RewardsStatement:
-      type: object
-      properties:
-        id:
-          type: string
-          description: UUID of this statement record.
-        asset_type:
-          type: string
-          description: Asset type (e.g. "USDG", "PYUSD").
-        period_start:
-          type: string
-          format: date-time
-          description: Start of the statement period (inclusive, beginning of month, UTC).
-        period_end:
-          type: string
-          format: date-time
-          description: End of the statement period (inclusive, end of month, UTC).
-        status:
-          $ref: '#/components/schemas/RewardsStatementStatus'
-        type:
-          $ref: '#/components/schemas/RewardsStatementType'
-        total_accrued:
-          type: string
-          description: Total rewards accrued over the period across all payout groups.
-        avg_daily_balance:
-          type: string
-          description: Average end-of-day balance across all payout groups and all days in the period.
-        files:
-          type: array
-          items:
-            $ref: '#/components/schemas/RewardsStatementFile'
-          description: Generated files (PDF, CSV). download_url is populated for completed statements in both list and get responses.
-        created_at:
-          type: string
-          format: date-time
-          description: When this statement record was created.
-      description: 'RewardsStatement is the period-level entity for a partner''s monthly rewards.
-
-        One record exists per (partner, asset, period, type). Each statement produces
-
-        one or more files (tracked in files), whose presigned download URLs are
-
-        populated for completed statements in both list and get responses.'
-    RewardsStatementStatus:
-      type: string
-      enum:
-      - STATEMENT_STATUS_GENERATING
-      - STATEMENT_STATUS_COMPLETED
-      - STATEMENT_STATUS_FAILED
-      description: "RewardsStatementStatus reflects the overall generation lifecycle of a reward statement.\n\n - STATEMENT_STATUS_GENERATING: Files are currently being generated.\n - STATEMENT_STATUS_COMPLETED: All files were successfully generated and are available for download.\n - STATEMENT_STATUS_FAILED: Generation failed; files may be incomplete or unavailable."
-    GetRewardsStatementResponse:
-      type: object
-      properties:
-        statement:
-          $ref: '#/components/schemas/RewardsStatement'
     ListRewardsStatementsResponse:
       type: object
       properties:
@@ -362,6 +281,87 @@ components:
           description: 'Additional structured metadata about the error.
 
             '
+    RewardsStatementFile:
+      type: object
+      properties:
+        format:
+          $ref: '#/components/schemas/RewardsStatementFormat'
+        download_url:
+          type: string
+          description: Presigned S3 download URL. Populated for completed statements in both list and get responses.
+        generated_at:
+          type: string
+          format: date-time
+          description: When the file was written to S3.
+      description: RewardsStatementFile describes one generated file attached to a reward statement.
+    RewardsStatementType:
+      type: string
+      enum:
+      - STATEMENT_TYPE_MONTHLY_REWARDS
+      description: "RewardsStatementType identifies the content and purpose of a reward statement.\n\n - STATEMENT_TYPE_MONTHLY_REWARDS: Monthly statement: PDF rewards summary with daily balance totals, rates, and\nper-payout-group breakdown, plus a CSV per-wallet daily balance export."
+      x-enum-varnames:
+      - MonthlyRewards
+    GetRewardsStatementResponse:
+      type: object
+      properties:
+        statement:
+          $ref: '#/components/schemas/RewardsStatement'
+    RewardsStatementFormat:
+      type: string
+      enum:
+      - STATEMENT_FORMAT_PDF
+      - STATEMENT_FORMAT_CSV
+      description: "RewardsStatementFormat identifies the file encoding of a generated statement file.\n\n - STATEMENT_FORMAT_PDF: PDF report suitable for printing or archival.\n - STATEMENT_FORMAT_CSV: CSV with per-wallet daily balance rows."
+    RewardsStatement:
+      type: object
+      properties:
+        id:
+          type: string
+          description: UUID of this statement record.
+        asset_type:
+          type: string
+          description: Asset type (e.g. "USDG", "PYUSD").
+        period_start:
+          type: string
+          format: date-time
+          description: Start of the statement period (inclusive, beginning of month, UTC).
+        period_end:
+          type: string
+          format: date-time
+          description: End of the statement period (inclusive, end of month, UTC).
+        status:
+          $ref: '#/components/schemas/RewardsStatementStatus'
+        type:
+          $ref: '#/components/schemas/RewardsStatementType'
+        total_accrued:
+          type: string
+          description: Total rewards accrued over the period across all payout groups.
+        avg_daily_balance:
+          type: string
+          description: Average end-of-day balance across all payout groups and all days in the period.
+        files:
+          type: array
+          items:
+            $ref: '#/components/schemas/RewardsStatementFile'
+          description: Generated files (PDF, CSV). download_url is populated for completed statements in both list and get responses.
+        created_at:
+          type: string
+          format: date-time
+          description: When this statement record was created.
+      description: 'RewardsStatement is the period-level entity for a partner''s monthly rewards.
+
+        One record exists per (partner, asset, period, type). Each statement produces
+
+        one or more files (tracked in files), whose presigned download URLs are
+
+        populated for completed statements in both list and get responses.'
+    RewardsStatementStatus:
+      type: string
+      enum:
+      - STATEMENT_STATUS_GENERATING
+      - STATEMENT_STATUS_COMPLETED
+      - STATEMENT_STATUS_FAILED
+      description: "RewardsStatementStatus reflects the overall generation lifecycle of a reward statement.\n\n - STATEMENT_STATUS_GENERATING: Files are currently being generated.\n - STATEMENT_STATUS_COMPLETED: All files were successfully generated and are available for download.\n - STATEMENT_STATUS_FAILED: Generation failed; files may be incomplete or unavailable."
   securitySchemes:
     OAuth2:
       type: oauth2

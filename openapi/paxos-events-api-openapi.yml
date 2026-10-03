@@ -245,40 +245,6 @@ paths:
         - events:read_event
 components:
   schemas:
-    ListEventsResponse:
-      type: object
-      properties:
-        events:
-          type: array
-          items:
-            $ref: '#/components/schemas/Event'
-          description: Events ordered by `created_at` timestamp in the direction specified by the `order` parameter (ascending by default).
-        next_page_cursor:
-          type: string
-          description: Cursor to pass in the next request to fetch the next page. Empty when no more results.
-    Event:
-      type: object
-      properties:
-        id:
-          type: string
-          title: The event identifier used to query or refer to a specific event
-        type:
-          type: string
-          title: The type of event representing an action in the system
-        object_type:
-          type: string
-          title: The type of the `object` associated with the event
-        object:
-          type: object
-          title: The structured payload of type `object_type` associated with the event
-        created_at:
-          type: string
-          format: date-time
-          description: The timestamp when the event was first created, RFC3339 format, like `YYYY-MM-DDTHH:MM:SS.sssZ`.
-        undelivered_webhooks:
-          type: integer
-          format: int32
-          title: The number of undelivered webhooks
     Problem:
       type: object
       properties:
@@ -328,6 +294,40 @@ components:
           description: 'Additional structured metadata about the error.
 
             '
+    ListEventsResponse:
+      type: object
+      properties:
+        events:
+          type: array
+          items:
+            $ref: '#/components/schemas/Event'
+          description: Events ordered by `created_at` timestamp in the direction specified by the `order` parameter (ascending by default).
+        next_page_cursor:
+          type: string
+          description: Cursor to pass in the next request to fetch the next page. Empty when no more results.
+    Event:
+      type: object
+      properties:
+        id:
+          type: string
+          title: The event identifier used to query or refer to a specific event
+        type:
+          type: string
+          title: The type of event representing an action in the system
+        object_type:
+          type: string
+          title: The type of the `object` associated with the event
+        object:
+          type: object
+          title: The structured payload of type `object_type` associated with the event
+        created_at:
+          type: string
+          format: date-time
+          description: The timestamp when the event was first created, RFC3339 format, like `YYYY-MM-DDTHH:MM:SS.sssZ`.
+        undelivered_webhooks:
+          type: integer
+          format: int32
+          title: The number of undelivered webhooks
   securitySchemes:
     OAuth2:
       type: oauth2

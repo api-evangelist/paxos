@@ -61,15 +61,6 @@ paths:
         - transfer:read_transfer_limit
 components:
   schemas:
-    ListTransferLimitsResponse:
-      type: object
-      properties:
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/TransferLimit'
-        next_page_cursor:
-          type: string
     TransferType:
       type: string
       enum:
@@ -93,6 +84,15 @@ components:
       - CUBIX_WITHDRAWAL
       - RTP_DEPOSIT
       description: Type of transfer.
+    ListTransferLimitsResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/TransferLimit'
+        next_page_cursor:
+          type: string
     TransferLimit:
       type: object
       properties:

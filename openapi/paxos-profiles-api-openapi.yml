@@ -408,6 +408,16 @@ components:
       - NORMAL
       - DEFAULT
       description: "The profile type.\n\n - NORMAL: A client-created profile. All Profiles created using the `CreateProfile` endpoint are of this type.\n - DEFAULT: A system-generated profile."
+    ProfilePublicUpdateProfileBody:
+      type: object
+      example:
+        profile_id: b7b77d82-e6a7-4ae9-9904-36231aedf985
+        nickname: MyProfileName
+      properties:
+        nickname:
+          type: string
+      required:
+      - nickname
     ListProfilesResponse:
       type: object
       properties:
@@ -418,8 +428,6 @@ components:
         next_page_cursor:
           type: string
           description: Cursor token required for fetching the next page.
-    DeactivateProfileResponse:
-      type: object
     ProfileBalance:
       type: object
       example:
@@ -443,16 +451,8 @@ components:
       - asset
       - available
       - trading
-    ProfilePublicUpdateProfileBody:
+    DeactivateProfileResponse:
       type: object
-      example:
-        profile_id: b7b77d82-e6a7-4ae9-9904-36231aedf985
-        nickname: MyProfileName
-      properties:
-        nickname:
-          type: string
-      required:
-      - nickname
   securitySchemes:
     OAuth2:
       type: oauth2

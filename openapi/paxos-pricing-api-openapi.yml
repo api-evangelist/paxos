@@ -513,32 +513,13 @@ components:
           type: string
           format: date-time
           description: Timestamp at the beginning of an increment.
-    publicListHistoricalCandlesResponse:
+    ListPricesResponse:
       type: object
       properties:
-        market:
-          $ref: '#/components/schemas/PricePriceMarket'
-        increment:
-          $ref: '#/components/schemas/Increment'
         items:
           type: array
           items:
-            $ref: '#/components/schemas/publicCandlestickPrice'
-          description: List of historical candles.
-        next_page_cursor:
-          type: string
-          description: Cursor token required for fetching the next page.
-    ListHistoricalPricesResponse:
-      type: object
-      properties:
-        total_count:
-          type: integer
-          format: int32
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/HistoricalPrice'
-          description: List of historical prices.
+            $ref: '#/components/schemas/Pricing'
     publicCandlestickPrice:
       type: object
       properties:
@@ -565,54 +546,21 @@ components:
           type: string
           format: decimal
           title: Volume traded during the period
-    PricePriceMarket:
-      type: string
-      enum:
-      - ETHUSD
-      - BTCUSD
-      - PAXGUSD
-      - BCHUSD
-      - LTCUSD
-      - USDPUSD
-      - LINKUSD
-      - AAVEUSD
-      - UNIUSD
-      - PEPEUSD
-      - TRUMPUSD
-      - SHIBUSD
-      - ARBUSD
-      - BONKUSD
-      - ENAUSD
-      - MNTUSD
-      - ONDOUSD
-      - PENGUUSD
-      - QNTUSD
-      - RENDERUSD
-      - SKYUSD
-      - WIFUSD
-      - WLDUSD
-      - DOGEUSD
-      - AVAXUSD
-      - SUIUSD
-      - POLUSD
-      - XLMUSD
-      - BNBUSD
-      description: ''
-      title: Market
-    Increment:
-      type: string
-      enum:
-      - ONE_MINUTE
-      - FIVE_MINUTES
-      - FIFTEEN_MINUTES
-      - THIRTY_MINUTES
-      - ONE_HOUR
-      - TWO_HOURS
-      - TWELVE_HOURS
-      - ONE_DAY
-      - ONE_WEEK
-      - TWO_WEEKS
-      - FOUR_WEEKS
+    publicListHistoricalCandlesResponse:
+      type: object
+      properties:
+        market:
+          $ref: '#/components/schemas/PricePriceMarket'
+        increment:
+          $ref: '#/components/schemas/Increment'
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/publicCandlestickPrice'
+          description: List of historical candles.
+        next_page_cursor:
+          type: string
+          description: Cursor token required for fetching the next page.
     Pricing:
       type: object
       properties:
@@ -630,13 +578,17 @@ components:
           type: string
           format: date-time
           description: The time when the price was generated. RFC3339 format, like `2023-01-03T18:27:40.294528Z`.
-    ListPricesResponse:
+    ListHistoricalPricesResponse:
       type: object
       properties:
+        total_count:
+          type: integer
+          format: int32
         items:
           type: array
           items:
-            $ref: '#/components/schemas/Pricing'
+            $ref: '#/components/schemas/HistoricalPrice'
+          description: List of historical prices.
     Problem:
       type: object
       properties:
@@ -686,6 +638,54 @@ components:
           description: 'Additional structured metadata about the error.
 
             '
+    PricePriceMarket:
+      type: string
+      enum:
+      - ETHUSD
+      - BTCUSD
+      - PAXGUSD
+      - BCHUSD
+      - LTCUSD
+      - USDPUSD
+      - LINKUSD
+      - AAVEUSD
+      - UNIUSD
+      - PEPEUSD
+      - TRUMPUSD
+      - SHIBUSD
+      - ARBUSD
+      - BONKUSD
+      - ENAUSD
+      - MNTUSD
+      - ONDOUSD
+      - PENGUUSD
+      - QNTUSD
+      - RENDERUSD
+      - SKYUSD
+      - WIFUSD
+      - WLDUSD
+      - DOGEUSD
+      - AVAXUSD
+      - SUIUSD
+      - POLUSD
+      - XLMUSD
+      - BNBUSD
+      description: ''
+      title: Market
+    Increment:
+      type: string
+      enum:
+      - ONE_MINUTE
+      - FIVE_MINUTES
+      - FIFTEEN_MINUTES
+      - THIRTY_MINUTES
+      - ONE_HOUR
+      - TWO_HOURS
+      - TWELVE_HOURS
+      - ONE_DAY
+      - ONE_WEEK
+      - TWO_WEEKS
+      - FOUR_WEEKS
   securitySchemes:
     OAuth2:
       type: oauth2

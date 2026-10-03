@@ -229,6 +229,48 @@ paths:
         - address_ownership:read_verification
 components:
   schemas:
+    publicSubmitSignatureRequest:
+      type: object
+      properties:
+        id:
+          type: string
+        signature:
+          type: string
+    publicManualVerification:
+      type: object
+      properties:
+        verified_by:
+          type: string
+          description: verified_by is the email of the admin who submitted the proof.
+        reason:
+          type: string
+      description: 'ManualVerification is populated on admin endpoints only when
+
+        verification_method is MANUAL. Not returned on public endpoints.'
+    publicVerificationStatus:
+      type: string
+      enum:
+      - PENDING
+      - APPROVED
+      - EXPIRED
+    publicListVerificationsResponse:
+      type: object
+      properties:
+        next_page_cursor:
+          type: string
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/publicVerification'
+    publicSignatureVerification:
+      type: object
+      properties:
+        message:
+          type: string
+        nonce:
+          type: string
+        signature:
+          type: string
     publicVerification:
       type: object
       properties:
@@ -260,33 +302,12 @@ components:
           description: expires_at is computed server-side at creation time and is always populated.
         ref_id:
           type: string
-    publicSubmitSignatureRequest:
-      type: object
-      properties:
-        id:
-          type: string
-        signature:
-          type: string
-    publicSignatureVerification:
-      type: object
-      properties:
-        message:
-          type: string
-        nonce:
-          type: string
-        signature:
-          type: string
-    publicCreateVerificationRequest:
-      type: object
-      properties:
-        network:
-          type: string
-        address:
-          type: string
-        verification_method:
-          $ref: '#/components/schemas/publicVerificationMethod'
-        ref_id:
-          type: string
+    publicVerificationMethod:
+      type: string
+      enum:
+      - SIGNATURE
+      - SMALL_DEPOSIT
+      - MANUAL
     publicSmallDepositVerification:
       type: object
       properties:
@@ -299,38 +320,17 @@ components:
           type: string
         asset:
           type: string
-    publicVerificationStatus:
-      type: string
-      enum:
-      - PENDING
-      - APPROVED
-      - EXPIRED
-    publicVerificationMethod:
-      type: string
-      enum:
-      - SIGNATURE
-      - SMALL_DEPOSIT
-      - MANUAL
-    publicManualVerification:
+    publicCreateVerificationRequest:
       type: object
       properties:
-        verified_by:
+        network:
           type: string
-          description: verified_by is the email of the admin who submitted the proof.
-        reason:
+        address:
           type: string
-      description: 'ManualVerification is populated on admin endpoints only when
-
-        verification_method is MANUAL. Not returned on public endpoints.'
-    publicListVerificationsResponse:
-      type: object
-      properties:
-        next_page_cursor:
+        verification_method:
+          $ref: '#/components/schemas/publicVerificationMethod'
+        ref_id:
           type: string
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/publicVerification'
   securitySchemes:
     OAuth2:
       type: oauth2

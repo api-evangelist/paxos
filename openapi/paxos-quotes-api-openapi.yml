@@ -133,6 +133,12 @@ paths:
         - exchange:read_quote
 components:
   schemas:
+    OrderSide:
+      type: string
+      enum:
+      - BUY
+      - SELL
+      description: Trade side.
     ListQuotesResponse:
       type: object
       properties:
@@ -140,12 +146,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Quote'
-    OrderSide:
-      type: string
-      enum:
-      - BUY
-      - SELL
-      description: Trade side.
     Quote:
       type: object
       example:

@@ -139,6 +139,19 @@ components:
       - FORM_1099_B
       - FORM_1099_MISC
       - FORM_1099_DA
+    TaxFormURL:
+      type: object
+      properties:
+        account_id:
+          type: string
+        type:
+          $ref: '#/components/schemas/TaxFormType'
+        tax_year:
+          type: string
+        revision:
+          type: string
+        url:
+          type: string
     ListTaxFormsResponse:
       type: object
       properties:
@@ -155,19 +168,6 @@ components:
           items:
             $ref: '#/components/schemas/TaxFormURL'
           title: List of tax form urls
-    TaxFormURL:
-      type: object
-      properties:
-        account_id:
-          type: string
-        type:
-          $ref: '#/components/schemas/TaxFormType'
-        tax_year:
-          type: string
-        revision:
-          type: string
-        url:
-          type: string
   securitySchemes:
     OAuth2:
       type: oauth2

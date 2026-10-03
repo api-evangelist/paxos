@@ -498,6 +498,17 @@ paths:
       x-summary-source: derived
 components:
   schemas:
+    ListAccountsResponse:
+      type: object
+      properties:
+        next_page_cursor:
+          type: string
+          description: Cursor token required for fetching the next page.
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Account'
+          description: The result list of accounts.
     Account:
       type: object
       properties:
@@ -548,66 +559,6 @@ components:
             The field is omitted when the account has no associated [Profile](#tag/Profiles).'
         type:
           $ref: '#/components/schemas/AccountAccountType'
-    IdentityStatus:
-      type: string
-      enum:
-      - PENDING
-      - ERROR
-      - APPROVED
-      - DENIED
-      - DISABLED
-      title: ''
-    ListAccountsResponse:
-      type: object
-      properties:
-        next_page_cursor:
-          type: string
-          description: Cursor token required for fetching the next page.
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/Account'
-          description: The result list of accounts.
-    UpdateAccountRequest:
-      type: object
-      properties:
-        account:
-          $ref: '#/components/schemas/Account'
-        set_user_disabled:
-          type: boolean
-          description: true if the account is required to be disabled by the API user.
-      required:
-      - account
-    AccountMemberAccountRoleType:
-      type: string
-      enum:
-      - BENEFICIAL_OWNER
-      - AUTHORIZED_USER
-      - FINANCIAL_ADVISOR
-    AccountAccountType:
-      type: string
-      enum:
-      - BROKERAGE
-      - TRADITIONAL_IRA
-      - ROTH_IRA
-      - SEP_IRA
-      - FINANCIAL_ADVISOR
-    AccountMember:
-      type: object
-      properties:
-        identity_id:
-          type: string
-        type:
-          $ref: '#/components/schemas/AccountMemberAccountRoleType'
-        roles:
-          type: array
-          items:
-            $ref: '#/components/schemas/AccountMemberAccountRoleType'
-        id:
-          type: string
-          description: 'Account member ID. Note: This field is auto-generated. Specifying an ID when creating an account member is a client error.'
-      required:
-      - identity_id
     CreateAccountRequest:
       type: object
       properties:
@@ -629,6 +580,55 @@ components:
           description: Individual account for John Doe
           metadata:
             custom_field: custom_value
+    AccountMemberAccountRoleType:
+      type: string
+      enum:
+      - BENEFICIAL_OWNER
+      - AUTHORIZED_USER
+      - FINANCIAL_ADVISOR
+    AccountAccountType:
+      type: string
+      enum:
+      - BROKERAGE
+      - TRADITIONAL_IRA
+      - ROTH_IRA
+      - SEP_IRA
+      - FINANCIAL_ADVISOR
+    IdentityStatus:
+      type: string
+      enum:
+      - PENDING
+      - ERROR
+      - APPROVED
+      - DENIED
+      - DISABLED
+      title: ''
+    AccountMember:
+      type: object
+      properties:
+        identity_id:
+          type: string
+        type:
+          $ref: '#/components/schemas/AccountMemberAccountRoleType'
+        roles:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccountMemberAccountRoleType'
+        id:
+          type: string
+          description: 'Account member ID. Note: This field is auto-generated. Specifying an ID when creating an account member is a client error.'
+      required:
+      - identity_id
+    UpdateAccountRequest:
+      type: object
+      properties:
+        account:
+          $ref: '#/components/schemas/Account'
+        set_user_disabled:
+          type: boolean
+          description: true if the account is required to be disabled by the API user.
+      required:
+      - account
   securitySchemes:
     OAuth2:
       type: oauth2

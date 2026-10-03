@@ -484,102 +484,6 @@ paths:
         - identity:write_identity
 components:
   schemas:
-    IdentityControlReasonCode:
-      type: string
-      enum:
-      - OTHER
-      - END_USER_REQUEST
-      - INACTIVITY
-      - COMPLIANCE_KYC
-      - COMPLIANCE_EDD
-      - COMPLIANCE_SCREENING
-      - COMPLIANCE_INVESTIGATION
-      - COMPLIANCE_INCOMPLETE
-      - RISK_FRAUD
-      - LEGAL_ORDER
-      - ADMINISTRATIVE
-      description: " - OTHER: Miscellaneous reason not captured by existing categories.\n - END_USER_REQUEST: Control applied at the end user's request.\n - INACTIVITY: Control applied due to prolonged inactivity in accordance with dormancy or lifecycle management policies.\n - COMPLIANCE_KYC: Control applied due to unmet KYC requirements, including missing, expired, failed, or unresponsiveness to refresh obligations.\n - COMPLIANCE_EDD: Control applied due to Enhanced Due Diligence (EDD) requirements, including failure to complete EDD reviews, provide requested information, or satisfy heightened risk assessment criteria.\n - COMPLIANCE_SCREENING: Control applied as a result of sanctions, politically exposed person (PEP), or adverse media screening hits.\n - COMPLIANCE_INVESTIGATION: Control applied while an identity is under active compliance, risk, or regulatory investigation, including reviews triggered by monitoring alerts or external inquiries.\n - COMPLIANCE_INCOMPLETE: Control applied because the onboarding process was not successfully completed, including failure to respond to requests for information or provide required documentation.\n - RISK_FRAUD: Control applied due to suspected or confirmed fraud, abuse, or security risk, including account compromise, transaction fraud, or policy violations.\n - LEGAL_ORDER: Control applied to comply with a legal, regulatory, or law-enforcement directive, including court orders, asset preservation requests, or regulatory instructions.\n - ADMINISTRATIVE: Control applied for operational or platform-initiated reasons not attributable to the end user or compliance failure, such as system remediation or account restructuring."
-    Identity:
-      type: object
-      example:
-        id: f190b163-208f-4d73-8deb-4fb8b24add00
-        summary_status: PENDING
-      properties:
-        id:
-          type: string
-          title: The id used for all other interactions with this account
-        metadata:
-          type: object
-          additionalProperties:
-            type: string
-          title: API User-facing metadata
-        status:
-          $ref: '#/components/schemas/IdentityStatus'
-        status_details:
-          $ref: '#/components/schemas/IdentityStatusDetails'
-        summary_status:
-          $ref: '#/components/schemas/IdentityStatus'
-        user_disabled:
-          type: boolean
-          description: 'Deprecated: use `status_details.active_controls` instead.'
-        admin_disabled:
-          type: boolean
-          description: 'Deprecated: use `status_details.active_controls` instead.'
-        person_details:
-          $ref: '#/components/schemas/PersonDetails'
-        type:
-          $ref: '#/components/schemas/IdentityType'
-        ref_id:
-          type: string
-          description: A user-facing ID to prevent duplicate account creation. Unique for all accounts created by the same API user.
-        institution_details:
-          $ref: '#/components/schemas/InstitutionDetails'
-        institution_members:
-          type: array
-          items:
-            $ref: '#/components/schemas/InstitutionMember'
-          title: members associated with institution identity type
-        created_at:
-          type: string
-          format: date-time
-          description: 'The time at which the identity is created at. RFC3339 format, like `YYYY-MM-DDTHH:MM:SS.sssZ`. ex: `2006-01-02T15:04:05Z`.'
-        updated_at:
-          type: string
-          format: date-time
-          description: 'The time at which the identity is updated at. RFC3339 format, like `YYYY-MM-DDTHH:MM:SS.sssZ`. ex: `2006-01-02T15:04:05Z`.'
-        tax_details:
-          type: array
-          items:
-            $ref: '#/components/schemas/TaxDetail'
-          title: tax payer details
-        tax_details_not_required:
-          type: boolean
-          title: whether or not tax_details are legally required
-        summary_tin_verification_status:
-          $ref: '#/components/schemas/TINVerificationStatus'
-        customer_due_diligence:
-          $ref: '#/components/schemas/CustomerDueDiligence'
-        is_merchant:
-          type: boolean
-          description: True if the identity is a merchant.
-        last_kyc_refresh_date:
-          type: string
-          format: date-time
-          description: 'The last timestamp the identity has undergone a periodic kyc refresh. RFC3339 format, like `YYYY-MM-DDTHH:MM:SS.sssZ`. ex: `2006-01-02T15:04:05Z`.'
-      required:
-      - id
-    IdentityRequirementRequirementType:
-      type: string
-      enum:
-      - ID_VERIFICATION
-      - DOCUMENT_VERIFICATION
-      - SCREENING_CHECK
-      - COMPLIANCE_CHECK
-      - ENHANCED_DUE_DILIGENCE
-      - MEMBERS
-      - KYC_REFRESH
-      - TAX_DETAILS_VERIFICATION
-      description: "RequirementType identifies the category of requirement blocking or pending for an identity.\n\n - ID_VERIFICATION: Identity verification via a passthrough provider is pending or failed.\n - DOCUMENT_VERIFICATION: Document review for an institution is pending or failed.\n - SCREENING_CHECK: Identity screening check is pending or failed.\n - COMPLIANCE_CHECK: A compliance check is pending or failed.\n - ENHANCED_DUE_DILIGENCE: Enhanced due diligence review is pending or failed.\n - MEMBERS: One or more institution members have a non-approved status.\n - KYC_REFRESH: KYC refresh is overdue or in progress.\n - TAX_DETAILS_VERIFICATION: Tax details verification is pending or failed."
     IdentityRequirement:
       type: object
       properties:
@@ -599,15 +503,42 @@ components:
       - type
       - errors
       - status
-    IdentityStatus:
+    EmploymentStatus:
       type: string
       enum:
-      - PENDING
-      - ERROR
-      - APPROVED
-      - DENIED
-      - DISABLED
-      title: ''
+      - CONTRACTUAL
+      - FULL_TIME
+      - PART_TIME
+      - RETIRED
+      - SELF_EMPLOYED
+      - STUDENT
+      - UNEMPLOYED
+    IdentityControl:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          $ref: '#/components/schemas/IdentityControlType'
+        set_by:
+          $ref: '#/components/schemas/IdentityControlSetBy'
+        is_overridable:
+          type: boolean
+        reason_code:
+          $ref: '#/components/schemas/IdentityControlReasonCode'
+        reason:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        deleted_at:
+          type: string
+          format: date-time
+      required:
+      - id
+      - type
+      - set_by
+      - created_at
     InstitutionRoleType:
       type: string
       enum:
@@ -620,12 +551,16 @@ components:
       - BENEFICIARY
       - SOLE_PROPRIETOR
       title: ''
-    RegulationStatus:
+    IdentityRequirementRequirementStatus:
       type: string
       enum:
-      - US_REGULATED
-      - INTL_REGULATED
-      - NON_REGULATED
+      - PENDING
+      - FAILED
+      description: 'RequirementStatus indicates whether this requirement is pending or has failed.
+
+        PENDING means the check is in progress or awaiting information.
+
+        FAILED means the check did not pass and may block approval.'
     IdentityStatusDetails:
       type: object
       properties:
@@ -639,80 +574,129 @@ components:
           items:
             $ref: '#/components/schemas/IdentityRequirement'
           description: Requirements that must be fulfilled for this identity to become approved.
-    IdentityControlType:
+    WealthSource:
       type: string
       enum:
-      - SELL_ONLY
-      - CLOSED
-      - FROZEN
-      - DORMANT
-    TradingType:
+      - INHERITANCE
+      - INVESTMENT_GAINS
+      - BUSINESS_OWNERSHIP_DIVIDENDS
+      - EMPLOYMENT_INCOME
+      - REAL_ESTATE
+      - OTHER_SOURCE_OF_WEALTH
+    PassthroughVerificationField:
       type: string
       enum:
-      - PRIVATE
-      - PUBLIC
-      - PUBLICLY_TRADED_SUBSIDIARY
-    IdentityMailingAddress:
+      - FULL_LEGAL_NAME
+      - ADDRESS
+      - DATE_OF_BIRTH
+      - CIP_ID
+    IdentityControlSetBy:
+      type: string
+      enum:
+      - SET_BY_PAXOS
+      - SET_BY_CLIENT
+    IdentityPublicUpdateIdentityBody:
       type: object
+      example:
+        id: f190b163-208f-4d73-8deb-4fb8b24add00
+        person_details:
+          first_name: John
       properties:
-        country:
+        person_details:
+          $ref: '#/components/schemas/PersonDetails'
+        metadata:
+          type: object
+          additionalProperties:
+            type: string
+          title: API User-facing metadata
+        set_user_disabled:
+          type: boolean
+          description: '`true` disables the identity. `false` re-enables it, unless it has been disabled by a Paxos admin.'
+        institution_details:
+          $ref: '#/components/schemas/InstitutionDetails'
+        ref_id:
           type: string
-          maxLength: 35
-          pattern: ^[0-9A-Za-z /?:().,&'+-]+$
-        address1:
-          type: string
-          maxLength: 35
-          pattern: ^[0-9A-Za-z /?:().,&'+-]+$
-        address2:
-          type: string
-          description: To clear address2 (i.e. when updating an identity), set address2 to an empty string ("").
-          maxLength: 35
-          pattern: ^[0-9A-Za-z /?:().,&'+-]+$
-        city:
-          type: string
-          maxLength: 35
-          pattern: ^[0-9A-Za-z /?:().,&'+-]+$
-        province:
-          type: string
-          maxLength: 35
-          pattern: ^[0-9A-Za-z /?:().,&'+-]+$
-        zip_code:
-          type: string
-          description: Required for countries that have postal or zip codes.
-          maxLength: 35
-          pattern: ^[0-9A-Za-z /?:().,&'+-]+$
-      description: A mailing address.
-      required:
-      - country
-      - address1
-      - city
-      - province
-    IdentityRequirementAwaitingActionFrom:
-      type: string
-      enum:
-      - CLIENT
-      - PAXOS
-      description: "AwaitingActionFrom indicates who needs to take action to unblock this requirement.\nNot set for MEMBERS requirements, where the client should call GetIdentity on each\nmember identity to determine their individual requirement status.\n\n - CLIENT: The client (the integrating partner) must take action to resolve this requirement.\n - PAXOS: Paxos is handling this; no action needed from the client."
-    ListIdentitiesResponse:
-      type: object
-      properties:
-        next_page_cursor:
-          type: string
-          description: Cursor token required for fetching the next page.
-        items:
+          description: A user-facing ID to prevent duplicate identity creation. Unique for all identities created by the same API user.
+        tax_details:
           type: array
           items:
-            $ref: '#/components/schemas/Identity'
-          description: The result list of identities.
-    InstitutionType:
+            $ref: '#/components/schemas/TaxDetail'
+          title: list of tax details associated with the identity
+        set_tax_details_not_required:
+          type: boolean
+          description: Set to true if tax details are not legally required. Must not be true when `cip_id_country` is USA.
+        customer_due_diligence:
+          $ref: '#/components/schemas/CustomerDueDiligence'
+        is_merchant:
+          type: boolean
+          description: Set to true to indicate that this identity is a merchant.
+        last_kyc_refresh_date:
+          type: string
+          format: date-time
+          description: 'Set to the timestamp the identity has last undergone a periodic kyc refresh. If unset, the update is not for
+
+            periodic kyc refresh. RFC3339 format, like `YYYY-MM-DDTHH:MM:SS.sssZ`. ex: `2006-01-02T15:04:05Z`.'
+      title: UpdateIdentityRequest
+    PassthroughVerifierType:
       type: string
       enum:
-      - TRUST
-      - CORPORATION
-      - LLC
-      - PARTNERSHIP
-      - SOLE_PROPRIETORSHIP
-      title: ''
+      - JUMIO
+      - ALLOY
+      - LEXISNEXIS
+      - MITEK
+      - SUMSUB
+      - MICROBILT
+      - ONFIDO
+      - CUSTOMER
+      - EQUIFAX
+      - ID3_AUTHENTICATE
+      - FIS
+      - PROVE
+      - PERSONA
+      - PLAID
+      - DOTFILE
+      - AIPRISE
+    TaxDetail:
+      type: object
+      properties:
+        tax_payer_id:
+          type: string
+          title: For U.S. citizens it is the SSN, TIN or EIN. For Brazil citizens, it is the CPF. Allowed in create and update
+          maxLength: 35
+          pattern: ^[0-9A-Za-z /?:().,&'+-]+$
+        tax_payer_country:
+          type: string
+          title: Allowed in create and update. Must be an ISO 3166-1 alpha 3 code
+        tin_verification_status:
+          $ref: '#/components/schemas/TINVerificationStatus'
+    CustomerDueDiligenceTransferValueRange:
+      type: string
+      enum:
+      - TRANSFER_VALUE_0_TO_25K
+      - TRANSFER_VALUE_25K_TO_50K
+      - TRANSFER_VALUE_50K_TO_100K
+      - TRANSFER_VALUE_100K_TO_250K
+      - TRANSFER_VALUE_250K_TO_500K
+      - TRANSFER_VALUE_500K_TO_750K
+      - TRANSFER_VALUE_750K_TO_1M
+      - TRANSFER_VALUE_1M_TO_2_5M
+      - TRANSFER_VALUE_2_5M_TO_5M
+      - TRANSFER_VALUE_ABOVE_5M
+      description: Anticipated monthly volume. The expected transfer value range for the Account associated with the Identity.
+    IdentityRequirementError:
+      type: object
+      properties:
+        code:
+          $ref: '#/components/schemas/IdentityRequirementErrorCode'
+        description:
+          type: string
+          description: 'Human-readable description providing additional context for the error.
+
+            Do not expose code or description values directly to end users.'
+      description: A specific error explaining why a requirement is blocked or pending.
+      required:
+      - code
+      - description
     InstitutionDetails:
       type: object
       properties:
@@ -789,72 +773,98 @@ components:
         business_description:
           type: string
           title: free text description of business
-    IdentityRequirementRequirementStatus:
-      type: string
-      enum:
-      - PENDING
-      - FAILED
-      description: 'RequirementStatus indicates whether this requirement is pending or has failed.
-
-        PENDING means the check is in progress or awaiting information.
-
-        FAILED means the check did not pass and may block approval.'
-    CustomerDueDiligence:
+    ListIdentitiesResponse:
       type: object
       properties:
-        aliases:
-          type: array
-          items:
-            type: string
-          description: A list of alternate names or aliases associated with the Identity.
-        estimated_net_worth:
-          $ref: '#/components/schemas/CustomerDueDiligenceNetWorthRange'
-        estimated_yearly_income:
-          $ref: '#/components/schemas/CustomerDueDiligenceYearlyIncomeRange'
-        expected_transfer_value:
-          $ref: '#/components/schemas/CustomerDueDiligenceTransferValueRange'
-        source_of_wealth:
-          $ref: '#/components/schemas/WealthSource'
-        source_of_funds:
-          $ref: '#/components/schemas/FundsSource'
-        purpose_of_account:
-          $ref: '#/components/schemas/AccountPurpose'
-        employment_status:
-          $ref: '#/components/schemas/EmploymentStatus'
-        employment_industry_sector:
-          $ref: '#/components/schemas/InstitutionSubType'
-        industry_sector:
-          $ref: '#/components/schemas/InstitutionSubType'
-        has_underlying_trust_structure:
-          type: boolean
-          description: Whether or not the institution tied to the Identity has an underlying trust structure.
-        has_nominee_shareholders:
-          type: boolean
-          description: Whether or not the institution tied to the Identity has nominee shareholders.
-        created_at:
+        next_page_cursor:
           type: string
-          format: date-time
-          title: When the customer due diligence was created
-        is_publicly_traded:
-          type: boolean
-          description: '`true` or `false` indicating whether or not the company is listed on a public stock exchange.'
-        merchant_funding_source:
-          $ref: '#/components/schemas/MerchantFundingSourceFundingSource'
-        customer_regions:
+          description: Cursor token required for fetching the next page.
+        items:
           type: array
           items:
-            $ref: '#/components/schemas/CustomerRegion'
-          description: Regions where the customer base is located.
-    MerchantFundingSourceFundingSource:
+            $ref: '#/components/schemas/Identity'
+          description: The result list of identities.
+    FundsSource:
       type: string
       enum:
-      - BUSINESS_LOANS_FINANCING
-      - SALARY_SAVINGS
-      - INVESTMENT_GAINS
-      - INHERITANCE
-      - REAL_ESTATE_INCOME
-      - NON_PROFIT_SOURCES
-      - OTHER_BUSINESS_INCOME
+      - SALARY_DISBURSEMENT
+      - INHERITANCE_DISTRIBUTION
+      - INVESTMENT_RETURNS
+      - BUSINESS_DIVIDENDS_PROFITS
+      - PROPERTY_SALE
+      - LOAN_DISBURSEMENT
+      - SAVINGS_ACCOUNT_WITHDRAWAL
+      - GOVERNMENT_BENEFITS
+    IdentityMailingAddress:
+      type: object
+      properties:
+        country:
+          type: string
+          maxLength: 35
+          pattern: ^[0-9A-Za-z /?:().,&'+-]+$
+        address1:
+          type: string
+          maxLength: 35
+          pattern: ^[0-9A-Za-z /?:().,&'+-]+$
+        address2:
+          type: string
+          description: To clear address2 (i.e. when updating an identity), set address2 to an empty string ("").
+          maxLength: 35
+          pattern: ^[0-9A-Za-z /?:().,&'+-]+$
+        city:
+          type: string
+          maxLength: 35
+          pattern: ^[0-9A-Za-z /?:().,&'+-]+$
+        province:
+          type: string
+          maxLength: 35
+          pattern: ^[0-9A-Za-z /?:().,&'+-]+$
+        zip_code:
+          type: string
+          description: Required for countries that have postal or zip codes.
+          maxLength: 35
+          pattern: ^[0-9A-Za-z /?:().,&'+-]+$
+      description: A mailing address.
+      required:
+      - country
+      - address1
+      - city
+      - province
+    IdentityControlReasonCode:
+      type: string
+      enum:
+      - OTHER
+      - END_USER_REQUEST
+      - INACTIVITY
+      - COMPLIANCE_KYC
+      - COMPLIANCE_EDD
+      - COMPLIANCE_SCREENING
+      - COMPLIANCE_INVESTIGATION
+      - COMPLIANCE_INCOMPLETE
+      - RISK_FRAUD
+      - LEGAL_ORDER
+      - ADMINISTRATIVE
+      description: " - OTHER: Miscellaneous reason not captured by existing categories.\n - END_USER_REQUEST: Control applied at the end user's request.\n - INACTIVITY: Control applied due to prolonged inactivity in accordance with dormancy or lifecycle management policies.\n - COMPLIANCE_KYC: Control applied due to unmet KYC requirements, including missing, expired, failed, or unresponsiveness to refresh obligations.\n - COMPLIANCE_EDD: Control applied due to Enhanced Due Diligence (EDD) requirements, including failure to complete EDD reviews, provide requested information, or satisfy heightened risk assessment criteria.\n - COMPLIANCE_SCREENING: Control applied as a result of sanctions, politically exposed person (PEP), or adverse media screening hits.\n - COMPLIANCE_INVESTIGATION: Control applied while an identity is under active compliance, risk, or regulatory investigation, including reviews triggered by monitoring alerts or external inquiries.\n - COMPLIANCE_INCOMPLETE: Control applied because the onboarding process was not successfully completed, including failure to respond to requests for information or provide required documentation.\n - RISK_FRAUD: Control applied due to suspected or confirmed fraud, abuse, or security risk, including account compromise, transaction fraud, or policy violations.\n - LEGAL_ORDER: Control applied to comply with a legal, regulatory, or law-enforcement directive, including court orders, asset preservation requests, or regulatory instructions.\n - ADMINISTRATIVE: Control applied for operational or platform-initiated reasons not attributable to the end user or compliance failure, such as system remediation or account restructuring."
+    IdentityRequirementErrorCode:
+      type: string
+      enum:
+      - IDENTITY_VERIFICATION_FAILED
+      - DOCUMENT_VERIFICATION_FAILED
+      - SCREENING_IN_PROGRESS
+      - SCREENING_FAILED
+      - KYC_REFRESH_OVERDUE
+      - MEMBER_VERIFICATION_FAILED
+      - MEMBER_VERIFICATION_PENDING
+      - EDD_DOCUMENTATION_REQUIRED
+      - COMPLIANCE_REVIEW_REQUIRED
+      - COMPLIANCE_REVIEW_FAILED
+      - TIN_NOT_FOUND
+      - IDENTITY_VERIFICATION_REQUIRED
+      - DOCUMENT_UPLOAD_REQUIRED
+      - KYC_REFRESH_REQUIRED
+      description: 'Code identifies the specific failure type.
+
+        Additional codes may be added as new requirement types are introduced.'
     TINVerificationStatus:
       type: string
       enum:
@@ -862,93 +872,26 @@ components:
       - TIN_VERIFICATION_ERROR
       - TIN_VERIFICATION_VALID
       description: The TIN verification status for the associated `tax_payer_id`.
-    CreateIdentityRequest:
-      type: object
-      properties:
-        person_details:
-          $ref: '#/components/schemas/PersonDetails'
-        metadata:
-          type: object
-          additionalProperties:
-            type: string
-          title: API User-facing metadata
-        ref_id:
-          type: string
-          description: A user-facing ID to prevent duplicate identity creation. Unique for all identities created by the same API user.
-        institution_details:
-          $ref: '#/components/schemas/InstitutionDetails'
-        institution_members:
-          type: array
-          items:
-            $ref: '#/components/schemas/InstitutionMember'
-          description: Required for all institution identity types. The required roles and number of members vary by institution type; see the [developer guide](https://docs.paxos.com/guides/identity/institution-types) for details.
-        tax_details:
-          type: array
-          items:
-            $ref: '#/components/schemas/TaxDetail'
-          description: List of tax details associated with the identity. Must be set if tax_details_not_required is false or not set.
-        tax_details_not_required:
-          type: boolean
-          description: Set to true if tax details are not legally required. Must not be true when `cip_id_country` is USA.
-        customer_due_diligence:
-          $ref: '#/components/schemas/CustomerDueDiligence'
-        is_merchant:
-          type: boolean
-          description: Set to true to indicate that this identity is a merchant.
-    IdentityRequirementError:
-      type: object
-      properties:
-        code:
-          $ref: '#/components/schemas/IdentityRequirementErrorCode'
-        description:
-          type: string
-          description: 'Human-readable description providing additional context for the error.
-
-            Do not expose code or description values directly to end users.'
-      description: A specific error explaining why a requirement is blocked or pending.
-      required:
-      - code
-      - description
-    InstitutionMember:
-      type: object
-      properties:
-        identity_id:
-          type: string
-          title: The ID of the member identity
-        roles:
-          type: array
-          items:
-            $ref: '#/components/schemas/InstitutionRoleType'
-          description: The role(s) the member fulfils for the institution. Should always be present in practice. See the [developer guide](https://docs.paxos.com/guides/identity/institution-types) for required roles per institution type.
-        ownership:
-          type: string
-          format: decimal
-          description: Decimal number representing the percent ownership the identity has in the company--  e.g. 5 represents 5% ownership.
-        position:
-          type: string
-          title: The position the identity holds with the company
-        name:
-          type: string
-          title: Member's full name. Not writable from API
-        summary_status:
-          $ref: '#/components/schemas/IdentityStatus'
-        id:
-          type: string
-          description: 'Institution member ID. Note: This field is auto-generated. Specifying an ID when creating an institution member is a client error.'
-      required:
-      - identity_id
-    IdentityType:
+    IdentityRequirementRequirementType:
       type: string
       enum:
-      - PERSON
-      - INSTITUTION
-    InstitutionCIPIDType:
+      - ID_VERIFICATION
+      - DOCUMENT_VERIFICATION
+      - SCREENING_CHECK
+      - COMPLIANCE_CHECK
+      - ENHANCED_DUE_DILIGENCE
+      - MEMBERS
+      - KYC_REFRESH
+      - TAX_DETAILS_VERIFICATION
+      description: "RequirementType identifies the category of requirement blocking or pending for an identity.\n\n - ID_VERIFICATION: Identity verification via a passthrough provider is pending or failed.\n - DOCUMENT_VERIFICATION: Document review for an institution is pending or failed.\n - SCREENING_CHECK: Identity screening check is pending or failed.\n - COMPLIANCE_CHECK: A compliance check is pending or failed.\n - ENHANCED_DUE_DILIGENCE: Enhanced due diligence review is pending or failed.\n - MEMBERS: One or more institution members have a non-approved status.\n - KYC_REFRESH: KYC refresh is overdue or in progress.\n - TAX_DETAILS_VERIFICATION: Tax details verification is pending or failed."
+    IdentityStatus:
       type: string
       enum:
-      - EIN
-      - SSN
-      - ITIN
-      - REGISTRATION_NUMBER
+      - PENDING
+      - ERROR
+      - APPROVED
+      - DENIED
+      - DISABLED
       title: ''
     InstitutionSubType:
       type: string
@@ -1007,21 +950,28 @@ components:
       - ASIA
       - AFRICA
       - OCEANIA
-    IdentityControlSetBy:
+    CustomerDueDiligenceYearlyIncomeRange:
       type: string
       enum:
-      - SET_BY_PAXOS
-      - SET_BY_CLIENT
-    PersonDetailsCIPIDType:
+      - INCOME_0_TO_50K
+      - INCOME_50K_TO_100K
+      - INCOME_100K_TO_250K
+      - INCOME_250K_TO_500K
+      - INCOME_500K_TO_750K
+      - INCOME_750K_TO_1M
+      - INCOME_ABOVE_1M
+    AccountPurpose:
       type: string
       enum:
-      - SSN
-      - ID_CARD
-      - ITIN
-      - PASSPORT
-      - DRIVING_LICENSE
-      - VISA
-      title: ''
+      - INVESTMENT_TRADING
+      - SAVINGS
+      - STABLECOIN_PURCHASE_REDEMPTION
+    RegulationStatus:
+      type: string
+      enum:
+      - US_REGULATED
+      - INTL_REGULATED
+      - NON_REGULATED
     Problem:
       type: object
       properties:
@@ -1071,80 +1021,77 @@ components:
           description: 'Additional structured metadata about the error.
 
             '
-    WealthSource:
-      type: string
-      enum:
-      - INHERITANCE
-      - INVESTMENT_GAINS
-      - BUSINESS_OWNERSHIP_DIVIDENDS
-      - EMPLOYMENT_INCOME
-      - REAL_ESTATE
-      - OTHER_SOURCE_OF_WEALTH
-    IdentityControl:
+    CustomerDueDiligence:
       type: object
       properties:
-        id:
-          type: string
-        type:
-          $ref: '#/components/schemas/IdentityControlType'
-        set_by:
-          $ref: '#/components/schemas/IdentityControlSetBy'
-        is_overridable:
+        aliases:
+          type: array
+          items:
+            type: string
+          description: A list of alternate names or aliases associated with the Identity.
+        estimated_net_worth:
+          $ref: '#/components/schemas/CustomerDueDiligenceNetWorthRange'
+        estimated_yearly_income:
+          $ref: '#/components/schemas/CustomerDueDiligenceYearlyIncomeRange'
+        expected_transfer_value:
+          $ref: '#/components/schemas/CustomerDueDiligenceTransferValueRange'
+        source_of_wealth:
+          $ref: '#/components/schemas/WealthSource'
+        source_of_funds:
+          $ref: '#/components/schemas/FundsSource'
+        purpose_of_account:
+          $ref: '#/components/schemas/AccountPurpose'
+        employment_status:
+          $ref: '#/components/schemas/EmploymentStatus'
+        employment_industry_sector:
+          $ref: '#/components/schemas/InstitutionSubType'
+        industry_sector:
+          $ref: '#/components/schemas/InstitutionSubType'
+        has_underlying_trust_structure:
           type: boolean
-        reason_code:
-          $ref: '#/components/schemas/IdentityControlReasonCode'
-        reason:
-          type: string
+          description: Whether or not the institution tied to the Identity has an underlying trust structure.
+        has_nominee_shareholders:
+          type: boolean
+          description: Whether or not the institution tied to the Identity has nominee shareholders.
         created_at:
           type: string
           format: date-time
-        deleted_at:
-          type: string
-          format: date-time
-      required:
-      - id
-      - type
-      - set_by
-      - created_at
-    TaxDetail:
-      type: object
-      properties:
-        tax_payer_id:
-          type: string
-          title: For U.S. citizens it is the SSN, TIN or EIN. For Brazil citizens, it is the CPF. Allowed in create and update
-          maxLength: 35
-          pattern: ^[0-9A-Za-z /?:().,&'+-]+$
-        tax_payer_country:
-          type: string
-          title: Allowed in create and update. Must be an ISO 3166-1 alpha 3 code
-        tin_verification_status:
-          $ref: '#/components/schemas/TINVerificationStatus'
-    PassthroughVerificationField:
+          title: When the customer due diligence was created
+        is_publicly_traded:
+          type: boolean
+          description: '`true` or `false` indicating whether or not the company is listed on a public stock exchange.'
+        merchant_funding_source:
+          $ref: '#/components/schemas/MerchantFundingSourceFundingSource'
+        customer_regions:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomerRegion'
+          description: Regions where the customer base is located.
+    InstitutionCIPIDType:
       type: string
       enum:
-      - FULL_LEGAL_NAME
-      - ADDRESS
-      - DATE_OF_BIRTH
-      - CIP_ID
-    PassthroughVerifierType:
+      - EIN
+      - SSN
+      - ITIN
+      - REGISTRATION_NUMBER
+      title: ''
+    IdentityType:
       type: string
       enum:
-      - JUMIO
-      - ALLOY
-      - LEXISNEXIS
-      - MITEK
-      - SUMSUB
-      - MICROBILT
-      - ONFIDO
-      - CUSTOMER
-      - EQUIFAX
-      - ID3_AUTHENTICATE
-      - FIS
-      - PROVE
-      - PERSONA
-      - PLAID
-      - DOTFILE
-      - AIPRISE
+      - PERSON
+      - INSTITUTION
+    TradingType:
+      type: string
+      enum:
+      - PRIVATE
+      - PUBLIC
+      - PUBLICLY_TRADED_SUBSIDIARY
+    identityprotoVerifierType:
+      type: string
+      enum:
+      - PAXOS
+      - PASSTHROUGH
+      - MANUAL
     PersonDetails:
       type: object
       properties:
@@ -1237,119 +1184,16 @@ components:
           items:
             $ref: '#/components/schemas/PassthroughVerificationField'
           description: List of verification fields used by the external verifier to validate the person's identity.
-    CustomerDueDiligenceTransferValueRange:
+    PersonDetailsCIPIDType:
       type: string
       enum:
-      - TRANSFER_VALUE_0_TO_25K
-      - TRANSFER_VALUE_25K_TO_50K
-      - TRANSFER_VALUE_50K_TO_100K
-      - TRANSFER_VALUE_100K_TO_250K
-      - TRANSFER_VALUE_250K_TO_500K
-      - TRANSFER_VALUE_500K_TO_750K
-      - TRANSFER_VALUE_750K_TO_1M
-      - TRANSFER_VALUE_1M_TO_2_5M
-      - TRANSFER_VALUE_2_5M_TO_5M
-      - TRANSFER_VALUE_ABOVE_5M
-      description: Anticipated monthly volume. The expected transfer value range for the Account associated with the Identity.
-    identityprotoVerifierType:
-      type: string
-      enum:
-      - PAXOS
-      - PASSTHROUGH
-      - MANUAL
-    CustomerDueDiligenceYearlyIncomeRange:
-      type: string
-      enum:
-      - INCOME_0_TO_50K
-      - INCOME_50K_TO_100K
-      - INCOME_100K_TO_250K
-      - INCOME_250K_TO_500K
-      - INCOME_500K_TO_750K
-      - INCOME_750K_TO_1M
-      - INCOME_ABOVE_1M
-    EmploymentStatus:
-      type: string
-      enum:
-      - CONTRACTUAL
-      - FULL_TIME
-      - PART_TIME
-      - RETIRED
-      - SELF_EMPLOYED
-      - STUDENT
-      - UNEMPLOYED
-    FundsSource:
-      type: string
-      enum:
-      - SALARY_DISBURSEMENT
-      - INHERITANCE_DISTRIBUTION
-      - INVESTMENT_RETURNS
-      - BUSINESS_DIVIDENDS_PROFITS
-      - PROPERTY_SALE
-      - LOAN_DISBURSEMENT
-      - SAVINGS_ACCOUNT_WITHDRAWAL
-      - GOVERNMENT_BENEFITS
-    IdentityRequirementErrorCode:
-      type: string
-      enum:
-      - IDENTITY_VERIFICATION_FAILED
-      - DOCUMENT_VERIFICATION_FAILED
-      - SCREENING_IN_PROGRESS
-      - SCREENING_FAILED
-      - KYC_REFRESH_OVERDUE
-      - MEMBER_VERIFICATION_FAILED
-      - MEMBER_VERIFICATION_PENDING
-      - EDD_DOCUMENTATION_REQUIRED
-      - COMPLIANCE_REVIEW_REQUIRED
-      - COMPLIANCE_REVIEW_FAILED
-      - TIN_NOT_FOUND
-      - IDENTITY_VERIFICATION_REQUIRED
-      - DOCUMENT_UPLOAD_REQUIRED
-      - KYC_REFRESH_REQUIRED
-      description: 'Code identifies the specific failure type.
-
-        Additional codes may be added as new requirement types are introduced.'
-    IdentityPublicUpdateIdentityBody:
-      type: object
-      example:
-        id: f190b163-208f-4d73-8deb-4fb8b24add00
-        person_details:
-          first_name: John
-      properties:
-        person_details:
-          $ref: '#/components/schemas/PersonDetails'
-        metadata:
-          type: object
-          additionalProperties:
-            type: string
-          title: API User-facing metadata
-        set_user_disabled:
-          type: boolean
-          description: '`true` disables the identity. `false` re-enables it, unless it has been disabled by a Paxos admin.'
-        institution_details:
-          $ref: '#/components/schemas/InstitutionDetails'
-        ref_id:
-          type: string
-          description: A user-facing ID to prevent duplicate identity creation. Unique for all identities created by the same API user.
-        tax_details:
-          type: array
-          items:
-            $ref: '#/components/schemas/TaxDetail'
-          title: list of tax details associated with the identity
-        set_tax_details_not_required:
-          type: boolean
-          description: Set to true if tax details are not legally required. Must not be true when `cip_id_country` is USA.
-        customer_due_diligence:
-          $ref: '#/components/schemas/CustomerDueDiligence'
-        is_merchant:
-          type: boolean
-          description: Set to true to indicate that this identity is a merchant.
-        last_kyc_refresh_date:
-          type: string
-          format: date-time
-          description: 'Set to the timestamp the identity has last undergone a periodic kyc refresh. If unset, the update is not for
-
-            periodic kyc refresh. RFC3339 format, like `YYYY-MM-DDTHH:MM:SS.sssZ`. ex: `2006-01-02T15:04:05Z`.'
-      title: UpdateIdentityRequest
+      - SSN
+      - ID_CARD
+      - ITIN
+      - PASSPORT
+      - DRIVING_LICENSE
+      - VISA
+      title: ''
     CustomerDueDiligenceNetWorthRange:
       type: string
       enum:
@@ -1363,12 +1207,168 @@ components:
       - NET_WORTH_10M_TO_25M
       - NET_WORTH_25M_TO_50M
       - NET_WORTH_OVER_50M
-    AccountPurpose:
+    MerchantFundingSourceFundingSource:
       type: string
       enum:
-      - INVESTMENT_TRADING
-      - SAVINGS
-      - STABLECOIN_PURCHASE_REDEMPTION
+      - BUSINESS_LOANS_FINANCING
+      - SALARY_SAVINGS
+      - INVESTMENT_GAINS
+      - INHERITANCE
+      - REAL_ESTATE_INCOME
+      - NON_PROFIT_SOURCES
+      - OTHER_BUSINESS_INCOME
+    CreateIdentityRequest:
+      type: object
+      properties:
+        person_details:
+          $ref: '#/components/schemas/PersonDetails'
+        metadata:
+          type: object
+          additionalProperties:
+            type: string
+          title: API User-facing metadata
+        ref_id:
+          type: string
+          description: A user-facing ID to prevent duplicate identity creation. Unique for all identities created by the same API user.
+        institution_details:
+          $ref: '#/components/schemas/InstitutionDetails'
+        institution_members:
+          type: array
+          items:
+            $ref: '#/components/schemas/InstitutionMember'
+          description: Required for all institution identity types. The required roles and number of members vary by institution type; see the [developer guide](https://docs.paxos.com/guides/identity/institution-types) for details.
+        tax_details:
+          type: array
+          items:
+            $ref: '#/components/schemas/TaxDetail'
+          description: List of tax details associated with the identity. Must be set if tax_details_not_required is false or not set.
+        tax_details_not_required:
+          type: boolean
+          description: Set to true if tax details are not legally required. Must not be true when `cip_id_country` is USA.
+        customer_due_diligence:
+          $ref: '#/components/schemas/CustomerDueDiligence'
+        is_merchant:
+          type: boolean
+          description: Set to true to indicate that this identity is a merchant.
+    IdentityRequirementAwaitingActionFrom:
+      type: string
+      enum:
+      - CLIENT
+      - PAXOS
+      description: "AwaitingActionFrom indicates who needs to take action to unblock this requirement.\nNot set for MEMBERS requirements, where the client should call GetIdentity on each\nmember identity to determine their individual requirement status.\n\n - CLIENT: The client (the integrating partner) must take action to resolve this requirement.\n - PAXOS: Paxos is handling this; no action needed from the client."
+    InstitutionMember:
+      type: object
+      properties:
+        identity_id:
+          type: string
+          title: The ID of the member identity
+        roles:
+          type: array
+          items:
+            $ref: '#/components/schemas/InstitutionRoleType'
+          description: The role(s) the member fulfils for the institution. Should always be present in practice. See the [developer guide](https://docs.paxos.com/guides/identity/institution-types) for required roles per institution type.
+        ownership:
+          type: string
+          format: decimal
+          description: Decimal number representing the percent ownership the identity has in the company--  e.g. 5 represents 5% ownership.
+        position:
+          type: string
+          title: The position the identity holds with the company
+        name:
+          type: string
+          title: Member's full name. Not writable from API
+        summary_status:
+          $ref: '#/components/schemas/IdentityStatus'
+        id:
+          type: string
+          description: 'Institution member ID. Note: This field is auto-generated. Specifying an ID when creating an institution member is a client error.'
+      required:
+      - identity_id
+    IdentityControlType:
+      type: string
+      enum:
+      - SELL_ONLY
+      - CLOSED
+      - FROZEN
+      - DORMANT
+    Identity:
+      type: object
+      example:
+        id: f190b163-208f-4d73-8deb-4fb8b24add00
+        summary_status: PENDING
+      properties:
+        id:
+          type: string
+          title: The id used for all other interactions with this account
+        metadata:
+          type: object
+          additionalProperties:
+            type: string
+          title: API User-facing metadata
+        status:
+          $ref: '#/components/schemas/IdentityStatus'
+        status_details:
+          $ref: '#/components/schemas/IdentityStatusDetails'
+        summary_status:
+          $ref: '#/components/schemas/IdentityStatus'
+        user_disabled:
+          type: boolean
+          description: 'Deprecated: use `status_details.active_controls` instead.'
+        admin_disabled:
+          type: boolean
+          description: 'Deprecated: use `status_details.active_controls` instead.'
+        person_details:
+          $ref: '#/components/schemas/PersonDetails'
+        type:
+          $ref: '#/components/schemas/IdentityType'
+        ref_id:
+          type: string
+          description: A user-facing ID to prevent duplicate account creation. Unique for all accounts created by the same API user.
+        institution_details:
+          $ref: '#/components/schemas/InstitutionDetails'
+        institution_members:
+          type: array
+          items:
+            $ref: '#/components/schemas/InstitutionMember'
+          title: members associated with institution identity type
+        created_at:
+          type: string
+          format: date-time
+          description: 'The time at which the identity is created at. RFC3339 format, like `YYYY-MM-DDTHH:MM:SS.sssZ`. ex: `2006-01-02T15:04:05Z`.'
+        updated_at:
+          type: string
+          format: date-time
+          description: 'The time at which the identity is updated at. RFC3339 format, like `YYYY-MM-DDTHH:MM:SS.sssZ`. ex: `2006-01-02T15:04:05Z`.'
+        tax_details:
+          type: array
+          items:
+            $ref: '#/components/schemas/TaxDetail'
+          title: tax payer details
+        tax_details_not_required:
+          type: boolean
+          title: whether or not tax_details are legally required
+        summary_tin_verification_status:
+          $ref: '#/components/schemas/TINVerificationStatus'
+        customer_due_diligence:
+          $ref: '#/components/schemas/CustomerDueDiligence'
+        is_merchant:
+          type: boolean
+          description: True if the identity is a merchant.
+        last_kyc_refresh_date:
+          type: string
+          format: date-time
+          description: 'The last timestamp the identity has undergone a periodic kyc refresh. RFC3339 format, like `YYYY-MM-DDTHH:MM:SS.sssZ`. ex: `2006-01-02T15:04:05Z`.'
+      required:
+      - id
+    InstitutionType:
+      type: string
+      enum:
+      - TRUST
+      - CORPORATION
+      - LLC
+      - PARTNERSHIP
+      - SOLE_PROPRIETORSHIP
+      title: ''
   securitySchemes:
     OAuth2:
       type: oauth2

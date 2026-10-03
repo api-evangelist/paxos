@@ -238,6 +238,15 @@ paths:
         - transfer:write_deposit_address
 components:
   schemas:
+    ListDepositAddressesResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/DepositAddress'
+        next_page_cursor:
+          type: string
     DepositAddress:
       type: object
       example:
@@ -306,21 +315,44 @@ components:
       - address
       - conversion_target_asset
       - created_at
-    ListDepositAddressesResponse:
+    CreateDepositAddressRequest:
       type: object
+      example:
+        profile_id: b7b77d82-e6a7-4ae9-9904-36231aedf985
+        crypto_network: ETHEREUM
+        identity_id: 54385e67-d7ef-40d1-b488-ceda6dd9b264
+        ref_id: deposit_address_0
+        metadata:
+          my_id: 4024ee50-eefb-4f2e-85c7-e7899c0b7da5
       properties:
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/DepositAddress'
-        next_page_cursor:
+        profile_id:
           type: string
-    DepositAddressConversionTargetAsset:
-      type: string
-      enum:
-      - NO_CONVERSION
-      - USD
-      description: Asset to credit for deposits of Paxos-minted USD stablecoin.
+          description: The target profile for deposit crediting.
+        crypto_network:
+          $ref: '#/components/schemas/CryptoNetwork'
+        identity_id:
+          type: string
+          description: The Paxos Identity associated with this deposit address.
+        ref_id:
+          type: string
+          description: Client-specified ID for replay protection and lookup.
+        metadata:
+          type: object
+          additionalProperties:
+            type: string
+          description: 'Optional client-specified metadata, which will be added to both the deposit address itself and transfers to the created address.
+
+            Up to 6 key/value pairs may be provided.
+
+            Each key and value must be less than or equal to 100 characters.'
+        account_id:
+          type: string
+          description: The Paxos Account associated with this deposit address.
+        conversion_target_asset:
+          $ref: '#/components/schemas/DepositAddressConversionTargetAsset'
+      required:
+      - profile_id
+      - crypto_network
     Problem:
       type: object
       properties:
@@ -370,44 +402,6 @@ components:
           description: 'Additional structured metadata about the error.
 
             '
-    CreateDepositAddressRequest:
-      type: object
-      example:
-        profile_id: b7b77d82-e6a7-4ae9-9904-36231aedf985
-        crypto_network: ETHEREUM
-        identity_id: 54385e67-d7ef-40d1-b488-ceda6dd9b264
-        ref_id: deposit_address_0
-        metadata:
-          my_id: 4024ee50-eefb-4f2e-85c7-e7899c0b7da5
-      properties:
-        profile_id:
-          type: string
-          description: The target profile for deposit crediting.
-        crypto_network:
-          $ref: '#/components/schemas/CryptoNetwork'
-        identity_id:
-          type: string
-          description: The Paxos Identity associated with this deposit address.
-        ref_id:
-          type: string
-          description: Client-specified ID for replay protection and lookup.
-        metadata:
-          type: object
-          additionalProperties:
-            type: string
-          description: 'Optional client-specified metadata, which will be added to both the deposit address itself and transfers to the created address.
-
-            Up to 6 key/value pairs may be provided.
-
-            Each key and value must be less than or equal to 100 characters.'
-        account_id:
-          type: string
-          description: The Paxos Account associated with this deposit address.
-        conversion_target_asset:
-          $ref: '#/components/schemas/DepositAddressConversionTargetAsset'
-      required:
-      - profile_id
-      - crypto_network
     CryptoNetwork:
       type: string
       enum:
@@ -428,6 +422,12 @@ components:
       - ROBINHOOD
       - BNB
       description: A CryptoNetwork is a blockchain transmitting cryptocurrencies.
+    DepositAddressConversionTargetAsset:
+      type: string
+      enum:
+      - NO_CONVERSION
+      - USD
+      description: Asset to credit for deposits of Paxos-minted USD stablecoin.
   examples:
     Problem_already_exists_deposit_address:
       value:

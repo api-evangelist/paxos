@@ -335,13 +335,38 @@ paths:
         - transfer:read_transfer
 components:
   schemas:
-    PendingCustomerApproval:
+    TransferType:
+      type: string
+      enum:
+      - INTERNAL_TRANSFER_DEBIT
+      - INTERNAL_TRANSFER_CREDIT
+      - CRYPTO_DEPOSIT
+      - CRYPTO_WITHDRAWAL
+      - WIRE_DEPOSIT
+      - WIRE_WITHDRAWAL
+      - SEN_DEPOSIT
+      - SEN_WITHDRAWAL
+      - BANK_DEPOSIT
+      - BANK_WITHDRAWAL
+      - PAXOS_TRANSFER_DEBIT
+      - PAXOS_TRANSFER_CREDIT
+      - SIGNET_DEPOSIT
+      - SIGNET_WITHDRAWAL
+      - CBIT_WITHDRAWAL
+      - CBIT_DEPOSIT
+      - CUBIX_DEPOSIT
+      - CUBIX_WITHDRAWAL
+      - RTP_DEPOSIT
+      description: Type of transfer.
+    ListTransfersResponse:
       type: object
       properties:
-        message:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Transfer'
+        next_page_cursor:
           type: string
-          title: Human-readable explanation
-      description: PendingCustomerApproval represents that this resource is awaiting customer approval.
     SecondaryStatus:
       type: object
       properties:
@@ -351,6 +376,106 @@ components:
           type: string
           description: Additional information about the current status of the transfer (e.g. if information is missing).
       description: Secondary status for the transfer, used for more granular explanation of the transfer status.
+    TransferStatus:
+      type: string
+      enum:
+      - PENDING
+      - COMPLETED
+      - FAILED
+    StaleFeeQuote:
+      type: object
+      properties:
+        message:
+          type: string
+          title: Human-readable explanation
+      description: StaleFeeQuote represents a transfer cancelled because on-chain state changed after the fee was quoted.
+    TransferDirection:
+      type: string
+      enum:
+      - CREDIT
+      - DEBIT
+      description: Direction of the transfer.
+    PendingCustomerApproval:
+      type: object
+      properties:
+        message:
+          type: string
+          title: Human-readable explanation
+      description: PendingCustomerApproval represents that this resource is awaiting customer approval.
+    MissingTrustline:
+      type: object
+      properties:
+        message:
+          type: string
+          title: Human-readable explanation of the error
+        destination_address:
+          type: string
+          title: The destination account address that is missing the trustline
+        asset:
+          type: string
+          title: The asset that requires a trustline
+      description: 'MissingTrustline represents a failed transfer where the destination account
+
+        lacks the required asset trustline.'
+    CryptoNetwork:
+      type: string
+      enum:
+      - BITCOIN
+      - ETHEREUM
+      - BITCOIN_CASH
+      - LITECOIN
+      - SOLANA
+      - POLYGON_POS
+      - BASE
+      - ARBITRUM_ONE
+      - STELLAR
+      - INK
+      - XLAYER
+      - AVALANCHE
+      - DOGECOIN
+      - SUI
+      - ROBINHOOD
+      - BNB
+      description: A CryptoNetwork is a blockchain transmitting cryptocurrencies.
+    AutoConversion:
+      type: object
+      properties:
+        from_transfer_id:
+          type: string
+          title: Transfer Id of the deposit triggering this transfer (only on withdrawal transfers)
+        to_transfer_id:
+          type: string
+          title: Transfer Id of the withdrawal triggered by this deposit(only on deposit transfers)
+    InvalidDestinationAddress:
+      type: object
+      properties:
+        message:
+          type: string
+          title: Human-readable explanation of the error
+        destination_address:
+          type: string
+          title: The destination address that caused the cancellation
+      description: 'InvalidDestinationAddress represents a transfer cancelled because the destination address
+
+        cannot receive the requested asset (e.g. it is a token account for a different mint).'
+    TransferStatusDetails:
+      type: object
+      properties:
+        missing_trustline:
+          $ref: '#/components/schemas/MissingTrustline'
+        max_rent_exceeded:
+          $ref: '#/components/schemas/MaxRentExceeded'
+        pending_customer_approval:
+          $ref: '#/components/schemas/PendingCustomerApproval'
+        stale_fee_quote:
+          $ref: '#/components/schemas/StaleFeeQuote'
+        invalid_destination_address:
+          $ref: '#/components/schemas/InvalidDestinationAddress'
+      description: 'TransferStatusDetails provides additional information about why a transfer
+
+        is in its current state. This field is only populated when a transfer
+
+        encounters specific error conditions or requires additional context.'
     Transfer:
       type: object
       example:
@@ -482,124 +607,6 @@ components:
       - status
       - direction
       - type
-    AutoConversion:
-      type: object
-      properties:
-        from_transfer_id:
-          type: string
-          title: Transfer Id of the deposit triggering this transfer (only on withdrawal transfers)
-        to_transfer_id:
-          type: string
-          title: Transfer Id of the withdrawal triggered by this deposit(only on deposit transfers)
-    CryptoNetwork:
-      type: string
-      enum:
-      - BITCOIN
-      - ETHEREUM
-      - BITCOIN_CASH
-      - LITECOIN
-      - SOLANA
-      - POLYGON_POS
-      - BASE
-      - ARBITRUM_ONE
-      - STELLAR
-      - INK
-      - XLAYER
-      - AVALANCHE
-      - DOGECOIN
-      - SUI
-      - ROBINHOOD
-      - BNB
-      description: A CryptoNetwork is a blockchain transmitting cryptocurrencies.
-    StaleFeeQuote:
-      type: object
-      properties:
-        message:
-          type: string
-          title: Human-readable explanation
-      description: StaleFeeQuote represents a transfer cancelled because on-chain state changed after the fee was quoted.
-    InvalidDestinationAddress:
-      type: object
-      properties:
-        message:
-          type: string
-          title: Human-readable explanation of the error
-        destination_address:
-          type: string
-          title: The destination address that caused the cancellation
-      description: 'InvalidDestinationAddress represents a transfer cancelled because the destination address
-
-        cannot receive the requested asset (e.g. it is a token account for a different mint).'
-    TransferDirection:
-      type: string
-      enum:
-      - CREDIT
-      - DEBIT
-      description: Direction of the transfer.
-    TransferStatus:
-      type: string
-      enum:
-      - PENDING
-      - COMPLETED
-      - FAILED
-    SecondaryStatusName:
-      type: string
-      enum:
-      - TRAVEL_RULE_INFO_REQUESTED
-      - TRAVEL_RULE_REJECTED
-      - CUSTOMER_REJECTED
-      - PENDING_CUSTOMER_APPROVAL
-      description: "Identifier for secondary status.\n\n - TRAVEL_RULE_INFO_REQUESTED: Travel rule information is required to continue processing the transfer.\n - TRAVEL_RULE_REJECTED: Transfer has been terminally rejected due to failing travel rule checks.\n - CUSTOMER_REJECTED: Transfer was rejected by a customer.\n - PENDING_CUSTOMER_APPROVAL: Transfer is pending customer approval."
-    TransferType:
-      type: string
-      enum:
-      - INTERNAL_TRANSFER_DEBIT
-      - INTERNAL_TRANSFER_CREDIT
-      - CRYPTO_DEPOSIT
-      - CRYPTO_WITHDRAWAL
-      - WIRE_DEPOSIT
-      - WIRE_WITHDRAWAL
-      - SEN_DEPOSIT
-      - SEN_WITHDRAWAL
-      - BANK_DEPOSIT
-      - BANK_WITHDRAWAL
-      - PAXOS_TRANSFER_DEBIT
-      - PAXOS_TRANSFER_CREDIT
-      - SIGNET_DEPOSIT
-      - SIGNET_WITHDRAWAL
-      - CBIT_WITHDRAWAL
-      - CBIT_DEPOSIT
-      - CUBIX_DEPOSIT
-      - CUBIX_WITHDRAWAL
-      - RTP_DEPOSIT
-      description: Type of transfer.
-    ListTransfersResponse:
-      type: object
-      properties:
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/Transfer'
-        next_page_cursor:
-          type: string
-    TransferStatusDetails:
-      type: object
-      properties:
-        missing_trustline:
-          $ref: '#/components/schemas/MissingTrustline'
-        max_rent_exceeded:
-          $ref: '#/components/schemas/MaxRentExceeded'
-        pending_customer_approval:
-          $ref: '#/components/schemas/PendingCustomerApproval'
-        stale_fee_quote:
-          $ref: '#/components/schemas/StaleFeeQuote'
-        invalid_destination_address:
-          $ref: '#/components/schemas/InvalidDestinationAddress'
-      description: 'TransferStatusDetails provides additional information about why a transfer
-
-        is in its current state. This field is only populated when a transfer
-
-        encounters specific error conditions or requires additional context.'
     MaxRentExceeded:
       type: object
       properties:
@@ -616,21 +623,14 @@ components:
         maximum allowed rent threshold, it may indicate malicious behavior. This status
 
         detail is set when such transfers are automatically cancelled.'
-    MissingTrustline:
-      type: object
-      properties:
-        message:
-          type: string
-          title: Human-readable explanation of the error
-        destination_address:
-          type: string
-          title: The destination account address that is missing the trustline
-        asset:
-          type: string
-          title: The asset that requires a trustline
-      description: 'MissingTrustline represents a failed transfer where the destination account
-
-        lacks the required asset trustline.'
+    SecondaryStatusName:
+      type: string
+      enum:
+      - TRAVEL_RULE_INFO_REQUESTED
+      - TRAVEL_RULE_REJECTED
+      - CUSTOMER_REJECTED
+      - PENDING_CUSTOMER_APPROVAL
+      description: "Identifier for secondary status.\n\n - TRAVEL_RULE_INFO_REQUESTED: Travel rule information is required to continue processing the transfer.\n - TRAVEL_RULE_REJECTED: Transfer has been terminally rejected due to failing travel rule checks.\n - CUSTOMER_REJECTED: Transfer was rejected by a customer.\n - PENDING_CUSTOMER_APPROVAL: Transfer is pending customer approval."
   securitySchemes:
     OAuth2:
       type: oauth2

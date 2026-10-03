@@ -209,13 +209,6 @@ paths:
         - rewards:read_claims
 components:
   schemas:
-    ClaimOnchainStatus:
-      type: string
-      enum:
-      - PENDING
-      - SUBMITTED
-      - CONFIRMED
-      - FAILED
     ClaimServicePublicUpdateClaimScheduleBody:
       type: object
       properties:
@@ -241,13 +234,12 @@ components:
       - schedule_type
       - hour
       - minute
-    ClaimType:
+    ScheduleType:
       type: string
       enum:
-      - CLAIM_ALL
-      - CLAIM_FOR_ADDRESSES
-      - CLAIM_UNREGISTER
-      title: Claim-related enums
+      - DAILY
+      - MONTHLY
+      - WEEKLY
     DeleteClaimScheduleResponse:
       type: object
       title: Empty
@@ -295,27 +287,6 @@ components:
           type: string
           format: date-time
       title: Claim represents a reward claim transaction
-    ListClaimSchedulesResponse:
-      type: object
-      properties:
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/ClaimSchedule'
-          description: Claim schedules in this page of results.
-        next_page_cursor:
-          type: string
-          description: Token to retrieve the next page of results, or empty if there are no more results.
-    CreateClaimScheduleResponse:
-      type: object
-      properties:
-        claim_schedule:
-          $ref: '#/components/schemas/ClaimSchedule'
-    UpdateClaimScheduleResponse:
-      type: object
-      properties:
-        claim_schedule:
-          $ref: '#/components/schemas/ClaimSchedule'
     ClaimSchedule:
       type: object
       properties:
@@ -350,6 +321,38 @@ components:
         minute:
           type: integer
           format: int32
+    ListClaimsResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Claim'
+          description: Claims in this page of results.
+        next_page_cursor:
+          type: string
+          description: Token to retrieve the next page of results, or empty if there are no more results.
+    UpdateClaimScheduleResponse:
+      type: object
+      properties:
+        claim_schedule:
+          $ref: '#/components/schemas/ClaimSchedule'
+    ListClaimSchedulesResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ClaimSchedule'
+          description: Claim schedules in this page of results.
+        next_page_cursor:
+          type: string
+          description: Token to retrieve the next page of results, or empty if there are no more results.
+    CreateClaimScheduleResponse:
+      type: object
+      properties:
+        claim_schedule:
+          $ref: '#/components/schemas/ClaimSchedule'
     CreateClaimScheduleRequest:
       type: object
       properties:
@@ -378,23 +381,20 @@ components:
       - schedule_type
       - hour
       - minute
-    ListClaimsResponse:
-      type: object
-      properties:
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/Claim'
-          description: Claims in this page of results.
-        next_page_cursor:
-          type: string
-          description: Token to retrieve the next page of results, or empty if there are no more results.
-    ScheduleType:
+    ClaimOnchainStatus:
       type: string
       enum:
-      - DAILY
-      - MONTHLY
-      - WEEKLY
+      - PENDING
+      - SUBMITTED
+      - CONFIRMED
+      - FAILED
+    ClaimType:
+      type: string
+      enum:
+      - CLAIM_ALL
+      - CLAIM_FOR_ADDRESSES
+      - CLAIM_UNREGISTER
+      title: Claim-related enums
   securitySchemes:
     OAuth2:
       type: oauth2

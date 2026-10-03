@@ -308,6 +308,16 @@ paths:
         - rewards:write_monitoring_address
 components:
   schemas:
+    UpdateMonitoringAddressResponse:
+      type: object
+      properties:
+        address:
+          $ref: '#/components/schemas/MonitoringAddress'
+    GetMonitoringAddressResponse:
+      type: object
+      properties:
+        address:
+          $ref: '#/components/schemas/MonitoringAddress'
     MonitoringAddress:
       type: object
       properties:
@@ -331,45 +341,6 @@ components:
       - address
       - crypto_network
       - created_at
-    AutoRewardsPublicUpdateMonitoringAddressBody:
-      type: object
-      properties:
-        name:
-          type: string
-          description: Optional display name. Useful for grouping or reporting.
-    CreateMonitoringAddressResponse:
-      type: object
-      properties:
-        address:
-          $ref: '#/components/schemas/MonitoringAddress'
-    CreateMonitoringAddressRequest:
-      type: object
-      properties:
-        crypto_network:
-          $ref: '#/components/schemas/CryptoNetwork'
-        address:
-          type: string
-          description: 'On-chain address Paxos will monitor for eligible reward activity. Must be valid for the specified network and not be registered to another customer.
-
-            For `SOLANA` specify the wallet account (ie: not a derived/token account like an ATA).'
-        name:
-          type: string
-          description: Optional display name. Useful for grouping or reporting.
-    GetMonitoringAddressResponse:
-      type: object
-      properties:
-        address:
-          $ref: '#/components/schemas/MonitoringAddress'
-    ListMonitoringAddressResponse:
-      type: object
-      properties:
-        addresses:
-          type: array
-          items:
-            $ref: '#/components/schemas/MonitoringAddress'
-        next_page_cursor:
-          type: string
-          title: Value to use as `page_cursor` in subsequent request
     Problem:
       type: object
       properties:
@@ -419,7 +390,20 @@ components:
           description: 'Additional structured metadata about the error.
 
             '
-    UpdateMonitoringAddressResponse:
+    CreateMonitoringAddressRequest:
+      type: object
+      properties:
+        crypto_network:
+          $ref: '#/components/schemas/CryptoNetwork'
+        address:
+          type: string
+          description: 'On-chain address Paxos will monitor for eligible reward activity. Must be valid for the specified network and not be registered to another customer.
+
+            For `SOLANA` specify the wallet account (ie: not a derived/token account like an ATA).'
+        name:
+          type: string
+          description: Optional display name. Useful for grouping or reporting.
+    CreateMonitoringAddressResponse:
       type: object
       properties:
         address:
@@ -444,6 +428,22 @@ components:
       - ROBINHOOD
       - BNB
       description: A CryptoNetwork is a blockchain transmitting cryptocurrencies.
+    ListMonitoringAddressResponse:
+      type: object
+      properties:
+        addresses:
+          type: array
+          items:
+            $ref: '#/components/schemas/MonitoringAddress'
+        next_page_cursor:
+          type: string
+          title: Value to use as `page_cursor` in subsequent request
+    AutoRewardsPublicUpdateMonitoringAddressBody:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Optional display name. Useful for grouping or reporting.
   securitySchemes:
     OAuth2:
       type: oauth2

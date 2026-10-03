@@ -265,11 +265,6 @@ paths:
         - rewards:write_monitoring_address
 components:
   schemas:
-    UpdateAttributionAddressResponse:
-      type: object
-      properties:
-        address:
-          $ref: '#/components/schemas/AttributionAddress'
     ListAttributionAddressesResponse:
       type: object
       properties:
@@ -309,13 +304,32 @@ components:
         a source and/or destination address which will be compared against the addresses
 
         configured relative to the same ledger type.'
-    CreateAttributionAddressRequest:
+    BatchCreateAttributionAddressesRequest:
+      type: object
+      properties:
+        addresses:
+          type: array
+          items:
+            $ref: '#/components/schemas/AttributionAddress'
+    UpdateAttributionAddressResponse:
       type: object
       properties:
         address:
           $ref: '#/components/schemas/AttributionAddress'
-    DeleteAttributionAddressResponse:
+    CreateAttributionAddressResponse:
       type: object
+      properties:
+        address:
+          $ref: '#/components/schemas/AttributionAddress'
+    AttributionAddressError:
+      type: object
+      properties:
+        address:
+          $ref: '#/components/schemas/AttributionAddress'
+        error:
+          type: string
+          title: Error message
+      title: Failed address with error details
     AttributionAddress:
       type: object
       properties:
@@ -368,27 +382,13 @@ components:
           description: Output only. Expiry of the latest proof. Absent when no proof exists.
           readOnly: true
       title: All data associated with an attribution address
-    AttributionAddressError:
+    CreateAttributionAddressRequest:
       type: object
       properties:
         address:
           $ref: '#/components/schemas/AttributionAddress'
-        error:
-          type: string
-          title: Error message
-      title: Failed address with error details
-    CreateAttributionAddressResponse:
+    DeleteAttributionAddressResponse:
       type: object
-      properties:
-        address:
-          $ref: '#/components/schemas/AttributionAddress'
-    BatchCreateAttributionAddressesRequest:
-      type: object
-      properties:
-        addresses:
-          type: array
-          items:
-            $ref: '#/components/schemas/AttributionAddress'
   securitySchemes:
     OAuth2:
       type: oauth2

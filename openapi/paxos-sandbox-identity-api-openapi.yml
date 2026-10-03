@@ -129,6 +129,8 @@ paths:
         - identity:write_identity
 components:
   schemas:
+    SandboxResetKycRefreshResponse:
+      type: object
     IdentitySandboxSandboxSetIdentityStatusBody:
       type: object
       example:
@@ -149,33 +151,8 @@ components:
         additional_screening_status:
           $ref: '#/components/schemas/IdentityStatus'
       title: SandboxSetIdentityStatusRequest
-    SetDisable:
+    SandboxStartKycRefreshResponse:
       type: object
-      properties:
-        disabled:
-          type: boolean
-    SandboxResetKycRefreshRequest:
-      type: object
-      properties:
-        identity_id:
-          type: string
-          maxLength: 64
-          minLength: 6
-          pattern: ^[a-zA-Z0-9][a-zA-Z0-9-.]{4,62}[a-zA-Z0-9]$
-      title: SandboxResetKycRefreshRequest
-      required:
-      - identity_id
-    SandboxForceStartKycRefreshResponse:
-      type: object
-    IdentityStatus:
-      type: string
-      enum:
-      - PENDING
-      - ERROR
-      - APPROVED
-      - DENIED
-      - DISABLED
-      title: ''
     SandboxForceStartKycRefreshRequest:
       type: object
       properties:
@@ -194,11 +171,34 @@ components:
       required:
       - identity_id
       - expiry_days
+    SandboxResetKycRefreshRequest:
+      type: object
+      properties:
+        identity_id:
+          type: string
+          maxLength: 64
+          minLength: 6
+          pattern: ^[a-zA-Z0-9][a-zA-Z0-9-.]{4,62}[a-zA-Z0-9]$
+      title: SandboxResetKycRefreshRequest
+      required:
+      - identity_id
+    IdentityStatus:
+      type: string
+      enum:
+      - PENDING
+      - ERROR
+      - APPROVED
+      - DENIED
+      - DISABLED
+      title: ''
+    SandboxForceStartKycRefreshResponse:
+      type: object
+    SetDisable:
+      type: object
+      properties:
+        disabled:
+          type: boolean
     SandboxSetIdentityResponse:
-      type: object
-    SandboxResetKycRefreshResponse:
-      type: object
-    SandboxStartKycRefreshResponse:
       type: object
   securitySchemes:
     OAuth2:

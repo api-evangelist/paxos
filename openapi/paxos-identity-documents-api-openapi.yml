@@ -218,32 +218,6 @@ components:
           type: string
           format: date-time
           title: When the document was archived
-    DocumentUploadResponse:
-      type: object
-      properties:
-        file_id:
-          type: string
-          description: The id assigned to the file.
-        name:
-          type: string
-          description: The file name.
-        upload_url:
-          type: string
-          description: The URI where we expect the file to be uploaded into.
-    IdentityPublicDocumentUploadBody:
-      type: object
-      properties:
-        name:
-          type: string
-          description: The file name.
-        document_types:
-          type: array
-          items:
-            $ref: '#/components/schemas/DocumentType'
-          description: A list of document types contained within the uploaded file.
-      title: DocumentUploadRequest
-      required:
-      - name
     DocumentType:
       type: string
       enum:
@@ -271,19 +245,20 @@ components:
       - LEGAL_DOMICILE_OF_BENEFICIAL_OWNERS
       - GOVERNING_BODY_MEMBER_NAMES
       - INDEPENDENT_AUDIT
-    ListIdentityDocumentsResponse:
+    IdentityPublicDocumentUploadBody:
       type: object
       properties:
-        documents:
-          type: array
-          items:
-            $ref: '#/components/schemas/DocumentDescription'
-          title: A list of documents
-        pending_documents:
+        name:
+          type: string
+          description: The file name.
+        document_types:
           type: array
           items:
             $ref: '#/components/schemas/DocumentType'
-          title: The document types that are mandatory for the identity but are missing
+          description: A list of document types contained within the uploaded file.
+      title: DocumentUploadRequest
+      required:
+      - name
     Problem:
       type: object
       properties:
@@ -333,6 +308,31 @@ components:
           description: 'Additional structured metadata about the error.
 
             '
+    DocumentUploadResponse:
+      type: object
+      properties:
+        file_id:
+          type: string
+          description: The id assigned to the file.
+        name:
+          type: string
+          description: The file name.
+        upload_url:
+          type: string
+          description: The URI where we expect the file to be uploaded into.
+    ListIdentityDocumentsResponse:
+      type: object
+      properties:
+        documents:
+          type: array
+          items:
+            $ref: '#/components/schemas/DocumentDescription'
+          title: A list of documents
+        pending_documents:
+          type: array
+          items:
+            $ref: '#/components/schemas/DocumentType'
+          title: The document types that are mandatory for the identity but are missing
   securitySchemes:
     OAuth2:
       type: oauth2
