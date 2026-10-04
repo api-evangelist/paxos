@@ -265,71 +265,6 @@ paths:
         - rewards:write_monitoring_address
 components:
   schemas:
-    ListAttributionAddressesResponse:
-      type: object
-      properties:
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/AttributionAddress'
-          description: Monitored addresses in this page of results.
-        next_page_cursor:
-          type: string
-          description: Token for the next page of results; empty if no more results.
-    BatchCreateAttributionAddressesResponse:
-      type: object
-      properties:
-        successful_addresses:
-          type: array
-          items:
-            $ref: '#/components/schemas/AttributionAddress'
-        failed_addresses:
-          type: array
-          items:
-            $ref: '#/components/schemas/AttributionAddressError'
-    AttributionLedgerType:
-      type: string
-      enum:
-      - PAXOS
-      - ETHEREUM
-      - SOLANA
-      - INK
-      - XLAYER
-      - ARBITRUM_ONE
-      - ROBINHOOD
-      description: 'An AttributionLedgerType is a data source which produces events which cause monitored
-
-        to occur. Examples include blockchains and the Paxos platform. Each event includes
-
-        a source and/or destination address which will be compared against the addresses
-
-        configured relative to the same ledger type.'
-    BatchCreateAttributionAddressesRequest:
-      type: object
-      properties:
-        addresses:
-          type: array
-          items:
-            $ref: '#/components/schemas/AttributionAddress'
-    UpdateAttributionAddressResponse:
-      type: object
-      properties:
-        address:
-          $ref: '#/components/schemas/AttributionAddress'
-    CreateAttributionAddressResponse:
-      type: object
-      properties:
-        address:
-          $ref: '#/components/schemas/AttributionAddress'
-    AttributionAddressError:
-      type: object
-      properties:
-        address:
-          $ref: '#/components/schemas/AttributionAddress'
-        error:
-          type: string
-          title: Error message
-      title: Failed address with error details
     AttributionAddress:
       type: object
       properties:
@@ -382,7 +317,72 @@ components:
           description: Output only. Expiry of the latest proof. Absent when no proof exists.
           readOnly: true
       title: All data associated with an attribution address
+    BatchCreateAttributionAddressesRequest:
+      type: object
+      properties:
+        addresses:
+          type: array
+          items:
+            $ref: '#/components/schemas/AttributionAddress'
+    ListAttributionAddressesResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/AttributionAddress'
+          description: Monitored addresses in this page of results.
+        next_page_cursor:
+          type: string
+          description: Token for the next page of results; empty if no more results.
+    UpdateAttributionAddressResponse:
+      type: object
+      properties:
+        address:
+          $ref: '#/components/schemas/AttributionAddress'
+    AttributionLedgerType:
+      type: string
+      enum:
+      - PAXOS
+      - ETHEREUM
+      - SOLANA
+      - INK
+      - XLAYER
+      - ARBITRUM_ONE
+      - ROBINHOOD
+      description: 'An AttributionLedgerType is a data source which produces events which cause monitored
+
+        to occur. Examples include blockchains and the Paxos platform. Each event includes
+
+        a source and/or destination address which will be compared against the addresses
+
+        configured relative to the same ledger type.'
     CreateAttributionAddressRequest:
+      type: object
+      properties:
+        address:
+          $ref: '#/components/schemas/AttributionAddress'
+    AttributionAddressError:
+      type: object
+      properties:
+        address:
+          $ref: '#/components/schemas/AttributionAddress'
+        error:
+          type: string
+          title: Error message
+      title: Failed address with error details
+    BatchCreateAttributionAddressesResponse:
+      type: object
+      properties:
+        successful_addresses:
+          type: array
+          items:
+            $ref: '#/components/schemas/AttributionAddress'
+        failed_addresses:
+          type: array
+          items:
+            $ref: '#/components/schemas/AttributionAddressError'
+    CreateAttributionAddressResponse:
       type: object
       properties:
         address:

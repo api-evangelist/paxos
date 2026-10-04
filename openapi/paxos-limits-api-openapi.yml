@@ -61,6 +61,34 @@ paths:
         - transfer:read_transfer_limit
 components:
   schemas:
+    TransferLimit:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The ID of the limit. Single-transaction limits will not have an id, but only a rule id.
+        rule_id:
+          type: string
+          description: The limit rule this limit applies to.
+        transfer_types:
+          type: array
+          items:
+            $ref: '#/components/schemas/TransferType'
+          description: One or more transfer types that the limit applies to, ordered alphabetically.
+        period_seconds:
+          type: string
+          description: The number of seconds that the limit is measured over. Single-transaction limits have period 0.
+        limit:
+          type: string
+          format: decimal
+          description: The limit.
+        remaining:
+          type: string
+          format: decimal
+          description: The limit, minus any transactions that have been done in the period. Single-transaction limits always have remaining set to the limit.
+        limit_asset:
+          type: string
+          description: The asset that limit and remaining are given in, e.g. "USD", "BTC", "ETH".
     TransferType:
       type: string
       enum:
@@ -93,34 +121,6 @@ components:
             $ref: '#/components/schemas/TransferLimit'
         next_page_cursor:
           type: string
-    TransferLimit:
-      type: object
-      properties:
-        id:
-          type: string
-          description: The ID of the limit. Single-transaction limits will not have an id, but only a rule id.
-        rule_id:
-          type: string
-          description: The limit rule this limit applies to.
-        transfer_types:
-          type: array
-          items:
-            $ref: '#/components/schemas/TransferType'
-          description: One or more transfer types that the limit applies to, ordered alphabetically.
-        period_seconds:
-          type: string
-          description: The number of seconds that the limit is measured over. Single-transaction limits have period 0.
-        limit:
-          type: string
-          format: decimal
-          description: The limit.
-        remaining:
-          type: string
-          format: decimal
-          description: The limit, minus any transactions that have been done in the period. Single-transaction limits always have remaining set to the limit.
-        limit_asset:
-          type: string
-          description: The asset that limit and remaining are given in, e.g. "USD", "BTC", "ETH".
   securitySchemes:
     OAuth2:
       type: oauth2

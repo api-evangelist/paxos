@@ -141,12 +141,6 @@ paths:
         - statements:read_payment
 components:
   schemas:
-    PaymentStatus:
-      type: string
-      enum:
-      - PAYMENT_STATUS_PENDING
-      - PAYMENT_STATUS_COMPLETED
-      - PAYMENT_STATUS_FAILED
     Product:
       type: string
       enum:
@@ -205,6 +199,12 @@ components:
           type: string
           format: date-time
           description: Lifecycle field for tracking transfer status.
+    PaymentStatus:
+      type: string
+      enum:
+      - PAYMENT_STATUS_PENDING
+      - PAYMENT_STATUS_COMPLETED
+      - PAYMENT_STATUS_FAILED
     ListPaymentsResponse:
       type: object
       properties:

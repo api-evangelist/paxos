@@ -129,7 +129,7 @@ paths:
         - identity:write_identity
 components:
   schemas:
-    SandboxResetKycRefreshResponse:
+    SandboxStartKycRefreshResponse:
       type: object
     IdentitySandboxSandboxSetIdentityStatusBody:
       type: object
@@ -151,8 +151,11 @@ components:
         additional_screening_status:
           $ref: '#/components/schemas/IdentityStatus'
       title: SandboxSetIdentityStatusRequest
-    SandboxStartKycRefreshResponse:
+    SetDisable:
       type: object
+      properties:
+        disabled:
+          type: boolean
     SandboxForceStartKycRefreshRequest:
       type: object
       properties:
@@ -171,6 +174,15 @@ components:
       required:
       - identity_id
       - expiry_days
+    IdentityStatus:
+      type: string
+      enum:
+      - PENDING
+      - ERROR
+      - APPROVED
+      - DENIED
+      - DISABLED
+      title: ''
     SandboxResetKycRefreshRequest:
       type: object
       properties:
@@ -182,23 +194,11 @@ components:
       title: SandboxResetKycRefreshRequest
       required:
       - identity_id
-    IdentityStatus:
-      type: string
-      enum:
-      - PENDING
-      - ERROR
-      - APPROVED
-      - DENIED
-      - DISABLED
-      title: ''
-    SandboxForceStartKycRefreshResponse:
-      type: object
-    SetDisable:
-      type: object
-      properties:
-        disabled:
-          type: boolean
     SandboxSetIdentityResponse:
+      type: object
+    SandboxResetKycRefreshResponse:
+      type: object
+    SandboxForceStartKycRefreshResponse:
       type: object
   securitySchemes:
     OAuth2:

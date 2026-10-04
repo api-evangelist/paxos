@@ -313,34 +313,6 @@ components:
       properties:
         address:
           $ref: '#/components/schemas/MonitoringAddress'
-    GetMonitoringAddressResponse:
-      type: object
-      properties:
-        address:
-          $ref: '#/components/schemas/MonitoringAddress'
-    MonitoringAddress:
-      type: object
-      properties:
-        address:
-          type: string
-          description: On-chain address Paxos will monitor for eligible reward activity.
-        crypto_network:
-          $ref: '#/components/schemas/CryptoNetwork'
-        name:
-          type: string
-          description: Optional display name. Useful for grouping or reporting.
-        created_at:
-          type: string
-          format: date-time
-          description: When the address was registered.
-        id:
-          type: string
-          description: UUID direct reference to the created address (to be used for updates).
-      required:
-      - id
-      - address
-      - crypto_network
-      - created_at
     Problem:
       type: object
       properties:
@@ -390,6 +362,16 @@ components:
           description: 'Additional structured metadata about the error.
 
             '
+    ListMonitoringAddressResponse:
+      type: object
+      properties:
+        addresses:
+          type: array
+          items:
+            $ref: '#/components/schemas/MonitoringAddress'
+        next_page_cursor:
+          type: string
+          title: Value to use as `page_cursor` in subsequent request
     CreateMonitoringAddressRequest:
       type: object
       properties:
@@ -403,11 +385,6 @@ components:
         name:
           type: string
           description: Optional display name. Useful for grouping or reporting.
-    CreateMonitoringAddressResponse:
-      type: object
-      properties:
-        address:
-          $ref: '#/components/schemas/MonitoringAddress'
     CryptoNetwork:
       type: string
       enum:
@@ -428,22 +405,45 @@ components:
       - ROBINHOOD
       - BNB
       description: A CryptoNetwork is a blockchain transmitting cryptocurrencies.
-    ListMonitoringAddressResponse:
-      type: object
-      properties:
-        addresses:
-          type: array
-          items:
-            $ref: '#/components/schemas/MonitoringAddress'
-        next_page_cursor:
-          type: string
-          title: Value to use as `page_cursor` in subsequent request
     AutoRewardsPublicUpdateMonitoringAddressBody:
       type: object
       properties:
         name:
           type: string
           description: Optional display name. Useful for grouping or reporting.
+    MonitoringAddress:
+      type: object
+      properties:
+        address:
+          type: string
+          description: On-chain address Paxos will monitor for eligible reward activity.
+        crypto_network:
+          $ref: '#/components/schemas/CryptoNetwork'
+        name:
+          type: string
+          description: Optional display name. Useful for grouping or reporting.
+        created_at:
+          type: string
+          format: date-time
+          description: When the address was registered.
+        id:
+          type: string
+          description: UUID direct reference to the created address (to be used for updates).
+      required:
+      - id
+      - address
+      - crypto_network
+      - created_at
+    GetMonitoringAddressResponse:
+      type: object
+      properties:
+        address:
+          $ref: '#/components/schemas/MonitoringAddress'
+    CreateMonitoringAddressResponse:
+      type: object
+      properties:
+        address:
+          $ref: '#/components/schemas/MonitoringAddress'
   securitySchemes:
     OAuth2:
       type: oauth2

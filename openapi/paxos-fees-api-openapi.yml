@@ -47,38 +47,6 @@ paths:
         - fee:write_crypto_withdrawal_fee
 components:
   schemas:
-    CreateCryptoWithdrawalFeeRequest:
-      type: object
-      example:
-        asset: ETH
-        amount: '0.00005'
-        destination_address: '0xF0Aa84466e353E5390be37FE2934301c07c19a55'
-        crypto_network: ETHEREUM
-      properties:
-        asset:
-          type: string
-          description: The currency to withdraw.
-        destination_address:
-          type: string
-          description: The destination address.
-        crypto_network:
-          $ref: '#/components/schemas/CryptoNetwork'
-        amount:
-          type: string
-          description: 'The amount to withdraw. Must be greater than `0`.
-
-            Specify exactly one of `amount` or `total`, otherwise an error is returned.'
-          pattern: ^[0-9]*\.?[0-9]+$
-        total:
-          type: string
-          description: 'Total amount to withdraw, including fees. Must be greater than `0`.
-
-            Specify exactly one of `total ` or `amount`, otherwise an error is returned.'
-          pattern: ^[0-9]*\.?[0-9]+$
-      required:
-      - asset
-      - destination_address
-      - crypto_network
     CryptoNetwork:
       type: string
       enum:
@@ -146,6 +114,38 @@ components:
       - fee
       - asset
       - expires_at
+      - destination_address
+      - crypto_network
+    CreateCryptoWithdrawalFeeRequest:
+      type: object
+      example:
+        asset: ETH
+        amount: '0.00005'
+        destination_address: '0xF0Aa84466e353E5390be37FE2934301c07c19a55'
+        crypto_network: ETHEREUM
+      properties:
+        asset:
+          type: string
+          description: The currency to withdraw.
+        destination_address:
+          type: string
+          description: The destination address.
+        crypto_network:
+          $ref: '#/components/schemas/CryptoNetwork'
+        amount:
+          type: string
+          description: 'The amount to withdraw. Must be greater than `0`.
+
+            Specify exactly one of `amount` or `total`, otherwise an error is returned.'
+          pattern: ^[0-9]*\.?[0-9]+$
+        total:
+          type: string
+          description: 'Total amount to withdraw, including fees. Must be greater than `0`.
+
+            Specify exactly one of `total ` or `amount`, otherwise an error is returned.'
+          pattern: ^[0-9]*\.?[0-9]+$
+      required:
+      - asset
       - destination_address
       - crypto_network
   securitySchemes:

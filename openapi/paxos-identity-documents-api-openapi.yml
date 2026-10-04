@@ -196,55 +196,6 @@ paths:
         - identity:write_identity
 components:
   schemas:
-    DocumentDescription:
-      type: object
-      properties:
-        file_id:
-          type: string
-          title: The document id
-        name:
-          type: string
-          title: The file name
-        document_types:
-          type: array
-          items:
-            $ref: '#/components/schemas/DocumentType'
-          title: The document types contained within the document
-        created_at:
-          type: string
-          format: date-time
-          title: When the document was created
-        archived_at:
-          type: string
-          format: date-time
-          title: When the document was archived
-    DocumentType:
-      type: string
-      enum:
-      - OTHER_DOCUMENTS
-      - APPLICATION
-      - ORGANIZATIONAL_DOCUMENTS
-      - CERTIFICATE_OF_GOOD_STANDING
-      - TAX_IDENTIFICATION
-      - IDENTITY_VERIFICATION
-      - PROOF_OF_RESIDENCY
-      - PROOF_OF_FUNDS
-      - SAMPLE_INVOICE
-      - OPERATING_AGREEMENT
-      - TRUST_DOCUMENTS
-      - MONEY_SERVICE_DOCUMENTS
-      - INVESTMENT_DOCUMENTS
-      - CURP
-      - AML_DOCUMENTS
-      - FUND_STRUCTURE_CHART
-      - FUND_MANAGER_REGISTRATION
-      - MEMORANDUM_OF_ASSOCIATION
-      - ORGANIZATIONAL_CHART
-      - FOUNDATION_BY_LAWS
-      - APPOINTMENT_OF_GUARDIAN_EVIDENCE
-      - LEGAL_DOMICILE_OF_BENEFICIAL_OWNERS
-      - GOVERNING_BODY_MEMBER_NAMES
-      - INDEPENDENT_AUDIT
     IdentityPublicDocumentUploadBody:
       type: object
       properties:
@@ -308,18 +259,33 @@ components:
           description: 'Additional structured metadata about the error.
 
             '
-    DocumentUploadResponse:
-      type: object
-      properties:
-        file_id:
-          type: string
-          description: The id assigned to the file.
-        name:
-          type: string
-          description: The file name.
-        upload_url:
-          type: string
-          description: The URI where we expect the file to be uploaded into.
+    DocumentType:
+      type: string
+      enum:
+      - OTHER_DOCUMENTS
+      - APPLICATION
+      - ORGANIZATIONAL_DOCUMENTS
+      - CERTIFICATE_OF_GOOD_STANDING
+      - TAX_IDENTIFICATION
+      - IDENTITY_VERIFICATION
+      - PROOF_OF_RESIDENCY
+      - PROOF_OF_FUNDS
+      - SAMPLE_INVOICE
+      - OPERATING_AGREEMENT
+      - TRUST_DOCUMENTS
+      - MONEY_SERVICE_DOCUMENTS
+      - INVESTMENT_DOCUMENTS
+      - CURP
+      - AML_DOCUMENTS
+      - FUND_STRUCTURE_CHART
+      - FUND_MANAGER_REGISTRATION
+      - MEMORANDUM_OF_ASSOCIATION
+      - ORGANIZATIONAL_CHART
+      - FOUNDATION_BY_LAWS
+      - APPOINTMENT_OF_GUARDIAN_EVIDENCE
+      - LEGAL_DOMICILE_OF_BENEFICIAL_OWNERS
+      - GOVERNING_BODY_MEMBER_NAMES
+      - INDEPENDENT_AUDIT
     ListIdentityDocumentsResponse:
       type: object
       properties:
@@ -333,6 +299,40 @@ components:
           items:
             $ref: '#/components/schemas/DocumentType'
           title: The document types that are mandatory for the identity but are missing
+    DocumentDescription:
+      type: object
+      properties:
+        file_id:
+          type: string
+          title: The document id
+        name:
+          type: string
+          title: The file name
+        document_types:
+          type: array
+          items:
+            $ref: '#/components/schemas/DocumentType'
+          title: The document types contained within the document
+        created_at:
+          type: string
+          format: date-time
+          title: When the document was created
+        archived_at:
+          type: string
+          format: date-time
+          title: When the document was archived
+    DocumentUploadResponse:
+      type: object
+      properties:
+        file_id:
+          type: string
+          description: The id assigned to the file.
+        name:
+          type: string
+          description: The file name.
+        upload_url:
+          type: string
+          description: The URI where we expect the file to be uploaded into.
   securitySchemes:
     OAuth2:
       type: oauth2

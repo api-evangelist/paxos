@@ -497,6 +497,16 @@ components:
           description: 'Additional structured metadata about the error.
 
             '
+    ListStablecoinConversionsResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/StablecoinConversion'
+        next_page_cursor:
+          type: string
+          description: Cursor token required for fetching the next page.
     StablecoinConversion:
       type: object
       properties:
@@ -579,16 +589,6 @@ components:
         recipient_profile_id:
           type: string
           description: For directed settlement, the receiving side `profile_id`.
-    ListStablecoinConversionsResponse:
-      type: object
-      properties:
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/StablecoinConversion'
-        next_page_cursor:
-          type: string
-          description: Cursor token required for fetching the next page.
     CreateStablecoinConversionRequest:
       type: object
       properties:

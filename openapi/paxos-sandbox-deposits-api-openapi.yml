@@ -53,31 +53,6 @@ paths:
         - funding:read_profile
 components:
   schemas:
-    FundingSandboxCreateSandboxDepositBody:
-      type: object
-      properties:
-        asset:
-          type: string
-          description: The kind of asset to deposit.
-        amount:
-          type: string
-          description: The amount to deposit.
-          pattern: ^[0-9]*\.?[0-9]+$
-        crypto_network:
-          $ref: '#/components/schemas/CryptoNetwork'
-        crypto_address:
-          type: string
-          title: The crypto address on which to deposit the asset. If not set, then a random address is used
-      title: CreateSandboxDepositRequest
-      required:
-      - asset
-      - amount
-    CreateSandboxDepositResponse:
-      type: object
-      properties:
-        activity_id:
-          type: string
-          description: The UUID of the customer activity created for the deposit.
     CryptoNetwork:
       type: string
       enum:
@@ -98,6 +73,31 @@ components:
       - ROBINHOOD
       - BNB
       description: A CryptoNetwork is a blockchain transmitting cryptocurrencies.
+    CreateSandboxDepositResponse:
+      type: object
+      properties:
+        activity_id:
+          type: string
+          description: The UUID of the customer activity created for the deposit.
+    FundingSandboxCreateSandboxDepositBody:
+      type: object
+      properties:
+        asset:
+          type: string
+          description: The kind of asset to deposit.
+        amount:
+          type: string
+          description: The amount to deposit.
+          pattern: ^[0-9]*\.?[0-9]+$
+        crypto_network:
+          $ref: '#/components/schemas/CryptoNetwork'
+        crypto_address:
+          type: string
+          title: The crypto address on which to deposit the asset. If not set, then a random address is used
+      title: CreateSandboxDepositRequest
+      required:
+      - asset
+      - amount
   securitySchemes:
     OAuth2:
       type: oauth2

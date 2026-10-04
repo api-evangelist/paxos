@@ -229,48 +229,6 @@ paths:
         - address_ownership:read_verification
 components:
   schemas:
-    publicSubmitSignatureRequest:
-      type: object
-      properties:
-        id:
-          type: string
-        signature:
-          type: string
-    publicManualVerification:
-      type: object
-      properties:
-        verified_by:
-          type: string
-          description: verified_by is the email of the admin who submitted the proof.
-        reason:
-          type: string
-      description: 'ManualVerification is populated on admin endpoints only when
-
-        verification_method is MANUAL. Not returned on public endpoints.'
-    publicVerificationStatus:
-      type: string
-      enum:
-      - PENDING
-      - APPROVED
-      - EXPIRED
-    publicListVerificationsResponse:
-      type: object
-      properties:
-        next_page_cursor:
-          type: string
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/publicVerification'
-    publicSignatureVerification:
-      type: object
-      properties:
-        message:
-          type: string
-        nonce:
-          type: string
-        signature:
-          type: string
     publicVerification:
       type: object
       properties:
@@ -308,17 +266,38 @@ components:
       - SIGNATURE
       - SMALL_DEPOSIT
       - MANUAL
-    publicSmallDepositVerification:
+    publicSubmitSignatureRequest:
       type: object
       properties:
-        amount:
+        id:
           type: string
-          format: decimal
-        deposit_address:
+        signature:
           type: string
-        transaction_hash:
+    publicManualVerification:
+      type: object
+      properties:
+        verified_by:
           type: string
-        asset:
+          description: verified_by is the email of the admin who submitted the proof.
+        reason:
+          type: string
+      description: 'ManualVerification is populated on admin endpoints only when
+
+        verification_method is MANUAL. Not returned on public endpoints.'
+    publicVerificationStatus:
+      type: string
+      enum:
+      - PENDING
+      - APPROVED
+      - EXPIRED
+    publicSignatureVerification:
+      type: object
+      properties:
+        message:
+          type: string
+        nonce:
+          type: string
+        signature:
           type: string
     publicCreateVerificationRequest:
       type: object
@@ -331,6 +310,27 @@ components:
           $ref: '#/components/schemas/publicVerificationMethod'
         ref_id:
           type: string
+    publicSmallDepositVerification:
+      type: object
+      properties:
+        amount:
+          type: string
+          format: decimal
+        deposit_address:
+          type: string
+        transaction_hash:
+          type: string
+        asset:
+          type: string
+    publicListVerificationsResponse:
+      type: object
+      properties:
+        next_page_cursor:
+          type: string
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/publicVerification'
   securitySchemes:
     OAuth2:
       type: oauth2

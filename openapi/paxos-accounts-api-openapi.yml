@@ -498,6 +498,44 @@ paths:
       x-summary-source: derived
 components:
   schemas:
+    CreateAccountRequest:
+      type: object
+      properties:
+        account:
+          $ref: '#/components/schemas/Account'
+        create_profile:
+          type: boolean
+          description: 'Create a new profile for this account.
+
+            Set to `true` to track user balances at the Profile level for this account.
+
+            See also [Profiles](#tag/Profiles).'
+      required:
+      - account
+      example:
+        account:
+          identity_id: 82c338f4-3cb7-4d9b-be2a-4b077c82ee3a
+          ref_id: fec36070-4c23-48ac-9ee1-df338b8233fc
+          description: Individual account for John Doe
+          metadata:
+            custom_field: custom_value
+    AccountAccountType:
+      type: string
+      enum:
+      - BROKERAGE
+      - TRADITIONAL_IRA
+      - ROTH_IRA
+      - SEP_IRA
+      - FINANCIAL_ADVISOR
+    IdentityStatus:
+      type: string
+      enum:
+      - PENDING
+      - ERROR
+      - APPROVED
+      - DENIED
+      - DISABLED
+      title: ''
     ListAccountsResponse:
       type: object
       properties:
@@ -509,6 +547,12 @@ components:
           items:
             $ref: '#/components/schemas/Account'
           description: The result list of accounts.
+    AccountMemberAccountRoleType:
+      type: string
+      enum:
+      - BENEFICIAL_OWNER
+      - AUTHORIZED_USER
+      - FINANCIAL_ADVISOR
     Account:
       type: object
       properties:
@@ -559,50 +603,16 @@ components:
             The field is omitted when the account has no associated [Profile](#tag/Profiles).'
         type:
           $ref: '#/components/schemas/AccountAccountType'
-    CreateAccountRequest:
+    UpdateAccountRequest:
       type: object
       properties:
         account:
           $ref: '#/components/schemas/Account'
-        create_profile:
+        set_user_disabled:
           type: boolean
-          description: 'Create a new profile for this account.
-
-            Set to `true` to track user balances at the Profile level for this account.
-
-            See also [Profiles](#tag/Profiles).'
+          description: true if the account is required to be disabled by the API user.
       required:
       - account
-      example:
-        account:
-          identity_id: 82c338f4-3cb7-4d9b-be2a-4b077c82ee3a
-          ref_id: fec36070-4c23-48ac-9ee1-df338b8233fc
-          description: Individual account for John Doe
-          metadata:
-            custom_field: custom_value
-    AccountMemberAccountRoleType:
-      type: string
-      enum:
-      - BENEFICIAL_OWNER
-      - AUTHORIZED_USER
-      - FINANCIAL_ADVISOR
-    AccountAccountType:
-      type: string
-      enum:
-      - BROKERAGE
-      - TRADITIONAL_IRA
-      - ROTH_IRA
-      - SEP_IRA
-      - FINANCIAL_ADVISOR
-    IdentityStatus:
-      type: string
-      enum:
-      - PENDING
-      - ERROR
-      - APPROVED
-      - DENIED
-      - DISABLED
-      title: ''
     AccountMember:
       type: object
       properties:
@@ -619,16 +629,6 @@ components:
           description: 'Account member ID. Note: This field is auto-generated. Specifying an ID when creating an account member is a client error.'
       required:
       - identity_id
-    UpdateAccountRequest:
-      type: object
-      properties:
-        account:
-          $ref: '#/components/schemas/Account'
-        set_user_disabled:
-          type: boolean
-          description: true if the account is required to be disabled by the API user.
-      required:
-      - account
   securitySchemes:
     OAuth2:
       type: oauth2

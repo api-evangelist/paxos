@@ -228,102 +228,12 @@ paths:
         - exchange:read_order
 components:
   schemas:
-    ListExecutionsResponse:
-      type: object
-      properties:
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/Execution'
-        next_page_cursor:
-          type: string
-          description: Cursor token required for fetching the next page.
     OrderSide:
       type: string
       enum:
       - BUY
       - SELL
       description: Trade side.
-    OrderType:
-      type: string
-      enum:
-      - LIMIT
-      - MARKET
-      - POST_ONLY_LIMIT
-      - STOP_MARKET
-      - STOP_LIMIT
-      description: Trade type.
-    TimeInForce:
-      type: string
-      enum:
-      - GTC
-      - FOK
-      - IOC
-      - GTT
-      description: 'How long an order will remain active before it expires.
-
-        - Immediate-or-Cancel (IOC): Cancel if not executed immediately, partial fills allowed.
-
-        - Good-Til-Canceled (GTC): Order can be canceled at any point until executed.
-
-        - Good-Til-Time (GTT): Expires if not executed by a specified time. GTT must be greater than 10 seconds after the order is placed, otherwise the order will be rejected.
-
-        - Fill-or-Kill (FOK): Fill entire order only or cancel entire order, does not allow for partial filling.
-
-
-        **Time in Force validity for Order Types**
-
-
-        | Order type      | Immediate or Cancel (IOC) | Good Til Canceled (GTC) | Good Til Time (GTT) | Fill or Kill (FOK) |
-
-        | --------------- | ------------------------- | ----------------------- | ------------------- | ------------------ |
-
-        | Market Order    | Default                   |  -                      |  -                  |  -                 |
-
-        | Limit Order     | Valid                     | Default                 | Valid               | Valid              |
-
-        | Post Only Limit | Valid                     | Default                 | Valid               | Valid              |
-
-        | Stop Market     |  -                        | Default                 | Valid               |  -                 |
-
-        | Stop Limit      |  -                        | Default                 | Valid               |  -                 |'
-    Market:
-      type: string
-      enum:
-      - ETHEUR
-      - ETHSGD
-      - ETHUSD
-      - BTCEUR
-      - BTCSGD
-      - BTCUSD
-      - PAXGUSD
-      - BCHUSD
-      - LTCUSD
-      - USDPUSD
-      - LINKUSD
-      - AAVEUSD
-      - UNIUSD
-      - PEPEUSD
-      - TRUMPUSD
-      - SHIBUSD
-      - ARBUSD
-      - BONKUSD
-      - ENAUSD
-      - MNTUSD
-      - ONDOUSD
-      - PENGUUSD
-      - QNTUSD
-      - RENDERUSD
-      - SKYUSD
-      - WIFUSD
-      - WLDUSD
-      - DOGEUSD
-      - AVAXUSD
-      - SUIUSD
-      - POLUSD
-      - XLMUSD
-      - BNBUSD
-      title: ''
     OrderStatus:
       type: string
       enum:
@@ -346,6 +256,16 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Order'
+        next_page_cursor:
+          type: string
+          description: Cursor token required for fetching the next page.
+    ListExecutionsResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Execution'
         next_page_cursor:
           type: string
           description: Cursor token required for fetching the next page.
@@ -396,6 +316,86 @@ components:
           type: string
           format: decimal
           description: The total asset traded (asset amount multiplied by price paid).
+    Market:
+      type: string
+      enum:
+      - ETHEUR
+      - ETHSGD
+      - ETHUSD
+      - BTCEUR
+      - BTCSGD
+      - BTCUSD
+      - PAXGUSD
+      - BCHUSD
+      - LTCUSD
+      - USDPUSD
+      - LINKUSD
+      - AAVEUSD
+      - UNIUSD
+      - PEPEUSD
+      - TRUMPUSD
+      - SHIBUSD
+      - ARBUSD
+      - BONKUSD
+      - ENAUSD
+      - MNTUSD
+      - ONDOUSD
+      - PENGUUSD
+      - QNTUSD
+      - RENDERUSD
+      - SKYUSD
+      - WIFUSD
+      - WLDUSD
+      - DOGEUSD
+      - AVAXUSD
+      - SUIUSD
+      - POLUSD
+      - XLMUSD
+      - BNBUSD
+      title: ''
+    TimeInForce:
+      type: string
+      enum:
+      - GTC
+      - FOK
+      - IOC
+      - GTT
+      description: 'How long an order will remain active before it expires.
+
+        - Immediate-or-Cancel (IOC): Cancel if not executed immediately, partial fills allowed.
+
+        - Good-Til-Canceled (GTC): Order can be canceled at any point until executed.
+
+        - Good-Til-Time (GTT): Expires if not executed by a specified time. GTT must be greater than 10 seconds after the order is placed, otherwise the order will be rejected.
+
+        - Fill-or-Kill (FOK): Fill entire order only or cancel entire order, does not allow for partial filling.
+
+
+        **Time in Force validity for Order Types**
+
+
+        | Order type      | Immediate or Cancel (IOC) | Good Til Canceled (GTC) | Good Til Time (GTT) | Fill or Kill (FOK) |
+
+        | --------------- | ------------------------- | ----------------------- | ------------------- | ------------------ |
+
+        | Market Order    | Default                   |  -                      |  -                  |  -                 |
+
+        | Limit Order     | Valid                     | Default                 | Valid               | Valid              |
+
+        | Post Only Limit | Valid                     | Default                 | Valid               | Valid              |
+
+        | Stop Market     |  -                        | Default                 | Valid               |  -                 |
+
+        | Stop Limit      |  -                        | Default                 | Valid               |  -                 |'
+    OrderType:
+      type: string
+      enum:
+      - LIMIT
+      - MARKET
+      - POST_ONLY_LIMIT
+      - STOP_MARKET
+      - STOP_LIMIT
+      description: Trade type.
     Order:
       type: object
       properties:

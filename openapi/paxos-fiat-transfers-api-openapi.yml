@@ -996,180 +996,31 @@ paths:
         - transfer:write_fiat_withdrawal
 components:
   schemas:
-    FiatDepositInstructions:
+    UpdateWireUpdateRoutingDetails:
       type: object
       properties:
-        id:
-          type: string
-          description: 'The Fiat Deposit Instructions ID (`id`) is provided in the response of the [Create Fiat Deposit Instructions](#operation/CreateFiatDepositInstructions).
-
-            Use this ID to retrieve the instructions using [Get Fiat Deposit Instructions](#operation/GetFiatDepositInstructions) & [List Fiat Deposit Instructions](#operation/ListFiatDepositInstructions).'
-        profile_id:
-          type: string
-          description: The Profile (`profile_id`) to deposit to.
-        identity_id:
-          type: string
-          description: The Identity (`identity_id`) of the user making the deposit.
-        account_id:
-          type: string
-          description: 'The Account (`account_id`) associated with the Identity of the user making the deposit.
-
-            Required only for customers with [3rd-Party integrations](https://docs.paxos.com/crypto-brokerage/ledger-type#fiat-and-crypto-subledger) making deposits on behalf of their end users.'
-        ref_id:
-          type: string
-          description: The optional client-specified ID (for idempotence).
-        status:
-          $ref: '#/components/schemas/FiatDepositInstructionsStatus'
-        memo_id:
-          type: string
-          description: 'The string, unique to the request.
-
-            To deposit funds into an account, the memo ID must be provided when initiating a `WIRE` transfer to Paxos.
-
-            This is provided after creating [Fiat Deposit Instructions](#/operation/CreateFiatDepositInstructions)
-
-            The `memo_id` can also be found from either [Get Fiat Deposit Instructions](#operation/GetFiatDepositInstructions) or [List Fiat Deposit Instructions](#operation/ListFiatDepositInstructions) for the corresponding ID (Fiat Deposit Instructions ID).'
-        fiat_network_instructions:
-          $ref: '#/components/schemas/FiatNetworkInstructions'
-        fiat_account_owner:
-          $ref: '#/components/schemas/FiatAccountOwner'
-        metadata:
-          type: object
-          additionalProperties:
-            type: string
-          description: Optional client-specified metadata.
-        created_at:
-          type: string
-          format: date-time
-          description: The time at which these instructions were created.
-      required:
-      - id
-      - profile_id
-      - identity_id
-      - status
-      - memo_id
-      - fiat_network_instructions
-      - created_at
-    MailingAddress:
-      type: object
-      properties:
-        country:
-          type: string
-          maxLength: 35
-          pattern: ^[0-9A-Za-z /?:().,&'+-]+$
-        address1:
-          type: string
-          maxLength: 35
-          pattern: ^[0-9A-Za-z /?:().,&'+-]+$
-        address2:
-          type: string
-          maxLength: 35
-          pattern: ^[0-9A-Za-z /?:().,&'+-]+$
-        city:
-          type: string
-          maxLength: 35
-          pattern: ^[0-9A-Za-z /?:().,&'+-]+$
-        province:
-          type: string
-          maxLength: 35
-          pattern: ^[0-9A-Za-z /?:().,&'+-]+$
-        zip_code:
-          type: string
-          maxLength: 35
-          pattern: ^[0-9A-Za-z /?:().,&'+-]+$
-      description: A mailing address.
-      required:
-      - country
-    StaleFeeQuote:
-      type: object
-      properties:
-        message:
-          type: string
-          title: Human-readable explanation
-      description: StaleFeeQuote represents a transfer cancelled because on-chain state changed after the fee was quoted.
-    TransferPublicUpdateFiatAccountBody:
-      type: object
-      properties:
-        fiat_account_owner:
-          $ref: '#/components/schemas/FiatAccountOwner'
-        fiat_network_instructions:
-          $ref: '#/components/schemas/UpdateFiatAccountRequestUpdateFiatNetworkInstructions'
-        metadata:
-          type: object
-          additionalProperties:
-            type: string
-          description: 'Optional client-specified metadata.
-
-            Up to 6 key/value pairs may be provided.
-
-            Each key and value must be less than or equal to 100 characters.'
-      title: UpdateFiatAccountRequest
-    ListFiatDepositInstructionsResponse:
-      type: object
-      properties:
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/FiatDepositInstructions'
-        next_page_cursor:
-          type: string
-    AutoConversion:
-      type: object
-      properties:
-        from_transfer_id:
-          type: string
-          title: Transfer Id of the deposit triggering this transfer (only on withdrawal transfers)
-        to_transfer_id:
-          type: string
-          title: Transfer Id of the withdrawal triggered by this deposit(only on deposit transfers)
-    FiatNetworkInstructionsRtpRoutingDetails:
-      type: object
-      properties:
-        routing_number:
-          type: string
-          description: The routing number.
         bank_name:
           type: string
           description: The name of the bank.
         bank_address:
           $ref: '#/components/schemas/MailingAddress'
-      required:
-      - routing_number
-    InvalidDestinationAddress:
+      title: RoutingDetails
+    FiatNetworkInstructionsScb:
       type: object
       properties:
-        message:
+        account_number:
           type: string
-          title: Human-readable explanation of the error
-        destination_address:
+          description: The account number of the StandChart account.
+      required:
+      - account_number
+    FiatNetworkInstructionsCubix:
+      type: object
+      properties:
+        account_id:
           type: string
-          title: The destination address that caused the cancellation
-      description: 'InvalidDestinationAddress represents a transfer cancelled because the destination address
-
-        cannot receive the requested asset (e.g. it is a token account for a different mint).'
-    TransferType:
-      type: string
-      enum:
-      - INTERNAL_TRANSFER_DEBIT
-      - INTERNAL_TRANSFER_CREDIT
-      - CRYPTO_DEPOSIT
-      - CRYPTO_WITHDRAWAL
-      - WIRE_DEPOSIT
-      - WIRE_WITHDRAWAL
-      - SEN_DEPOSIT
-      - SEN_WITHDRAWAL
-      - BANK_DEPOSIT
-      - BANK_WITHDRAWAL
-      - PAXOS_TRANSFER_DEBIT
-      - PAXOS_TRANSFER_CREDIT
-      - SIGNET_DEPOSIT
-      - SIGNET_WITHDRAWAL
-      - CBIT_WITHDRAWAL
-      - CBIT_DEPOSIT
-      - CUBIX_DEPOSIT
-      - CUBIX_WITHDRAWAL
-      - RTP_DEPOSIT
-      description: Type of transfer.
+          description: The uuid account id of the CUBIX account.
+      required:
+      - account_id
     CreateFiatAccountRequest:
       type: object
       example:
@@ -1220,12 +1071,394 @@ components:
       required:
       - fiat_network_instructions
       - fiat_account_owner
-    UpdateFiatAccountRequestUpdateFiatNetworkInstructions:
+    FiatAccountStatus:
+      type: string
+      enum:
+      - PENDING
+      - APPROVED
+      - REJECTED
+    TransferStatusDetails:
+      type: object
+      properties:
+        missing_trustline:
+          $ref: '#/components/schemas/MissingTrustline'
+        max_rent_exceeded:
+          $ref: '#/components/schemas/MaxRentExceeded'
+        pending_customer_approval:
+          $ref: '#/components/schemas/PendingCustomerApproval'
+        stale_fee_quote:
+          $ref: '#/components/schemas/StaleFeeQuote'
+        invalid_destination_address:
+          $ref: '#/components/schemas/InvalidDestinationAddress'
+      description: 'TransferStatusDetails provides additional information about why a transfer
+
+        is in its current state. This field is only populated when a transfer
+
+        encounters specific error conditions or requires additional context.'
+    CryptoNetwork:
+      type: string
+      enum:
+      - BITCOIN
+      - ETHEREUM
+      - BITCOIN_CASH
+      - LITECOIN
+      - SOLANA
+      - POLYGON_POS
+      - BASE
+      - ARBITRUM_ONE
+      - STELLAR
+      - INK
+      - XLAYER
+      - AVALANCHE
+      - DOGECOIN
+      - SUI
+      - ROBINHOOD
+      - BNB
+      description: A CryptoNetwork is a blockchain transmitting cryptocurrencies.
+    PendingCustomerApproval:
+      type: object
+      properties:
+        message:
+          type: string
+          title: Human-readable explanation
+      description: PendingCustomerApproval represents that this resource is awaiting customer approval.
+    InvalidDestinationAddress:
+      type: object
+      properties:
+        message:
+          type: string
+          title: Human-readable explanation of the error
+        destination_address:
+          type: string
+          title: The destination address that caused the cancellation
+      description: 'InvalidDestinationAddress represents a transfer cancelled because the destination address
+
+        cannot receive the requested asset (e.g. it is a token account for a different mint).'
+    FiatAccountOwnerInstitutionDetails:
+      type: object
+      properties:
+        name:
+          type: string
+      required:
+      - name
+    TransferDirection:
+      type: string
+      enum:
+      - CREDIT
+      - DEBIT
+      description: Direction of the transfer.
+    TransferType:
+      type: string
+      enum:
+      - INTERNAL_TRANSFER_DEBIT
+      - INTERNAL_TRANSFER_CREDIT
+      - CRYPTO_DEPOSIT
+      - CRYPTO_WITHDRAWAL
+      - WIRE_DEPOSIT
+      - WIRE_WITHDRAWAL
+      - SEN_DEPOSIT
+      - SEN_WITHDRAWAL
+      - BANK_DEPOSIT
+      - BANK_WITHDRAWAL
+      - PAXOS_TRANSFER_DEBIT
+      - PAXOS_TRANSFER_CREDIT
+      - SIGNET_DEPOSIT
+      - SIGNET_WITHDRAWAL
+      - CBIT_WITHDRAWAL
+      - CBIT_DEPOSIT
+      - CUBIX_DEPOSIT
+      - CUBIX_WITHDRAWAL
+      - RTP_DEPOSIT
+      description: Type of transfer.
+    UpdateFiatNetworkInstructionsUpdateWire:
+      type: object
+      properties:
+        fiat_account_owner_address:
+          $ref: '#/components/schemas/MailingAddress'
+        routing_details:
+          $ref: '#/components/schemas/UpdateWireUpdateRoutingDetails'
+        intermediary_routing_details:
+          $ref: '#/components/schemas/UpdateWireUpdateRoutingDetails'
+      title: Wire
+    FiatNetwork:
+      type: string
+      enum:
+      - WIRE
+      - DBS_ACT
+      - CUBIX
+      - SCB
+      - RTP
+    Problem:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+          description: 'An absolute URI that identifies the problem type.  When dereferenced,
+
+            it SHOULD provide human-readable documentation for the problem type
+
+            (e.g., using HTML).
+
+            '
+          default: about:blank
+          example: https://api.paxos.com/v2/problems/insufficient_funds
+        title:
+          type: string
+          description: 'A short, summary of the problem type. Written in english and readable
+
+            for engineers (usually not suited for non technical stakeholders and
+
+            not localized); example: Service Unavailable
+
+            '
+          example: Insufficient Funds
+        status:
+          type: integer
+          format: int32
+          description: 'The HTTP status code generated by the origin server for this occurrence
+
+            of the problem.
+
+            '
+          minimum: 100
+          example: 403
+          exclusiveMaximum: 600
+        detail:
+          type: string
+          description: 'A human readable explanation specific to this occurrence of the
+
+            problem.
+
+            '
+          example: Not enough funds in account.
+        meta:
+          type: object
+          description: 'Additional structured metadata about the error.
+
+            '
+    ListFiatDepositInstructionsResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/FiatDepositInstructions'
+        next_page_cursor:
+          type: string
+    FiatAccountOwner:
+      type: object
+      properties:
+        person_details:
+          $ref: '#/components/schemas/FiatAccountOwnerPersonDetails'
+        institution_details:
+          $ref: '#/components/schemas/FiatAccountOwnerInstitutionDetails'
+    FiatNetworkInstructions:
       type: object
       properties:
         wire:
-          $ref: '#/components/schemas/UpdateFiatNetworkInstructionsUpdateWire'
-      title: FiatNetworkInstructions
+          $ref: '#/components/schemas/FiatNetworkInstructionsWire'
+        cbit:
+          $ref: '#/components/schemas/FiatNetworkInstructionsCbit'
+        dbs_act:
+          $ref: '#/components/schemas/FiatNetworkInstructionsDbsAct'
+        cubix:
+          $ref: '#/components/schemas/FiatNetworkInstructionsCubix'
+        scb:
+          $ref: '#/components/schemas/FiatNetworkInstructionsScb'
+        rtp:
+          $ref: '#/components/schemas/FiatNetworkInstructionsRtp'
+    FiatNetworkInstructionsRtpRoutingDetails:
+      type: object
+      properties:
+        routing_number:
+          type: string
+          description: The routing number.
+        bank_name:
+          type: string
+          description: The name of the bank.
+        bank_address:
+          $ref: '#/components/schemas/MailingAddress'
+      required:
+      - routing_number
+    TransferStatus:
+      type: string
+      enum:
+      - PENDING
+      - COMPLETED
+      - FAILED
+    SecondaryStatusName:
+      type: string
+      enum:
+      - TRAVEL_RULE_INFO_REQUESTED
+      - TRAVEL_RULE_REJECTED
+      - CUSTOMER_REJECTED
+      - PENDING_CUSTOMER_APPROVAL
+      description: "Identifier for secondary status.\n\n - TRAVEL_RULE_INFO_REQUESTED: Travel rule information is required to continue processing the transfer.\n - TRAVEL_RULE_REJECTED: Transfer has been terminally rejected due to failing travel rule checks.\n - CUSTOMER_REJECTED: Transfer was rejected by a customer.\n - PENDING_CUSTOMER_APPROVAL: Transfer is pending customer approval."
+    FiatNetworkInstructionsDbsAct:
+      type: object
+      properties:
+        account_number:
+          type: string
+          description: The account number of the DBS account.
+      required:
+      - account_number
+    FiatWireAccountType:
+      type: string
+      enum:
+      - ABA
+      - SWIFT
+    TransferPublicUpdateFiatAccountBody:
+      type: object
+      properties:
+        fiat_account_owner:
+          $ref: '#/components/schemas/FiatAccountOwner'
+        fiat_network_instructions:
+          $ref: '#/components/schemas/UpdateFiatAccountRequestUpdateFiatNetworkInstructions'
+        metadata:
+          type: object
+          additionalProperties:
+            type: string
+          description: 'Optional client-specified metadata.
+
+            Up to 6 key/value pairs may be provided.
+
+            Each key and value must be less than or equal to 100 characters.'
+      title: UpdateFiatAccountRequest
+    FiatAccount:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The Paxos FiatAccount ID (UUID).
+        ref_id:
+          type: string
+          description: The optional client-specified ID (for idempotence).
+        identity_id:
+          type: string
+          description: The Paxos Identity (`identity_id`) of the user's FiatAccount.
+        account_id:
+          type: string
+          description: 'The Paxos Account (`account_id`) of the user''s FiatAccount.
+
+            Required only for customers with [3rd-Party integrations](https://docs.paxos.com/crypto-brokerage/ledger-type#fiat-and-crypto-subledger) initiating transfers on behalf of their end users.'
+        fiat_account_owner:
+          $ref: '#/components/schemas/FiatAccountOwner'
+        fiat_network_instructions:
+          $ref: '#/components/schemas/FiatNetworkInstructions'
+        status:
+          $ref: '#/components/schemas/FiatAccountStatus'
+        metadata:
+          type: object
+          additionalProperties:
+            type: string
+          description: 'Optional client-specified metadata.
+
+            Up to 6 key/value pairs may be returned.
+
+            Each key and value must be less than or equal to 100 characters.'
+        created_at:
+          type: string
+          format: date-time
+          description: The time at which this FiatAccount was created.
+        updated_at:
+          type: string
+          format: date-time
+          description: The time at which this FiatAccount record was most recently updated.
+      required:
+      - id
+      - status
+      - fiat_network_instructions
+      - created_at
+    MaxRentExceeded:
+      type: object
+      properties:
+        message:
+          type: string
+          title: Human-readable explanation of the error
+        destination_address:
+          type: string
+          title: The destination account address that triggered the check
+      description: 'MaxRentExceeded represents a failed transfer that was flagged for system abuse.
+
+        When a withdrawal''s rent calculation for the destination account exceeds the
+
+        maximum allowed rent threshold, it may indicate malicious behavior. This status
+
+        detail is set when such transfers are automatically cancelled.'
+    FiatNetworkInstructionsRtp:
+      type: object
+      properties:
+        account_number:
+          type: string
+          description: The FiatAccount owner's bank account number.
+        fiat_account_owner_address:
+          $ref: '#/components/schemas/MailingAddress'
+        routing_details:
+          $ref: '#/components/schemas/FiatNetworkInstructionsRtpRoutingDetails'
+      required:
+      - account_number
+      - routing_details
+    FiatDepositInstructionsStatus:
+      type: string
+      enum:
+      - VALID
+      - DEPRECATED
+    FiatNetworkInstructionsCbit:
+      type: object
+      properties:
+        wallet_address:
+          type: string
+          description: The wallet address of the CBIT account.
+      required:
+      - wallet_address
+    AutoConversion:
+      type: object
+      properties:
+        from_transfer_id:
+          type: string
+          title: Transfer Id of the deposit triggering this transfer (only on withdrawal transfers)
+        to_transfer_id:
+          type: string
+          title: Transfer Id of the withdrawal triggered by this deposit(only on deposit transfers)
+    FiatNetworkInstructionsWire:
+      type: object
+      properties:
+        account_number:
+          type: string
+          description: The FiatAccount owner's bank account number.
+        fiat_account_owner_address:
+          $ref: '#/components/schemas/MailingAddress'
+        routing_details:
+          $ref: '#/components/schemas/FiatNetworkInstructionsWireRoutingDetails'
+        intermediary_routing_details:
+          $ref: '#/components/schemas/FiatNetworkInstructionsWireRoutingDetails'
+      required:
+      - account_number
+      - fiat_account_owner_address
+      - routing_details
+    StaleFeeQuote:
+      type: object
+      properties:
+        message:
+          type: string
+          title: Human-readable explanation
+      description: StaleFeeQuote represents a transfer cancelled because on-chain state changed after the fee was quoted.
+    MissingTrustline:
+      type: object
+      properties:
+        message:
+          type: string
+          title: Human-readable explanation of the error
+        destination_address:
+          type: string
+          title: The destination account address that is missing the trustline
+        asset:
+          type: string
+          title: The asset that requires a trustline
+      description: 'MissingTrustline represents a failed transfer where the destination account
+
+        lacks the required asset trustline.'
     CreateFiatWithdrawalRequest:
       type: object
       example:
@@ -1291,45 +1524,6 @@ components:
       - asset
       - fiat_account_id
       - profile_id
-    FiatAccountStatus:
-      type: string
-      enum:
-      - PENDING
-      - APPROVED
-      - REJECTED
-    PendingCustomerApproval:
-      type: object
-      properties:
-        message:
-          type: string
-          title: Human-readable explanation
-      description: PendingCustomerApproval represents that this resource is awaiting customer approval.
-    FiatNetwork:
-      type: string
-      enum:
-      - WIRE
-      - DBS_ACT
-      - CUBIX
-      - SCB
-      - RTP
-    TransferStatusDetails:
-      type: object
-      properties:
-        missing_trustline:
-          $ref: '#/components/schemas/MissingTrustline'
-        max_rent_exceeded:
-          $ref: '#/components/schemas/MaxRentExceeded'
-        pending_customer_approval:
-          $ref: '#/components/schemas/PendingCustomerApproval'
-        stale_fee_quote:
-          $ref: '#/components/schemas/StaleFeeQuote'
-        invalid_destination_address:
-          $ref: '#/components/schemas/InvalidDestinationAddress'
-      description: 'TransferStatusDetails provides additional information about why a transfer
-
-        is in its current state. This field is only populated when a transfer
-
-        encounters specific error conditions or requires additional context.'
     Transfer:
       type: object
       example:
@@ -1461,183 +1655,22 @@ components:
       - status
       - direction
       - type
-    ListFiatAccountsResponse:
+    UpdateFiatAccountRequestUpdateFiatNetworkInstructions:
       type: object
       properties:
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/FiatAccount'
-        next_page_cursor:
-          type: string
-    SecondaryStatusName:
-      type: string
-      enum:
-      - TRAVEL_RULE_INFO_REQUESTED
-      - TRAVEL_RULE_REJECTED
-      - CUSTOMER_REJECTED
-      - PENDING_CUSTOMER_APPROVAL
-      description: "Identifier for secondary status.\n\n - TRAVEL_RULE_INFO_REQUESTED: Travel rule information is required to continue processing the transfer.\n - TRAVEL_RULE_REJECTED: Transfer has been terminally rejected due to failing travel rule checks.\n - CUSTOMER_REJECTED: Transfer was rejected by a customer.\n - PENDING_CUSTOMER_APPROVAL: Transfer is pending customer approval."
-    FiatNetworkInstructionsDbsAct:
+        wire:
+          $ref: '#/components/schemas/UpdateFiatNetworkInstructionsUpdateWire'
+      title: FiatNetworkInstructions
+    FiatAccountOwnerPersonDetails:
       type: object
       properties:
-        account_number:
+        first_name:
           type: string
-          description: The account number of the DBS account.
-      required:
-      - account_number
-    TransferStatus:
-      type: string
-      enum:
-      - PENDING
-      - COMPLETED
-      - FAILED
-    FiatNetworkInstructionsScb:
-      type: object
-      properties:
-        account_number:
-          type: string
-          description: The account number of the StandChart account.
-      required:
-      - account_number
-    UpdateFiatNetworkInstructionsUpdateWire:
-      type: object
-      properties:
-        fiat_account_owner_address:
-          $ref: '#/components/schemas/MailingAddress'
-        routing_details:
-          $ref: '#/components/schemas/UpdateWireUpdateRoutingDetails'
-        intermediary_routing_details:
-          $ref: '#/components/schemas/UpdateWireUpdateRoutingDetails'
-      title: Wire
-    FiatNetworkInstructionsWire:
-      type: object
-      properties:
-        account_number:
-          type: string
-          description: The FiatAccount owner's bank account number.
-        fiat_account_owner_address:
-          $ref: '#/components/schemas/MailingAddress'
-        routing_details:
-          $ref: '#/components/schemas/FiatNetworkInstructionsWireRoutingDetails'
-        intermediary_routing_details:
-          $ref: '#/components/schemas/FiatNetworkInstructionsWireRoutingDetails'
-      required:
-      - account_number
-      - fiat_account_owner_address
-      - routing_details
-    FiatNetworkInstructionsWireRoutingDetails:
-      type: object
-      properties:
-        routing_number_type:
-          $ref: '#/components/schemas/FiatWireAccountType'
-        routing_number:
-          type: string
-          description: The routing number.
-        bank_name:
-          type: string
-          description: The name of the bank.
-        bank_address:
-          $ref: '#/components/schemas/MailingAddress'
-      required:
-      - routing_number_type
-      - routing_number
-      - bank_name
-      - bank_address
-    Problem:
-      type: object
-      properties:
-        type:
-          type: string
-          format: uri
-          description: 'An absolute URI that identifies the problem type.  When dereferenced,
-
-            it SHOULD provide human-readable documentation for the problem type
-
-            (e.g., using HTML).
-
-            '
-          default: about:blank
-          example: https://api.paxos.com/v2/problems/insufficient_funds
-        title:
-          type: string
-          description: 'A short, summary of the problem type. Written in english and readable
-
-            for engineers (usually not suited for non technical stakeholders and
-
-            not localized); example: Service Unavailable
-
-            '
-          example: Insufficient Funds
-        status:
-          type: integer
-          format: int32
-          description: 'The HTTP status code generated by the origin server for this occurrence
-
-            of the problem.
-
-            '
-          minimum: 100
-          example: 403
-          exclusiveMaximum: 600
-        detail:
-          type: string
-          description: 'A human readable explanation specific to this occurrence of the
-
-            problem.
-
-            '
-          example: Not enough funds in account.
-        meta:
-          type: object
-          description: 'Additional structured metadata about the error.
-
-            '
-    MaxRentExceeded:
-      type: object
-      properties:
-        message:
-          type: string
-          title: Human-readable explanation of the error
-        destination_address:
-          type: string
-          title: The destination account address that triggered the check
-      description: 'MaxRentExceeded represents a failed transfer that was flagged for system abuse.
-
-        When a withdrawal''s rent calculation for the destination account exceeds the
-
-        maximum allowed rent threshold, it may indicate malicious behavior. This status
-
-        detail is set when such transfers are automatically cancelled.'
-    UpdateWireUpdateRoutingDetails:
-      type: object
-      properties:
-        bank_name:
-          type: string
-          description: The name of the bank.
-        bank_address:
-          $ref: '#/components/schemas/MailingAddress'
-      title: RoutingDetails
-    FiatNetworkInstructionsCubix:
-      type: object
-      properties:
-        account_id:
-          type: string
-          description: The uuid account id of the CUBIX account.
-      required:
-      - account_id
-    FiatAccountOwnerInstitutionDetails:
-      type: object
-      properties:
-        name:
+        last_name:
           type: string
       required:
-      - name
-    FiatWireAccountType:
-      type: string
-      enum:
-      - ABA
-      - SWIFT
+      - first_name
+      - last_name
     SecondaryStatus:
       type: object
       properties:
@@ -1647,6 +1680,36 @@ components:
           type: string
           description: Additional information about the current status of the transfer (e.g. if information is missing).
       description: Secondary status for the transfer, used for more granular explanation of the transfer status.
+    MailingAddress:
+      type: object
+      properties:
+        country:
+          type: string
+          maxLength: 35
+          pattern: ^[0-9A-Za-z /?:().,&'+-]+$
+        address1:
+          type: string
+          maxLength: 35
+          pattern: ^[0-9A-Za-z /?:().,&'+-]+$
+        address2:
+          type: string
+          maxLength: 35
+          pattern: ^[0-9A-Za-z /?:().,&'+-]+$
+        city:
+          type: string
+          maxLength: 35
+          pattern: ^[0-9A-Za-z /?:().,&'+-]+$
+        province:
+          type: string
+          maxLength: 35
+          pattern: ^[0-9A-Za-z /?:().,&'+-]+$
+        zip_code:
+          type: string
+          maxLength: 35
+          pattern: ^[0-9A-Za-z /?:().,&'+-]+$
+      description: A mailing address.
+      required:
+      - country
     CreateFiatDepositInstructionsRequest:
       type: object
       properties:
@@ -1682,150 +1745,87 @@ components:
       required:
       - profile_id
       - fiat_network
-    FiatNetworkInstructionsCbit:
-      type: object
-      properties:
-        wallet_address:
-          type: string
-          description: The wallet address of the CBIT account.
-      required:
-      - wallet_address
-    FiatNetworkInstructionsRtp:
-      type: object
-      properties:
-        account_number:
-          type: string
-          description: The FiatAccount owner's bank account number.
-        fiat_account_owner_address:
-          $ref: '#/components/schemas/MailingAddress'
-        routing_details:
-          $ref: '#/components/schemas/FiatNetworkInstructionsRtpRoutingDetails'
-      required:
-      - account_number
-      - routing_details
-    FiatAccount:
+    FiatDepositInstructions:
       type: object
       properties:
         id:
           type: string
-          description: The Paxos FiatAccount ID (UUID).
+          description: 'The Fiat Deposit Instructions ID (`id`) is provided in the response of the [Create Fiat Deposit Instructions](#operation/CreateFiatDepositInstructions).
+
+            Use this ID to retrieve the instructions using [Get Fiat Deposit Instructions](#operation/GetFiatDepositInstructions) & [List Fiat Deposit Instructions](#operation/ListFiatDepositInstructions).'
+        profile_id:
+          type: string
+          description: The Profile (`profile_id`) to deposit to.
+        identity_id:
+          type: string
+          description: The Identity (`identity_id`) of the user making the deposit.
+        account_id:
+          type: string
+          description: 'The Account (`account_id`) associated with the Identity of the user making the deposit.
+
+            Required only for customers with [3rd-Party integrations](https://docs.paxos.com/crypto-brokerage/ledger-type#fiat-and-crypto-subledger) making deposits on behalf of their end users.'
         ref_id:
           type: string
           description: The optional client-specified ID (for idempotence).
-        identity_id:
+        status:
+          $ref: '#/components/schemas/FiatDepositInstructionsStatus'
+        memo_id:
           type: string
-          description: The Paxos Identity (`identity_id`) of the user's FiatAccount.
-        account_id:
-          type: string
-          description: 'The Paxos Account (`account_id`) of the user''s FiatAccount.
+          description: 'The string, unique to the request.
 
-            Required only for customers with [3rd-Party integrations](https://docs.paxos.com/crypto-brokerage/ledger-type#fiat-and-crypto-subledger) initiating transfers on behalf of their end users.'
-        fiat_account_owner:
-          $ref: '#/components/schemas/FiatAccountOwner'
+            To deposit funds into an account, the memo ID must be provided when initiating a `WIRE` transfer to Paxos.
+
+            This is provided after creating [Fiat Deposit Instructions](#/operation/CreateFiatDepositInstructions)
+
+            The `memo_id` can also be found from either [Get Fiat Deposit Instructions](#operation/GetFiatDepositInstructions) or [List Fiat Deposit Instructions](#operation/ListFiatDepositInstructions) for the corresponding ID (Fiat Deposit Instructions ID).'
         fiat_network_instructions:
           $ref: '#/components/schemas/FiatNetworkInstructions'
-        status:
-          $ref: '#/components/schemas/FiatAccountStatus'
+        fiat_account_owner:
+          $ref: '#/components/schemas/FiatAccountOwner'
         metadata:
           type: object
           additionalProperties:
             type: string
-          description: 'Optional client-specified metadata.
-
-            Up to 6 key/value pairs may be returned.
-
-            Each key and value must be less than or equal to 100 characters.'
+          description: Optional client-specified metadata.
         created_at:
           type: string
           format: date-time
-          description: The time at which this FiatAccount was created.
-        updated_at:
-          type: string
-          format: date-time
-          description: The time at which this FiatAccount record was most recently updated.
+          description: The time at which these instructions were created.
       required:
       - id
+      - profile_id
+      - identity_id
       - status
+      - memo_id
       - fiat_network_instructions
       - created_at
-    TransferDirection:
-      type: string
-      enum:
-      - CREDIT
-      - DEBIT
-      description: Direction of the transfer.
-    FiatAccountOwnerPersonDetails:
+    ListFiatAccountsResponse:
       type: object
       properties:
-        first_name:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/FiatAccount'
+        next_page_cursor:
           type: string
-        last_name:
+    FiatNetworkInstructionsWireRoutingDetails:
+      type: object
+      properties:
+        routing_number_type:
+          $ref: '#/components/schemas/FiatWireAccountType'
+        routing_number:
           type: string
+          description: The routing number.
+        bank_name:
+          type: string
+          description: The name of the bank.
+        bank_address:
+          $ref: '#/components/schemas/MailingAddress'
       required:
-      - first_name
-      - last_name
-    FiatNetworkInstructions:
-      type: object
-      properties:
-        wire:
-          $ref: '#/components/schemas/FiatNetworkInstructionsWire'
-        cbit:
-          $ref: '#/components/schemas/FiatNetworkInstructionsCbit'
-        dbs_act:
-          $ref: '#/components/schemas/FiatNetworkInstructionsDbsAct'
-        cubix:
-          $ref: '#/components/schemas/FiatNetworkInstructionsCubix'
-        scb:
-          $ref: '#/components/schemas/FiatNetworkInstructionsScb'
-        rtp:
-          $ref: '#/components/schemas/FiatNetworkInstructionsRtp'
-    MissingTrustline:
-      type: object
-      properties:
-        message:
-          type: string
-          title: Human-readable explanation of the error
-        destination_address:
-          type: string
-          title: The destination account address that is missing the trustline
-        asset:
-          type: string
-          title: The asset that requires a trustline
-      description: 'MissingTrustline represents a failed transfer where the destination account
-
-        lacks the required asset trustline.'
-    CryptoNetwork:
-      type: string
-      enum:
-      - BITCOIN
-      - ETHEREUM
-      - BITCOIN_CASH
-      - LITECOIN
-      - SOLANA
-      - POLYGON_POS
-      - BASE
-      - ARBITRUM_ONE
-      - STELLAR
-      - INK
-      - XLAYER
-      - AVALANCHE
-      - DOGECOIN
-      - SUI
-      - ROBINHOOD
-      - BNB
-      description: A CryptoNetwork is a blockchain transmitting cryptocurrencies.
-    FiatDepositInstructionsStatus:
-      type: string
-      enum:
-      - VALID
-      - DEPRECATED
-    FiatAccountOwner:
-      type: object
-      properties:
-        person_details:
-          $ref: '#/components/schemas/FiatAccountOwnerPersonDetails'
-        institution_details:
-          $ref: '#/components/schemas/FiatAccountOwnerInstitutionDetails'
+      - routing_number_type
+      - routing_number
+      - bank_name
+      - bank_address
   examples:
     Problem_already_exists_fiat_withdrawal:
       value:

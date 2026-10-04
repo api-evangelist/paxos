@@ -513,82 +513,6 @@ components:
           type: string
           format: date-time
           description: Timestamp at the beginning of an increment.
-    ListPricesResponse:
-      type: object
-      properties:
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/Pricing'
-    publicCandlestickPrice:
-      type: object
-      properties:
-        timestamp:
-          type: string
-          format: date-time
-          title: Timestamp at the beginning of an increment
-        open:
-          type: string
-          format: decimal
-          title: Opening price of the period
-        high:
-          type: string
-          format: decimal
-          title: Highest price during the period
-        low:
-          type: string
-          format: decimal
-          title: Lowest price during the period
-        close:
-          type: string
-          title: Closing price of the period
-        volume:
-          type: string
-          format: decimal
-          title: Volume traded during the period
-    publicListHistoricalCandlesResponse:
-      type: object
-      properties:
-        market:
-          $ref: '#/components/schemas/PricePriceMarket'
-        increment:
-          $ref: '#/components/schemas/Increment'
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/publicCandlestickPrice'
-          description: List of historical candles.
-        next_page_cursor:
-          type: string
-          description: Cursor token required for fetching the next page.
-    Pricing:
-      type: object
-      properties:
-        market:
-          $ref: '#/components/schemas/PricePriceMarket'
-        current_price:
-          type: string
-          format: decimal
-          description: The current price for the given market.
-        yesterday_price:
-          type: string
-          format: decimal
-          description: The one-minute average price from 24 hours ago. Updates once per minute.
-        snapshot_at:
-          type: string
-          format: date-time
-          description: The time when the price was generated. RFC3339 format, like `2023-01-03T18:27:40.294528Z`.
-    ListHistoricalPricesResponse:
-      type: object
-      properties:
-        total_count:
-          type: integer
-          format: int32
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/HistoricalPrice'
-          description: List of historical prices.
     Problem:
       type: object
       properties:
@@ -638,6 +562,21 @@ components:
           description: 'Additional structured metadata about the error.
 
             '
+    publicListHistoricalCandlesResponse:
+      type: object
+      properties:
+        market:
+          $ref: '#/components/schemas/PricePriceMarket'
+        increment:
+          $ref: '#/components/schemas/Increment'
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/publicCandlestickPrice'
+          description: List of historical candles.
+        next_page_cursor:
+          type: string
+          description: Cursor token required for fetching the next page.
     PricePriceMarket:
       type: string
       enum:
@@ -672,6 +611,67 @@ components:
       - BNBUSD
       description: ''
       title: Market
+    publicCandlestickPrice:
+      type: object
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+          title: Timestamp at the beginning of an increment
+        open:
+          type: string
+          format: decimal
+          title: Opening price of the period
+        high:
+          type: string
+          format: decimal
+          title: Highest price during the period
+        low:
+          type: string
+          format: decimal
+          title: Lowest price during the period
+        close:
+          type: string
+          title: Closing price of the period
+        volume:
+          type: string
+          format: decimal
+          title: Volume traded during the period
+    ListHistoricalPricesResponse:
+      type: object
+      properties:
+        total_count:
+          type: integer
+          format: int32
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/HistoricalPrice'
+          description: List of historical prices.
+    ListPricesResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Pricing'
+    Pricing:
+      type: object
+      properties:
+        market:
+          $ref: '#/components/schemas/PricePriceMarket'
+        current_price:
+          type: string
+          format: decimal
+          description: The current price for the given market.
+        yesterday_price:
+          type: string
+          format: decimal
+          description: The one-minute average price from 24 hours ago. Updates once per minute.
+        snapshot_at:
+          type: string
+          format: date-time
+          description: The time when the price was generated. RFC3339 format, like `2023-01-03T18:27:40.294528Z`.
     Increment:
       type: string
       enum:

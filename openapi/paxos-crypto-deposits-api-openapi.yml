@@ -172,41 +172,6 @@ paths:
         - transfer:update_crypto_deposit
 components:
   schemas:
-    IndividualInfo:
-      type: object
-      properties:
-        first_name:
-          type: string
-        last_name:
-          type: string
-      required:
-      - first_name
-      - last_name
-    TransferPublicRejectCryptoDepositBody:
-      type: object
-      example:
-        identity_id: 54385e67-d7ef-40d1-b488-ceda6dd9b264
-      properties:
-        identity_id:
-          type: string
-          description: The Identity (`identity_id`) of the end user that requests to reject the deposit.
-      title: RejectCryptoDepositRequest
-      required:
-      - identity_id
-    InstitutionInfo:
-      type: object
-      properties:
-        institution_name:
-          type: string
-      required:
-      - institution_name
-    AddressInfo:
-      type: object
-      properties:
-        individual_info:
-          $ref: '#/components/schemas/IndividualInfo'
-        institution_info:
-          $ref: '#/components/schemas/InstitutionInfo'
     Problem:
       type: object
       properties:
@@ -256,8 +221,16 @@ components:
           description: 'Additional structured metadata about the error.
 
             '
-    RejectCryptoDepositResponse:
+    IndividualInfo:
       type: object
+      properties:
+        first_name:
+          type: string
+        last_name:
+          type: string
+      required:
+      - first_name
+      - last_name
     TransferPublicUpdateCryptoDepositBody:
       type: object
       example:
@@ -275,8 +248,35 @@ components:
       required:
       - identity_id
       - originator_address_info
+    InstitutionInfo:
+      type: object
+      properties:
+        institution_name:
+          type: string
+      required:
+      - institution_name
     UpdateCryptoDepositResponse:
       type: object
+    TransferPublicRejectCryptoDepositBody:
+      type: object
+      example:
+        identity_id: 54385e67-d7ef-40d1-b488-ceda6dd9b264
+      properties:
+        identity_id:
+          type: string
+          description: The Identity (`identity_id`) of the end user that requests to reject the deposit.
+      title: RejectCryptoDepositRequest
+      required:
+      - identity_id
+    RejectCryptoDepositResponse:
+      type: object
+    AddressInfo:
+      type: object
+      properties:
+        individual_info:
+          $ref: '#/components/schemas/IndividualInfo'
+        institution_info:
+          $ref: '#/components/schemas/InstitutionInfo'
   securitySchemes:
     OAuth2:
       type: oauth2

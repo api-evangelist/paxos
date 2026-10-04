@@ -208,26 +208,6 @@ paths:
         - rewards:write_payout_groups
 components:
   schemas:
-    ScheduleType:
-      type: string
-      enum:
-      - DAILY
-      - MONTHLY
-      - WEEKLY
-    ListPayoutGroupsResponse:
-      type: object
-      properties:
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/PayoutGroup'
-          description: Payout groups in this page of results.
-        next_page_cursor:
-          type: string
-        count:
-          type: integer
-          format: int32
-          description: Total number of payout groups matching the current filters (without pagination).
     PayoutGroup:
       type: object
       properties:
@@ -308,6 +288,26 @@ components:
       - MULTIPLIER_UPDATE_FAILED
       - UNREGISTERED_INSUFFICIENT_BALANCE
       description: PayoutGroupOnchainStatus represents the on-chain registration status of a payout group.
+    CreatePayoutGroupRequest:
+      type: object
+      properties:
+        ledger:
+          type: string
+          title: Ledger identifier
+        asset_type:
+          type: string
+          title: Asset type for this payout group
+        jurisdiction:
+          type: string
+          title: Jurisdiction for this payout group
+        name:
+          type: string
+          title: User-readable name for this group
+        claimer_address:
+          type: string
+          description: Address with signing authority to claim rewards for this group.
+        schedule:
+          $ref: '#/components/schemas/ClaimScheduleConfig'
     UpdatePayoutGroupResponse:
       type: object
       properties:
@@ -343,33 +343,33 @@ components:
         minute:
           type: integer
           format: int32
-    DeletePayoutGroupResponse:
-      type: object
-    CreatePayoutGroupRequest:
-      type: object
-      properties:
-        ledger:
-          type: string
-          title: Ledger identifier
-        asset_type:
-          type: string
-          title: Asset type for this payout group
-        jurisdiction:
-          type: string
-          title: Jurisdiction for this payout group
-        name:
-          type: string
-          title: User-readable name for this group
-        claimer_address:
-          type: string
-          description: Address with signing authority to claim rewards for this group.
-        schedule:
-          $ref: '#/components/schemas/ClaimScheduleConfig'
+    ScheduleType:
+      type: string
+      enum:
+      - DAILY
+      - MONTHLY
+      - WEEKLY
     CreatePayoutGroupResponse:
       type: object
       properties:
         group:
           $ref: '#/components/schemas/PayoutGroup'
+    ListPayoutGroupsResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/PayoutGroup'
+          description: Payout groups in this page of results.
+        next_page_cursor:
+          type: string
+        count:
+          type: integer
+          format: int32
+          description: Total number of payout groups matching the current filters (without pagination).
+    DeletePayoutGroupResponse:
+      type: object
   securitySchemes:
     OAuth2:
       type: oauth2

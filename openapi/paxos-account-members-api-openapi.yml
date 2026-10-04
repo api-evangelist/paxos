@@ -113,6 +113,14 @@ components:
       required:
       - account_id
       - members
+    DeleteAccountMemberResponse:
+      type: object
+    AccountMemberAccountRoleType:
+      type: string
+      enum:
+      - BENEFICIAL_OWNER
+      - AUTHORIZED_USER
+      - FINANCIAL_ADVISOR
     AddAccountMembersResponse:
       type: object
       properties:
@@ -126,12 +134,6 @@ components:
           description: List of account members that were added to the account.
       required:
       - account_id
-    AccountMemberAccountRoleType:
-      type: string
-      enum:
-      - BENEFICIAL_OWNER
-      - AUTHORIZED_USER
-      - FINANCIAL_ADVISOR
     AccountMember:
       type: object
       properties:
@@ -148,8 +150,6 @@ components:
           description: 'Account member ID. Note: This field is auto-generated. Specifying an ID when creating an account member is a client error.'
       required:
       - identity_id
-    DeleteAccountMemberResponse:
-      type: object
   securitySchemes:
     OAuth2:
       type: oauth2

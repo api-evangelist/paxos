@@ -119,11 +119,6 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    GetVaspResponse:
-      type: object
-      properties:
-        vasp:
-          $ref: '#/components/schemas/Vasp'
     Vasp:
       type: object
       properties:
@@ -136,6 +131,11 @@ components:
       required:
       - id
       - name
+    GetVaspResponse:
+      type: object
+      properties:
+        vasp:
+          $ref: '#/components/schemas/Vasp'
     ListVaspsResponse:
       type: object
       properties:

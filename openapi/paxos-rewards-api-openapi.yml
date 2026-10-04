@@ -71,40 +71,6 @@ paths:
         - rewards:read_rewards_details
 components:
   schemas:
-    GetRewardDetailsResponse:
-      type: object
-      properties:
-        rates:
-          type: array
-          items:
-            $ref: '#/components/schemas/RewardRate'
-          title: Current reward rates
-        next_accrual:
-          type: string
-          format: date-time
-          title: The next time rewards will accrue
-        lifetime_earned:
-          type: string
-          title: Total rewards earned over the lifetime of the account
-        total_available_rewards:
-          type: string
-          title: Total rewards currently available to claim in business units
-        est_next_accrual_amount:
-          type: string
-          title: Estimated amount of the next accrual based on current balances, pending rewards, and multiplier rates
-        asset_details:
-          type: array
-          items:
-            $ref: '#/components/schemas/AssetRewardDetails'
-          description: Per-asset reward details breakdown. Supports partners with multiple asset types.
-    GetRewardsRatesResponse:
-      type: object
-      properties:
-        rates:
-          type: array
-          items:
-            $ref: '#/components/schemas/RewardRate'
-          description: Reward rates for the requested asset type.
     RewardRate:
       type: object
       properties:
@@ -135,22 +101,32 @@ components:
           format: date-time
           title: When this rate was created
       title: RewardRate represents a reward rate configuration
-    Jurisdiction:
-      type: string
-      enum:
-      - JURISDICTION_UNSPECIFIED
-      - EU
-      - US
-    Tier:
-      type: string
-      enum:
-      - TIER_UNSPECIFIED
-      - FOUNDER
-      - PARTNER_CUSTODY_REMOVAL_PROGRAM
-      - PARTNER_STANDARD_CUSTODY_TIER_1
-      - PARTNER_STANDARD_CUSTODY_TIER_2
-      - PARTNER_STANDARD_CUSTODY_TIER_3
-      - FOUNDER_TIER_2
+    GetRewardDetailsResponse:
+      type: object
+      properties:
+        rates:
+          type: array
+          items:
+            $ref: '#/components/schemas/RewardRate'
+          title: Current reward rates
+        next_accrual:
+          type: string
+          format: date-time
+          title: The next time rewards will accrue
+        lifetime_earned:
+          type: string
+          title: Total rewards earned over the lifetime of the account
+        total_available_rewards:
+          type: string
+          title: Total rewards currently available to claim in business units
+        est_next_accrual_amount:
+          type: string
+          title: Estimated amount of the next accrual based on current balances, pending rewards, and multiplier rates
+        asset_details:
+          type: array
+          items:
+            $ref: '#/components/schemas/AssetRewardDetails'
+          description: Per-asset reward details breakdown. Supports partners with multiple asset types.
     AssetRewardDetails:
       type: object
       properties:
@@ -167,6 +143,30 @@ components:
           type: string
           title: Estimated amount of the next accrual for this asset, in business units
       description: AssetRewardDetails contains reward summary information for a single asset type.
+    GetRewardsRatesResponse:
+      type: object
+      properties:
+        rates:
+          type: array
+          items:
+            $ref: '#/components/schemas/RewardRate'
+          description: Reward rates for the requested asset type.
+    Tier:
+      type: string
+      enum:
+      - TIER_UNSPECIFIED
+      - FOUNDER
+      - PARTNER_CUSTODY_REMOVAL_PROGRAM
+      - PARTNER_STANDARD_CUSTODY_TIER_1
+      - PARTNER_STANDARD_CUSTODY_TIER_2
+      - PARTNER_STANDARD_CUSTODY_TIER_3
+      - FOUNDER_TIER_2
+    Jurisdiction:
+      type: string
+      enum:
+      - JURISDICTION_UNSPECIFIED
+      - EU
+      - US
   securitySchemes:
     OAuth2:
       type: oauth2

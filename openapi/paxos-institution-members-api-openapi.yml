@@ -110,33 +110,6 @@ components:
   schemas:
     DeleteInstitutionMemberResponse:
       type: object
-    AddInstitutionMembersRequest:
-      type: object
-      properties:
-        institution_id:
-          type: string
-          description: ID of institution identity to which members will be added.
-        members:
-          type: array
-          items:
-            $ref: '#/components/schemas/InstitutionMember'
-          description: A non-empty array of institution members that were added. Should always be present in practice.
-      required:
-      - institution_id
-      - members
-    AddInstitutionMembersResponse:
-      type: object
-      properties:
-        institution_id:
-          type: string
-          description: ID of institution identity to which members were added.
-        members:
-          type: array
-          items:
-            $ref: '#/components/schemas/InstitutionMember'
-          description: List of institution members that were added to the institution.
-      required:
-      - institution_id
     InstitutionMember:
       type: object
       properties:
@@ -174,6 +147,33 @@ components:
       - DENIED
       - DISABLED
       title: ''
+    AddInstitutionMembersResponse:
+      type: object
+      properties:
+        institution_id:
+          type: string
+          description: ID of institution identity to which members were added.
+        members:
+          type: array
+          items:
+            $ref: '#/components/schemas/InstitutionMember'
+          description: List of institution members that were added to the institution.
+      required:
+      - institution_id
+    AddInstitutionMembersRequest:
+      type: object
+      properties:
+        institution_id:
+          type: string
+          description: ID of institution identity to which members will be added.
+        members:
+          type: array
+          items:
+            $ref: '#/components/schemas/InstitutionMember'
+          description: A non-empty array of institution members that were added. Should always be present in practice.
+      required:
+      - institution_id
+      - members
     InstitutionRoleType:
       type: string
       enum:

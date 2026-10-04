@@ -256,65 +256,15 @@ paths:
         - orchestration:read_orchestration
 components:
   schemas:
-    OrchestrationStatus:
-      type: string
-      enum:
-      - PROCESSING
-      - COMPLETED
-      - FAILED
-      - PENDING
-      - REJECTED
-      description: "Status represents the current state of an orchestration.\n\n - PROCESSING: The orchestration is actively being processed.\n - COMPLETED: The orchestration completed successfully.\n - FAILED: The orchestration failed during processing.\n - PENDING: The orchestration is awaiting approval before processing begins.\nOnce approved, it transitions to PROCESSING. If rejected, it transitions to REJECTED.\n - REJECTED: The orchestration was rejected during approval."
-    ListOrchestrationsResponse:
+    TransferDetails:
       type: object
       properties:
-        orchestrations:
-          type: array
-          items:
-            $ref: '#/components/schemas/Orchestration'
-          description: 'Deprecated: Use items instead. This field will be removed in a future version.'
-        next_page_cursor:
+        transfer_id:
           type: string
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/Orchestration'
-    CreateOrchestrationRequestDestination:
-      type: object
-      properties:
-        crypto:
-          $ref: '#/components/schemas/CreateOrchestrationRequestCryptoDestination'
-        fiat:
-          $ref: '#/components/schemas/CreateOrchestrationRequestFiatDestination'
-        profile:
-          $ref: '#/components/schemas/CreateOrchestrationRequestProfileDestination'
+        status:
+          $ref: '#/components/schemas/TransferDetailsTransferStatus'
+      description: TransferDetails refers to a specific Transfer and encodes its current status.
     OrchestrationProfileDestination:
-      type: object
-      properties:
-        profile_id:
-          type: string
-    OrchestrationProfileSource:
-      type: object
-      properties:
-        profile_id:
-          type: string
-    CreateOrchestrationRequestFiatDestination:
-      type: object
-      properties:
-        bank_account_id:
-          type: string
-        memo:
-          type: string
-    OrchestrationDestination:
-      type: object
-      properties:
-        crypto:
-          $ref: '#/components/schemas/OrchestrationCryptoDestination'
-        fiat:
-          $ref: '#/components/schemas/OrchestrationFiatDestination'
-        profile:
-          $ref: '#/components/schemas/OrchestrationProfileDestination'
-    CreateOrchestrationRequestProfileDestination:
       type: object
       properties:
         profile_id:
@@ -328,26 +278,6 @@ components:
           $ref: '#/components/schemas/OrchestrationFiatSource'
         profile:
           $ref: '#/components/schemas/OrchestrationProfileSource'
-    CreateOrchestrationRequestSource:
-      type: object
-      properties:
-        profile:
-          $ref: '#/components/schemas/CreateOrchestrationRequestProfileSource'
-    OrchestrationFiatDestination:
-      type: object
-      properties:
-        bank_account_id:
-          type: string
-        memo:
-          type: string
-    TransferDetails:
-      type: object
-      properties:
-        transfer_id:
-          type: string
-        status:
-          $ref: '#/components/schemas/TransferDetailsTransferStatus'
-      description: TransferDetails refers to a specific Transfer and encodes its current status.
     OrchestrationCryptoDestination:
       type: object
       properties:
@@ -356,6 +286,13 @@ components:
         network:
           type: string
         address_id:
+          type: string
+    CreateOrchestrationRequestFiatDestination:
+      type: object
+      properties:
+        bank_account_id:
+          type: string
+        memo:
           type: string
     CreateOrchestrationRequest:
       type: object
@@ -406,6 +343,30 @@ components:
       - source_asset
       - destination_asset
       - source_amount
+    TransferDetailsTransferStatus:
+      type: string
+      enum:
+      - PENDING
+      - PROCESSING
+      - COMPLETED
+      - FAILED
+      description: " - PENDING: PENDING: a transfer is planned, but its resource_id is not yet known.\n - PROCESSING: PROCESSING: a transfer with `resource_id` is being processed. resource_id is\nguaranteed to be set if the status is PROCESSING.\n - COMPLETED: COMPLETED: a transfer with `resource_id` has successfully completed.\n - FAILED: FAILED: a transfer with `resource_id` has failed."
+    CreateOrchestrationRequestCryptoDestination:
+      type: object
+      properties:
+        address:
+          type: string
+          description: 'The blockchain destination address. Specify together with `network`
+
+            (and `identity_id` on the parent request for 3P integrations).
+
+            These together identify a CryptoDestinationAddress whose travel rule metadata will be used.'
+        network:
+          type: string
+          description: The blockchain network of the destination address.
+        address_id:
+          type: string
+          description: Deprecated. Specify `address` and `network` instead.
     OrchestrationFiatSource:
       type: object
       properties:
@@ -413,16 +374,83 @@ components:
           type: string
         memo:
           type: string
+    CreateOrchestrationRequestDestination:
+      type: object
+      properties:
+        crypto:
+          $ref: '#/components/schemas/CreateOrchestrationRequestCryptoDestination'
+        fiat:
+          $ref: '#/components/schemas/CreateOrchestrationRequestFiatDestination'
+        profile:
+          $ref: '#/components/schemas/CreateOrchestrationRequestProfileDestination'
+    OrchestrationDestination:
+      type: object
+      properties:
+        crypto:
+          $ref: '#/components/schemas/OrchestrationCryptoDestination'
+        fiat:
+          $ref: '#/components/schemas/OrchestrationFiatDestination'
+        profile:
+          $ref: '#/components/schemas/OrchestrationProfileDestination'
+    OrchestrationFiatDestination:
+      type: object
+      properties:
+        bank_account_id:
+          type: string
+        memo:
+          type: string
+    CreateOrchestrationRequestProfileDestination:
+      type: object
+      properties:
+        profile_id:
+          type: string
+    ListOrchestrationsResponse:
+      type: object
+      properties:
+        orchestrations:
+          type: array
+          items:
+            $ref: '#/components/schemas/Orchestration'
+          description: 'Deprecated: Use items instead. This field will be removed in a future version.'
+        next_page_cursor:
+          type: string
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Orchestration'
+    OrchestrationProfileSource:
+      type: object
+      properties:
+        profile_id:
+          type: string
+    OrchestrationCryptoSource:
+      type: object
+      properties:
+        address_id:
+          type: string
+        address:
+          type: string
+        network:
+          type: string
     CreateOrchestrationRequestProfileSource:
       type: object
       properties:
         profile_id:
           type: string
-    FailReason:
+    OrchestrationStatus:
+      type: string
+      enum:
+      - PROCESSING
+      - COMPLETED
+      - FAILED
+      - PENDING
+      - REJECTED
+      description: "Status represents the current state of an orchestration.\n\n - PROCESSING: The orchestration is actively being processed.\n - COMPLETED: The orchestration completed successfully.\n - FAILED: The orchestration failed during processing.\n - PENDING: The orchestration is awaiting approval before processing begins.\nOnce approved, it transitions to PROCESSING. If rejected, it transitions to REJECTED.\n - REJECTED: The orchestration was rejected during approval."
+    CreateOrchestrationRequestSource:
       type: object
       properties:
-        detail:
-          type: string
+        profile:
+          $ref: '#/components/schemas/CreateOrchestrationRequestProfileSource'
     Orchestration:
       type: object
       example:
@@ -505,38 +533,10 @@ components:
         by an incoming deposit which matches an OrchestrationRule previously defined with the
 
         CreateOrchestrationRule endpoint.'
-    TransferDetailsTransferStatus:
-      type: string
-      enum:
-      - PENDING
-      - PROCESSING
-      - COMPLETED
-      - FAILED
-      description: " - PENDING: PENDING: a transfer is planned, but its resource_id is not yet known.\n - PROCESSING: PROCESSING: a transfer with `resource_id` is being processed. resource_id is\nguaranteed to be set if the status is PROCESSING.\n - COMPLETED: COMPLETED: a transfer with `resource_id` has successfully completed.\n - FAILED: FAILED: a transfer with `resource_id` has failed."
-    CreateOrchestrationRequestCryptoDestination:
+    FailReason:
       type: object
       properties:
-        address:
-          type: string
-          description: 'The blockchain destination address. Specify together with `network`
-
-            (and `identity_id` on the parent request for 3P integrations).
-
-            These together identify a CryptoDestinationAddress whose travel rule metadata will be used.'
-        network:
-          type: string
-          description: The blockchain network of the destination address.
-        address_id:
-          type: string
-          description: Deprecated. Specify `address` and `network` instead.
-    OrchestrationCryptoSource:
-      type: object
-      properties:
-        address_id:
-          type: string
-        address:
-          type: string
-        network:
+        detail:
           type: string
   securitySchemes:
     OAuth2:

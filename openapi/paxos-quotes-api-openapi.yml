@@ -133,12 +133,6 @@ paths:
         - exchange:read_quote
 components:
   schemas:
-    OrderSide:
-      type: string
-      enum:
-      - BUY
-      - SELL
-      description: Trade side.
     ListQuotesResponse:
       type: object
       properties:
@@ -195,6 +189,12 @@ components:
       - quote_asset
       - created_at
       - expires_at
+    OrderSide:
+      type: string
+      enum:
+      - BUY
+      - SELL
+      description: Trade side.
     Market:
       type: string
       enum:
