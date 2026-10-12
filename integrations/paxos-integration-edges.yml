@@ -1,5 +1,5 @@
 generated: '2026-10-12'
-method: none
+method: searched
 source:
 - https://zapier.com/apps/paxos/integrations
 - https://n8n.io/integrations/paxos/
